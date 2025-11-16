@@ -6,6 +6,7 @@ export default function HomePage() {
 
   const games = {
     catacombs: { title: "Alien Catacombs", src: "/alien-catacombs.html" },
+    dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html" },
     // Add more games here as they become available
   };
 
