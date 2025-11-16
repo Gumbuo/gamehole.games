@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+}
+
+#__next {
+  min-height: 100%;
+  width: 100%;
+  background-color: black;
+}
+
+/* Gamehole Theme */
+:root {
+  --game-primary: #00d4ff;
+  --game-secondary: #00ff99;
+  --game-accent: #8e44ad;
+  --game-dark: #0a0a0f;
+}
