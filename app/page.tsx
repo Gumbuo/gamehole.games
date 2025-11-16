@@ -1,14 +1,24 @@
 "use client";
 import { useState } from "react";
+import Leaderboard from "./components/Leaderboard";
+import { useGameScoreTracking } from "./hooks/useGameScoreTracking";
 
 export default function HomePage() {
   const [selectedGame, setSelectedGame] = useState("catacombs");
+
+  // Track game scores and submit to leaderboard
+  useGameScoreTracking();
 
   const games = {
     catacombs: { title: "Alien Catacombs", src: "/alien-catacombs.html" },
     dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html" },
     invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html" },
     // Add more games here as they become available
+  };
+
+  const tabs = {
+    ...games,
+    leaderboard: { title: "Leaderboard", src: null },
   };
 
   return (
@@ -45,6 +55,39 @@ export default function HomePage() {
           }}>
             Browser Games Collection
           </p>
+
+          {/* Web3 Badge */}
+          <a
+            href="https://gumbuo.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block',
+              marginTop: '15px',
+              padding: '12px 24px',
+              background: 'linear-gradient(135deg, #8e44ad, #9b59b6)',
+              border: '2px solid #00ff99',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              color: '#00ff99',
+              fontFamily: 'Orbitron, sans-serif',
+              fontWeight: 'bold',
+              fontSize: '14px',
+              textTransform: 'uppercase',
+              boxShadow: '0 0 20px rgba(0, 255, 153, 0.4)',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 255, 153, 0.8)';
+              e.currentTarget.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 255, 153, 0.4)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            🌐 Try Us in Web3 | Join the Alien Points Economy
+          </a>
         </div>
 
         {/* Game Tabs */}
@@ -55,7 +98,7 @@ export default function HomePage() {
           justifyContent: 'center',
           flexWrap: 'wrap'
         }}>
-          {Object.entries(games).map(([key, game]) => (
+          {Object.entries(tabs).map(([key, tab]) => (
             <button
               key={key}
               onClick={() => setSelectedGame(key)}
@@ -90,7 +133,7 @@ export default function HomePage() {
                 }
               }}
             >
-              {game.title}
+              {tab.title}
             </button>
           ))}
         </div>
@@ -102,7 +145,9 @@ export default function HomePage() {
         height: 'calc(100vh - 140px)',
         overflow: 'hidden'
       }}>
-        {(() => {
+        {selectedGame === "leaderboard" ? (
+          <Leaderboard />
+        ) : (() => {
           const game = games[selectedGame as keyof typeof games];
           if (!game) return null;
 

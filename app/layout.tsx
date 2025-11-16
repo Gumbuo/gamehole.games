@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Game Hole - Browser Games Collection",
@@ -19,7 +20,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen bg-black">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
