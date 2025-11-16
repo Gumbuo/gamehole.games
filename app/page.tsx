@@ -28,7 +28,7 @@ export default function HomePage() {
         }}>
           <h1 style={{
             fontFamily: 'Orbitron, sans-serif',
-            fontSize: '32px',
+            fontSize: '56px',
             fontWeight: 'bold',
             background: 'linear-gradient(90deg, #00d4ff, #00ff99)',
             WebkitBackgroundClip: 'text',
