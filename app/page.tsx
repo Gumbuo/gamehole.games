@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Leaderboard from "./components/Leaderboard";
+import Credits from "./components/Credits";
 import { useGameScoreTracking } from "./hooks/useGameScoreTracking";
 import { useAuth } from "./context/AuthContext";
 
@@ -21,6 +22,7 @@ export default function HomePage() {
   const tabs = {
     ...games,
     leaderboard: { title: "Leaderboard", src: null },
+    credits: { title: "Credits", src: null },
   };
 
   return (
@@ -194,6 +196,8 @@ export default function HomePage() {
       }}>
         {selectedGame === "leaderboard" ? (
           <Leaderboard />
+        ) : selectedGame === "credits" ? (
+          <Credits />
         ) : (() => {
           const game = games[selectedGame as keyof typeof games];
           if (!game) return null;
