@@ -151,8 +151,8 @@ export default function Credits() {
                 <span style={{ color: '#00d4ff', fontWeight: 'bold' }}>AI-Generated Assets</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px' }}>
-                <span>Tilemap Generator</span>
-                <span style={{ color: '#00d4ff', fontWeight: 'bold' }}>Futuristic Zelda Tilemap Maker</span>
+                <span>Zelda Futuristic Asset Pack</span>
+                <span style={{ color: '#00d4ff', fontWeight: 'bold' }}>Deakcor (@deakcor)</span>
               </div>
             </div>
           </div>
