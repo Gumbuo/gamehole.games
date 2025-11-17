@@ -2,9 +2,11 @@
 import { useState } from "react";
 import Leaderboard from "./components/Leaderboard";
 import { useGameScoreTracking } from "./hooks/useGameScoreTracking";
+import { useAuth } from "./context/AuthContext";
 
 export default function HomePage() {
   const [selectedGame, setSelectedGame] = useState("catacombs");
+  const { username, isAuthenticated, logout } = useAuth();
 
   // Track game scores and submit to leaderboard
   useGameScoreTracking();
@@ -88,6 +90,51 @@ export default function HomePage() {
           >
             🌐 Try Us in Web3 | Join the Alien Points Economy
           </a>
+
+          {/* User Info & Logout */}
+          {isAuthenticated && username && (
+            <div style={{
+              marginTop: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '15px',
+              justifyContent: 'center',
+            }}>
+              <span style={{
+                fontFamily: 'Share Tech Mono, monospace',
+                color: '#00d4ff',
+                fontSize: '14px',
+              }}>
+                👤 {username}
+              </span>
+              <button
+                onClick={logout}
+                style={{
+                  padding: '8px 16px',
+                  background: 'rgba(255, 0, 102, 0.2)',
+                  border: '2px solid #ff0066',
+                  borderRadius: '6px',
+                  color: '#ff0066',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 'bold',
+                  fontSize: '12px',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 0, 102, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 0, 102, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 0, 102, 0.2)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Game Tabs */}

@@ -1,13 +1,13 @@
 "use client";
 import { ReactNode } from 'react';
-import { UsernameProvider } from './context/UsernameContext';
-import UsernameModal from './components/UsernameModal';
+import { AuthProvider } from './context/AuthContext';
+import LoginModal from './components/LoginModal';
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <UsernameProvider>
-      <UsernameModal />
+    <AuthProvider>
+      <LoginModal />
       {children}
-    </UsernameProvider>
+    </AuthProvider>
   );
 }

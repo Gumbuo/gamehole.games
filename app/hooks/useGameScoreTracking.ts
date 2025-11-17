@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useUsername } from '../context/UsernameContext';
+import { useUsername } from '../context/AuthContext';
 
 export function useGameScoreTracking() {
   const { username } = useUsername();
