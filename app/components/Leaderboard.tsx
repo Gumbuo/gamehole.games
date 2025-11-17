@@ -6,12 +6,13 @@ interface ScoreEntry {
   game: string;
   score: number;
   timestamp: number;
-  // Alien Catacombs specific stats
+  // Common stats (used by multiple games)
   kills?: number;
+  highestLevel?: number;
+  // Alien Catacombs specific stats
   crystals?: number;
   healthDrops?: number;
   roomsExplored?: number;
-  highestLevel?: number;
 }
 
 export default function Leaderboard() {
@@ -75,7 +76,10 @@ export default function Leaderboard() {
   const renderScoreRow = (entry: ScoreEntry, index: number, globalRank?: number) => {
     const rankToShow = globalRank !== undefined ? globalRank : index + 1;
     const isCatacombs = entry.game === 'catacombs';
-    const hasStats = isCatacombs && (entry.kills !== undefined || entry.crystals !== undefined || entry.healthDrops !== undefined || entry.roomsExplored !== undefined || entry.highestLevel !== undefined);
+    const isDungeon = entry.game === 'dungeon';
+    const isInvasion = entry.game === 'invasion';
+    // Show stats for any game that has kills, highestLevel, or catacombs-specific stats
+    const hasStats = entry.kills !== undefined || entry.highestLevel !== undefined || entry.crystals !== undefined || entry.healthDrops !== undefined || entry.roomsExplored !== undefined;
 
     return (
       <div key={`${entry.username}-${entry.timestamp}`}>

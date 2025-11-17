@@ -7,12 +7,13 @@ interface ScoreEntry {
   game: string;
   score: number;
   timestamp: number;
-  // Alien Catacombs specific stats
+  // Common stats (used by multiple games)
   kills?: number;
+  highestLevel?: number;
+  // Alien Catacombs specific stats
   crystals?: number;
   healthDrops?: number;
   roomsExplored?: number;
-  highestLevel?: number;
 }
 
 let scores: ScoreEntry[] = [];
@@ -58,13 +59,15 @@ export async function POST(request: NextRequest) {
       timestamp: Date.now(),
     };
 
+    // Add common stats (kills, highestLevel) for all games
+    if (typeof kills === 'number') scoreEntry.kills = kills;
+    if (typeof highestLevel === 'number') scoreEntry.highestLevel = highestLevel;
+
     // Add Catacombs-specific stats if present
     if (game === 'catacombs') {
-      if (typeof kills === 'number') scoreEntry.kills = kills;
       if (typeof crystals === 'number') scoreEntry.crystals = crystals;
       if (typeof healthDrops === 'number') scoreEntry.healthDrops = healthDrops;
       if (typeof roomsExplored === 'number') scoreEntry.roomsExplored = roomsExplored;
-      if (typeof highestLevel === 'number') scoreEntry.highestLevel = highestLevel;
     }
 
     scores.push(scoreEntry);

@@ -566,9 +566,10 @@
                 window.parent.postMessage({
                     type: 'GAME_OVER',
                     game: 'invasion',
-                    score: score
+                    score: score,
+                    kills: enemiesKilled
                 }, '*');
-                console.log('Sent GAME_OVER to leaderboard:', { game: 'invasion', score: score, enemiesKilled: enemiesKilled });
+                console.log('Sent GAME_OVER to leaderboard:', { game: 'invasion', score: score, kills: enemiesKilled });
             }
         }
 
