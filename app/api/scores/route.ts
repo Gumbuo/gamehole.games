@@ -51,7 +51,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Add new score with optional Catacombs stats
+    // Check if user already has a score for this game
+    const existingScoreIndex = scores.findIndex(
+      s => s.username.toLowerCase() === username.toLowerCase() && s.game === game
+    );
+
+    // Create new score entry
     const scoreEntry: ScoreEntry = {
       username,
       game,
@@ -70,7 +75,18 @@ export async function POST(request: NextRequest) {
       if (typeof roomsExplored === 'number') scoreEntry.roomsExplored = roomsExplored;
     }
 
-    scores.push(scoreEntry);
+    // Only keep the highest score per user per game
+    if (existingScoreIndex !== -1) {
+      const existingScore = scores[existingScoreIndex];
+      if (score > existingScore.score) {
+        // New high score! Replace the old entry
+        scores[existingScoreIndex] = scoreEntry;
+      }
+      // If new score is lower, don't add it
+    } else {
+      // First time playing this game, add the score
+      scores.push(scoreEntry);
+    }
 
     // Keep only top 100 scores per game to prevent memory issues
     const gameScores = scores.filter(s => s.game === game);
