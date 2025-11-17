@@ -21,20 +21,22 @@ export function useGameScoreTracking() {
         }
 
         try {
-          // Build request body with optional Catacombs stats
+          // Build request body with common stats
           const requestBody: any = {
             username,
             game,
             score,
           };
 
+          // Add common stats (kills, highestLevel) for all games
+          if (typeof kills === 'number') requestBody.kills = kills;
+          if (typeof highestLevel === 'number') requestBody.highestLevel = highestLevel;
+
           // Add Catacombs-specific stats if present
           if (game === 'catacombs') {
-            if (typeof kills === 'number') requestBody.kills = kills;
             if (typeof crystals === 'number') requestBody.crystals = crystals;
             if (typeof healthDrops === 'number') requestBody.healthDrops = healthDrops;
             if (typeof roomsExplored === 'number') requestBody.roomsExplored = roomsExplored;
-            if (typeof highestLevel === 'number') requestBody.highestLevel = highestLevel;
           }
 
           const response = await fetch('/api/scores', {
