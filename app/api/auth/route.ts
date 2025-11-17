@@ -19,23 +19,64 @@ interface Session {
 const USERS_KEY = 'gamehole:users';
 const SESSIONS_KEY = 'gamehole:sessions';
 
-// Helper functions to interact with KV
+// Check if we're in development mode without KV configured
+const isKVAvailable = () => {
+  return process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
+};
+
+// Fallback in-memory storage for development (will be replaced by KV in production)
+let devUsers: User[] = [];
+let devSessions: Session[] = [];
+
+// Helper functions to interact with KV or fallback to memory
 async function getUsers(): Promise<User[]> {
-  const users = await kv.get<User[]>(USERS_KEY);
-  return users || [];
+  if (isKVAvailable()) {
+    try {
+      const users = await kv.get<User[]>(USERS_KEY);
+      return users || [];
+    } catch (error) {
+      console.error('KV error, using fallback:', error);
+      return devUsers;
+    }
+  }
+  return devUsers;
 }
 
 async function saveUsers(users: User[]): Promise<void> {
-  await kv.set(USERS_KEY, users);
+  if (isKVAvailable()) {
+    try {
+      await kv.set(USERS_KEY, users);
+      return;
+    } catch (error) {
+      console.error('KV error, using fallback:', error);
+    }
+  }
+  devUsers = users;
 }
 
 async function getSessions(): Promise<Session[]> {
-  const sessions = await kv.get<Session[]>(SESSIONS_KEY);
-  return sessions || [];
+  if (isKVAvailable()) {
+    try {
+      const sessions = await kv.get<Session[]>(SESSIONS_KEY);
+      return sessions || [];
+    } catch (error) {
+      console.error('KV error, using fallback:', error);
+      return devSessions;
+    }
+  }
+  return devSessions;
 }
 
 async function saveSessions(sessions: Session[]): Promise<void> {
-  await kv.set(SESSIONS_KEY, sessions);
+  if (isKVAvailable()) {
+    try {
+      await kv.set(SESSIONS_KEY, sessions);
+      return;
+    } catch (error) {
+      console.error('KV error, using fallback:', error);
+    }
+  }
+  devSessions = sessions;
 }
 
 // Helper function to hash passwords
