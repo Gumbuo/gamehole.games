@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { kv } from '@vercel/kv';
 
-// Simple in-memory storage for users and sessions
-// In production, use Vercel KV or another database
+// Persistent storage using Vercel KV
 interface User {
   username: string;
   passwordHash: string;
@@ -15,8 +15,28 @@ interface Session {
   expiresAt: number;
 }
 
-let users: User[] = [];
-let sessions: Session[] = [];
+// KV keys
+const USERS_KEY = 'gamehole:users';
+const SESSIONS_KEY = 'gamehole:sessions';
+
+// Helper functions to interact with KV
+async function getUsers(): Promise<User[]> {
+  const users = await kv.get<User[]>(USERS_KEY);
+  return users || [];
+}
+
+async function saveUsers(users: User[]): Promise<void> {
+  await kv.set(USERS_KEY, users);
+}
+
+async function getSessions(): Promise<Session[]> {
+  const sessions = await kv.get<Session[]>(SESSIONS_KEY);
+  return sessions || [];
+}
+
+async function saveSessions(sessions: Session[]): Promise<void> {
+  await kv.set(SESSIONS_KEY, sessions);
+}
 
 // Helper function to hash passwords
 function hashPassword(password: string): string {
@@ -29,9 +49,13 @@ function generateToken(): string {
 }
 
 // Clean up expired sessions
-function cleanExpiredSessions() {
+async function cleanExpiredSessions(): Promise<void> {
   const now = Date.now();
-  sessions = sessions.filter(s => s.expiresAt > now);
+  const sessions = await getSessions();
+  const validSessions = sessions.filter(s => s.expiresAt > now);
+  if (validSessions.length !== sessions.length) {
+    await saveSessions(validSessions);
+  }
 }
 
 // Register new user
@@ -64,6 +88,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Check if username already exists
+      const users = await getUsers();
       if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
         return NextResponse.json(
           { success: false, error: 'Username already taken' },
@@ -79,6 +104,7 @@ export async function POST(request: NextRequest) {
       };
 
       users.push(user);
+      await saveUsers(users);
 
       // Create session
       const sessionToken = generateToken();
@@ -88,8 +114,10 @@ export async function POST(request: NextRequest) {
         expiresAt: Date.now() + (30 * 24 * 60 * 60 * 1000), // 30 days
       };
 
+      const sessions = await getSessions();
       sessions.push(session);
-      cleanExpiredSessions();
+      await saveSessions(sessions);
+      await cleanExpiredSessions();
 
       return NextResponse.json({
         success: true,
@@ -109,6 +137,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Find user
+      const users = await getUsers();
       const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
       if (!user) {
         return NextResponse.json(
@@ -134,8 +163,10 @@ export async function POST(request: NextRequest) {
         expiresAt: Date.now() + (30 * 24 * 60 * 60 * 1000), // 30 days
       };
 
+      const sessions = await getSessions();
       sessions.push(session);
-      cleanExpiredSessions();
+      await saveSessions(sessions);
+      await cleanExpiredSessions();
 
       return NextResponse.json({
         success: true,
@@ -147,7 +178,9 @@ export async function POST(request: NextRequest) {
 
     if (action === 'logout') {
       if (token) {
-        sessions = sessions.filter(s => s.token !== token);
+        const sessions = await getSessions();
+        const updatedSessions = sessions.filter(s => s.token !== token);
+        await saveSessions(updatedSessions);
       }
 
       return NextResponse.json({
@@ -180,8 +213,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    cleanExpiredSessions();
+    await cleanExpiredSessions();
 
+    const sessions = await getSessions();
     const session = sessions.find(s => s.token === token);
     if (!session) {
       return NextResponse.json(
@@ -190,6 +224,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const users = await getUsers();
     const user = users.find(u => u.username === session.username);
     if (!user) {
       return NextResponse.json(
