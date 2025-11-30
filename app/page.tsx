@@ -3,270 +3,678 @@ import { useState } from "react";
 import Leaderboard from "./components/Leaderboard";
 import Credits from "./components/Credits";
 import { useGameScoreTracking } from "./hooks/useGameScoreTracking";
-import { useAuth } from "./context/AuthContext";
+
+// Featured Crypto Games
+interface FeaturedGame {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  playUrl: string;
+  tags: string[];
+  color: string;
+  secondaryColor?: string;
+}
+
+const featuredGames: FeaturedGame[] = [
+  {
+    id: "spidertanks",
+    title: "Spider Tanks",
+    description: "PvP brawler where you battle in arenas with customizable tanks. Web2 & Web3 gaming on Immutable X.",
+    image: "/featured/spider-tanks.png",
+    playUrl: "https://www.spidertanks.game/",
+    tags: ["PvP", "Web2/Web3", "Immutable X"],
+    color: "#ff6b00",
+  },
+  {
+    id: "playa3ull",
+    title: "Playa3ull Games",
+    description: "Gaming ecosystem with multiple titles including Nexus, Starvin Martian, Dogs of War, and more. Play, compete, and earn!",
+    image: "/featured/playa3ull-logo.webp",
+    playUrl: "https://playa3ull.games/",
+    tags: ["Ecosystem", "Multi-Game", "3ULL Token"],
+    color: "#00ff66",
+  },
+  {
+    id: "infinityrising",
+    title: "Infinity Rising",
+    description: "Epic action RPG with stunning visuals and blockchain rewards. Build your hero and conquer dungeons!",
+    image: "/featured/infinity-rising.png",
+    playUrl: "https://infinityrising.io/",
+    tags: ["RPG", "Action", "NFT"],
+    color: "#ff0033",
+    secondaryColor: "#1a1a1a",
+  },
+];
+
+// Community Games
+const communityGames = {
+  catacombs: { title: "Alien Catacombs", src: "/alien-catacombs.html", badge: "ALPHA" },
+  dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY" },
+  invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY" },
+};
 
 export default function HomePage() {
-  const [selectedGame, setSelectedGame] = useState("catacombs");
-  const { username, isAuthenticated, logout } = useAuth();
+  const [activeSection, setActiveSection] = useState<"home" | "play" | "leaderboard" | "credits">("home");
+  const [selectedGame, setSelectedGame] = useState<string | null>(null);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [submitForm, setSubmitForm] = useState({ title: '', url: '', description: '', contact: '' });
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success'>('idle');
 
-  // Track game scores and submit to leaderboard
   useGameScoreTracking();
 
-  const games = {
-    catacombs: { title: "Alien Catacombs", src: "/alien-catacombs.html" },
-    dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html" },
-    invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html" },
-    // Add more games here as they become available
+  const handleSubmitGame = () => {
+    // For now, just show success - in future this could save to a database
+    console.log('Game submission:', submitForm);
+    setSubmitStatus('success');
+    setTimeout(() => {
+      setShowSubmitModal(false);
+      setSubmitForm({ title: '', url: '', description: '', contact: '' });
+      setSubmitStatus('idle');
+    }, 2000);
   };
 
-  const tabs = {
-    ...games,
-    leaderboard: { title: "Leaderboard", src: null },
-    credits: { title: "Credits", src: null },
+  const playGame = (gameKey: string) => {
+    setSelectedGame(gameKey);
+    setActiveSection("play");
   };
 
   return (
-    <div style={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', background: '#000' }}>
-      {/* Game Selector */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'linear-gradient(to bottom, #1a1a2e, #0f0f1e)',
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 50%, #0f0f1e 100%)' }}>
+      {/* Navigation */}
+      <nav style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        background: 'rgba(10, 10, 26, 0.95)',
         borderBottom: '2px solid #00d4ff',
+        backdropFilter: 'blur(10px)',
       }}>
-        {/* Header */}
         <div style={{
-          padding: '20px',
-          textAlign: 'center',
-          borderBottom: '1px solid rgba(0, 212, 255, 0.3)',
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: '15px 20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}>
-          <h1 style={{
-            fontFamily: 'Orbitron, sans-serif',
-            fontSize: '80px',
-            fontWeight: 'bold',
-            background: 'linear-gradient(90deg, #00d4ff, #00ff99)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}>
-            GAME HOLE
-          </h1>
-          <p style={{
-            fontFamily: 'Share Tech Mono, monospace',
-            color: '#00d4ff',
-            fontSize: '14px',
-            marginTop: '8px',
-          }}>
-            Browser Games Collection
-          </p>
-
-          {/* Web3 Badge */}
-          <a
-            href="https://gumbuo.io"
-            target="_blank"
-            rel="noopener noreferrer"
+          <h1
+            onClick={() => { setActiveSection("home"); setSelectedGame(null); }}
             style={{
-              display: 'inline-block',
-              marginTop: '15px',
-              padding: '12px 24px',
-              background: 'linear-gradient(135deg, #8e44ad, #9b59b6)',
-              border: '2px solid #00ff99',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              color: '#00ff99',
               fontFamily: 'Orbitron, sans-serif',
+              fontSize: '28px',
               fontWeight: 'bold',
-              fontSize: '14px',
-              textTransform: 'uppercase',
-              boxShadow: '0 0 20px rgba(0, 255, 153, 0.4)',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 255, 153, 0.8)';
-              e.currentTarget.style.transform = 'scale(1.05)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 255, 153, 0.4)';
-              e.currentTarget.style.transform = 'scale(1)';
+              background: 'linear-gradient(90deg, #00d4ff, #00ff99)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              cursor: 'pointer',
             }}
           >
-            🌐 Try Us in Web3 | Join the Alien Points Economy
-          </a>
+            GAME HOLE
+          </h1>
 
-          {/* User Info & Logout */}
-          {isAuthenticated && username && (
-            <div style={{
-              marginTop: '15px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '15px',
-              justifyContent: 'center',
-            }}>
-              <span style={{
-                fontFamily: 'Share Tech Mono, monospace',
-                color: '#00d4ff',
-                fontSize: '14px',
-              }}>
-                👤 {username}
-              </span>
+          <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+            {["home", "leaderboard", "credits"].map((section) => (
               <button
-                onClick={logout}
+                key={section}
+                onClick={() => { setActiveSection(section as any); setSelectedGame(null); }}
                 style={{
                   padding: '8px 16px',
-                  background: 'rgba(255, 0, 102, 0.2)',
-                  border: '2px solid #ff0066',
+                  background: activeSection === section ? 'rgba(0, 212, 255, 0.2)' : 'transparent',
+                  border: activeSection === section ? '1px solid #00d4ff' : '1px solid transparent',
                   borderRadius: '6px',
-                  color: '#ff0066',
+                  color: '#00d4ff',
                   fontFamily: 'Orbitron, sans-serif',
-                  fontWeight: 'bold',
                   fontSize: '12px',
                   textTransform: 'uppercase',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 0, 102, 0.3)';
-                  e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 0, 102, 0.5)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 0, 102, 0.2)';
-                  e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                Logout
+                {section}
               </button>
-            </div>
-          )}
-        </div>
+            ))}
 
-        {/* Game Tabs */}
-        <div style={{
-          display: 'flex',
-          gap: '10px',
-          padding: '15px',
-          justifyContent: 'center',
-          flexWrap: 'wrap'
-        }}>
-          {Object.entries(tabs).map(([key, tab]) => (
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      {activeSection === "leaderboard" ? (
+        <Leaderboard />
+      ) : activeSection === "credits" ? (
+        <Credits />
+      ) : activeSection === "play" && selectedGame ? (
+        <div style={{ width: '100%', height: 'calc(100vh - 70px)' }}>
+          <div style={{
+            padding: '10px 20px',
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+            <span style={{ color: '#00d4ff', fontFamily: 'Orbitron, sans-serif' }}>
+              Now Playing: {communityGames[selectedGame as keyof typeof communityGames]?.title}
+            </span>
             <button
-              key={key}
-              onClick={() => setSelectedGame(key)}
+              onClick={() => { setActiveSection("home"); setSelectedGame(null); }}
               style={{
-                padding: '12px 24px',
-                background: selectedGame === key
-                  ? 'linear-gradient(135deg, #00d4ff, #0099cc)'
-                  : 'rgba(0, 212, 255, 0.1)',
-                color: selectedGame === key ? '#000' : '#00d4ff',
-                border: `2px solid ${selectedGame === key ? '#00d4ff' : '#00d4ff44'}`,
-                borderRadius: '8px',
-                cursor: 'pointer',
+                padding: '8px 16px',
+                background: 'rgba(255, 0, 102, 0.2)',
+                border: '1px solid #ff0066',
+                borderRadius: '6px',
+                color: '#ff0066',
                 fontFamily: 'Orbitron, sans-serif',
-                fontWeight: 'bold',
-                fontSize: '14px',
-                textTransform: 'uppercase',
-                transition: 'all 0.3s ease',
-                boxShadow: selectedGame === key
-                  ? '0 0 20px rgba(0, 212, 255, 0.5)'
-                  : 'none',
-              }}
-              onMouseEnter={(e) => {
-                if (selectedGame !== key) {
-                  e.currentTarget.style.background = 'rgba(0, 212, 255, 0.2)';
-                  e.currentTarget.style.borderColor = '#00d4ff';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (selectedGame !== key) {
-                  e.currentTarget.style.background = 'rgba(0, 212, 255, 0.1)';
-                  e.currentTarget.style.borderColor = '#00d4ff44';
-                }
+                fontSize: '12px',
+                cursor: 'pointer',
               }}
             >
-              {tab.title}
+              ← Back to Games
             </button>
-          ))}
+          </div>
+          <iframe
+            src={communityGames[selectedGame as keyof typeof communityGames]?.src}
+            style={{ width: '100%', height: 'calc(100% - 50px)', border: 'none' }}
+            title={communityGames[selectedGame as keyof typeof communityGames]?.title}
+          />
         </div>
-      </div>
+      ) : (
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '40px 20px' }}>
 
-      {/* Game Display */}
-      <div style={{
-        width: '100%',
-        height: 'calc(100vh - 140px)',
-        overflow: 'hidden'
-      }}>
-        {selectedGame === "leaderboard" ? (
-          <Leaderboard />
-        ) : selectedGame === "credits" ? (
-          <Credits />
-        ) : (() => {
-          const game = games[selectedGame as keyof typeof games];
-          if (!game) return null;
-
-          return (
-            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-              {/* Alpha Build Notice for Catacombs */}
-              {selectedGame === "catacombs" && (
-                <div style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '10px',
-                  zIndex: 1000,
-                  background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.95), rgba(0, 153, 204, 0.95))',
-                  padding: '12px 20px',
-                  borderRadius: '8px',
-                  border: '2px solid #00d4ff',
-                  boxShadow: '0 0 20px rgba(0, 212, 255, 0.6)',
-                  fontFamily: 'Orbitron, sans-serif',
-                  color: '#000',
-                  fontWeight: 'bold',
-                  fontSize: '14px',
-                  textAlign: 'center',
-                  lineHeight: '1.4',
-                  maxWidth: '250px'
-                }}>
-                  <div style={{ fontSize: '16px', marginBottom: '4px' }}>⚠️ ALPHA BUILD</div>
-                  <div style={{ fontSize: '12px', opacity: 0.9 }}>This build changes daily</div>
-                </div>
-              )}
-              {/* Community Driven Notice for Dungeon & Invasion */}
-              {(selectedGame === "dungeon" || selectedGame === "invasion") && (
-                <div style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '10px',
-                  zIndex: 1000,
-                  background: 'linear-gradient(135deg, rgba(0, 255, 153, 0.95), rgba(0, 204, 119, 0.95))',
-                  padding: '12px 20px',
-                  borderRadius: '8px',
-                  border: '2px solid #00ff99',
-                  boxShadow: '0 0 20px rgba(0, 255, 153, 0.6)',
-                  fontFamily: 'Orbitron, sans-serif',
-                  color: '#000',
-                  fontWeight: 'bold',
-                  fontSize: '14px',
-                  textAlign: 'center',
-                  lineHeight: '1.4',
-                  maxWidth: '280px'
-                }}>
-                  <div style={{ fontSize: '16px', marginBottom: '4px' }}>💬 COMMUNITY DRIVEN</div>
-                  <div style={{ fontSize: '12px', opacity: 0.9 }}>Updates upon user requests</div>
-                  <div style={{ fontSize: '11px', opacity: 0.85, marginTop: '4px' }}>Make requests in Discord!</div>
-                </div>
-              )}
-              <iframe
-                key={selectedGame}
-                src={game.src}
+          {/* Hero Section */}
+          <section style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h1 style={{
+              fontFamily: 'Orbitron, sans-serif',
+              fontSize: '72px',
+              fontWeight: 'bold',
+              background: 'linear-gradient(90deg, #00d4ff, #00ff99, #ff6b00)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '20px',
+            }}>
+              GAME HOLE
+            </h1>
+            <p style={{
+              fontFamily: 'Share Tech Mono, monospace',
+              color: '#888',
+              fontSize: '18px',
+              maxWidth: '600px',
+              margin: '0 auto 30px',
+            }}>
+              Your destination for the best crypto games. Play featured Web3 titles,
+              discover community games, and share your own creations!
+            </p>
+            <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a
+                href="https://gumbuo.io"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
+                  padding: '14px 28px',
+                  background: 'linear-gradient(135deg, #8e44ad, #9b59b6)',
+                  border: '2px solid #00ff99',
+                  borderRadius: '8px',
+                  color: '#00ff99',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  textDecoration: 'none',
+                  textTransform: 'uppercase',
                 }}
-                title={game.title}
-              />
+              >
+                🌐 Join Web3 Community
+              </a>
+              <a
+                href="https://discord.gg/gumbuo"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  padding: '14px 28px',
+                  background: 'rgba(88, 101, 242, 0.2)',
+                  border: '2px solid #5865F2',
+                  borderRadius: '8px',
+                  color: '#5865F2',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  textDecoration: 'none',
+                  textTransform: 'uppercase',
+                }}
+              >
+                💬 Discord
+              </a>
             </div>
-          );
-        })()}
-      </div>
+          </section>
+
+          {/* Featured Crypto Games */}
+          <section style={{ marginBottom: '60px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px' }}>
+              <h2 style={{
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '28px',
+                color: '#00d4ff',
+              }}>
+                🎮 Featured Crypto Games
+              </h2>
+              <span style={{
+                padding: '4px 12px',
+                background: 'linear-gradient(135deg, #ff6b00, #ff8c00)',
+                borderRadius: '20px',
+                color: '#000',
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '10px',
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+              }}>
+                Our Favorites
+              </span>
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+              gap: '25px',
+            }}>
+              {featuredGames.map((game) => {
+                const hasSecondary = 'secondaryColor' in game;
+                const bgStyle = hasSecondary
+                  ? `linear-gradient(135deg, ${game.secondaryColor}, #0a0a0a)`
+                  : 'linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(15, 15, 30, 0.9))';
+
+                return (
+                <div
+                  key={game.id}
+                  style={{
+                    background: bgStyle,
+                    border: `2px solid ${game.color}40`,
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = game.color;
+                    e.currentTarget.style.boxShadow = `0 0 30px ${game.color}40`;
+                    e.currentTarget.style.transform = 'translateY(-5px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = `${game.color}40`;
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  {/* Game Image */}
+                  <div style={{
+                    height: '180px',
+                    background: hasSecondary
+                      ? `linear-gradient(135deg, ${game.color}40, ${game.secondaryColor})`
+                      : `linear-gradient(135deg, ${game.color}30, ${game.color}10)`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderBottom: `1px solid ${game.color}40`,
+                    overflow: 'hidden',
+                  }}>
+                    <img
+                      src={game.image}
+                      alt={game.title}
+                      style={{
+                        maxHeight: '140px',
+                        maxWidth: '90%',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ padding: '20px' }}>
+                    <h3 style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '22px',
+                      color: game.color,
+                      marginBottom: '10px',
+                    }}>
+                      {game.title}
+                    </h3>
+
+                    <p style={{
+                      fontFamily: 'Share Tech Mono, monospace',
+                      color: '#aaa',
+                      fontSize: '14px',
+                      lineHeight: '1.6',
+                      marginBottom: '15px',
+                    }}>
+                      {game.description}
+                    </p>
+
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                      {game.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          style={{
+                            padding: '4px 10px',
+                            background: `${game.color}20`,
+                            border: `1px solid ${game.color}40`,
+                            borderRadius: '12px',
+                            color: game.color,
+                            fontFamily: 'Share Tech Mono, monospace',
+                            fontSize: '11px',
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <a
+                      href={game.playUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        padding: '12px',
+                        background: `linear-gradient(135deg, ${game.color}, ${game.color}cc)`,
+                        border: 'none',
+                        borderRadius: '8px',
+                        color: '#000',
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontWeight: 'bold',
+                        fontSize: '14px',
+                        textAlign: 'center',
+                        textDecoration: 'none',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Play Now →
+                    </a>
+                  </div>
+                </div>
+              );
+              })}
+            </div>
+          </section>
+
+          {/* Community Games */}
+          <section style={{ marginBottom: '60px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <h2 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '28px',
+                  color: '#00ff99',
+                }}>
+                  🕹️ Community Games
+                </h2>
+                <span style={{
+                  padding: '4px 12px',
+                  background: 'linear-gradient(135deg, #00ff99, #00cc77)',
+                  borderRadius: '20px',
+                  color: '#000',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '10px',
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase',
+                }}>
+                  Play Free
+                </span>
+              </div>
+
+              <button
+                onClick={() => setShowSubmitModal(true)}
+                style={{
+                  padding: '10px 20px',
+                  background: 'rgba(0, 255, 153, 0.1)',
+                  border: '2px solid #00ff99',
+                  borderRadius: '8px',
+                  color: '#00ff99',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 'bold',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                }}
+              >
+                + Submit Your Game
+              </button>
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '20px',
+            }}>
+              {Object.entries(communityGames).map(([key, game]) => (
+                <div
+                  key={key}
+                  onClick={() => playGame(key)}
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
+                    border: '2px solid #00ff9940',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#00ff99';
+                    e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 255, 153, 0.3)';
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#00ff9940';
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '15px' }}>
+                    <h3 style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '18px',
+                      color: '#00ff99',
+                    }}>
+                      {game.title}
+                    </h3>
+                    <span style={{
+                      padding: '3px 8px',
+                      background: game.badge === 'ALPHA' ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 255, 153, 0.2)',
+                      border: `1px solid ${game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99'}`,
+                      borderRadius: '4px',
+                      color: game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99',
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '9px',
+                      fontWeight: 'bold',
+                    }}>
+                      {game.badge}
+                    </span>
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    color: '#666',
+                    fontFamily: 'Share Tech Mono, monospace',
+                    fontSize: '12px',
+                  }}>
+                    <span>🎮</span>
+                    <span>Click to Play</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+        </div>
+      )}
+
+      {/* Submit Game Modal */}
+      {showSubmitModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.85)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+        }} onClick={() => setShowSubmitModal(false)}>
+          <div style={{
+            background: 'linear-gradient(135deg, #1a1a2e, #0f0f1e)',
+            border: '2px solid #00ff99',
+            borderRadius: '16px',
+            padding: '30px',
+            maxWidth: '500px',
+            width: '90%',
+            boxShadow: '0 0 40px rgba(0, 255, 153, 0.3)',
+          }} onClick={(e) => e.stopPropagation()}>
+            {submitStatus === 'success' ? (
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <div style={{ fontSize: '48px', marginBottom: '20px' }}>✓</div>
+                <h3 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '24px',
+                  color: '#00ff99',
+                  marginBottom: '10px',
+                }}>
+                  Submitted!
+                </h3>
+                <p style={{
+                  fontFamily: 'Share Tech Mono, monospace',
+                  color: '#888',
+                }}>
+                  We'll review your game soon.
+                </p>
+              </div>
+            ) : (
+              <>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
+                  <h3 style={{
+                    fontFamily: 'Orbitron, sans-serif',
+                    fontSize: '22px',
+                    color: '#00ff99',
+                  }}>
+                    Submit Your Game
+                  </h3>
+                  <button
+                    onClick={() => setShowSubmitModal(false)}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: '#666',
+                      fontSize: '24px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                  <input
+                    type="text"
+                    placeholder="Game Title"
+                    value={submitForm.title}
+                    onChange={(e) => setSubmitForm({ ...submitForm, title: e.target.value })}
+                    style={{
+                      padding: '12px 15px',
+                      background: 'rgba(0, 0, 0, 0.5)',
+                      border: '1px solid #00ff9940',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontFamily: 'Share Tech Mono, monospace',
+                      fontSize: '14px',
+                    }}
+                  />
+                  <input
+                    type="url"
+                    placeholder="Game URL (playable link)"
+                    value={submitForm.url}
+                    onChange={(e) => setSubmitForm({ ...submitForm, url: e.target.value })}
+                    style={{
+                      padding: '12px 15px',
+                      background: 'rgba(0, 0, 0, 0.5)',
+                      border: '1px solid #00ff9940',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontFamily: 'Share Tech Mono, monospace',
+                      fontSize: '14px',
+                    }}
+                  />
+                  <textarea
+                    placeholder="Short description"
+                    value={submitForm.description}
+                    onChange={(e) => setSubmitForm({ ...submitForm, description: e.target.value })}
+                    rows={3}
+                    style={{
+                      padding: '12px 15px',
+                      background: 'rgba(0, 0, 0, 0.5)',
+                      border: '1px solid #00ff9940',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontFamily: 'Share Tech Mono, monospace',
+                      fontSize: '14px',
+                      resize: 'vertical',
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Contact (Discord, Twitter, or Email)"
+                    value={submitForm.contact}
+                    onChange={(e) => setSubmitForm({ ...submitForm, contact: e.target.value })}
+                    style={{
+                      padding: '12px 15px',
+                      background: 'rgba(0, 0, 0, 0.5)',
+                      border: '1px solid #00ff9940',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontFamily: 'Share Tech Mono, monospace',
+                      fontSize: '14px',
+                    }}
+                  />
+                  <button
+                    onClick={handleSubmitGame}
+                    disabled={!submitForm.title || !submitForm.url}
+                    style={{
+                      padding: '14px',
+                      background: submitForm.title && submitForm.url
+                        ? 'linear-gradient(135deg, #00ff99, #00cc77)'
+                        : 'rgba(0, 255, 153, 0.2)',
+                      border: 'none',
+                      borderRadius: '8px',
+                      color: submitForm.title && submitForm.url ? '#000' : '#666',
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontWeight: 'bold',
+                      fontSize: '14px',
+                      cursor: submitForm.title && submitForm.url ? 'pointer' : 'not-allowed',
+                      textTransform: 'uppercase',
+                      marginTop: '10px',
+                    }}
+                  >
+                    Submit Game
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Footer */}
+      <footer style={{
+        borderTop: '1px solid rgba(0, 212, 255, 0.2)',
+        padding: '30px 20px',
+        textAlign: 'center',
+        marginTop: '60px',
+      }}>
+        <p style={{
+          fontFamily: 'Share Tech Mono, monospace',
+          color: '#666',
+          fontSize: '12px',
+        }}>
+          © 2024 Game Hole | A Community Gaming Hub | Not affiliated with featured games
+        </p>
+      </footer>
     </div>
   );
 }
