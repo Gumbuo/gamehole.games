@@ -62,6 +62,16 @@ const featuredGames: FeaturedGame[] = [
     color: "#ff0033",
     secondaryColor: "#1a1a1a",
   },
+  {
+    id: "machinesarena",
+    title: "The Machines Arena",
+    description: "Fast-paced 4v4 hero shooter with top-down PvP battles. Earn digital collectibles on the Ronin chain.",
+    image: "/featured/machines-arena.png",
+    playUrl: "https://www.themachinesarena.com/",
+    tags: ["Hero Shooter", "4v4 PvP", "Ronin"],
+    color: "#e63946",
+    secondaryColor: "#1d3557",
+  },
 ];
 
 // Community Games
