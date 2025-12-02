@@ -36,11 +36,11 @@ const featuredGames: FeaturedGame[] = [
   },
   {
     id: "spidertanks",
-    title: "Spider Tanks",
-    description: "PvP brawler where you battle in arenas with customizable tanks. Web2 & Web3 gaming on Immutable X.",
+    title: "Spider Tanks: Cores of Chaos",
+    description: "PvP brawler where you battle in arenas with customizable tanks. Revived by GAMEDIA on Immutable.",
     image: "/featured/spider-tanks.png",
-    playUrl: "https://www.spidertanks.game/",
-    tags: ["PvP", "Web2/Web3", "Immutable X"],
+    playUrl: "https://play.immutable.com/games/spider-tanks-cores-of-chaos/",
+    tags: ["PvP", "Brawler", "Immutable"],
     color: "#ff6b00",
   },
   {
