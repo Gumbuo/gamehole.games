@@ -72,6 +72,16 @@ const featuredGames: FeaturedGame[] = [
     color: "#e63946",
     secondaryColor: "#1d3557",
   },
+  {
+    id: "captaincompany",
+    title: "Captain & Company",
+    description: "128-player naval battle MMORPG. Command ships, recruit pirates, and battle for treasure on the high seas.",
+    image: "/featured/captain-company.png",
+    playUrl: "https://capnco.gg/",
+    tags: ["MMORPG", "Naval Combat", "Polygon"],
+    color: "#d4af37",
+    secondaryColor: "#1a0a00",
+  },
 ];
 
 // Community Games
