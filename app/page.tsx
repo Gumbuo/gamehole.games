@@ -25,6 +25,16 @@ interface FeaturedGame {
 
 const featuredGames: FeaturedGame[] = [
   {
+    id: "offthegrid",
+    title: "Off The Grid",
+    description: "AAA battle royale with deep narrative and player-driven economy. Free-to-play cyberpunk action on Avalanche.",
+    image: "/featured/off-the-grid.png",
+    playUrl: "https://offthegrid.com/",
+    tags: ["Battle Royale", "AAA", "Avalanche"],
+    color: "#00ffcc",
+    secondaryColor: "#0a1a1a",
+  },
+  {
     id: "spidertanks",
     title: "Spider Tanks",
     description: "PvP brawler where you battle in arenas with customizable tanks. Web2 & Web3 gaming on Immutable X.",
@@ -317,46 +327,6 @@ export default function HomePage() {
               Your destination for the best crypto games. Play featured Web3 titles,
               discover community games, and share your own creations!
             </p>
-            <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a
-                href="https://gumbuo.io"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  padding: '14px 28px',
-                  background: 'linear-gradient(135deg, #8e44ad, #9b59b6)',
-                  border: '2px solid #00ff99',
-                  borderRadius: '8px',
-                  color: '#00ff99',
-                  fontFamily: 'Orbitron, sans-serif',
-                  fontWeight: 'bold',
-                  fontSize: '14px',
-                  textDecoration: 'none',
-                  textTransform: 'uppercase',
-                }}
-              >
-                🌐 Join Web3 Community
-              </a>
-              <a
-                href="https://discord.gg/gumbuo"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  padding: '14px 28px',
-                  background: 'rgba(88, 101, 242, 0.2)',
-                  border: '2px solid #5865F2',
-                  borderRadius: '8px',
-                  color: '#5865F2',
-                  fontFamily: 'Orbitron, sans-serif',
-                  fontWeight: 'bold',
-                  fontSize: '14px',
-                  textDecoration: 'none',
-                  textTransform: 'uppercase',
-                }}
-              >
-                💬 Discord
-              </a>
-            </div>
           </section>
 
           {/* Featured Crypto Games */}
