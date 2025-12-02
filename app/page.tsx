@@ -1,8 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Leaderboard from "./components/Leaderboard";
 import Credits from "./components/Credits";
 import { useGameScoreTracking } from "./hooks/useGameScoreTracking";
+
+// Add more videos to this array as needed
+const AD_VIDEOS = [
+  "/Fox_Fights_Alien_Wins_Video.mp4",
+  "/can_you_make_these_character.mp4",
+  "/Fox_and_Alien_Battle_Video.mp4",
+];
 
 // Featured Crypto Games
 interface FeaturedGame {
@@ -61,7 +68,43 @@ export default function HomePage() {
   const [submitForm, setSubmitForm] = useState({ title: '', url: '', description: '', contact: '' });
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success'>('idle');
 
+  // Video ad state
+  const [showVideo, setShowVideo] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<string>("");
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
   useGameScoreTracking();
+
+  // Show video popup on page load with rotation
+  useEffect(() => {
+    const lastPlayed = localStorage.getItem("lastVideoAdGamehole");
+    let availableVideos = AD_VIDEOS;
+    if (lastPlayed && AD_VIDEOS.length > 1) {
+      availableVideos = AD_VIDEOS.filter(v => v !== lastPlayed);
+    }
+    const randomIndex = Math.floor(Math.random() * availableVideos.length);
+    const selected = availableVideos[randomIndex];
+    localStorage.setItem("lastVideoAdGamehole", selected);
+    setSelectedVideo(selected);
+    setShowVideo(true);
+  }, []);
+
+  // Handle video autoplay with unmute
+  useEffect(() => {
+    if (showVideo && videoRef.current) {
+      const video = videoRef.current;
+      video.muted = true;
+      video.play().then(() => {
+        video.muted = false;
+      }).catch(() => {
+        video.muted = true;
+      });
+    }
+  }, [showVideo]);
+
+  const closeVideo = () => {
+    setShowVideo(false);
+  };
 
   const handleSubmitGame = () => {
     // For now, just show success - in future this could save to a database
@@ -81,6 +124,77 @@ export default function HomePage() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 50%, #0f0f1e 100%)' }}>
+      {/* Video Popup Modal */}
+      {showVideo && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'rgba(0, 0, 0, 0.95)',
+          backdropFilter: 'blur(4px)',
+        }}>
+          <div style={{ position: 'relative', width: '100%', maxWidth: '900px', margin: '0 16px' }}>
+            {/* Close Button */}
+            <button
+              onClick={closeVideo}
+              style={{
+                position: 'absolute',
+                top: '-40px',
+                right: '0',
+                background: 'transparent',
+                border: 'none',
+                color: '#fff',
+                fontSize: '32px',
+                cursor: 'pointer',
+                zIndex: 10,
+              }}
+            >
+              ×
+            </button>
+            {/* Video Container */}
+            <div style={{
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 0 40px rgba(0, 212, 255, 0.5)',
+              border: '4px solid #00d4ff',
+            }}>
+              <video
+                ref={videoRef}
+                autoPlay
+                controls
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+                onEnded={closeVideo}
+              >
+                {selectedVideo && <source src={selectedVideo} type="video/mp4" />}
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            {/* Play Button */}
+            <div style={{ textAlign: 'center', marginTop: '16px' }}>
+              <button
+                onClick={() => videoRef.current?.play()}
+                style={{
+                  padding: '12px 32px',
+                  background: 'linear-gradient(135deg, #00d4ff, #00ff99)',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#000',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                }}
+              >
+                ▶ Play Video
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Navigation */}
       <nav style={{
         position: 'sticky',
