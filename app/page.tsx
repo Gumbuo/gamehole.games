@@ -351,26 +351,18 @@ export default function HomePage() {
 
           {/* Featured Crypto Games */}
           <section style={{ marginBottom: '60px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px' }}>
+            <div style={{ marginBottom: '30px' }}>
               <h2 style={{
                 fontFamily: 'Orbitron, sans-serif',
-                fontSize: '28px',
-                color: '#00d4ff',
-              }}>
-                🎮 Featured Crypto Games
-              </h2>
-              <span style={{
-                padding: '4px 12px',
-                background: 'linear-gradient(135deg, #ff6b00, #ff8c00)',
-                borderRadius: '20px',
-                color: '#000',
-                fontFamily: 'Orbitron, sans-serif',
-                fontSize: '10px',
+                fontSize: '32px',
                 fontWeight: 'bold',
+                background: 'linear-gradient(135deg, #ff6b00, #ff8c00)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
                 textTransform: 'uppercase',
               }}>
                 Our Favorites
-              </span>
+              </h2>
             </div>
 
             <div style={{
