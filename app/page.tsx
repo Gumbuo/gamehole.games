@@ -90,6 +90,7 @@ const featuredGames: FeaturedGame[] = [
 
 // Community Games
 const communityGames = {
+  chess: { title: "Web3 Chess", src: "/chess", badge: "NEW", isRoute: true },
   catacombs: { title: "Alien Catacombs", src: "/alien-catacombs.html", badge: "ALPHA" },
   dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY" },
   invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY" },
@@ -152,6 +153,12 @@ export default function HomePage() {
   };
 
   const playGame = (gameKey: string) => {
+    const game = communityGames[gameKey as keyof typeof communityGames];
+    // For route-based games (like chess), navigate to the route
+    if (game && 'isRoute' in game && game.isRoute) {
+      window.location.href = game.src;
+      return;
+    }
     setSelectedGame(gameKey);
     setActiveSection("play");
   };
@@ -574,10 +581,10 @@ export default function HomePage() {
                     </h3>
                     <span style={{
                       padding: '3px 8px',
-                      background: game.badge === 'ALPHA' ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 255, 153, 0.2)',
-                      border: `1px solid ${game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99'}`,
+                      background: game.badge === 'NEW' ? 'rgba(255, 107, 0, 0.2)' : game.badge === 'ALPHA' ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 255, 153, 0.2)',
+                      border: `1px solid ${game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99'}`,
                       borderRadius: '4px',
-                      color: game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99',
+                      color: game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99',
                       fontFamily: 'Orbitron, sans-serif',
                       fontSize: '9px',
                       fontWeight: 'bold',
