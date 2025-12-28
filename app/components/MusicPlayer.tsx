@@ -12,7 +12,7 @@ const TRACKS = [
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [selectedTrack, setSelectedTrack] = useState(TRACKS[0]);
+  const [selectedTrack, setSelectedTrack] = useState(TRACKS[4]); // Galactic Groove
   const [isExpanded, setIsExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
