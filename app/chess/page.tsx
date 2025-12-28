@@ -7,6 +7,7 @@ import { formatEther, parseEther } from "viem";
 import { motion, AnimatePresence } from "framer-motion";
 import { Chess } from "chess.js";
 import ChessBoard from "../components/chess/ChessBoard";
+import { findBestMove } from "../components/chess/ChessAI";
 import MoveHistory from "../components/chess/MoveHistory";
 import GameClock, { TIME_CONTROLS } from "../components/chess/GameClock";
 

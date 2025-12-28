@@ -85,6 +85,8 @@ export function ChessBoard({
   const [optionSquares, setOptionSquares] = useState<Record<string, React.CSSProperties>>({});
   const [rightClickedSquares, setRightClickedSquares] = useState<Record<string, React.CSSProperties>>({});
   const [internalLastMove, setInternalLastMove] = useState<{ from: string; to: string } | null>(null);
+  const [captureFlash, setCaptureFlash] = useState(false);
+  const [checkFlash, setCheckFlash] = useState(false);
 
   // Sync external FEN with internal game state
   useEffect(() => {
