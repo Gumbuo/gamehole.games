@@ -133,12 +133,16 @@ export function ChessBoard({
         // Play sound
         if (move.captured) {
           playSound("capture");
+          setCaptureFlash(true);
+          setTimeout(() => setCaptureFlash(false), 300);
         } else {
           playSound("move");
         }
 
         if (gameCopy.isCheck()) {
           setTimeout(() => playSound("check"), 100);
+          setCheckFlash(true);
+          setTimeout(() => setCheckFlash(false), 400);
         }
 
         if (gameCopy.isGameOver()) {
@@ -325,7 +329,8 @@ export function ChessBoard({
         animate={{ opacity: 1, y: 0 }}
         className="rounded-lg overflow-hidden"
         style={{
-          boxShadow: "0 0 30px rgba(0, 255, 153, 0.3)",
+          boxShadow: captureFlash ? "0 0 60px rgba(255, 50, 50, 0.8)" : checkFlash ? "0 0 60px rgba(255, 165, 0, 0.8)" : "0 0 30px rgba(0, 255, 153, 0.3)",
+          transition: "box-shadow 0.15s ease-out",
         }}
       >
         <Chessboard

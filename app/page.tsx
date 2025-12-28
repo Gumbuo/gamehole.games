@@ -948,8 +948,6 @@ export default function HomePage() {
         </div>
       )}
 
-      <MusicPlayer />
-
       {/* Footer */}
       <footer style={{
         borderTop: '1px solid rgba(0, 212, 255, 0.2)',
