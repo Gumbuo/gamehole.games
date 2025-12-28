@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import Leaderboard from "./components/Leaderboard";
 import Credits from "./components/Credits";
+import MusicPlayer from "./components/MusicPlayer";
 import { useGameScoreTracking } from "./hooks/useGameScoreTracking";
 
 // Add more videos to this array as needed
@@ -946,6 +947,8 @@ export default function HomePage() {
           </div>
         </div>
       )}
+
+      <MusicPlayer />
 
       {/* Footer */}
       <footer style={{
