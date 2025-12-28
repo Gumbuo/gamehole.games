@@ -23,6 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-screen bg-black">
         <Providers>
           {children}
+          <MusicPlayer />
         </Providers>
       </body>
     </html>
