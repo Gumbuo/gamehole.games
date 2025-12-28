@@ -360,7 +360,7 @@ export default function ChessPage() {
               <div className="grid lg:grid-cols-[1fr_300px] gap-8">
                 {/* Chess Board */}
                 <div className="flex justify-center">
-                  <div style={{ width: "min(360px, 90vw, calc(100vh - 280px))", margin: "0 auto" }}>
+                  <div style={{ width: "min(720px, 90vw, calc(100vh - 200px))", margin: "0 auto" }}>
                     <ChessBoard
                       fen={game.fen()}
                       orientation={playerColor}
