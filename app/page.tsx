@@ -963,6 +963,9 @@ export default function HomePage() {
           © 2024 Game Hole | A Community Gaming Hub | Not affiliated with featured games
         </p>
       </footer>
+
+      {/* Music Player */}
+      <MusicPlayer />
     </div>
   );
 }
