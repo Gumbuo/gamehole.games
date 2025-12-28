@@ -359,7 +359,7 @@ export default function ChessPage() {
               <div className="grid lg:grid-cols-[1fr_300px] gap-8">
                 {/* Chess Board */}
                 <div className="flex justify-center">
-                  <div className="w-full max-w-[560px]">
+                  <div className="w-full max-w-[400px]">
                     <ChessBoard
                       fen={game.fen()}
                       orientation={playerColor}

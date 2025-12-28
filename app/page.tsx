@@ -16,6 +16,18 @@ const AD_VIDEOS = [
 ];
 
 // Featured Crypto Games
+
+// Free-to-Play Games from API
+interface FreeGame {
+  id: number;
+  title: string;
+  thumbnail: string;
+  short_description: string;
+  game_url: string;
+  genre: string;
+  platform: string;
+}
+
 interface FeaturedGame {
   id: string;
   title: string;
@@ -103,12 +115,36 @@ export default function HomePage() {
   const [submitForm, setSubmitForm] = useState({ title: '', url: '', description: '', contact: '' });
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success'>('idle');
 
+  // Free games from API
+  const [freeGames, setFreeGames] = useState<FreeGame[]>([]);
+  const [loadingFreeGames, setLoadingFreeGames] = useState(true);
+
+
   // Video ad state
   const [showVideo, setShowVideo] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string>("");
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useGameScoreTracking();
+
+  // Fetch free games from API
+  useEffect(() => {
+    const fetchFreeGames = async () => {
+      try {
+        const response = await fetch('/api/games?platform=browser&limit=8');
+        const data = await response.json();
+        if (data.success) {
+          setFreeGames(data.games);
+        }
+      } catch (error) {
+        console.error('Failed to fetch free games:', error);
+      } finally {
+        setLoadingFreeGames(false);
+      }
+    };
+    fetchFreeGames();
+  }, []);
+
 
   // Show video popup on page load with rotation
   useEffect(() => {
@@ -269,10 +305,10 @@ export default function HomePage() {
           </h1>
 
           <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-            {["home", "leaderboard", "credits"].map((section) => (
+            {["home", "discover", "leaderboard", "credits"].map((section) => (
               <button
                 key={section}
-                onClick={() => { setActiveSection(section as any); setSelectedGame(null); }}
+                onClick={() => { if (section === "discover") { window.location.href = "/discover"; return; } setActiveSection(section as any); setSelectedGame(null); }}
                 style={{
                   padding: '8px 16px',
                   background: activeSection === section ? 'rgba(0, 212, 255, 0.2)' : 'transparent',
@@ -499,7 +535,151 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Community Games */}
+          
+          {/* Popular Free-to-Play Games */}
+          <section style={{ marginBottom: '60px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <h2 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '28px',
+                  color: '#ff6b00',
+                }}>
+                  Free-to-Play Games
+                </h2>
+                <span style={{
+                  padding: '4px 12px',
+                  background: 'linear-gradient(135deg, #ff6b00, #ff8c00)',
+                  borderRadius: '20px',
+                  color: '#000',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '10px',
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase',
+                }}>
+                  100+ Games
+                </span>
+              </div>
+
+              <a
+                href="/discover"
+                style={{
+                  padding: '10px 20px',
+                  background: 'rgba(255, 107, 0, 0.1)',
+                  border: '2px solid #ff6b00',
+                  borderRadius: '8px',
+                  color: '#ff6b00',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 'bold',
+                  fontSize: '12px',
+                  textDecoration: 'none',
+                  textTransform: 'uppercase',
+                }}
+              >
+                View All →
+              </a>
+            </div>
+
+            {loadingFreeGames ? (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                gap: '20px',
+              }}>
+                {[...Array(4)].map((_, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      background: 'rgba(26, 26, 46, 0.5)',
+                      borderRadius: '12px',
+                      height: '280px',
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                gap: '20px',
+              }}>
+                {freeGames.map((game) => (
+                  <a
+                    key={game.id}
+                    href={game.game_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(15, 15, 30, 0.9))',
+                      border: '2px solid rgba(255, 107, 0, 0.3)',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      textDecoration: 'none',
+                      transition: 'all 0.3s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = '#ff6b00';
+                      e.currentTarget.style.boxShadow = '0 0 25px rgba(255, 107, 0, 0.3)';
+                      e.currentTarget.style.transform = 'translateY(-5px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(255, 107, 0, 0.3)';
+                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <div style={{
+                      height: '140px',
+                      background: `url(${game.thumbnail}) center/cover`,
+                      position: 'relative',
+                    }}>
+                      <div style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        padding: '3px 8px',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        borderRadius: '4px',
+                        color: '#ff6b00',
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '9px',
+                        textTransform: 'uppercase',
+                      }}>
+                        {game.genre}
+                      </div>
+                    </div>
+                    <div style={{ padding: '12px' }}>
+                      <h3 style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '14px',
+                        color: '#ff6b00',
+                        marginBottom: '6px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}>
+                        {game.title}
+                      </h3>
+                      <p style={{
+                        fontFamily: 'Share Tech Mono, monospace',
+                        fontSize: '11px',
+                        color: '#888',
+                        lineHeight: '1.4',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}>
+                        {game.short_description}
+                      </p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            )}
+          </section>
+
+{/* Community Games */}
           <section style={{ marginBottom: '60px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
