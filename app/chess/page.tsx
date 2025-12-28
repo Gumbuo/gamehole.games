@@ -41,6 +41,23 @@ export default function ChessPage() {
   const [game, setGame] = useState(() => new Chess());
   const [playerColor, setPlayerColor] = useState<"white" | "black">("white");
   const [isMyTurn, setIsMyTurn] = useState(true);
+  const [boardWidth, setBoardWidth] = useState(320);
+
+  // Calculate board size based on viewport
+  useEffect(() => {
+    const calculateBoardSize = () => {
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      // Leave room for header (70px) and padding
+      const maxHeight = vh - 200;
+      const maxWidth = Math.min(vw - 40, 400);
+      const size = Math.min(maxHeight, maxWidth, 360);
+      setBoardWidth(Math.max(size, 280));
+    };
+    calculateBoardSize();
+    window.addEventListener('resize', calculateBoardSize);
+    return () => window.removeEventListener('resize', calculateBoardSize);
+  }, []);
 
   // Start a new game
   const startGame = (mode: "cpu" | "playing") => {

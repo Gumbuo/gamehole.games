@@ -13,6 +13,7 @@ interface ChessBoardProps {
   lastMove?: { from: string; to: string };
   disabled?: boolean;
   showHints?: boolean;
+  boardWidth?: number;
 }
 
 // Sound effects using Web Audio API
@@ -79,6 +80,7 @@ export function ChessBoard({
   lastMove,
   disabled = false,
   showHints = true,
+  boardWidth,
 }: ChessBoardProps) {
   const [game, setGame] = useState(() => new Chess(externalFen));
   const [moveFrom, setMoveFrom] = useState<Square | null>(null);
@@ -328,6 +330,7 @@ export function ChessBoard({
       >
         <Chessboard
           options={{
+            boardWidth: boardWidth,
             position: game.fen(),
             onPieceDrop: onDrop,
             onSquareClick: onSquareClick,
