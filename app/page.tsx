@@ -104,7 +104,7 @@ const featuredGames: FeaturedGame[] = [
     title: "Chainers",
     description: "Collect, battle, and evolve adorable Chainers in this creature-collecting RPG. Build your team and compete!",
     image: "/featured/chainers.png",
-    playUrl: "https://play.immutable.com/games/chainers/",
+    playUrl: "https://chainers.io/?r=mjw0b0oz",
     tags: ["RPG", "Creature Collector", "Immutable"],
     color: "#9b59b6",
     secondaryColor: "#1a0a2e",
