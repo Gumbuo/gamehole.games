@@ -149,6 +149,26 @@ const featuredGames: FeaturedGame[] = [
     color: "#8e44ad",
     secondaryColor: "#1a0a1a",
   },
+  {
+    id: "godsunchained",
+    title: "Gods Unchained",
+    description: "The original Web3 trading card game. Collect 1800+ cards, master 6 domains, and battle in skill-based PvP. True ownership of your cards!",
+    image: "/featured/gods-unchained.webp",
+    playUrl: "https://godsunchained.com/",
+    tags: ["TCG", "PvP", "Immutable"],
+    color: "#c9a227",
+    secondaryColor: "#1a1505",
+  },
+  {
+    id: "basejump",
+    title: "Basejump",
+    description: "AI-powered gaming platform with user-generated content. Play Broadside PvP battles, collect Solarpunk avatars, and support rainforest conservation!",
+    image: "/featured/basejump.webp",
+    playUrl: "https://play.immutable.com/games/basejump/",
+    tags: ["Platform", "PvP", "Immutable"],
+    color: "#2ecc71",
+    secondaryColor: "#0a1a0f",
+  },
 ];
 
 // Community Games
