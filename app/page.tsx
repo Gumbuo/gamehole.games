@@ -34,7 +34,9 @@ interface FeaturedGame {
   title: string;
   description: string;
   image: string;
-  playUrl: string;
+  playUrl?: string;
+  youtubeTrailer?: string;
+  comingSoon?: boolean;
   tags: string[];
   color: string;
   secondaryColor?: string;
@@ -168,6 +170,27 @@ const featuredGames: FeaturedGame[] = [
     tags: ["Platform", "PvP", "Immutable"],
     color: "#2ecc71",
     secondaryColor: "#0a1a0f",
+  },
+  {
+    id: "enginesoffury",
+    title: "Engines of Fury",
+    description: "Top-down extraction shooter in a post-apocalyptic dystopia. Infiltrate, scavenge loot, and escape before death claims you. From ex-Blizzard, Ubisoft & EA devs!",
+    image: "/featured/engines-of-fury.png",
+    playUrl: "https://www.eof.gg/",
+    tags: ["Extraction", "Shooter", "Immutable"],
+    color: "#ff4444",
+    secondaryColor: "#1a0505",
+  },
+  {
+    id: "wilderworld",
+    title: "Wilder World",
+    description: "AAA metaverse 13.5x larger than GTA 5. Race, fight, explore and build in Wiami. Partnered with NVIDIA, Samsung & Epic Games. Coming 2026!",
+    image: "/featured/wilder-world.png",
+    youtubeTrailer: "7G8SwYp6gPo",
+    comingSoon: true,
+    tags: ["Metaverse", "AAA", "Coming Soon"],
+    color: "#ed9f51",
+    secondaryColor: "#1a0f05",
   },
 ];
 
@@ -515,9 +538,9 @@ export default function HomePage() {
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  {/* Game Image */}
+                  {/* Game Image or YouTube Trailer */}
                   <div style={{
-                    height: '180px',
+                    height: game.youtubeTrailer ? '200px' : '180px',
                     background: hasSecondary
                       ? `linear-gradient(135deg, ${game.color}40, ${game.secondaryColor})`
                       : `linear-gradient(135deg, ${game.color}30, ${game.color}10)`,
@@ -526,16 +549,49 @@ export default function HomePage() {
                     justifyContent: 'center',
                     borderBottom: `1px solid ${game.color}40`,
                     overflow: 'hidden',
+                    position: 'relative',
                   }}>
-                    <img
-                      src={game.image}
-                      alt={game.title}
-                      style={{
-                        maxHeight: '140px',
-                        maxWidth: '90%',
-                        objectFit: 'contain',
-                      }}
-                    />
+                    {game.youtubeTrailer ? (
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        src={`https://www.youtube.com/embed/${game.youtubeTrailer}`}
+                        title={`${game.title} Trailer`}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{ border: 'none' }}
+                      />
+                    ) : (
+                      <img
+                        src={game.image}
+                        alt={game.title}
+                        style={{
+                          maxHeight: '140px',
+                          maxWidth: '90%',
+                          objectFit: 'contain',
+                        }}
+                      />
+                    )}
+                    {game.comingSoon && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        padding: '4px 10px',
+                        background: 'rgba(0, 0, 0, 0.8)',
+                        border: `1px solid ${game.color}`,
+                        borderRadius: '4px',
+                        color: game.color,
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '10px',
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase',
+                        zIndex: 10,
+                      }}>
+                        Coming Soon
+                      </div>
+                    )}
                   </div>
 
                   <div style={{ padding: '20px' }}>
@@ -577,28 +633,49 @@ export default function HomePage() {
                       ))}
                     </div>
 
-                    <a
-                      href={game.playUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'block',
-                        width: '100%',
-                        padding: '12px',
-                        background: `linear-gradient(135deg, ${game.color}, ${game.color}cc)`,
-                        border: 'none',
-                        borderRadius: '8px',
-                        color: '#000',
-                        fontFamily: 'Orbitron, sans-serif',
-                        fontWeight: 'bold',
-                        fontSize: '14px',
-                        textAlign: 'center',
-                        textDecoration: 'none',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Play Now →
-                    </a>
+                    {game.playUrl ? (
+                      <a
+                        href={game.playUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          padding: '12px',
+                          background: `linear-gradient(135deg, ${game.color}, ${game.color}cc)`,
+                          border: 'none',
+                          borderRadius: '8px',
+                          color: '#000',
+                          fontFamily: 'Orbitron, sans-serif',
+                          fontWeight: 'bold',
+                          fontSize: '14px',
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        Play Now →
+                      </a>
+                    ) : (
+                      <div
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          padding: '12px',
+                          background: `linear-gradient(135deg, ${game.color}40, ${game.color}20)`,
+                          border: `2px solid ${game.color}`,
+                          borderRadius: '8px',
+                          color: game.color,
+                          fontFamily: 'Orbitron, sans-serif',
+                          fontWeight: 'bold',
+                          fontSize: '14px',
+                          textAlign: 'center',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        Coming 2026
+                      </div>
+                    )}
                   </div>
                 </div>
               );
