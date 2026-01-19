@@ -139,6 +139,16 @@ const featuredGames: FeaturedGame[] = [
     color: "#3498db",
     secondaryColor: "#0a1a2e",
   },
+  {
+    id: "villains",
+    title: "Villains: Robot Battle Royale",
+    description: "Fast-paced 4-minute mech battles mixing Battle Royale with MOBA tactics. Customize robots, awaken Super Villains as NFTs!",
+    image: "/featured/villains.webp",
+    playUrl: "https://play.immutable.com/games/villains/",
+    tags: ["Battle Royale", "MOBA", "Immutable"],
+    color: "#8e44ad",
+    secondaryColor: "#1a0a1a",
+  },
 ];
 
 // Community Games
