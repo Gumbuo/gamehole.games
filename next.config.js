@@ -14,6 +14,10 @@ module.exports = {
       'porto': emptyModule,
       '@safe-global/safe-apps-sdk': emptyModule,
       '@safe-global/safe-apps-provider': emptyModule,
+      // MetaMask SDK dependencies
+      '@react-native-async-storage/async-storage': emptyModule,
+      'supports-color': emptyModule,
+      'encoding': emptyModule,
     };
 
     return config;

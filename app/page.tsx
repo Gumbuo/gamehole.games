@@ -210,7 +210,6 @@ const featuredGames: FeaturedGame[] = [
 
 // Community Games
 const communityGames = {
-  chess: { title: "Web3 Chess", src: "/chess", badge: "NEW", isRoute: true },
   catacombs: { title: "Alien Catacombs", src: "/alien-catacombs.html", badge: "ALPHA" },
   dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY" },
   invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY" },
