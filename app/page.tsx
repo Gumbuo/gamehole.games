@@ -239,7 +239,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchFreeGames = async () => {
       try {
-        const response = await fetch('/api/games?platform=browser&limit=8');
+        const response = await fetch('/api/games?platform=browser&limit=100');
         const data = await response.json();
         if (data.success) {
           setFreeGames(data.games);
@@ -397,20 +397,46 @@ export default function HomePage() {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-          <h1
-            onClick={() => { setActiveSection("home"); setSelectedGame(null); }}
-            style={{
-              fontFamily: 'Orbitron, sans-serif',
-              fontSize: '28px',
-              fontWeight: 'bold',
-              background: 'linear-gradient(90deg, #00d4ff, #00ff99)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              cursor: 'pointer',
-            }}
-          >
-            GAME HOLE
-          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <h1
+              onClick={() => { setActiveSection("home"); setSelectedGame(null); }}
+              style={{
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '28px',
+                fontWeight: 'bold',
+                background: 'linear-gradient(90deg, #00d4ff, #00ff99)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                cursor: 'pointer',
+              }}
+            >
+              GAME HOLE
+            </h1>
+
+            {/* Community Games Tabs */}
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', borderLeft: '1px solid rgba(0, 212, 255, 0.3)', paddingLeft: '20px' }}>
+              {Object.entries(communityGames).map(([key, game]) => (
+                <button
+                  key={key}
+                  onClick={() => playGame(key)}
+                  style={{
+                    padding: '6px 12px',
+                    background: selectedGame === key && activeSection === "play" ? 'rgba(0, 255, 153, 0.2)' : 'rgba(0, 0, 0, 0.3)',
+                    border: selectedGame === key && activeSection === "play" ? '1px solid #00ff99' : '1px solid rgba(0, 212, 255, 0.3)',
+                    borderRadius: '4px',
+                    color: selectedGame === key && activeSection === "play" ? '#00ff99' : '#00d4ff',
+                    fontFamily: 'Orbitron, sans-serif',
+                    fontSize: '10px',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {game.title}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
             {["home", "discover", "leaderboard", "credits"].map((section) => (
