@@ -1,89 +1,108 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-interface NomsteadStats {
-  totalNFTs: number | null;
-  activeListings: number | null;
-  floorPrice: string | null;
+// Stats shape returned for any Immutable game
+interface GameStats {
+  gameId: string;
+  totalCards?: number;
+  totalPlayers?: number;
+  collectionSize?: number;
   lastUpdated: number;
 }
 
-// In-memory cache with 10-minute TTL
-let cachedStats: NomsteadStats | null = null;
-let cacheTimestamp: number = 0;
-const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+// In-memory cache keyed by gameId, 10-minute TTL
+const cache = new Map<string, { stats: GameStats; timestamp: number }>();
+const CACHE_DURATION = 10 * 60 * 1000;
 
-const NOMSTEAD_COLLECTION = "nomstead";
-const IMX_API_BASE = "https://api.immutable.com/v1";
+// Gods Unchained dedicated public API (no auth, 5/s rate limit)
+const GU_API = "https://api.godsunchained.com/v0";
 
-export async function GET() {
+async function fetchGodsUnchained(): Promise<GameStats> {
+  // Fetch card count and player count in parallel
+  const [protoRes, playersRes] = await Promise.allSettled([
+    fetch(`${GU_API}/proto?perPage=1`, {
+      signal: AbortSignal.timeout(8000),
+    }),
+    fetch(`${GU_API}/properties?perPage=1`, {
+      signal: AbortSignal.timeout(8000),
+    }),
+  ]);
+
+  let totalCards: number | undefined;
+  let totalPlayers: number | undefined;
+
+  if (protoRes.status === "fulfilled" && protoRes.value.ok) {
+    const data = await protoRes.value.json();
+    totalCards = data.total ?? undefined;
+  }
+
+  if (playersRes.status === "fulfilled" && playersRes.value.ok) {
+    const data = await playersRes.value.json();
+    totalPlayers = data.total ?? undefined;
+  }
+
+  return {
+    gameId: "godsunchained",
+    totalCards,
+    totalPlayers,
+    lastUpdated: Date.now(),
+  };
+}
+
+// Supported games and their fetch functions
+const GAME_FETCHERS: Record<string, () => Promise<GameStats>> = {
+  godsunchained: fetchGodsUnchained,
+};
+
+export async function GET(request: NextRequest) {
   try {
-    const now = Date.now();
-    if (cachedStats && now - cacheTimestamp < CACHE_DURATION) {
-      return NextResponse.json({ success: true, stats: cachedStats, cached: true });
-    }
+    const { searchParams } = new URL(request.url);
+    const gameId = searchParams.get("game") || "all";
 
-    // Fetch collection metadata and active listings in parallel
-    const [collectionRes, listingsRes] = await Promise.allSettled([
-      fetch(`${IMX_API_BASE}/chains/imtbl-zkevm-mainnet/collections/${NOMSTEAD_COLLECTION}`, {
-        headers: { Accept: "application/json" },
-        signal: AbortSignal.timeout(8000),
-      }),
-      fetch(`${IMX_API_BASE}/chains/imtbl-zkevm-mainnet/collections/${NOMSTEAD_COLLECTION}/listings?page_size=1&status=active`, {
-        headers: { Accept: "application/json" },
-        signal: AbortSignal.timeout(8000),
-      }),
-    ]);
-
-    let totalNFTs: number | null = null;
-    let activeListings: number | null = null;
-    let floorPrice: string | null = null;
-
-    // Parse collection data
-    if (collectionRes.status === "fulfilled" && collectionRes.value.ok) {
-      const data = await collectionRes.value.json();
-      // Immutable zkEVM collection response may have different shapes
-      // Try common field names for total supply
-      totalNFTs = data.total_supply ?? data.total_count ?? null;
-    }
-
-    // Parse listings data
-    if (listingsRes.status === "fulfilled" && listingsRes.value.ok) {
-      const data = await listingsRes.value.json();
-      // result array and page info
-      if (data.page?.total_count != null) {
-        activeListings = data.page.total_count;
-      } else if (data.result) {
-        activeListings = data.result.length;
+    // If requesting a specific game
+    if (gameId !== "all") {
+      const cached = cache.get(gameId);
+      if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+        return NextResponse.json({ success: true, stats: cached.stats, cached: true });
       }
-      // Floor price from first listing (sorted by price ascending by default)
-      if (data.result?.[0]?.amount?.value) {
-        const raw = data.result[0].amount.value;
-        const decimals = data.result[0].amount.decimals ?? 18;
-        floorPrice = (Number(raw) / Math.pow(10, decimals)).toFixed(4);
+
+      const fetcher = GAME_FETCHERS[gameId];
+      if (!fetcher) {
+        return NextResponse.json(
+          { success: false, error: `Unknown game: ${gameId}`, stats: null },
+          { status: 404 }
+        );
       }
+
+      const stats = await fetcher();
+      cache.set(gameId, { stats, timestamp: Date.now() });
+      return NextResponse.json({ success: true, stats, cached: false });
     }
 
-    const stats: NomsteadStats = {
-      totalNFTs,
-      activeListings,
-      floorPrice,
-      lastUpdated: now,
-    };
+    // Fetch all games
+    const allStats: Record<string, GameStats> = {};
+    const fetches = Object.entries(GAME_FETCHERS).map(async ([id, fetcher]) => {
+      const cached = cache.get(id);
+      if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+        allStats[id] = cached.stats;
+        return;
+      }
+      try {
+        const stats = await fetcher();
+        cache.set(id, { stats, timestamp: Date.now() });
+        allStats[id] = stats;
+      } catch {
+        // Use stale cache if available
+        if (cached) allStats[id] = cached.stats;
+      }
+    });
 
-    cachedStats = stats;
-    cacheTimestamp = now;
+    await Promise.allSettled(fetches);
 
-    return NextResponse.json({ success: true, stats, cached: false });
+    return NextResponse.json({ success: true, stats: allStats, cached: false });
   } catch (error) {
-    console.error("Error fetching Nomstead data:", error);
-
-    // Return stale cache if available
-    if (cachedStats) {
-      return NextResponse.json({ success: true, stats: cachedStats, cached: true, stale: true });
-    }
-
+    console.error("Error fetching game stats:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to fetch Nomstead data", stats: null },
+      { success: false, error: "Failed to fetch game stats" },
       { status: 500 }
     );
   }

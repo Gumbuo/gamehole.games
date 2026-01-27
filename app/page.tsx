@@ -237,8 +237,8 @@ export default function HomePage() {
   const [freeGames, setFreeGames] = useState<FreeGame[]>([]);
   const [loadingFreeGames, setLoadingFreeGames] = useState(true);
 
-  // Nomstead NFT stats
-  const [nomsteadStats, setNomsteadStats] = useState<{ totalNFTs: number | null; activeListings: number | null; floorPrice: string | null } | null>(null);
+  // Live game stats from Immutable APIs
+  const [gameStats, setGameStats] = useState<Record<string, { totalCards?: number; totalPlayers?: number; collectionSize?: number }>>({});
 
 
   // Video ad state
@@ -267,13 +267,13 @@ export default function HomePage() {
   }, []);
 
 
-  // Fetch Nomstead NFT stats
+  // Fetch live game stats from Immutable APIs
   useEffect(() => {
-    fetch('/api/nomstead')
+    fetch('/api/nomstead?game=all')
       .then(res => res.json())
       .then(data => {
         if (data.success && data.stats) {
-          setNomsteadStats(data.stats);
+          setGameStats(data.stats);
         }
       })
       .catch(() => {});
@@ -698,58 +698,58 @@ export default function HomePage() {
                       ))}
                     </div>
 
-                    {game.id === 'nomstead' && nomsteadStats && (
+                    {gameStats[game.id] && (
                       <div style={{
                         display: 'flex',
                         gap: '12px',
                         marginBottom: '16px',
                         flexWrap: 'wrap',
                       }}>
-                        {nomsteadStats.totalNFTs != null && (
+                        {gameStats[game.id].totalCards != null && (
                           <div style={{
                             padding: '6px 12px',
-                            background: 'rgba(74, 222, 128, 0.1)',
-                            border: '1px solid rgba(74, 222, 128, 0.3)',
+                            background: `${game.color}15`,
+                            border: `1px solid ${game.color}40`,
                             borderRadius: '8px',
                             textAlign: 'center',
                           }}>
-                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: '#4ade80', fontWeight: 'bold' }}>
-                              {nomsteadStats.totalNFTs.toLocaleString()}
+                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
+                              {gameStats[game.id].totalCards!.toLocaleString()}
                             </div>
                             <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                              NFTs Minted
+                              Cards
                             </div>
                           </div>
                         )}
-                        {nomsteadStats.activeListings != null && (
+                        {gameStats[game.id].totalPlayers != null && (
                           <div style={{
                             padding: '6px 12px',
-                            background: 'rgba(74, 222, 128, 0.1)',
-                            border: '1px solid rgba(74, 222, 128, 0.3)',
+                            background: `${game.color}15`,
+                            border: `1px solid ${game.color}40`,
                             borderRadius: '8px',
                             textAlign: 'center',
                           }}>
-                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: '#4ade80', fontWeight: 'bold' }}>
-                              {nomsteadStats.activeListings.toLocaleString()}
+                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
+                              {gameStats[game.id].totalPlayers!.toLocaleString()}
                             </div>
                             <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                              Listings
+                              Players
                             </div>
                           </div>
                         )}
-                        {nomsteadStats.floorPrice != null && (
+                        {gameStats[game.id].collectionSize != null && (
                           <div style={{
                             padding: '6px 12px',
-                            background: 'rgba(74, 222, 128, 0.1)',
-                            border: '1px solid rgba(74, 222, 128, 0.3)',
+                            background: `${game.color}15`,
+                            border: `1px solid ${game.color}40`,
                             borderRadius: '8px',
                             textAlign: 'center',
                           }}>
-                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: '#4ade80', fontWeight: 'bold' }}>
-                              {nomsteadStats.floorPrice}
+                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
+                              {gameStats[game.id].collectionSize!.toLocaleString()}
                             </div>
                             <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                              Floor
+                              NFTs
                             </div>
                           </div>
                         )}
