@@ -238,7 +238,11 @@ export default function HomePage() {
   const [loadingFreeGames, setLoadingFreeGames] = useState(true);
 
   // Live game stats from Immutable APIs
-  const [gameStats, setGameStats] = useState<Record<string, { totalCards?: number; totalPlayers?: number; collectionSize?: number }>>({});
+  const [gameStats, setGameStats] = useState<Record<string, {
+    totalCards?: number; totalPlayers?: number; nftCount?: number;
+    activeListings?: number; floorPrice?: string; floorCurrency?: string;
+    marketplaceUrl?: string;
+  }>>({});
 
 
   // Video ad state
@@ -660,14 +664,32 @@ export default function HomePage() {
                   </div>
 
                   <div style={{ padding: '20px' }}>
-                    <h3 style={{
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '22px',
-                      color: game.color,
-                      marginBottom: '10px',
-                    }}>
-                      {game.title}
-                    </h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                      <h3 style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '22px',
+                        color: game.color,
+                        margin: 0,
+                      }}>
+                        {game.title}
+                      </h3>
+                      {game.tags.includes('Immutable') && (
+                        <span style={{
+                          padding: '2px 8px',
+                          background: 'linear-gradient(135deg, #00d4ff20, #00ff9920)',
+                          border: '1px solid #00d4ff60',
+                          borderRadius: '4px',
+                          color: '#00d4ff',
+                          fontFamily: 'Orbitron, sans-serif',
+                          fontSize: '9px',
+                          fontWeight: 'bold',
+                          letterSpacing: '1px',
+                          whiteSpace: 'nowrap',
+                        }}>
+                          IMX
+                        </span>
+                      )}
+                    </div>
 
                     <p style={{
                       fontFamily: 'Share Tech Mono, monospace',
@@ -699,59 +721,113 @@ export default function HomePage() {
                     </div>
 
                     {gameStats[game.id] && (
-                      <div style={{
-                        display: 'flex',
-                        gap: '12px',
-                        marginBottom: '16px',
-                        flexWrap: 'wrap',
-                      }}>
-                        {gameStats[game.id].totalCards != null && (
-                          <div style={{
-                            padding: '6px 12px',
-                            background: `${game.color}15`,
-                            border: `1px solid ${game.color}40`,
-                            borderRadius: '8px',
-                            textAlign: 'center',
-                          }}>
-                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
-                              {gameStats[game.id].totalCards!.toLocaleString()}
+                      <div style={{ marginBottom: '16px' }}>
+                        <div style={{
+                          display: 'flex',
+                          gap: '10px',
+                          flexWrap: 'wrap',
+                          marginBottom: gameStats[game.id].marketplaceUrl ? '10px' : '0',
+                        }}>
+                          {gameStats[game.id].totalCards != null && (
+                            <div style={{
+                              padding: '6px 12px',
+                              background: `${game.color}15`,
+                              border: `1px solid ${game.color}40`,
+                              borderRadius: '8px',
+                              textAlign: 'center',
+                            }}>
+                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
+                                {gameStats[game.id].totalCards!.toLocaleString()}
+                              </div>
+                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
+                                Cards
+                              </div>
                             </div>
-                            <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                              Cards
+                          )}
+                          {gameStats[game.id].totalPlayers != null && (
+                            <div style={{
+                              padding: '6px 12px',
+                              background: `${game.color}15`,
+                              border: `1px solid ${game.color}40`,
+                              borderRadius: '8px',
+                              textAlign: 'center',
+                            }}>
+                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
+                                {gameStats[game.id].totalPlayers!.toLocaleString()}
+                              </div>
+                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
+                                Players
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {gameStats[game.id].totalPlayers != null && (
-                          <div style={{
-                            padding: '6px 12px',
-                            background: `${game.color}15`,
-                            border: `1px solid ${game.color}40`,
-                            borderRadius: '8px',
-                            textAlign: 'center',
-                          }}>
-                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
-                              {gameStats[game.id].totalPlayers!.toLocaleString()}
+                          )}
+                          {gameStats[game.id].nftCount != null && (
+                            <div style={{
+                              padding: '6px 12px',
+                              background: `${game.color}15`,
+                              border: `1px solid ${game.color}40`,
+                              borderRadius: '8px',
+                              textAlign: 'center',
+                            }}>
+                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
+                                {gameStats[game.id].nftCount!.toLocaleString()}
+                              </div>
+                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
+                                NFTs
+                              </div>
                             </div>
-                            <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                              Players
+                          )}
+                          {gameStats[game.id].activeListings != null && (
+                            <div style={{
+                              padding: '6px 12px',
+                              background: `${game.color}15`,
+                              border: `1px solid ${game.color}40`,
+                              borderRadius: '8px',
+                              textAlign: 'center',
+                            }}>
+                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
+                                {gameStats[game.id].activeListings!.toLocaleString()}
+                              </div>
+                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
+                                Listed
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {gameStats[game.id].collectionSize != null && (
-                          <div style={{
-                            padding: '6px 12px',
-                            background: `${game.color}15`,
-                            border: `1px solid ${game.color}40`,
-                            borderRadius: '8px',
-                            textAlign: 'center',
-                          }}>
-                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
-                              {gameStats[game.id].collectionSize!.toLocaleString()}
+                          )}
+                          {gameStats[game.id].floorPrice != null && (
+                            <div style={{
+                              padding: '6px 12px',
+                              background: `${game.color}15`,
+                              border: `1px solid ${game.color}40`,
+                              borderRadius: '8px',
+                              textAlign: 'center',
+                            }}>
+                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
+                                ${gameStats[game.id].floorPrice}
+                              </div>
+                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
+                                Floor
+                              </div>
                             </div>
-                            <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                              NFTs
-                            </div>
-                          </div>
+                          )}
+                        </div>
+                        {gameStats[game.id].marketplaceUrl && (
+                          <a
+                            href={gameStats[game.id].marketplaceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'inline-block',
+                              padding: '4px 12px',
+                              background: `${game.color}10`,
+                              border: `1px solid ${game.color}30`,
+                              borderRadius: '6px',
+                              color: game.color,
+                              fontFamily: 'Share Tech Mono, monospace',
+                              fontSize: '11px',
+                              textDecoration: 'none',
+                            }}
+                          >
+                            View Collection →
+                          </a>
                         )}
                       </div>
                     )}
