@@ -3,11 +3,17 @@ import { Redis } from "@upstash/redis";
 
 const GAME_STORAGE_KEY_PREFIX = "gumbuo:game_storage:";
 
-// Initialize Redis client with Vercel KV environment variables
-const redis = new Redis({
-  url: process.env.KV_REST_API_URL!,
-  token: process.env.KV_REST_API_TOKEN!,
-});
+// Lazily initialize Redis to avoid crashing when env vars are missing at build time
+let _redis: Redis | null = null;
+function getRedis(): Redis {
+  if (!_redis) {
+    _redis = new Redis({
+      url: process.env.KV_REST_API_URL!,
+      token: process.env.KV_REST_API_TOKEN!,
+    });
+  }
+  return _redis;
+}
 
 interface GameStorageData {
   [key: string]: any;
@@ -28,7 +34,7 @@ export async function GET(request: NextRequest) {
     }
 
     const storageKey = `${GAME_STORAGE_KEY_PREFIX}${userId}:${file}`;
-    const data = await redis.get<GameStorageData>(storageKey);
+    const data = await getRedis().get<GameStorageData>(storageKey);
 
     return NextResponse.json({
       success: true,
@@ -60,7 +66,7 @@ export async function POST(request: NextRequest) {
     const storageKey = `${GAME_STORAGE_KEY_PREFIX}${userId}:${file}`;
 
     // Save to Redis
-    await redis.set(storageKey, data);
+    await getRedis().set(storageKey, data);
 
     return NextResponse.json({
       success: true,
@@ -91,13 +97,13 @@ export async function PATCH(request: NextRequest) {
     const storageKey = `${GAME_STORAGE_KEY_PREFIX}${userId}:${file}`;
 
     // Fetch current data
-    const currentData = await redis.get<GameStorageData>(storageKey) || {};
+    const currentData = await getRedis().get<GameStorageData>(storageKey) || {};
 
     // Deep merge updates
     const updatedData = deepMerge(currentData, updates);
 
     // Save to Redis
-    await redis.set(storageKey, updatedData);
+    await getRedis().set(storageKey, updatedData);
 
     return NextResponse.json({
       success: true,
@@ -127,7 +133,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const storageKey = `${GAME_STORAGE_KEY_PREFIX}${userId}:${file}`;
-    await redis.del(storageKey);
+    await getRedis().del(storageKey);
 
     return NextResponse.json({
       success: true,

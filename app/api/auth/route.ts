@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { kv } from '@vercel/kv';
+
+// Lazily import kv to avoid crashing when env vars are missing at build time
+function getKV(): import('@vercel/kv').VercelKV {
+  const { kv } = require('@vercel/kv');
+  return kv;
+}
 
 // Persistent storage using Vercel KV
 interface User {
@@ -32,7 +37,7 @@ let devSessions: Session[] = [];
 async function getUsers(): Promise<User[]> {
   if (isKVAvailable()) {
     try {
-      const users = await kv.get<User[]>(USERS_KEY);
+      const users = await getKV().get<User[]>(USERS_KEY);
       return users || [];
     } catch (error) {
       console.error('KV error, using fallback:', error);
@@ -45,7 +50,7 @@ async function getUsers(): Promise<User[]> {
 async function saveUsers(users: User[]): Promise<void> {
   if (isKVAvailable()) {
     try {
-      await kv.set(USERS_KEY, users);
+      await getKV().set(USERS_KEY, users);
       return;
     } catch (error) {
       console.error('KV error, using fallback:', error);
@@ -57,7 +62,7 @@ async function saveUsers(users: User[]): Promise<void> {
 async function getSessions(): Promise<Session[]> {
   if (isKVAvailable()) {
     try {
-      const sessions = await kv.get<Session[]>(SESSIONS_KEY);
+      const sessions = await getKV().get<Session[]>(SESSIONS_KEY);
       return sessions || [];
     } catch (error) {
       console.error('KV error, using fallback:', error);
@@ -70,7 +75,7 @@ async function getSessions(): Promise<Session[]> {
 async function saveSessions(sessions: Session[]): Promise<void> {
   if (isKVAvailable()) {
     try {
-      await kv.set(SESSIONS_KEY, sessions);
+      await getKV().set(SESSIONS_KEY, sessions);
       return;
     } catch (error) {
       console.error('KV error, using fallback:', error);
