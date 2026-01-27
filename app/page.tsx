@@ -196,6 +196,17 @@ const featuredGames: FeaturedGame[] = [
     secondaryColor: "#1a0505",
   },
   {
+    id: "nomstead",
+    title: "NomStead",
+    description: "Casual sandbox MMORPG where every player helps shape the world. Farm, craft, trade, and build your civilization on Immutable zkEVM — casually, on your phone, in your spare time.",
+    image: "/featured/nomstead.png",
+    playUrl: "https://play.immutable.com/games/nomstead/",
+    youtubeTrailer: "sdQtdwdVduY",
+    tags: ["Sandbox MMO", "Cozy", "Immutable"],
+    color: "#4ade80",
+    secondaryColor: "#0a1a10",
+  },
+  {
     id: "wilderworld",
     title: "Wilder World",
     description: "AAA metaverse 13.5x larger than GTA 5. Race, fight, explore and build in Wiami. Partnered with NVIDIA, Samsung & Epic Games. Coming 2026!",
@@ -226,6 +237,9 @@ export default function HomePage() {
   const [freeGames, setFreeGames] = useState<FreeGame[]>([]);
   const [loadingFreeGames, setLoadingFreeGames] = useState(true);
 
+  // Nomstead NFT stats
+  const [nomsteadStats, setNomsteadStats] = useState<{ totalNFTs: number | null; activeListings: number | null; floorPrice: string | null } | null>(null);
+
 
   // Video ad state
   const [showVideo, setShowVideo] = useState(false);
@@ -252,6 +266,18 @@ export default function HomePage() {
     fetchFreeGames();
   }, []);
 
+
+  // Fetch Nomstead NFT stats
+  useEffect(() => {
+    fetch('/api/nomstead')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.stats) {
+          setNomsteadStats(data.stats);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Show video popup on page load with rotation
   useEffect(() => {
@@ -671,6 +697,64 @@ export default function HomePage() {
                         </span>
                       ))}
                     </div>
+
+                    {game.id === 'nomstead' && nomsteadStats && (
+                      <div style={{
+                        display: 'flex',
+                        gap: '12px',
+                        marginBottom: '16px',
+                        flexWrap: 'wrap',
+                      }}>
+                        {nomsteadStats.totalNFTs != null && (
+                          <div style={{
+                            padding: '6px 12px',
+                            background: 'rgba(74, 222, 128, 0.1)',
+                            border: '1px solid rgba(74, 222, 128, 0.3)',
+                            borderRadius: '8px',
+                            textAlign: 'center',
+                          }}>
+                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: '#4ade80', fontWeight: 'bold' }}>
+                              {nomsteadStats.totalNFTs.toLocaleString()}
+                            </div>
+                            <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
+                              NFTs Minted
+                            </div>
+                          </div>
+                        )}
+                        {nomsteadStats.activeListings != null && (
+                          <div style={{
+                            padding: '6px 12px',
+                            background: 'rgba(74, 222, 128, 0.1)',
+                            border: '1px solid rgba(74, 222, 128, 0.3)',
+                            borderRadius: '8px',
+                            textAlign: 'center',
+                          }}>
+                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: '#4ade80', fontWeight: 'bold' }}>
+                              {nomsteadStats.activeListings.toLocaleString()}
+                            </div>
+                            <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
+                              Listings
+                            </div>
+                          </div>
+                        )}
+                        {nomsteadStats.floorPrice != null && (
+                          <div style={{
+                            padding: '6px 12px',
+                            background: 'rgba(74, 222, 128, 0.1)',
+                            border: '1px solid rgba(74, 222, 128, 0.3)',
+                            borderRadius: '8px',
+                            textAlign: 'center',
+                          }}>
+                            <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: '#4ade80', fontWeight: 'bold' }}>
+                              {nomsteadStats.floorPrice}
+                            </div>
+                            <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
+                              Floor
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     {game.playUrl ? (
                       <a
