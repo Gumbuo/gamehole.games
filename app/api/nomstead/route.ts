@@ -24,8 +24,16 @@ const IMX_ZKEVM_API = "https://api.immutable.com/v1/chains/imtbl-zkevm-mainnet";
 // NomStead collections on Immutable zkEVM
 const NOMSTEAD_TILES = "0x213d44664cdf6c79abe73bf9310ec68e0329a2c6";
 const NOMSTEAD_CHESTS = "0x80f2f7100e4155105c6ea4e3b822726cbe56cccc";
+const NOMSTEAD_COMPANIONS = "0x3167dd54e6fe1b7d4a9688af031c7c00f1dcfdc9";
+
+// Illuvium collections on Immutable zkEVM
+const ILLUVIUM_ILLUVIALS = "0x0cf79ecde0c183b0cf3fe66b624e29b127bfc867";
+const ILLUVIUM_LAND = "0x300a861089c28eb2b1604c24ef7c7360b7236bc0";
+
 // USDC on Immutable zkEVM (6 decimals)
 const USDC_DECIMALS = 6;
+// Native IMX token (18 decimals)
+const IMX_DECIMALS = 18;
 
 async function fetchGodsUnchained(): Promise<GameStats> {
   const [protoRes, playersRes] = await Promise.allSettled([
@@ -99,26 +107,24 @@ async function getFloorListing(contractAddress: string): Promise<{ count: number
 }
 
 async function fetchNomStead(): Promise<GameStats> {
-  // Fetch tiles count and listings in parallel
-  const [tilesCount, chestsCount, tilesListings, chestsListings] = await Promise.all([
+  // Fetch all three collections: tiles, chests, companions
+  const [tilesCount, chestsCount, companionsCount, tilesListings, chestsListings, companionsListings] = await Promise.all([
     countNFTs(NOMSTEAD_TILES).catch(() => 0),
     countNFTs(NOMSTEAD_CHESTS).catch(() => 0),
+    countNFTs(NOMSTEAD_COMPANIONS).catch(() => 0),
     getFloorListing(NOMSTEAD_TILES).catch((): { count: number; floorPrice?: string } => ({ count: 0 })),
     getFloorListing(NOMSTEAD_CHESTS).catch((): { count: number; floorPrice?: string } => ({ count: 0 })),
+    getFloorListing(NOMSTEAD_COMPANIONS).catch((): { count: number; floorPrice?: string } => ({ count: 0 })),
   ]);
 
-  const totalNFTs = tilesCount + chestsCount;
-  const totalListings = tilesListings.count + chestsListings.count;
+  const totalNFTs = tilesCount + chestsCount + companionsCount;
+  const totalListings = tilesListings.count + chestsListings.count + companionsListings.count;
 
-  // Use the cheaper floor as the overall floor
-  let floorPrice: string | undefined;
-  if (tilesListings.floorPrice && chestsListings.floorPrice) {
-    floorPrice = parseFloat(tilesListings.floorPrice) < parseFloat(chestsListings.floorPrice)
-      ? tilesListings.floorPrice
-      : chestsListings.floorPrice;
-  } else {
-    floorPrice = tilesListings.floorPrice || chestsListings.floorPrice;
-  }
+  // Use the cheapest floor price across all collections
+  const floors = [tilesListings.floorPrice, chestsListings.floorPrice, companionsListings.floorPrice]
+    .filter((f): f is string => !!f)
+    .map(f => parseFloat(f));
+  const floorPrice = floors.length > 0 ? Math.min(...floors).toFixed(2) : undefined;
 
   return {
     gameId: "nomstead",
@@ -128,6 +134,64 @@ async function fetchNomStead(): Promise<GameStats> {
     floorCurrency: floorPrice ? "USDC" : undefined,
     collectionName: "NomStead",
     marketplaceUrl: `https://sphere.market/immutable/collection/${NOMSTEAD_TILES}`,
+    lastUpdated: Date.now(),
+  };
+}
+
+async function getFloorListingIMX(contractAddress: string): Promise<{ count: number; floorPrice?: string }> {
+  // Fetch active listings for IMX-denominated collections
+  const url = `${IMX_ZKEVM_API}/orders/listings?sell_item_contract_address=${contractAddress}&status=ACTIVE&page_size=200`;
+  const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+  if (!res.ok) return { count: 0 };
+
+  const data = await res.json();
+  const results = data.result ?? [];
+  const count = results.length;
+
+  // Find cheapest listing (handle both native IMX and ERC20)
+  let cheapest: number | null = null;
+  for (const listing of results) {
+    const buyItem = listing.buy?.[0];
+    if (!buyItem) continue;
+    const raw = Number(buyItem.amount ?? 0);
+    // Determine decimals based on token type
+    const decimals = buyItem.type === "NATIVE" ? IMX_DECIMALS : USDC_DECIMALS;
+    const normalized = raw / Math.pow(10, decimals);
+    if (normalized > 0 && (cheapest === null || normalized < cheapest)) {
+      cheapest = normalized;
+    }
+  }
+
+  const floorPrice = cheapest != null ? cheapest.toFixed(4) : undefined;
+  return { count, floorPrice };
+}
+
+async function fetchIlluvium(): Promise<GameStats> {
+  // Fetch Illuvials (main creatures) and Land collections
+  const [illuvialsCount, landCount, illuvialsListings, landListings] = await Promise.all([
+    countNFTs(ILLUVIUM_ILLUVIALS).catch(() => 0),
+    countNFTs(ILLUVIUM_LAND).catch(() => 0),
+    getFloorListingIMX(ILLUVIUM_ILLUVIALS).catch((): { count: number; floorPrice?: string } => ({ count: 0 })),
+    getFloorListingIMX(ILLUVIUM_LAND).catch((): { count: number; floorPrice?: string } => ({ count: 0 })),
+  ]);
+
+  const totalNFTs = illuvialsCount + landCount;
+  const totalListings = illuvialsListings.count + landListings.count;
+
+  // Use the cheaper floor
+  const floors = [illuvialsListings.floorPrice, landListings.floorPrice]
+    .filter((f): f is string => !!f)
+    .map(f => parseFloat(f));
+  const floorPrice = floors.length > 0 ? Math.min(...floors).toFixed(4) : undefined;
+
+  return {
+    gameId: "illuvium",
+    nftCount: totalNFTs || undefined,
+    activeListings: totalListings || undefined,
+    floorPrice,
+    floorCurrency: floorPrice ? "IMX" : undefined,
+    collectionName: "Illuvium",
+    marketplaceUrl: `https://sphere.market/immutable/collection/${ILLUVIUM_ILLUVIALS}`,
     lastUpdated: Date.now(),
   };
 }
@@ -148,6 +212,7 @@ const GAME_FETCHERS: Record<string, () => Promise<GameStats>> = {
   godsunchained: fetchGodsUnchained,
   nomstead: fetchNomStead,
   spidertanks: fetchSpiderTanks,
+  illuvium: fetchIlluvium,
 };
 
 export async function GET(request: NextRequest) {
