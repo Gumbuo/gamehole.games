@@ -136,7 +136,7 @@ export async function GET(request: NextRequest) {
     }
     if (migrated) {
       saveState.lastUpdated = Date.now();
-      try { await kv.set(saveKey, saveState); } catch (_) { /* non-critical */ }
+      try { await kv.set(saveKey, saveState); } catch { /* non-critical */ }
     }
 
     // Check for completed crafting jobs
