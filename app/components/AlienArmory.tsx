@@ -10,10 +10,11 @@ import {
   Recipe,
   InventoryItem,
   EquipmentSlot,
+  RarityTier,
 } from "./armory/types";
 import { STATIONS, STATION_ORDER, getStationQueueSize } from "./armory/data/stations";
 import { RECIPES, getAvailableRecipes, canCraftRecipe, getRecipe } from "./armory/data/recipes";
-import { ITEMS, getItem } from "./armory/data/items";
+import { ITEMS, getItem, getItemWithRarity } from "./armory/data/items";
 import ArmoryMap from "./armory/ArmoryMap";
 import RecipeChart from "./armory/RecipeChart";
 import {
@@ -26,6 +27,11 @@ import {
   getLevelTitle,
   formatTime,
   calculateSpeedUpCost,
+  RARITY_NAMES,
+  RARITY_COLORS,
+  RARITY_UPGRADE_PATH,
+  RARITY_SELL_MULTIPLIERS,
+  MERGE_COST,
 } from "./armory/constants";
 
 type ModalType = "shop" | "inventory" | "crafting" | "none";
@@ -192,14 +198,14 @@ export default function AlienArmory() {
   };
 
   // Sell item for Gold
-  const sellItem = async (itemId: string, quantity: number) => {
+  const sellItem = async (itemId: string, quantity: number, rarity: RarityTier = 'common') => {
     if (!address) return;
 
     try {
       const response = await fetch("/api/armory/sell", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ wallet: address, itemId, quantity }),
+        body: JSON.stringify({ wallet: address, itemId, quantity, rarity }),
       });
       const data = await response.json();
       if (data.success) {
@@ -210,6 +216,35 @@ export default function AlienArmory() {
       }
     } catch (error) {
       showNotification("Failed to sell", "error");
+    }
+  };
+
+  // Merge items
+  const mergeItem = async (itemId: string, rarity: RarityTier) => {
+    if (!address) return;
+
+    try {
+      const response = await fetch("/api/armory/merge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wallet: address, itemId, rarity }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setSaveState((prev) => prev ? { ...prev, inventory: data.data.inventory, gold: data.data.newGoldBalance } : null);
+        const nextRarity = RARITY_UPGRADE_PATH[rarity];
+        showNotification(
+          `Merged! ${data.data.merged.itemName} is now ${RARITY_NAMES[nextRarity!]}! +${data.data.xpGained} XP`,
+          "success"
+        );
+        if (data.data.leveledUp) {
+          showNotification(`Level Up! Now level ${data.data.newLevel}!`, "success");
+        }
+      } else {
+        showNotification(data.error || "Failed to merge", "error");
+      }
+    } catch (error) {
+      showNotification("Failed to merge", "error");
     }
   };
 
@@ -236,14 +271,14 @@ export default function AlienArmory() {
   };
 
   // Equip item
-  const equipItem = async (itemId: string, slot: EquipmentSlot) => {
+  const equipItem = async (itemId: string, slot: EquipmentSlot, rarity: RarityTier = 'common') => {
     if (!address) return;
 
     try {
       const response = await fetch("/api/armory/equip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ wallet: address, itemId, slot }),
+        body: JSON.stringify({ wallet: address, itemId, slot, rarity }),
       });
       const data = await response.json();
       if (data.success) {
@@ -965,36 +1000,44 @@ export default function AlienArmory() {
                 gap: "12px",
               }}>
                 {saveState.inventory.map((slot) => {
-                  const item = getItem(slot.itemId);
-                  if (!item) return null;
+                  const rarity: RarityTier = slot.rarity || 'common';
+                  const rarityItem = getItemWithRarity(slot.itemId, rarity);
+                  const baseItem = getItem(slot.itemId);
+                  if (!rarityItem || !baseItem) return null;
+                  const rarityColor = RARITY_COLORS[rarity];
+                  const canMerge = slot.quantity >= 2 && RARITY_UPGRADE_PATH[rarity] !== null;
+                  const nextRarity = RARITY_UPGRADE_PATH[rarity];
                   return (
                     <div
-                      key={slot.itemId}
+                      key={`${slot.itemId}-${rarity}`}
                       style={{
-                        background: `linear-gradient(135deg, rgba(0,0,0,0.5), ${
-                          item.tier === 1 ? "rgba(156,163,175,0.2)" :
-                          item.tier === 2 ? "rgba(96,165,250,0.2)" :
-                          item.tier === 3 ? "rgba(167,139,250,0.2)" :
-                          "rgba(251,191,36,0.2)"
-                        })`,
+                        background: `linear-gradient(135deg, rgba(0,0,0,0.5), ${rarityColor}22)`,
                         borderRadius: "8px",
                         padding: "12px",
-                        border: `1px solid ${
-                          item.tier === 1 ? "#9ca3af" :
-                          item.tier === 2 ? "#60a5fa" :
-                          item.tier === 3 ? "#a78bfa" :
-                          "#fbbf24"
-                        }`,
+                        border: `2px solid ${rarityColor}`,
                       }}
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
                         <div>
-                          <span style={{ fontSize: "32px", fontFamily: "'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif" }}>{item.icon}</span>
+                          <span style={{ fontSize: "32px", fontFamily: "'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif" }}>{baseItem.icon}</span>
                           <div style={{ color: THEME.colors.textBright, fontWeight: "bold", marginTop: "4px" }}>
-                            {item.name}
+                            {rarityItem.name}
                           </div>
-                          <div style={{ fontSize: "11px", color: THEME.colors.text, marginTop: "2px" }}>
-                            {item.description}
+                          <div style={{
+                            display: "inline-block",
+                            fontSize: "9px",
+                            fontWeight: "bold",
+                            color: rarityColor,
+                            background: `${rarityColor}22`,
+                            border: `1px solid ${rarityColor}`,
+                            borderRadius: "3px",
+                            padding: "1px 6px",
+                            marginTop: "2px",
+                          }}>
+                            {RARITY_NAMES[rarity]}
+                          </div>
+                          <div style={{ fontSize: "11px", color: THEME.colors.text, marginTop: "4px" }}>
+                            {baseItem.description}
                           </div>
                         </div>
                         <div style={{
@@ -1008,18 +1051,23 @@ export default function AlienArmory() {
                         </div>
                       </div>
                       <div style={{
+                        fontSize: "11px", color: THEME.colors.secondary, marginTop: "6px",
+                      }}>
+                        {rarityItem.stats.attack ? `ATK: ${rarityItem.stats.attack}` : ""}
+                        {rarityItem.stats.defense ? ` DEF: ${rarityItem.stats.defense}` : ""}
+                        {rarityItem.stats.special ? ` | ${rarityItem.stats.special}` : ""}
+                      </div>
+                      <div style={{
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
                         marginTop: "8px",
+                        gap: "4px",
+                        flexWrap: "wrap",
                       }}>
-                        <div style={{ fontSize: "11px", color: THEME.colors.secondary }}>
-                          {item.stats.attack && `ATK: ${item.stats.attack}`}
-                          {item.stats.defense && ` DEF: ${item.stats.defense}`}
-                        </div>
                         <div style={{ display: "flex", gap: "4px" }}>
                           <button
-                            onClick={() => equipItem(slot.itemId, item.type as EquipmentSlot)}
+                            onClick={() => equipItem(slot.itemId, baseItem.type as EquipmentSlot, rarity)}
                             style={{
                               background: THEME.gradients.button,
                               border: "none",
@@ -1035,7 +1083,7 @@ export default function AlienArmory() {
                             EQUIP
                           </button>
                           <button
-                            onClick={() => sellItem(slot.itemId, 1)}
+                            onClick={() => sellItem(slot.itemId, 1, rarity)}
                             style={{
                               background: THEME.colors.warning,
                               border: "none",
@@ -1048,9 +1096,31 @@ export default function AlienArmory() {
                               fontSize: "10px",
                             }}
                           >
-                            SELL (+{item.sellValue}G)
+                            SELL (+{rarityItem.sellValue}G)
                           </button>
                         </div>
+                        {canMerge && (
+                          <button
+                            onClick={() => mergeItem(slot.itemId, rarity)}
+                            disabled={(saveState?.gold || 0) < MERGE_COST}
+                            title={nextRarity ? `Merge 2x into 1x ${RARITY_NAMES[nextRarity]} (${MERGE_COST}G)` : ""}
+                            style={{
+                              background: (saveState?.gold || 0) >= MERGE_COST
+                                ? `linear-gradient(135deg, ${rarityColor}, ${RARITY_COLORS[nextRarity!]})`
+                                : THEME.colors.locked,
+                              border: "none",
+                              borderRadius: "4px",
+                              padding: "4px 8px",
+                              color: "#000",
+                              fontWeight: "bold",
+                              cursor: (saveState?.gold || 0) >= MERGE_COST ? "pointer" : "not-allowed",
+                              fontFamily: "Orbitron, sans-serif",
+                              fontSize: "10px",
+                            }}
+                          >
+                            MERGE ({MERGE_COST}G)
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
@@ -1065,90 +1135,130 @@ export default function AlienArmory() {
               </h3>
               <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 {/* Weapon Slot */}
-                <div style={{
-                  background: "rgba(0,0,0,0.3)",
-                  borderRadius: "8px",
-                  padding: "12px",
-                  minWidth: "150px",
-                  border: `1px solid ${saveState.equipped?.weapon ? THEME.colors.primary : THEME.colors.locked}`,
-                }}>
-                  <div style={{ fontSize: "10px", color: THEME.colors.secondary, marginBottom: "4px" }}>WEAPON</div>
-                  {saveState.equipped?.weapon ? (() => {
-                    const weapon = getItem(saveState.equipped.weapon);
-                    return weapon ? (
-                      <div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ fontSize: "20px" }}>{weapon.icon}</span>
-                          <span style={{ color: THEME.colors.textBright, fontSize: "12px" }}>{weapon.name}</span>
-                        </div>
-                        <div style={{ fontSize: "10px", color: "#ff6b6b", marginTop: "4px" }}>
-                          ATK: +{weapon.stats.attack || 0}
-                        </div>
-                        <button
-                          onClick={() => unequipItem("weapon")}
-                          style={{
-                            marginTop: "8px",
-                            background: "rgba(255,107,107,0.2)",
-                            border: "1px solid #ff6b6b",
-                            borderRadius: "4px",
-                            padding: "4px 8px",
-                            color: "#ff6b6b",
-                            cursor: "pointer",
-                            fontFamily: "Orbitron, sans-serif",
-                            fontSize: "9px",
-                          }}
-                        >
-                          UNEQUIP
-                        </button>
-                      </div>
-                    ) : null;
-                  })() : (
-                    <div style={{ color: THEME.colors.locked, fontSize: "11px" }}>Empty</div>
-                  )}
-                </div>
+                {(() => {
+                  const weaponRarity: RarityTier = (saveState.equipped?.weaponRarity as RarityTier) || 'common';
+                  const weaponColor = saveState.equipped?.weapon ? RARITY_COLORS[weaponRarity] : THEME.colors.locked;
+                  return (
+                    <div style={{
+                      background: "rgba(0,0,0,0.3)",
+                      borderRadius: "8px",
+                      padding: "12px",
+                      minWidth: "150px",
+                      border: `2px solid ${weaponColor}`,
+                    }}>
+                      <div style={{ fontSize: "10px", color: THEME.colors.secondary, marginBottom: "4px" }}>WEAPON</div>
+                      {saveState.equipped?.weapon ? (() => {
+                        const weapon = getItemWithRarity(saveState.equipped.weapon, weaponRarity);
+                        const baseWeapon = getItem(saveState.equipped.weapon);
+                        return weapon && baseWeapon ? (
+                          <div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              <span style={{ fontSize: "20px" }}>{baseWeapon.icon}</span>
+                              <span style={{ color: THEME.colors.textBright, fontSize: "12px" }}>{weapon.name}</span>
+                            </div>
+                            <div style={{
+                              display: "inline-block",
+                              fontSize: "8px",
+                              fontWeight: "bold",
+                              color: weaponColor,
+                              background: `${weaponColor}22`,
+                              border: `1px solid ${weaponColor}`,
+                              borderRadius: "3px",
+                              padding: "1px 4px",
+                              marginTop: "2px",
+                            }}>
+                              {RARITY_NAMES[weaponRarity]}
+                            </div>
+                            <div style={{ fontSize: "10px", color: "#ff6b6b", marginTop: "4px" }}>
+                              ATK: +{weapon.stats.attack || 0}
+                            </div>
+                            <button
+                              onClick={() => unequipItem("weapon")}
+                              style={{
+                                marginTop: "8px",
+                                background: "rgba(255,107,107,0.2)",
+                                border: "1px solid #ff6b6b",
+                                borderRadius: "4px",
+                                padding: "4px 8px",
+                                color: "#ff6b6b",
+                                cursor: "pointer",
+                                fontFamily: "Orbitron, sans-serif",
+                                fontSize: "9px",
+                              }}
+                            >
+                              UNEQUIP
+                            </button>
+                          </div>
+                        ) : null;
+                      })() : (
+                        <div style={{ color: THEME.colors.locked, fontSize: "11px" }}>Empty</div>
+                      )}
+                    </div>
+                  );
+                })()}
 
                 {/* Armor Slot */}
-                <div style={{
-                  background: "rgba(0,0,0,0.3)",
-                  borderRadius: "8px",
-                  padding: "12px",
-                  minWidth: "150px",
-                  border: `1px solid ${saveState.equipped?.armor ? THEME.colors.primary : THEME.colors.locked}`,
-                }}>
-                  <div style={{ fontSize: "10px", color: THEME.colors.secondary, marginBottom: "4px" }}>ARMOR</div>
-                  {saveState.equipped?.armor ? (() => {
-                    const armor = getItem(saveState.equipped.armor);
-                    return armor ? (
-                      <div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ fontSize: "20px" }}>{armor.icon}</span>
-                          <span style={{ color: THEME.colors.textBright, fontSize: "12px" }}>{armor.name}</span>
-                        </div>
-                        <div style={{ fontSize: "10px", color: "#4ecdc4", marginTop: "4px" }}>
-                          DEF: +{armor.stats.defense || 0}
-                        </div>
-                        <button
-                          onClick={() => unequipItem("armor")}
-                          style={{
-                            marginTop: "8px",
-                            background: "rgba(78,205,196,0.2)",
-                            border: "1px solid #4ecdc4",
-                            borderRadius: "4px",
-                            padding: "4px 8px",
-                            color: "#4ecdc4",
-                            cursor: "pointer",
-                            fontFamily: "Orbitron, sans-serif",
-                            fontSize: "9px",
-                          }}
-                        >
-                          UNEQUIP
-                        </button>
-                      </div>
-                    ) : null;
-                  })() : (
-                    <div style={{ color: THEME.colors.locked, fontSize: "11px" }}>Empty</div>
-                  )}
-                </div>
+                {(() => {
+                  const armorRarity: RarityTier = (saveState.equipped?.armorRarity as RarityTier) || 'common';
+                  const armorColor = saveState.equipped?.armor ? RARITY_COLORS[armorRarity] : THEME.colors.locked;
+                  return (
+                    <div style={{
+                      background: "rgba(0,0,0,0.3)",
+                      borderRadius: "8px",
+                      padding: "12px",
+                      minWidth: "150px",
+                      border: `2px solid ${armorColor}`,
+                    }}>
+                      <div style={{ fontSize: "10px", color: THEME.colors.secondary, marginBottom: "4px" }}>ARMOR</div>
+                      {saveState.equipped?.armor ? (() => {
+                        const armor = getItemWithRarity(saveState.equipped.armor, armorRarity);
+                        const baseArmor = getItem(saveState.equipped.armor);
+                        return armor && baseArmor ? (
+                          <div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              <span style={{ fontSize: "20px" }}>{baseArmor.icon}</span>
+                              <span style={{ color: THEME.colors.textBright, fontSize: "12px" }}>{armor.name}</span>
+                            </div>
+                            <div style={{
+                              display: "inline-block",
+                              fontSize: "8px",
+                              fontWeight: "bold",
+                              color: armorColor,
+                              background: `${armorColor}22`,
+                              border: `1px solid ${armorColor}`,
+                              borderRadius: "3px",
+                              padding: "1px 4px",
+                              marginTop: "2px",
+                            }}>
+                              {RARITY_NAMES[armorRarity]}
+                            </div>
+                            <div style={{ fontSize: "10px", color: "#4ecdc4", marginTop: "4px" }}>
+                              DEF: +{armor.stats.defense || 0}
+                            </div>
+                            <button
+                              onClick={() => unequipItem("armor")}
+                              style={{
+                                marginTop: "8px",
+                                background: "rgba(78,205,196,0.2)",
+                                border: "1px solid #4ecdc4",
+                                borderRadius: "4px",
+                                padding: "4px 8px",
+                                color: "#4ecdc4",
+                                cursor: "pointer",
+                                fontFamily: "Orbitron, sans-serif",
+                                fontSize: "9px",
+                              }}
+                            >
+                              UNEQUIP
+                            </button>
+                          </div>
+                        ) : null;
+                      })() : (
+                        <div style={{ color: THEME.colors.locked, fontSize: "11px" }}>Empty</div>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>
