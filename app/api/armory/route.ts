@@ -1,0 +1,282 @@
+import { NextRequest, NextResponse } from "next/server";
+import { kv } from "@vercel/kv";
+import {
+  ArmorySaveState,
+  ArmoryResources,
+  CraftingQueue,
+  StationLevels,
+  ArmoryProgress,
+} from "../../components/armory/types";
+import {
+  DEFAULT_RESOURCES,
+  DEFAULT_STATION_LEVELS,
+  DEFAULT_PROGRESS,
+  XP_REQUIREMENTS,
+  STARTING_GOLD,
+  DAILY_LOGIN_GOLD,
+} from "../../components/armory/constants";
+
+const SAVE_KEY_PREFIX = "armory:save:";
+
+function getSaveKey(wallet: string): string {
+  return `${SAVE_KEY_PREFIX}${wallet.toLowerCase()}`;
+}
+
+function createNewSave(wallet: string): ArmorySaveState {
+  const now = Date.now();
+  return {
+    wallet: wallet.toLowerCase(),
+    gold: STARTING_GOLD,
+    resources: { ...DEFAULT_RESOURCES },
+    craftingQueues: {
+      plasmaRefinery: [],
+      voidForge: [],
+      bioLab: [],
+      quantumChamber: [],
+      assemblyBay: [],
+    },
+    stationLevels: { ...DEFAULT_STATION_LEVELS },
+    inventory: [],
+    progress: { ...DEFAULT_PROGRESS },
+    equipped: {
+      weapon: null,
+      armor: null,
+    },
+    playerPosition: {
+      x: 0,
+      currentStation: 'plasmaRefinery',
+    },
+    lastUpdated: now,
+    createdAt: now,
+  };
+}
+
+// Process any completed crafting jobs
+function processCompletedJobs(saveState: ArmorySaveState): {
+  saveState: ArmorySaveState;
+  completedCount: number;
+} {
+  const now = Date.now();
+  let completedCount = 0;
+
+  // We'll process completed jobs when the collect endpoint is called
+  // This function just counts how many are ready
+  for (const stationId of Object.keys(saveState.craftingQueues) as (keyof CraftingQueue)[]) {
+    const queue = saveState.craftingQueues[stationId];
+    for (const job of queue) {
+      if (job.endTime <= now) {
+        completedCount++;
+      }
+    }
+  }
+
+  return { saveState, completedCount };
+}
+
+// GET /api/armory?wallet=0x... - Load save state
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const wallet = searchParams.get("wallet");
+
+    if (!wallet) {
+      return NextResponse.json(
+        { success: false, error: "Wallet address required" },
+        { status: 400 }
+      );
+    }
+
+    const saveKey = getSaveKey(wallet);
+    let saveState: ArmorySaveState | null = null;
+
+    try {
+      saveState = await kv.get<ArmorySaveState>(saveKey);
+    } catch (redisError) {
+      console.error("Redis GET error:", redisError);
+      return NextResponse.json(
+        { success: false, error: "Redis connection failed", details: String(redisError) },
+        { status: 500 }
+      );
+    }
+
+    // Create new save if doesn't exist
+    if (!saveState) {
+      saveState = createNewSave(wallet);
+      try {
+        await kv.set(saveKey, saveState);
+      } catch (setError) {
+        console.error("Redis SET error:", setError);
+        return NextResponse.json(
+          { success: false, error: "Failed to create save", details: String(setError) },
+          { status: 500 }
+        );
+      }
+    }
+
+    // Check for completed crafting jobs
+    const { completedCount } = processCompletedJobs(saveState);
+
+    // Update last login for daily bonus
+    const today = new Date().toISOString().split("T")[0];
+    let dailyBonusAwarded = false;
+    if (saveState.progress.lastLoginDate !== today) {
+      // Award daily login gold bonus
+      const wasYesterday =
+        saveState.progress.lastLoginDate ===
+        new Date(Date.now() - 86400000).toISOString().split("T")[0];
+
+      saveState.progress.dailyLoginStreak = wasYesterday
+        ? saveState.progress.dailyLoginStreak + 1
+        : 1;
+      saveState.progress.lastLoginDate = today;
+
+      // Award gold (bonus for streaks)
+      const streakBonus = Math.min(saveState.progress.dailyLoginStreak - 1, 4) * 10;
+      const goldBonus = DAILY_LOGIN_GOLD + streakBonus;
+      saveState.gold = (saveState.gold || 0) + goldBonus;
+      dailyBonusAwarded = true;
+
+      saveState.lastUpdated = Date.now();
+      try {
+        await kv.set(saveKey, saveState);
+      } catch (updateError) {
+        console.error("Redis update error:", updateError);
+        // Don't fail the request, just log it
+      }
+    }
+
+    // Ensure gold field exists for old saves
+    if (saveState.gold === undefined) {
+      saveState.gold = STARTING_GOLD;
+      await kv.set(saveKey, saveState);
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: saveState,
+      completedJobsReady: completedCount,
+    });
+  } catch (error) {
+    console.error("Error loading armory save:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to load save", details: String(error) },
+      { status: 500 }
+    );
+  }
+}
+
+// POST /api/armory - Create new save (reset)
+export async function POST(request: NextRequest) {
+  try {
+    const { wallet, reset } = await request.json();
+
+    if (!wallet) {
+      return NextResponse.json(
+        { success: false, error: "Wallet address required" },
+        { status: 400 }
+      );
+    }
+
+    const saveKey = getSaveKey(wallet);
+
+    // Check if save already exists
+    const existingSave = await kv.get<ArmorySaveState>(saveKey);
+    if (existingSave && !reset) {
+      return NextResponse.json({
+        success: true,
+        data: existingSave,
+        message: "Save already exists",
+      });
+    }
+
+    // Create new save
+    const saveState = createNewSave(wallet);
+    await kv.set(saveKey, saveState);
+
+    return NextResponse.json({
+      success: true,
+      data: saveState,
+      message: reset ? "Save reset successfully" : "New save created",
+    });
+  } catch (error) {
+    console.error("Error creating armory save:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to create save" },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH /api/armory - Update save state (generic update)
+export async function PATCH(request: NextRequest) {
+  try {
+    const { wallet, updates } = await request.json();
+
+    if (!wallet || !updates) {
+      return NextResponse.json(
+        { success: false, error: "Wallet and updates required" },
+        { status: 400 }
+      );
+    }
+
+    const saveKey = getSaveKey(wallet);
+    let saveState = await kv.get<ArmorySaveState>(saveKey);
+
+    if (!saveState) {
+      return NextResponse.json(
+        { success: false, error: "Save not found" },
+        { status: 404 }
+      );
+    }
+
+    // Apply updates (shallow merge for top-level properties)
+    if (updates.resources) {
+      saveState.resources = { ...saveState.resources, ...updates.resources };
+    }
+    if (updates.stationLevels) {
+      saveState.stationLevels = {
+        ...saveState.stationLevels,
+        ...updates.stationLevels,
+      };
+    }
+    if (updates.inventory) {
+      saveState.inventory = updates.inventory;
+    }
+    if (updates.progress) {
+      saveState.progress = { ...saveState.progress, ...updates.progress };
+    }
+    if (updates.craftingQueues) {
+      saveState.craftingQueues = {
+        ...saveState.craftingQueues,
+        ...updates.craftingQueues,
+      };
+    }
+    if (updates.equipped) {
+      saveState.equipped = { ...saveState.equipped, ...updates.equipped };
+    }
+    if (updates.playerPosition) {
+      saveState.playerPosition = { ...saveState.playerPosition, ...updates.playerPosition };
+    }
+    // Initialize equipment/position if missing (migration for existing saves)
+    if (!saveState.equipped) {
+      saveState.equipped = { weapon: null, armor: null };
+    }
+    if (!saveState.playerPosition) {
+      saveState.playerPosition = { x: 0, currentStation: 'plasmaRefinery' };
+    }
+
+    saveState.lastUpdated = Date.now();
+    await kv.set(saveKey, saveState);
+
+    return NextResponse.json({
+      success: true,
+      data: saveState,
+    });
+  } catch (error) {
+    console.error("Error updating armory save:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to update save" },
+      { status: 500 }
+    );
+  }
+}

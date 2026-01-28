@@ -222,6 +222,7 @@ const featuredGames: FeaturedGame[] = [
 // Community Games
 const communityGames = {
   catacombs: { title: "Alien Catacombs", src: "/alien-catacombs.html", badge: "ALPHA" },
+  armory: { title: "Alien Armory", href: "/armory", badge: "NEW" },
   dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY" },
   invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY" },
 };
@@ -327,9 +328,14 @@ export default function HomePage() {
 
   const playGame = (gameKey: string) => {
     const game = communityGames[gameKey as keyof typeof communityGames];
-    // For route-based games (like chess), navigate to the route
-    if (game && 'isRoute' in game && game.isRoute) {
-      window.location.href = game.src;
+    // For route-based games (like Alien Armory), navigate to the route
+    if (game && 'href' in game && game.href) {
+      window.location.href = game.href;
+      return;
+    }
+    // For legacy isRoute games
+    if (game && 'isRoute' in game && (game as { isRoute?: boolean }).isRoute) {
+      window.location.href = (game as { src: string }).src;
       return;
     }
     setSelectedGame(gameKey);
@@ -525,11 +531,19 @@ export default function HomePage() {
               ← Back to Games
             </button>
           </div>
-          <iframe
-            src={communityGames[selectedGame as keyof typeof communityGames]?.src}
-            style={{ width: '100%', height: 'calc(100% - 50px)', border: 'none' }}
-            title={communityGames[selectedGame as keyof typeof communityGames]?.title}
-          />
+          {(() => {
+            const game = communityGames[selectedGame as keyof typeof communityGames];
+            if (game && 'src' in game) {
+              return (
+                <iframe
+                  src={game.src}
+                  style={{ width: '100%', height: 'calc(100% - 50px)', border: 'none' }}
+                  title={game.title}
+                />
+              );
+            }
+            return null;
+          })()}
         </div>
       ) : (
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '40px 20px' }}>
