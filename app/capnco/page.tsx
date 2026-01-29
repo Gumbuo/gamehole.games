@@ -66,19 +66,16 @@ const CLASSES = [
 
 const CHAINS = [
   {
-    name: "Soneium",
-    note: "Newest deployment (Jan 2026)",
-    color: "#7c3aed",
-  },
-  {
     name: "Abstract",
-    note: "Active deployment",
+    note: "Primary chain — ZK rollup L2",
     color: "#3b82f6",
+    contract: "0xD3844AcCa3562b52a22e46fb56C5c29b621b0d33",
   },
   {
     name: "Ethereum",
-    note: "Original chain",
+    note: "Original deployment",
     color: "#627eea",
+    contract: "0xB8F7709ef495a459e69BC7bCbABAadB80462f2A6",
   },
 ];
 
@@ -611,9 +608,21 @@ export default function CapnCoPage() {
               >
                 {chain.name}
               </div>
-              <div style={{ fontSize: "13px", color: THEME.textMuted }}>
+              <div style={{ fontSize: "13px", color: THEME.textMuted, marginBottom: "6px" }}>
                 {chain.note}
               </div>
+              <code
+                style={{
+                  fontSize: "11px",
+                  color: THEME.secondary,
+                  background: "rgba(139, 105, 20, 0.15)",
+                  padding: "2px 6px",
+                  borderRadius: "4px",
+                  wordBreak: "break-all",
+                }}
+              >
+                {chain.contract}
+              </code>
             </div>
           ))}
         </div>
@@ -649,6 +658,230 @@ export default function CapnCoPage() {
               dominate the seas together
             </li>
           </ul>
+        </div>
+
+        {/* Soneium Score / Sony Campaign */}
+        <SectionTitle>Sony Soneium Score Campaign</SectionTitle>
+        <div
+          style={{
+            background: THEME.cardBg,
+            border: `1px solid #7c3aed60`,
+            borderRadius: "12px",
+            padding: "20px",
+            marginBottom: "16px",
+          }}
+        >
+          <p style={{ margin: "0 0 12px 0", lineHeight: "1.6", fontSize: "14px" }}>
+            <strong style={{ color: "#7c3aed" }}>Soneium</strong> is Sony&apos;s
+            Ethereum Layer 2 blockchain (OP Stack). While Captain & Company
+            isn&apos;t deployed on Soneium, the Soneium Score campaign is a
+            separate opportunity for web3 gamers to earn potential future rewards
+            from Sony&apos;s ecosystem.
+          </p>
+          <h3
+            style={{
+              fontFamily: THEME.font,
+              fontSize: "14px",
+              color: "#7c3aed",
+              margin: "0 0 8px 0",
+            }}
+          >
+            What is Soneium Score?
+          </h3>
+          <ul
+            style={{
+              margin: "0 0 16px 0",
+              paddingLeft: "20px",
+              lineHeight: "1.8",
+              fontSize: "14px",
+            }}
+          >
+            <li>On-chain proof-of-contribution system that tracks and rewards participation</li>
+            <li>28-day seasons — currently Season 6 (Jan 14 – Feb 11, 2026)</li>
+            <li>Score 80+ out of 100 each season to earn a permanent SBT badge</li>
+            <li>No confirmed airdrop yet, but badge holders may be eligible for future rewards</li>
+          </ul>
+
+          <h3
+            style={{
+              fontFamily: THEME.font,
+              fontSize: "14px",
+              color: "#7c3aed",
+              margin: "0 0 8px 0",
+            }}
+          >
+            How to Participate
+          </h3>
+          <ol
+            style={{
+              margin: "0 0 16px 0",
+              paddingLeft: "20px",
+              lineHeight: "1.8",
+              fontSize: "14px",
+            }}
+          >
+            <li>
+              <strong style={{ color: THEME.accent }}>Bridge ETH to Soneium</strong>{" "}
+              — use{" "}
+              <a href="https://superbridge.app/soneium" target="_blank" rel="noopener noreferrer" style={{ color: THEME.primary }}>
+                Superbridge
+              </a>{" "}
+              or{" "}
+              <a href="https://relay.link/" target="_blank" rel="noopener noreferrer" style={{ color: THEME.primary }}>
+                Relay
+              </a>
+            </li>
+            <li>
+              <strong style={{ color: THEME.accent }}>Connect wallet</strong> at the
+              Soneium Score campaign page on{" "}
+              <a href="https://soneium.org/" target="_blank" rel="noopener noreferrer" style={{ color: THEME.primary }}>
+                soneium.org
+              </a>
+            </li>
+            <li>
+              <strong style={{ color: THEME.accent }}>Earn across 4 categories</strong>
+            </li>
+          </ol>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "10px",
+              marginBottom: "16px",
+            }}
+          >
+            {[
+              {
+                name: "Activity Score",
+                desc: "Transaction frequency, active days, streaks",
+              },
+              {
+                name: "Liquidity Score",
+                desc: "LP contributions on Aave, Velodrome, QuickSwap, etc.",
+              },
+              {
+                name: "NFT Score",
+                desc: "Participate in NFT activities announced each season",
+              },
+              {
+                name: "Bonus Score",
+                desc: "Temporary partner activities and special tasks",
+              },
+            ].map((cat) => (
+              <div
+                key={cat.name}
+                style={{
+                  background: "rgba(0,0,0,0.3)",
+                  border: "1px solid #7c3aed30",
+                  borderRadius: "8px",
+                  padding: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: THEME.font,
+                    fontSize: "12px",
+                    color: "#7c3aed",
+                    marginBottom: "4px",
+                  }}
+                >
+                  {cat.name}
+                </div>
+                <div style={{ fontSize: "12px", lineHeight: "1.4" }}>{cat.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          <h3
+            style={{
+              fontFamily: THEME.font,
+              fontSize: "14px",
+              color: "#7c3aed",
+              margin: "0 0 8px 0",
+            }}
+          >
+            Quick Ways to Earn Points
+          </h3>
+          <ul
+            style={{
+              margin: 0,
+              paddingLeft: "20px",
+              lineHeight: "1.8",
+              fontSize: "14px",
+            }}
+          >
+            <li>Swap tokens on Uniswap (Soneium) — each swap counts toward Activity Score</li>
+            <li>Bridge via Meson at least 3 times for bonus NFT</li>
+            <li>Swap $100+ from any chain to Soneium via Rango for an NFT Badge</li>
+            <li>Provide liquidity on Velodrome, Aave, or Kyo Finance</li>
+            <li>Maintain daily streaks for multiplied Activity Score</li>
+          </ul>
+        </div>
+
+        <div
+          style={{
+            background: THEME.cardBg,
+            border: `1px solid #7c3aed60`,
+            borderRadius: "12px",
+            padding: "20px",
+            marginBottom: "32px",
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: THEME.font,
+              fontSize: "14px",
+              color: "#7c3aed",
+              margin: "0 0 8px 0",
+            }}
+          >
+            Soneium Stats
+          </h3>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+              gap: "10px",
+            }}
+          >
+            {[
+              { label: "Transactions", value: "500M+" },
+              { label: "Active Wallets", value: "5.4M" },
+              { label: "Live dApps", value: "250+" },
+              { label: "Backed By", value: "Sony" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                style={{
+                  background: "rgba(0,0,0,0.3)",
+                  borderRadius: "8px",
+                  padding: "12px",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: THEME.secondary,
+                    fontFamily: THEME.font,
+                    marginBottom: "4px",
+                  }}
+                >
+                  {stat.label}
+                </div>
+                <div
+                  style={{
+                    fontSize: "16px",
+                    fontFamily: THEME.font,
+                    color: "#7c3aed",
+                  }}
+                >
+                  {stat.value}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Footer links */}
