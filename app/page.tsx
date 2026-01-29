@@ -107,9 +107,11 @@ const featuredGames: FeaturedGame[] = [
     image: "/featured/captain-company.png",
     playUrl: "https://capnco.gg/",
     youtubeTrailer: "YcYKa0VbxNs",
-    tags: ["MMORPG", "Naval Combat", "Polygon"],
+    tags: ["MMORPG", "Naval Combat", "Soneium"],
     color: "#d4af37",
     secondaryColor: "#1a0a00",
+    guideUrl: "/capnco",
+    guideLabel: "Help Guide",
   },
   {
     id: "chainers",
