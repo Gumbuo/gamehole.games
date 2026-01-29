@@ -227,6 +227,14 @@ const featuredGames: FeaturedGame[] = [
   },
 ];
 
+// Blockchain chain config for "Games by Blockchain" section
+const BLOCKCHAIN_CHAINS = [
+  { name: "Immutable", color: "#00bfff", tag: "Immutable" },
+  { name: "Avalanche", color: "#e84142", tag: "Avalanche" },
+  { name: "Ronin", color: "#1a56db", tag: "Ronin" },
+  { name: "Abstract", color: "#3b82f6", tag: "Abstract" },
+];
+
 // Community Games
 const communityGames = {
   catacombs: { title: "Alien Catacombs", src: "/alien-catacombs.html", badge: "ALPHA" },
@@ -931,7 +939,175 @@ export default function HomePage() {
             </div>
           </section>
 
-          
+          {/* Games by Blockchain */}
+          <section style={{ marginBottom: '60px' }}>
+            <div style={{ marginBottom: '30px' }}>
+              <h2 style={{
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '32px',
+                fontWeight: 'bold',
+                background: 'linear-gradient(135deg, #00bfff, #00ff99)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textTransform: 'uppercase',
+              }}>
+                Games by Blockchain
+              </h2>
+            </div>
+
+            {(() => {
+              const chainGroups = BLOCKCHAIN_CHAINS.map((chain) => ({
+                ...chain,
+                games: featuredGames.filter((g) => g.tags.includes(chain.tag)),
+              }));
+              const matchedIds = new Set(chainGroups.flatMap((c) => c.games.map((g) => g.id)));
+              const otherGames = featuredGames.filter((g) => !matchedIds.has(g.id));
+              const allGroups = [
+                ...chainGroups,
+                ...(otherGames.length > 0
+                  ? [{ name: "Other", color: "#888888", tag: "", games: otherGames }]
+                  : []),
+              ];
+
+              return allGroups.map((chain) => (
+                <div key={chain.name} style={{ marginBottom: '24px' }}>
+                  {/* Chain header */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    marginBottom: '14px',
+                  }}>
+                    <span style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      background: chain.color,
+                      display: 'inline-block',
+                      boxShadow: `0 0 8px ${chain.color}80`,
+                    }} />
+                    <span style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '18px',
+                      color: chain.color,
+                      fontWeight: 'bold',
+                    }}>
+                      {chain.name}
+                    </span>
+                    <span style={{
+                      padding: '2px 10px',
+                      background: `${chain.color}20`,
+                      border: `1px solid ${chain.color}40`,
+                      borderRadius: '12px',
+                      color: chain.color,
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '11px',
+                      fontWeight: 'bold',
+                    }}>
+                      {chain.games.length}
+                    </span>
+                  </div>
+
+                  {/* Horizontal scroll row */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '16px',
+                    overflowX: 'auto',
+                    paddingBottom: '12px',
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: `${chain.color}40 transparent`,
+                  }}>
+                    {chain.games.map((game) => (
+                      <a
+                        key={game.id}
+                        href={game.playUrl || `#${game.id}`}
+                        target={game.playUrl ? '_blank' : undefined}
+                        rel={game.playUrl ? 'noopener noreferrer' : undefined}
+                        style={{
+                          flex: '0 0 220px',
+                          background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(15, 15, 30, 0.9))',
+                          border: `2px solid ${game.color}40`,
+                          borderRadius: '12px',
+                          overflow: 'hidden',
+                          textDecoration: 'none',
+                          transition: 'all 0.3s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = game.color;
+                          e.currentTarget.style.boxShadow = `0 0 20px ${game.color}30`;
+                          e.currentTarget.style.transform = 'translateY(-3px)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = `${game.color}40`;
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                        }}
+                      >
+                        <div style={{
+                          height: '110px',
+                          background: `linear-gradient(135deg, ${game.color}30, ${game.color}10)`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          overflow: 'hidden',
+                        }}>
+                          <img
+                            src={game.image}
+                            alt={game.title}
+                            style={{
+                              maxHeight: '90px',
+                              maxWidth: '90%',
+                              objectFit: 'contain',
+                            }}
+                          />
+                        </div>
+                        <div style={{ padding: '12px' }}>
+                          <h4 style={{
+                            fontFamily: 'Orbitron, sans-serif',
+                            fontSize: '13px',
+                            color: game.color,
+                            margin: '0 0 6px 0',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}>
+                            {game.title}
+                          </h4>
+                          <p style={{
+                            fontFamily: 'Share Tech Mono, monospace',
+                            fontSize: '10px',
+                            color: '#888',
+                            lineHeight: '1.4',
+                            margin: '0 0 10px 0',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                          }}>
+                            {game.description}
+                          </p>
+                          <span style={{
+                            display: 'inline-block',
+                            padding: '4px 12px',
+                            background: `linear-gradient(135deg, ${game.color}, ${game.color}cc)`,
+                            borderRadius: '6px',
+                            color: '#000',
+                            fontFamily: 'Orbitron, sans-serif',
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            textTransform: 'uppercase',
+                          }}>
+                            {game.comingSoon ? 'Coming 2026' : 'Play'}
+                          </span>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ));
+            })()}
+          </section>
+
           {/* Popular Free-to-Play Games */}
           <section style={{ marginBottom: '60px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' }}>
