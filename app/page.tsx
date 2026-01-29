@@ -40,6 +40,8 @@ interface FeaturedGame {
   tags: string[];
   color: string;
   secondaryColor?: string;
+  guideUrl?: string;
+  guideLabel?: string;
 }
 
 const featuredGames: FeaturedGame[] = [
@@ -63,6 +65,8 @@ const featuredGames: FeaturedGame[] = [
     youtubeTrailer: "5Tyqhqp3GYI",
     tags: ["PvP", "Brawler", "Immutable"],
     color: "#ff6b00",
+    guideUrl: "https://www.spidergang.xyz",
+    guideLabel: "Spider Gang",
   },
   {
     id: "playa3ull",
@@ -205,6 +209,8 @@ const featuredGames: FeaturedGame[] = [
     tags: ["Sandbox MMO", "Cozy", "Immutable"],
     color: "#4ade80",
     secondaryColor: "#0a1a10",
+    guideUrl: "/nomstead",
+    guideLabel: "NFT Guide",
   },
   {
     id: "wilderworld",
@@ -844,6 +850,33 @@ export default function HomePage() {
                           </a>
                         )}
                       </div>
+                    )}
+
+                    {game.guideUrl && (
+                      <a
+                        href={game.guideUrl}
+                        target={game.guideUrl.startsWith('/') ? undefined : '_blank'}
+                        rel={game.guideUrl.startsWith('/') ? undefined : 'noopener noreferrer'}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          padding: '10px',
+                          background: `${game.color}15`,
+                          border: `1px solid ${game.color}60`,
+                          borderRadius: '8px',
+                          color: game.color,
+                          fontFamily: 'Orbitron, sans-serif',
+                          fontWeight: 'bold',
+                          fontSize: '12px',
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          textTransform: 'uppercase',
+                          marginBottom: '10px',
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        {game.guideLabel ?? 'Guide'} →
+                      </a>
                     )}
 
                     {game.playUrl ? (
