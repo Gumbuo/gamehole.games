@@ -88,6 +88,8 @@ const featuredGames: FeaturedGame[] = [
     tags: ["RPG", "Action", "Cardano", "Base", "$RISE"],
     color: "#ff0033",
     secondaryColor: "#1a1a1a",
+    guideUrl: "/infinityrising",
+    guideLabel: "File Nodes & Token Guide",
   },
   {
     id: "machinesarena",
