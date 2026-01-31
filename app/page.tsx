@@ -59,7 +59,7 @@ const featuredGames: FeaturedGame[] = [
   {
     id: "spidertanks",
     title: "Spider Tanks: Cores of Chaos",
-    description: "PvP brawler where you battle in arenas with customizable tanks. Revived by GAMEDIA on Immutable.",
+    description: "PvP brawler where you battle in arenas with customizable tanks. Revived by GAMEDIA on Immutable. Note: IMX questing indefinitely removed due to bot abuse.",
     image: "/featured/spider-tanks.png",
     playUrl: "https://play.immutable.com/games/spider-tanks-cores-of-chaos/",
     youtubeTrailer: "5Tyqhqp3GYI",
@@ -129,7 +129,7 @@ const featuredGames: FeaturedGame[] = [
   {
     id: "minesofdalarnia",
     title: "Mines of Dalarnia",
-    description: "Action-adventure mining game. Dig deep, fight monsters, and collect rare resources in procedurally generated mines.",
+    description: "Action-adventure mining game. Dig deep, fight monsters, and collect rare resources in procedurally generated mines. Note: IMX questing indefinitely removed due to bot abuse.",
     image: "/featured/mines-of-dalarnia.png",
     playUrl: "https://www.minesofdalarnia.com/",
     youtubeTrailer: "p_7gEKK89vE",
@@ -140,7 +140,7 @@ const featuredGames: FeaturedGame[] = [
   {
     id: "dalarnialegends",
     title: "Dalarnia Legends",
-    description: "Fast-paced card game with strategic deck-building. All base cards unlocked through gameplay - no pay-to-win, just skill and strategy.",
+    description: "Fast-paced card game with strategic deck-building. All base cards unlocked through gameplay - no pay-to-win, just skill and strategy. Note: IMX questing indefinitely removed due to bot abuse.",
     image: "/featured/dalarnia-legends.png",
     playUrl: "https://legends.dalarnia.com/",
     youtubeTrailer: "-a0eXe3DC34",
