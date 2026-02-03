@@ -392,6 +392,11 @@ export default function NomSteadPage() {
           }}
         >
           <LinkCard
+            label="Full Wiki & Item Guide"
+            href="/nomstead/wiki"
+            internal
+          />
+          <LinkCard
             label="Play NomStead"
             href="https://play.immutable.com/games/nomstead/"
           />
@@ -534,24 +539,34 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
-function LinkCard({ label, href }: { label: string; href: string }) {
+function LinkCard({ label, href, internal }: { label: string; href: string; internal?: boolean }) {
+  const style = {
+    display: "block",
+    background: THEME.cardBg,
+    border: `1px solid ${THEME.secondary}`,
+    borderRadius: "10px",
+    padding: "16px",
+    textAlign: "center" as const,
+    textDecoration: "none",
+    color: THEME.primary,
+    fontFamily: THEME.font,
+    fontSize: "14px",
+  };
+
+  if (internal) {
+    return (
+      <Link href={href} style={style}>
+        {label} →
+      </Link>
+    );
+  }
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      style={{
-        display: "block",
-        background: THEME.cardBg,
-        border: `1px solid ${THEME.secondary}`,
-        borderRadius: "10px",
-        padding: "16px",
-        textAlign: "center",
-        textDecoration: "none",
-        color: THEME.primary,
-        fontFamily: THEME.font,
-        fontSize: "14px",
-      }}
+      style={style}
     >
       {label} →
     </a>
