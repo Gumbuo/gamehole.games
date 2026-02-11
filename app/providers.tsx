@@ -1,7 +1,50 @@
 "use client";
-import { ReactNode } from 'react';
-import { WalletProvider } from './components/WalletProvider';
+import "@rainbow-me/rainbowkit/styles.css";
+import type { ReactNode } from "react";
+import { useState, useEffect } from "react";
+import { WagmiProvider } from "wagmi";
+import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AlienPointsProvider } from "./context/AlienPointsEconomy";
+import { AlienPointProvider } from "./context/AlienPointContext";
+import { RightDrawerProvider } from "./context/RightDrawerContext";
+import { config } from "./wagmi";
+import AlienLoader from "./components/AlienLoader";
 
 export function Providers({ children }: { children: ReactNode }) {
-  return <WalletProvider>{children}</WalletProvider>;
+  const [queryClient] = useState(() => new QueryClient());
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Show loader for at least 1.5 seconds for the effect
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider config={config}>
+        <RainbowKitProvider
+          showRecentTransactions={true}
+          theme={darkTheme({
+            accentColor: "#00ff99",
+            accentColorForeground: "#000",
+            borderRadius: "medium",
+          })}
+        >
+          <AlienPointsProvider>
+            <AlienPointProvider>
+              <RightDrawerProvider>
+                {isLoading && <AlienLoader />}
+                {children}
+              </RightDrawerProvider>
+            </AlienPointProvider>
+          </AlienPointsProvider>
+        </RainbowKitProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
+  );
 }

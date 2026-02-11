@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { kv } from "@vercel/kv";
-import { ArmorySaveState, StationId } from "../../../components/armory/types";
-import { STATIONS, getUpgradeCost, isStationUnlocked } from "../../../components/armory/data/stations";
+import { ArmorySaveState, StationId } from "../../../base/components/armory/types";
+import { STATIONS, getUpgradeCost, isStationUnlocked } from "../../../base/components/armory/data/stations";
+import { getRedis, getUserBalance, deductUserPoints } from "../../lib/points";
+import { addPlayerXP } from "../../lib/playerLevel";
 
 const SAVE_KEY_PREFIX = "armory:save:";
 
@@ -9,7 +10,7 @@ function getSaveKey(wallet: string): string {
   return `${SAVE_KEY_PREFIX}${wallet.toLowerCase()}`;
 }
 
-// POST /api/armory/upgrade - Upgrade a station with Gold
+// POST /api/armory/upgrade - Upgrade a station
 export async function POST(request: NextRequest) {
   try {
     const { wallet, stationId } = await request.json();
@@ -29,9 +30,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const redis = getRedis();
+    const normalizedWallet = wallet.toLowerCase();
     const typedStationId = stationId as StationId;
     const saveKey = getSaveKey(wallet);
-    const saveState = await kv.get<ArmorySaveState>(saveKey);
+    const saveState = await redis.get<ArmorySaveState>(saveKey);
 
     if (!saveState) {
       return NextResponse.json(
@@ -55,7 +58,7 @@ export async function POST(request: NextRequest) {
       // If player level is high enough but station is still 0, auto-unlock
       saveState.stationLevels[typedStationId] = 1;
       saveState.lastUpdated = Date.now();
-      await kv.set(saveKey, saveState);
+      await redis.set(saveKey, saveState);
 
       return NextResponse.json({
         success: true,
@@ -85,32 +88,48 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Check gold balance
-    if ((saveState.gold || 0) < upgradeCost) {
+    // Check AP balance (individual key lookup)
+    const userBalance = await getUserBalance(normalizedWallet);
+
+    if (userBalance < upgradeCost) {
       return NextResponse.json({
         success: false,
-        error: `Insufficient Gold. Need ${upgradeCost}G, have ${saveState.gold || 0}G`,
+        error: `Insufficient AP. Need ${upgradeCost} AP, have ${userBalance} AP`,
       });
     }
 
-    // Deduct gold
-    saveState.gold = (saveState.gold || 0) - upgradeCost;
+    // Deduct AP (individual key update)
+    const newBalance = await deductUserPoints(normalizedWallet, upgradeCost);
 
     // Upgrade station
     saveState.stationLevels[typedStationId] = currentLevel + 1;
-    saveState.progress.totalGoldSpent = (saveState.progress.totalGoldSpent || 0) + upgradeCost;
+    saveState.progress.totalAPSpent += upgradeCost;
     saveState.lastUpdated = Date.now();
 
-    await kv.set(saveKey, saveState);
+    await redis.set(saveKey, saveState);
+
+    // Award player XP for spending AP (1 XP per 20 AP spent)
+    const playerXP = Math.floor(upgradeCost / 20);
+    let playerXPResult = null;
+    if (playerXP > 0) {
+      playerXPResult = await addPlayerXP(wallet, playerXP, "spend");
+    }
 
     return NextResponse.json({
       success: true,
       data: {
         stationId: typedStationId,
         newLevel: currentLevel + 1,
-        goldSpent: upgradeCost,
-        newGoldBalance: saveState.gold,
+        apSpent: upgradeCost,
+        newAPBalance: newBalance,
         stationLevels: saveState.stationLevels,
+        playerLevel: playerXPResult ? {
+          level: playerXPResult.levelData.level,
+          xp: playerXPResult.levelData.xp,
+          xpAdded: playerXPResult.xpAdded,
+          levelsGained: playerXPResult.levelsGained,
+          apRewarded: playerXPResult.apRewarded,
+        } : undefined,
       },
     });
   } catch (error) {

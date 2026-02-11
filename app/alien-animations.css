@@ -1,0 +1,1081 @@
+/* Alien-themed animations and effects */
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5),
+                 0 0 20px rgba(0, 212, 255, 0.3),
+                 0 0 30px rgba(0, 255, 153, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.8),
+                 0 0 30px rgba(0, 255, 153, 0.6),
+                 0 0 40px rgba(0, 212, 255, 0.4);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.8),
+                0 0 60px rgba(0, 255, 153, 0.6);
+  }
+}
+
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes drip-flow {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
+
+@keyframes holographic {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-scan {
+  animation: scan 4s linear infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 3s ease-in-out infinite 0.5s;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-matrix-rain {
+  animation: matrix-rain 10s linear infinite;
+}
+
+.animate-drip {
+  animation: drip-flow 2s ease-in-out infinite;
+}
+
+.animate-holographic {
+  background-size: 200% 200%;
+  animation: holographic 3s ease infinite;
+}
+
+/* Glowing text shadow utility */
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.6));
+}
+
+/* Neon border effect */
+.neon-border {
+  box-shadow:
+    0 0 5px rgba(0, 212, 255, 0.5),
+    0 0 10px rgba(0, 212, 255, 0.4),
+    0 0 15px rgba(0, 255, 153, 0.3),
+    inset 0 0 5px rgba(0, 212, 255, 0.2);
+}
+
+/* Holographic gradient */
+.holographic-text {
+  background: linear-gradient(
+    45deg,
+    #00d4ff,
+    #00ff99,
+    #00d4ff,
+    #00ff99,
+    #00d4ff
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: holographic 3s ease infinite;
+}
+
+/* Glitch effect */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.glitch {
+  animation: glitch 0.3s infinite;
+}
+
+/* Wheel Spin Button Animations */
+@keyframes spin-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 255, 153, 0.6);
+  }
+}
+
+@keyframes spin-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+@keyframes spin-border-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes confetti-pop {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes wheel-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.9)) drop-shadow(0 0 60px rgba(0, 255, 153, 0.5));
+  }
+}
+
+.animate-spin-pulse {
+  animation: spin-pulse 2s ease-in-out infinite;
+}
+
+.animate-spin-wiggle {
+  animation: spin-wiggle 0.5s ease-in-out infinite;
+}
+
+.animate-spin-border-rotate {
+  animation: spin-border-rotate 3s linear infinite;
+}
+
+.animate-confetti {
+  animation: confetti-pop 1s ease-out forwards;
+}
+
+.animate-wheel-glow {
+  animation: wheel-glow 2s ease-in-out infinite;
+}
+
+/* Advanced Hover Effects */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes morph {
+  0%, 100% {
+    border-radius: 0.75rem;
+  }
+  50% {
+    border-radius: 2rem;
+  }
+}
+
+@keyframes color-shift {
+  0%, 100% {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  50% {
+    filter: hue-rotate(15deg) brightness(1.2);
+  }
+}
+
+@keyframes button-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes coinFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(180deg);
+  }
+}
+
+@keyframes cosmic-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5),
+                0 0 40px rgba(0, 212, 255, 0.3),
+                0 0 60px rgba(0, 255, 153, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.8),
+                0 0 80px rgba(0, 255, 153, 0.6),
+                0 0 120px rgba(0, 212, 255, 0.4);
+  }
+}
+
+/* Ripple effect for buttons */
+.hover-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.6s ease-out;
+  pointer-events: none;
+}
+
+.hover-ripple:hover::before {
+  animation: ripple 0.6s ease-out;
+}
+
+.hover-morph {
+  transition: border-radius 0.4s ease-in-out;
+}
+
+.hover-morph:hover {
+  animation: morph 2s ease-in-out infinite;
+}
+
+.hover-color-shift:hover {
+  animation: color-shift 3s ease-in-out infinite;
+}
+
+.hover-float:hover {
+  animation: button-float 1s ease-in-out infinite;
+}
+
+.hover-cosmic-pulse:hover {
+  animation: cosmic-pulse 2s ease-in-out infinite;
+}
+
+/* Holographic Panel Designs */
+@keyframes holographic-border {
+  0%, 100% {
+    border-color: rgba(0, 212, 255, 0.8);
+    box-shadow:
+      0 0 20px rgba(0, 212, 255, 0.5),
+      inset 0 0 20px rgba(0, 212, 255, 0.1);
+  }
+  50% {
+    border-color: rgba(0, 255, 153, 0.8);
+    box-shadow:
+      0 0 20px rgba(0, 255, 153, 0.5),
+      inset 0 0 20px rgba(0, 255, 153, 0.1);
+  }
+}
+
+@keyframes organic-pulse {
+  0%, 100% {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    transform: scale(1);
+  }
+  50% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    top: -100%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes corner-glow {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Holographic Panel */
+.holographic-panel {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 212, 255, 0.05) 25%,
+    rgba(0, 255, 153, 0.05) 50%,
+    rgba(0, 212, 255, 0.05) 75%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(0, 212, 255, 0.5);
+  animation: holographic-border 4s ease-in-out infinite;
+}
+
+.holographic-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(0, 212, 255, 0.1) 50%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: shimmer 3s linear infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.holographic-panel::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.8), transparent);
+  animation: scan-line 3s linear infinite;
+  pointer-events: none;
+}
+
+/* Organic Panel Shape */
+.organic-panel {
+  position: relative;
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  animation: organic-pulse 8s ease-in-out infinite;
+  overflow: visible;
+}
+
+/* Holographic Button */
+.holographic-button {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0.2),
+    rgba(0, 255, 153, 0.2),
+    rgba(0, 212, 255, 0.2)
+  );
+  background-size: 200% 200%;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  animation: holographic 4s ease infinite;
+}
+
+.holographic-button::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(
+    135deg,
+    #00d4ff,
+    #00ff99,
+    #00d4ff,
+    #00ff99
+  );
+  background-size: 400% 400%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: holographic 4s ease infinite;
+}
+
+.holographic-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: shimmer 2s linear infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Organic Button Shape */
+.organic-button {
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  transition: border-radius 0.5s ease-in-out;
+}
+
+.organic-button:hover {
+  border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+  animation: organic-pulse 2s ease-in-out infinite;
+}
+
+/* Corner Glow Accents */
+.corner-glow {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.corner-glow::before,
+.corner-glow::after {
+  content: '';
+  position: absolute;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.8), transparent);
+  animation: corner-glow 2s ease-in-out infinite;
+}
+
+.corner-glow-tl {
+  top: -2px;
+  left: -2px;
+}
+
+.corner-glow-tl::before {
+  width: 40px;
+  height: 3px;
+  top: 0;
+  left: 0;
+  border-top-left-radius: 8px;
+}
+
+.corner-glow-tl::after {
+  width: 3px;
+  height: 40px;
+  top: 0;
+  left: 0;
+  border-top-left-radius: 8px;
+}
+
+.corner-glow-tr {
+  top: -2px;
+  right: -2px;
+}
+
+.corner-glow-tr::before {
+  width: 40px;
+  height: 3px;
+  top: 0;
+  right: 0;
+  border-top-right-radius: 8px;
+  background: linear-gradient(-135deg, rgba(0, 255, 153, 0.8), transparent);
+}
+
+.corner-glow-tr::after {
+  width: 3px;
+  height: 40px;
+  top: 0;
+  right: 0;
+  border-top-right-radius: 8px;
+  background: linear-gradient(-135deg, rgba(0, 255, 153, 0.8), transparent);
+}
+
+.corner-glow-bl {
+  bottom: -2px;
+  left: -2px;
+}
+
+.corner-glow-bl::before {
+  width: 40px;
+  height: 3px;
+  bottom: 0;
+  left: 0;
+  border-bottom-left-radius: 8px;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.8), transparent);
+}
+
+.corner-glow-bl::after {
+  width: 3px;
+  height: 40px;
+  bottom: 0;
+  left: 0;
+  border-bottom-left-radius: 8px;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.8), transparent);
+}
+
+.corner-glow-br {
+  bottom: -2px;
+  right: -2px;
+}
+
+.corner-glow-br::before {
+  width: 40px;
+  height: 3px;
+  bottom: 0;
+  right: 0;
+  border-bottom-right-radius: 8px;
+  background: linear-gradient(-135deg, rgba(0, 255, 153, 0.8), transparent);
+}
+
+.corner-glow-br::after {
+  width: 3px;
+  height: 40px;
+  bottom: 0;
+  right: 0;
+  border-bottom-right-radius: 8px;
+  background: linear-gradient(-135deg, rgba(0, 255, 153, 0.8), transparent);
+}
+
+/* Glassmorphism Panel */
+.glass-panel {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 212, 255, 0.2),
+    inset 0 0 20px 0 rgba(0, 255, 153, 0.05);
+}
+
+/* Alien Glyph Decorations */
+@keyframes glyph-rotate {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes glyph-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(10deg);
+  }
+}
+
+@keyframes glyph-pulse-color {
+  0%, 100% {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+  }
+  50% {
+    color: #00ff99;
+    text-shadow: 0 0 15px #00ff99;
+  }
+}
+
+/* Alien Glyph Text with Symbols */
+.alien-glyph-text {
+  position: relative;
+  display: inline-block;
+  font-family: 'Audiowide', 'Orbitron', sans-serif;
+  letter-spacing: 0.15em;
+}
+
+.alien-glyph-text::before,
+.alien-glyph-text::after {
+  position: absolute;
+  font-size: 1.5em;
+  animation: glyph-pulse-color 3s ease-in-out infinite;
+  font-weight: bold;
+}
+
+.alien-glyph-text::before {
+  content: '◆';
+  left: -1.2em;
+  animation: glyph-rotate 4s ease-in-out infinite;
+}
+
+.alien-glyph-text::after {
+  content: '◆';
+  right: -1.2em;
+  animation: glyph-rotate 4s ease-in-out infinite reverse;
+}
+
+/* Alien Symbol Decorations - Various Styles */
+.alien-symbols-circle::before {
+  content: '◉ ⬡ ◈';
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2em;
+  color: #00d4ff;
+  animation: glyph-pulse-color 3s ease-in-out infinite;
+  letter-spacing: 0.5em;
+}
+
+.alien-symbols-underline::after {
+  content: '▬ ◆ ▬ ◆ ▬';
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1em;
+  color: #00ff99;
+  animation: shimmer 3s linear infinite;
+  letter-spacing: 0.3em;
+}
+
+.alien-symbols-sides::before,
+.alien-symbols-sides::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2em;
+  animation: glyph-float 3s ease-in-out infinite;
+}
+
+.alien-symbols-sides::before {
+  content: '⟨⟨';
+  left: -1.5em;
+  color: #00d4ff;
+}
+
+.alien-symbols-sides::after {
+  content: '⟩⟩';
+  right: -1.5em;
+  color: #00ff99;
+}
+
+/* Alien Bracket Text */
+.alien-brackets {
+  position: relative;
+  display: inline-block;
+  padding: 0 2em;
+}
+
+.alien-brackets::before,
+.alien-brackets::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.8em;
+  font-weight: bold;
+  animation: glyph-pulse-color 2s ease-in-out infinite;
+}
+
+.alien-brackets::before {
+  content: '『';
+  left: 0.2em;
+}
+
+.alien-brackets::after {
+  content: '』';
+  right: 0.2em;
+}
+
+/* Tech Symbol Corners */
+.tech-corners {
+  position: relative;
+}
+
+.tech-corners::before,
+.tech-corners::after {
+  position: absolute;
+  font-size: 1.5em;
+  color: #00d4ff;
+  animation: corner-glow 2s ease-in-out infinite;
+}
+
+.tech-corners::before {
+  content: '┏';
+  top: -0.3em;
+  left: -0.5em;
+}
+
+.tech-corners::after {
+  content: '┓';
+  top: -0.3em;
+  right: -0.5em;
+}
+
+/* Hexagon Pattern Text */
+.hex-pattern {
+  position: relative;
+}
+
+.hex-pattern::before {
+  content: '⬡ ⬢ ⬡';
+  position: absolute;
+  top: -1.5em;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8em;
+  color: #00d4ff;
+  letter-spacing: 0.5em;
+  animation: glyph-pulse-color 3s ease-in-out infinite;
+}
+
+/* Circuit Text Effect */
+.circuit-text {
+  position: relative;
+  font-family: 'Electrolize', sans-serif;
+  letter-spacing: 0.2em;
+}
+
+.circuit-text::before,
+.circuit-text::after {
+  position: absolute;
+  content: '';
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+  animation: shimmer 2s linear infinite;
+}
+
+.circuit-text::before {
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.circuit-text::after {
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+/* Alien Code Font */
+.alien-code {
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 0.1em;
+  text-shadow:
+    0 0 5px rgba(0, 255, 153, 0.5),
+    0 0 10px rgba(0, 255, 153, 0.3);
+}
+
+/* Glowing Symbol */
+.glowing-symbol::before {
+  content: '◉';
+  position: absolute;
+  left: -1.5em;
+  font-size: 1.2em;
+  animation: glyph-pulse-color 2s ease-in-out infinite, glyph-rotate 6s linear infinite;
+}
+
+/* Stacked Symbols */
+.stacked-symbols::before {
+  content: '▲\A▼';
+  white-space: pre;
+  position: absolute;
+  left: -1.2em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+  line-height: 1;
+  color: #00d4ff;
+  animation: glyph-pulse-color 3s ease-in-out infinite;
+}
+
+/* Alien Button Styles */
+.alien-button {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 255, 153, 0.15));
+  border: 2px solid #00d4ff;
+  border-radius: 12px;
+  fontFamily: 'Orbitron', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 0 10px rgba(0, 212, 255, 0.3),
+    inset 0 0 10px rgba(0, 212, 255, 0.1);
+}
+
+.alien-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.4), transparent);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.alien-button:hover::before {
+  width: 300%;
+  height: 300%;
+}
+
+.alien-button:hover {
+  transform: translateY(-2px);
+  border-color: #00ffff;
+  box-shadow:
+    0 0 20px rgba(0, 212, 255, 0.6),
+    0 0 40px rgba(0, 255, 153, 0.4),
+    inset 0 0 15px rgba(0, 212, 255, 0.2);
+}
+
+.alien-button:active {
+  transform: translateY(0px);
+  box-shadow:
+    0 0 10px rgba(0, 212, 255, 0.4),
+    inset 0 0 20px rgba(0, 255, 153, 0.3);
+}
+
+/* Alien Button Primary (Cyan/Teal Theme) */
+.alien-button-primary {
+  background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+  border: 2px solid #00d4ff;
+  color: #000;
+  box-shadow:
+    0 0 15px rgba(0, 212, 255, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.alien-button-primary:hover {
+  background: linear-gradient(135deg, #00ff99 0%, #00d4ff 100%);
+  box-shadow:
+    0 0 25px rgba(0, 212, 255, 0.8),
+    0 0 50px rgba(0, 255, 153, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Alien Button Secondary (Cyan Theme) */
+.alien-button-secondary {
+  background: linear-gradient(135deg, #00ffff 0%, #00cccc 100%);
+  border: 2px solid #00ffff;
+  color: #000;
+  box-shadow:
+    0 0 15px rgba(0, 255, 255, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.alien-button-secondary:hover {
+  background: linear-gradient(135deg, #33ffff 0%, #00dddd 100%);
+  box-shadow:
+    0 0 25px rgba(0, 255, 255, 0.8),
+    0 0 50px rgba(0, 255, 255, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Alien Button Danger (Red/Orange Theme) */
+.alien-button-danger {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff4444 100%);
+  border: 2px solid #ff8888;
+  color: #fff;
+  box-shadow:
+    0 0 15px rgba(255, 107, 107, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.alien-button-danger:hover {
+  background: linear-gradient(135deg, #ff8888 0%, #ff5555 100%);
+  box-shadow:
+    0 0 25px rgba(255, 107, 107, 0.8),
+    0 0 50px rgba(255, 107, 107, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Alien Button Purple (Ultimate/Special) */
+.alien-button-purple {
+  background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+  border: 2px solid #c084fc;
+  color: #fff;
+  box-shadow:
+    0 0 15px rgba(168, 85, 247, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.alien-button-purple:hover {
+  background: linear-gradient(135deg, #b968f9 0%, #9d6cf7 100%);
+  box-shadow:
+    0 0 25px rgba(168, 85, 247, 0.8),
+    0 0 50px rgba(168, 85, 247, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Alien Button Gold/Yellow (Rare/Premium) */
+.alien-button-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  border: 2px solid #fcd34d;
+  color: #000;
+  box-shadow:
+    0 0 15px rgba(251, 191, 36, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.alien-button-gold:hover {
+  background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+  box-shadow:
+    0 0 25px rgba(251, 191, 36, 0.8),
+    0 0 50px rgba(251, 191, 36, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Alien Button Disabled */
+.alien-button:disabled,
+.alien-button-disabled {
+  background: linear-gradient(135deg, #4a4a4a 0%, #333333 100%);
+  border: 2px solid #555555;
+  color: #888888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.alien-button:disabled:hover,
+.alien-button-disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Alien Button with Glow Animation */
+.alien-button-glow {
+  animation: cosmic-pulse 2s ease-in-out infinite;
+}
+
+/* Organic/Rounded Alien Button */
+.alien-button-organic {
+  border-radius: 25px 35px 30px 40px / 35px 30px 40px 25px;
+  transition: border-radius 0.3s ease, transform 0.3s ease;
+}
+
+.alien-button-organic:hover {
+  border-radius: 35px 25px 40px 30px / 30px 40px 25px 35px;
+}
+
+.alien-button-blue {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(0, 255, 255, 0.15));
+  border-color: #06b6d4;
+  box-shadow:
+    0 0 10px rgba(6, 182, 212, 0.3),
+    inset 0 0 10px rgba(6, 182, 212, 0.1);
+}
+
+.alien-button-blue:hover {
+  border-color: #00ffff;
+  box-shadow:
+    0 0 20px rgba(6, 182, 212, 0.6),
+    0 0 40px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(6, 182, 212, 0.2);
+}
+
+.alien-button-blue-active {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.3), rgba(0, 255, 255, 0.3));
+  border-color: #00ffff;
+  box-shadow:
+    0 0 20px rgba(6, 182, 212, 0.6),
+    0 0 40px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(6, 182, 212, 0.2);
+}

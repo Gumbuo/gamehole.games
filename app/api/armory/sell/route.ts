@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { kv } from "@vercel/kv";
-import { ArmorySaveState, RarityTier } from "../../../components/armory/types";
-import { getItem } from "../../../components/armory/data/items";
-import { RARITY_SELL_MULTIPLIERS } from "../../../components/armory/constants";
+import { ArmorySaveState } from "../../../base/components/armory/types";
+import { getItem } from "../../../base/components/armory/data/items";
+import { getRedis, addUserPoints } from "../../lib/points";
+import { addPlayerXP } from "../../lib/playerLevel";
 
 const SAVE_KEY_PREFIX = "armory:save:";
 
@@ -10,11 +10,10 @@ function getSaveKey(wallet: string): string {
   return `${SAVE_KEY_PREFIX}${wallet.toLowerCase()}`;
 }
 
-// POST /api/armory/sell - Sell items for Gold
+// POST /api/armory/sell - Sell items for AP
 export async function POST(request: NextRequest) {
   try {
-    const { wallet, itemId, quantity, rarity: requestRarity } = await request.json();
-    const rarity: RarityTier = requestRarity || 'common';
+    const { wallet, itemId, quantity } = await request.json();
 
     if (!wallet || !itemId || !quantity || quantity < 1) {
       return NextResponse.json(
@@ -23,8 +22,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const redis = getRedis();
+    const normalizedWallet = wallet.toLowerCase();
     const saveKey = getSaveKey(wallet);
-    const saveState = await kv.get<ArmorySaveState>(saveKey);
+    const saveState = await redis.get<ArmorySaveState>(saveKey);
 
     if (!saveState) {
       return NextResponse.json(
@@ -33,9 +34,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find item in inventory matching both itemId and rarity
+    // Find item in inventory
     const inventorySlot = saveState.inventory.find(
-      (slot) => slot.itemId === itemId && (slot.rarity || 'common') === rarity
+      (slot) => slot.itemId === itemId
     );
 
     if (!inventorySlot || inventorySlot.quantity < quantity) {
@@ -54,33 +55,43 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const sellMultiplier = RARITY_SELL_MULTIPLIERS[rarity];
-    const totalGoldEarned = Math.floor(item.sellValue * sellMultiplier * quantity);
+    const totalAPEarned = item.sellValue * quantity;
 
     // Remove items from inventory
     inventorySlot.quantity -= quantity;
     if (inventorySlot.quantity <= 0) {
       saveState.inventory = saveState.inventory.filter(
-        (slot) => !(slot.itemId === itemId && (slot.rarity || 'common') === rarity) || slot.quantity > 0
+        (slot) => slot.itemId !== itemId
       );
     }
 
-    // Add gold to player balance
-    saveState.gold = (saveState.gold || 0) + totalGoldEarned;
+    // Add AP to user balance (individual key)
+    const newBalance = await addUserPoints(normalizedWallet, totalAPEarned);
 
     // Update progress
-    saveState.progress.totalGoldEarned = (saveState.progress.totalGoldEarned || 0) + totalGoldEarned;
+    saveState.progress.totalAPEarned += totalAPEarned;
     saveState.lastUpdated = Date.now();
 
-    await kv.set(saveKey, saveState);
+    await redis.set(saveKey, saveState);
+
+    // Award player XP for selling (3 XP per item sold)
+    const playerXP = quantity * 3;
+    const playerXPResult = await addPlayerXP(wallet, playerXP, "sell");
 
     return NextResponse.json({
       success: true,
       data: {
         sold: { itemId, itemName: item.name, quantity },
-        goldEarned: totalGoldEarned,
-        newGoldBalance: saveState.gold,
+        apEarned: totalAPEarned,
+        newAPBalance: newBalance,
         inventory: saveState.inventory,
+        playerLevel: {
+          level: playerXPResult.levelData.level,
+          xp: playerXPResult.levelData.xp,
+          xpAdded: playerXPResult.xpAdded,
+          levelsGained: playerXPResult.levelsGained,
+          apRewarded: playerXPResult.apRewarded,
+        },
       },
     });
   } catch (error) {

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { kv } from "@vercel/kv";
-import { ArmorySaveState, RawResourceKey } from "../../../components/armory/types";
-import { MATERIAL_COSTS } from "../../../components/armory/constants";
+import { ArmorySaveState, RawResourceKey } from "../../../base/components/armory/types";
+import { MATERIAL_COSTS } from "../../../base/components/armory/constants";
+import { getRedis, getUserBalance, deductUserPoints } from "../../lib/points";
+import { addPlayerXP } from "../../lib/playerLevel";
 
 const SAVE_KEY_PREFIX = "armory:save:";
 
@@ -9,7 +10,7 @@ function getSaveKey(wallet: string): string {
   return `${SAVE_KEY_PREFIX}${wallet.toLowerCase()}`;
 }
 
-// POST /api/armory/shop - Purchase raw materials with Gold
+// POST /api/armory/shop - Purchase raw materials with AP
 export async function POST(request: NextRequest) {
   try {
     const { wallet, resourceId, quantity } = await request.json();
@@ -29,8 +30,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const redis = getRedis();
+    const normalizedWallet = wallet.toLowerCase();
+    const unitCost = MATERIAL_COSTS[resourceId as RawResourceKey];
+    const totalCost = unitCost * quantity;
+
+    // Get user's AP balance (individual key lookup)
+    const userBalance = await getUserBalance(normalizedWallet);
+
+    if (userBalance < totalCost) {
+      return NextResponse.json({
+        success: false,
+        error: `Insufficient AP. Need ${totalCost} AP, have ${userBalance} AP`,
+      });
+    }
+
+    // Get armory save
     const saveKey = getSaveKey(wallet);
-    const saveState = await kv.get<ArmorySaveState>(saveKey);
+    const saveState = await redis.get<ArmorySaveState>(saveKey);
 
     if (!saveState) {
       return NextResponse.json(
@@ -39,34 +56,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const unitCost = MATERIAL_COSTS[resourceId as RawResourceKey];
-    const totalCost = unitCost * quantity;
+    // Deduct AP (individual key update)
+    const newBalance = await deductUserPoints(normalizedWallet, totalCost);
 
-    // Check gold balance
-    if ((saveState.gold || 0) < totalCost) {
-      return NextResponse.json({
-        success: false,
-        error: `Insufficient Gold. Need ${totalCost}G, have ${saveState.gold || 0}G`,
-      });
-    }
-
-    // Deduct gold and add resources
-    saveState.gold = (saveState.gold || 0) - totalCost;
+    // Add resources to inventory
     const typedResourceId = resourceId as RawResourceKey;
     saveState.resources[typedResourceId] =
       (saveState.resources[typedResourceId] || 0) + quantity;
-    saveState.progress.totalGoldSpent = (saveState.progress.totalGoldSpent || 0) + totalCost;
+    saveState.progress.totalAPSpent += totalCost;
     saveState.lastUpdated = Date.now();
 
-    await kv.set(saveKey, saveState);
+    await redis.set(saveKey, saveState);
+
+    // Award player XP for spending AP (1 XP per 20 AP spent)
+    const playerXP = Math.floor(totalCost / 20);
+    let playerXPResult = null;
+    if (playerXP > 0) {
+      playerXPResult = await addPlayerXP(wallet, playerXP, "spend");
+    }
 
     return NextResponse.json({
       success: true,
       data: {
         resources: saveState.resources,
-        goldSpent: totalCost,
-        newGoldBalance: saveState.gold,
+        apSpent: totalCost,
+        newAPBalance: newBalance,
         purchased: { resourceId, quantity },
+        playerLevel: playerXPResult ? {
+          level: playerXPResult.levelData.level,
+          xp: playerXPResult.levelData.xp,
+          xpAdded: playerXPResult.xpAdded,
+          levelsGained: playerXPResult.levelsGained,
+          apRewarded: playerXPResult.apRewarded,
+        } : undefined,
       },
     });
   } catch (error) {

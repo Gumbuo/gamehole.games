@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { kv } from "@vercel/kv";
-import { ArmorySaveState, CraftingJob, StationId } from "../../../components/armory/types";
-import { getRecipe, canCraftRecipe } from "../../../components/armory/data/recipes";
-import { getStationQueueSize, getStationSpeedMultiplier } from "../../../components/armory/data/stations";
-import { calculateSpeedUpCost } from "../../../components/armory/constants";
+import { ArmorySaveState, CraftingJob, StationId } from "../../../base/components/armory/types";
+import { getRecipe, canCraftRecipe } from "../../../base/components/armory/data/recipes";
+import { STATIONS, getStationQueueSize, getStationSpeedMultiplier } from "../../../base/components/armory/data/stations";
+import { calculateSpeedUpCost } from "../../../base/components/armory/constants";
+import { getRedis, getUserBalance, deductUserPoints } from "../../lib/points";
+import { addPlayerXP } from "../../lib/playerLevel";
 
 const SAVE_KEY_PREFIX = "armory:save:";
 
@@ -27,8 +28,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const redis = getRedis();
     const saveKey = getSaveKey(wallet);
-    const saveState = await kv.get<ArmorySaveState>(saveKey);
+    const saveState = await redis.get<ArmorySaveState>(saveKey);
 
     if (!saveState) {
       return NextResponse.json(
@@ -130,7 +132,7 @@ export async function POST(request: NextRequest) {
     saveState.craftingQueues[typedStationId].push(job);
     saveState.lastUpdated = Date.now();
 
-    await kv.set(saveKey, saveState);
+    await redis.set(saveKey, saveState);
 
     return NextResponse.json({
       success: true,
@@ -149,7 +151,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PATCH /api/armory/craft - Speed up a crafting job with Gold
+// PATCH /api/armory/craft - Speed up a crafting job
 export async function PATCH(request: NextRequest) {
   try {
     const { wallet, jobId, speedUpType } = await request.json();
@@ -168,8 +170,10 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    const redis = getRedis();
+    const normalizedWallet = wallet.toLowerCase();
     const saveKey = getSaveKey(wallet);
-    const saveState = await kv.get<ArmorySaveState>(saveKey);
+    const saveState = await redis.get<ArmorySaveState>(saveKey);
 
     if (!saveState) {
       return NextResponse.json(
@@ -212,19 +216,21 @@ export async function PATCH(request: NextRequest) {
       });
     }
 
-    // Calculate gold cost
-    const goldCost = calculateSpeedUpCost(remainingSeconds, speedUpType);
+    // Calculate cost
+    const apCost = calculateSpeedUpCost(remainingSeconds, speedUpType);
 
-    // Check gold balance
-    if ((saveState.gold || 0) < goldCost) {
+    // Check AP balance (individual key lookup)
+    const userBalance = await getUserBalance(normalizedWallet);
+
+    if (userBalance < apCost) {
       return NextResponse.json({
         success: false,
-        error: `Insufficient Gold. Need ${goldCost}G, have ${saveState.gold || 0}G`,
+        error: `Insufficient AP. Need ${apCost} AP, have ${userBalance} AP`,
       });
     }
 
-    // Deduct gold
-    saveState.gold = (saveState.gold || 0) - goldCost;
+    // Deduct AP (individual key update)
+    const newBalance = await deductUserPoints(normalizedWallet, apCost);
 
     // Update job time
     if (speedUpType === "instant") {
@@ -234,21 +240,35 @@ export async function PATCH(request: NextRequest) {
       const newRemainingMs = remainingMs / 2;
       foundJob.endTime = now + newRemainingMs;
     }
-    foundJob.speedUpApplied += goldCost;
+    foundJob.speedUpApplied += apCost;
 
     // Update in save state
     saveState.craftingQueues[foundStationId][jobIndex] = foundJob;
-    saveState.progress.totalGoldSpent = (saveState.progress.totalGoldSpent || 0) + goldCost;
+    saveState.progress.totalAPSpent += apCost;
     saveState.lastUpdated = Date.now();
 
-    await kv.set(saveKey, saveState);
+    await redis.set(saveKey, saveState);
+
+    // Award player XP for spending AP on speedup (1 XP per 20 AP spent)
+    const playerXP = Math.floor(apCost / 20);
+    let playerXPResult = null;
+    if (playerXP > 0) {
+      playerXPResult = await addPlayerXP(wallet, playerXP, "spend");
+    }
 
     return NextResponse.json({
       success: true,
       data: {
         job: foundJob,
-        goldSpent: goldCost,
-        newGoldBalance: saveState.gold,
+        apSpent: apCost,
+        newAPBalance: newBalance,
+        playerLevel: playerXPResult ? {
+          level: playerXPResult.levelData.level,
+          xp: playerXPResult.levelData.xp,
+          xpAdded: playerXPResult.xpAdded,
+          levelsGained: playerXPResult.levelsGained,
+          apRewarded: playerXPResult.apRewarded,
+        } : undefined,
       },
     });
   } catch (error) {

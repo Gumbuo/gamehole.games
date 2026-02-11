@@ -1,20 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { kv } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
 import {
   ArmorySaveState,
   ArmoryResources,
   CraftingQueue,
   StationLevels,
   ArmoryProgress,
-} from "../../components/armory/types";
+} from "../../base/components/armory/types";
 import {
   DEFAULT_RESOURCES,
   DEFAULT_STATION_LEVELS,
   DEFAULT_PROGRESS,
   XP_REQUIREMENTS,
-  STARTING_GOLD,
-  DAILY_LOGIN_GOLD,
-} from "../../components/armory/constants";
+} from "../../base/components/armory/constants";
+
+// Lazy initialization using fromEnv() - automatically reads UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN
+let _redis: Redis | null = null;
+
+function getRedis(): Redis {
+  if (!_redis) {
+    _redis = Redis.fromEnv();
+  }
+  return _redis;
+}
 
 const SAVE_KEY_PREFIX = "armory:save:";
 
@@ -26,7 +34,6 @@ function createNewSave(wallet: string): ArmorySaveState {
   const now = Date.now();
   return {
     wallet: wallet.toLowerCase(),
-    gold: STARTING_GOLD,
     resources: { ...DEFAULT_RESOURCES },
     craftingQueues: {
       plasmaRefinery: [],
@@ -41,8 +48,6 @@ function createNewSave(wallet: string): ArmorySaveState {
     equipped: {
       weapon: null,
       armor: null,
-      weaponRarity: null,
-      armorRarity: null,
     },
     playerPosition: {
       x: 0,
@@ -92,7 +97,7 @@ export async function GET(request: NextRequest) {
     let saveState: ArmorySaveState | null = null;
 
     try {
-      saveState = await kv.get<ArmorySaveState>(saveKey);
+      saveState = await getRedis().get<ArmorySaveState>(saveKey);
     } catch (redisError) {
       console.error("Redis GET error:", redisError);
       return NextResponse.json(
@@ -105,7 +110,7 @@ export async function GET(request: NextRequest) {
     if (!saveState) {
       saveState = createNewSave(wallet);
       try {
-        await kv.set(saveKey, saveState);
+        await getRedis().set(saveKey, saveState);
       } catch (setError) {
         console.error("Redis SET error:", setError);
         return NextResponse.json(
@@ -115,38 +120,13 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Migrate inventory items: add rarity field if missing
-    let migrated = false;
-    for (const slot of saveState.inventory) {
-      if (!slot.rarity) {
-        slot.rarity = 'common';
-        migrated = true;
-      }
-    }
-    // Migrate equipped rarity fields
-    if (saveState.equipped) {
-      if (saveState.equipped.weaponRarity === undefined) {
-        saveState.equipped.weaponRarity = saveState.equipped.weapon ? 'common' : null;
-        migrated = true;
-      }
-      if (saveState.equipped.armorRarity === undefined) {
-        saveState.equipped.armorRarity = saveState.equipped.armor ? 'common' : null;
-        migrated = true;
-      }
-    }
-    if (migrated) {
-      saveState.lastUpdated = Date.now();
-      try { await kv.set(saveKey, saveState); } catch { /* non-critical */ }
-    }
-
     // Check for completed crafting jobs
     const { completedCount } = processCompletedJobs(saveState);
 
     // Update last login for daily bonus
     const today = new Date().toISOString().split("T")[0];
-    let dailyBonusAwarded = false;
     if (saveState.progress.lastLoginDate !== today) {
-      // Award daily login gold bonus
+      // Award daily login XP
       const wasYesterday =
         saveState.progress.lastLoginDate ===
         new Date(Date.now() - 86400000).toISOString().split("T")[0];
@@ -155,26 +135,13 @@ export async function GET(request: NextRequest) {
         ? saveState.progress.dailyLoginStreak + 1
         : 1;
       saveState.progress.lastLoginDate = today;
-
-      // Award gold (bonus for streaks)
-      const streakBonus = Math.min(saveState.progress.dailyLoginStreak - 1, 4) * 10;
-      const goldBonus = DAILY_LOGIN_GOLD + streakBonus;
-      saveState.gold = (saveState.gold || 0) + goldBonus;
-      dailyBonusAwarded = true;
-
       saveState.lastUpdated = Date.now();
       try {
-        await kv.set(saveKey, saveState);
+        await getRedis().set(saveKey, saveState);
       } catch (updateError) {
         console.error("Redis update error:", updateError);
         // Don't fail the request, just log it
       }
-    }
-
-    // Ensure gold field exists for old saves
-    if (saveState.gold === undefined) {
-      saveState.gold = STARTING_GOLD;
-      await kv.set(saveKey, saveState);
     }
 
     return NextResponse.json({
@@ -206,7 +173,7 @@ export async function POST(request: NextRequest) {
     const saveKey = getSaveKey(wallet);
 
     // Check if save already exists
-    const existingSave = await kv.get<ArmorySaveState>(saveKey);
+    const existingSave = await getRedis().get<ArmorySaveState>(saveKey);
     if (existingSave && !reset) {
       return NextResponse.json({
         success: true,
@@ -217,7 +184,7 @@ export async function POST(request: NextRequest) {
 
     // Create new save
     const saveState = createNewSave(wallet);
-    await kv.set(saveKey, saveState);
+    await getRedis().set(saveKey, saveState);
 
     return NextResponse.json({
       success: true,
@@ -246,7 +213,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const saveKey = getSaveKey(wallet);
-    let saveState = await kv.get<ArmorySaveState>(saveKey);
+    let saveState = await getRedis().get<ArmorySaveState>(saveKey);
 
     if (!saveState) {
       return NextResponse.json(
@@ -285,14 +252,14 @@ export async function PATCH(request: NextRequest) {
     }
     // Initialize equipment/position if missing (migration for existing saves)
     if (!saveState.equipped) {
-      saveState.equipped = { weapon: null, armor: null, weaponRarity: null, armorRarity: null };
+      saveState.equipped = { weapon: null, armor: null };
     }
     if (!saveState.playerPosition) {
       saveState.playerPosition = { x: 0, currentStation: 'plasmaRefinery' };
     }
 
     saveState.lastUpdated = Date.now();
-    await kv.set(saveKey, saveState);
+    await getRedis().set(saveKey, saveState);
 
     return NextResponse.json({
       success: true,

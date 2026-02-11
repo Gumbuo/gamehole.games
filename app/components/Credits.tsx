@@ -273,7 +273,7 @@ export default function Credits() {
               Part of the Gumbuo Ecosystem
             </p>
             <a
-              href="https://gumbuo.io"
+              href="https://gamehole.games"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -301,7 +301,7 @@ export default function Credits() {
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >
-              Visit Gumbuo.io
+              Visit Game Hole
             </a>
           </div>
         </div>
