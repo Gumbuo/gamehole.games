@@ -1,32 +1,19 @@
 "use client";
 import { useAccount, useBalance } from "wagmi";
-import { useEffect } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { formatUnits } from "viem";
+import { base } from "wagmi/chains";
 
 export default function WalletHUD() {
-  const { address, chain } = useAccount();
+  const { address } = useAccount();
 
-  // Abstract Mainnet ETH (chain ID 2741)
-  const { data: abstractMainnetBalance } = useBalance({
+  // Base ETH balance
+  const { data: baseBalance } = useBalance({
     address,
-    chainId: 2741,
+    chainId: base.id,
   });
 
-  // Abstract Testnet ETH (chain ID 11124)
-  const { data: abstractTestnetBalance } = useBalance({
-    address,
-    chainId: 11124,
-  });
-
-  useEffect(() => {
-    console.log("WalletHUD mounted, address:", address);
-    console.log("Chain:", chain?.name, "ID:", chain?.id);
-    console.log("Abstract Mainnet balance:", abstractMainnetBalance);
-    console.log("Abstract Testnet balance:", abstractTestnetBalance);
-  }, [address, chain, abstractMainnetBalance, abstractTestnetBalance]);
-
-  const formatBalance = (balance: { value: bigint; decimals: number } | undefined) => {
+  const formatBal = (balance: { value: bigint; decimals: number } | undefined) => {
     if (!balance) return "0";
     return parseFloat(formatUnits(balance.value, balance.decimals)).toFixed(4);
   };
@@ -54,18 +41,14 @@ export default function WalletHUD() {
                 {address.slice(0, 6)}...{address.slice(-4)}
               </span>
             </div>
-            <div className="flex items-center justify-end gap-2">
-              <span className="text-gray-400">Abstract Mainnet:</span>
-              <span className="text-green-400 font-bold alien-code">
-                {formatBalance(abstractMainnetBalance)} ETH
-              </span>
-            </div>
-            <div className="flex items-center justify-end gap-2">
-              <span className="text-gray-400">Abstract Testnet:</span>
-              <span className="text-yellow-400 font-bold alien-code">
-                {formatBalance(abstractTestnetBalance)} ETH
-              </span>
-            </div>
+            {parseFloat(formatBal(baseBalance)) > 0 && (
+              <div className="flex items-center justify-end gap-2">
+                <span className="text-gray-400">Base:</span>
+                <span className="text-blue-400 font-bold alien-code">
+                  {formatBal(baseBalance)} ETH
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>

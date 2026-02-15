@@ -7,9 +7,6 @@ import { base, blast, arbitrum } from "wagmi/chains";
 import { formatUnits } from "viem";
 
 const GMB_TOKEN_ADDRESS_BASE = "0xeA80bCC8DcbD395EAf783DE20fb38903E4B26dc0";
-const GMB_TOKEN_ADDRESS_ABSTRACT = "0x1660AA473D936029C7659e7d047F05EcF28D40c9";
-const ABSTRACT_CHAIN_ID = 2741;
-const ABSTRACT_TESTNET_CHAIN_ID = 11124;
 
 // Helper to format balance from wagmi v3 format
 const formatBalance = (balance: { value: bigint; decimals: number } | undefined): string => {
@@ -21,22 +18,11 @@ export function AlienHUD() {
   const { address, isConnected } = useAccount();
   const [isExpanded, setIsExpanded] = useState(true);
   const [gmbBalanceBase, setGmbBalanceBase] = useState<string>("0");
-  const [gmbBalanceAbstract, setGmbBalanceAbstract] = useState<string>("0");
 
-  // Mainnet ETH balances
+  // ETH balances (only chains we care about)
   const { data: ethBalanceBase } = useBalance({
     address,
     chainId: base.id
-  });
-
-  const { data: ethBalanceAbstract } = useBalance({
-    address,
-    chainId: ABSTRACT_CHAIN_ID
-  });
-
-  const { data: ethBalanceAbstractTestnet } = useBalance({
-    address,
-    chainId: ABSTRACT_TESTNET_CHAIN_ID
   });
 
   const { data: ethBalanceBlast } = useBalance({
@@ -49,7 +35,7 @@ export function AlienHUD() {
     chainId: arbitrum.id
   });
 
-  // Fetch GMB token balances via API (wagmi v3 doesn't support token param in useBalance)
+  // Fetch GMB token balance via API
   useEffect(() => {
     if (address) {
       fetch(`/api/balance?wallet=${address}`)
@@ -66,55 +52,28 @@ export function AlienHUD() {
   const { userBalances, getUserBalance } = useAlienPointsEconomy();
   const alienPointsSimple = useAlienPointsSimple();
 
-  // Log whenever userBalances changes
-  useEffect(() => {
-    console.log('📊 [HUD] userBalances changed:', userBalances);
-  }, [userBalances]);
-
-  // Compute alien points directly from state - no local state needed!
+  // Compute alien points directly from state
   const alienPoints = React.useMemo(() => {
-    console.log('🔄 [HUD] useMemo recalculating...', {
-      address,
-      simplePoints: alienPointsSimple?.alienPoints,
-      userBalances,
-      addressBalance: address ? userBalances[address.toLowerCase()] : 'no address'
-    });
-
-    // PRIORITY 1: Use economy context if available (drip station, wheel, etc.)
     if (address && userBalances[address.toLowerCase()] !== undefined) {
-      const balance = userBalances[address.toLowerCase()];
-      console.log("🎯 [HUD] Using economy context balance:", balance, "for", address);
-      return balance;
+      return userBalances[address.toLowerCase()];
     }
-
-    // PRIORITY 2: Fall back to simple context (maze game only)
     if (alienPointsSimple && alienPointsSimple.alienPoints !== undefined) {
-      console.log("🎯 [HUD] Using simple context points (fallback):", alienPointsSimple.alienPoints);
       return alienPointsSimple.alienPoints;
     }
-
-    console.log("🎯 [HUD] Returning 0 (no context data)");
     return 0;
   }, [address, alienPointsSimple?.alienPoints, userBalances]);
 
-  // Fetch initial balance when address changes (triggers API call if not cached)
+  // Fetch initial balance when address changes
   useEffect(() => {
     if (address && userBalances[address.toLowerCase()] === undefined) {
-      console.log("📡 HUD: Fetching initial balance for", address);
       getUserBalance(address);
     }
   }, [address, getUserBalance, userBalances]);
-
-  useEffect(() => {
-    console.log("Abstract Mainnet Balance:", ethBalanceAbstract);
-    console.log("Abstract Testnet Balance:", ethBalanceAbstractTestnet);
-  }, [ethBalanceAbstract, ethBalanceAbstractTestnet]);
 
   // Add token to MetaMask with chain switching
   const addTokenToMetaMask = async (tokenAddress: string, symbol: string, decimals: number, chainName: string, chainId?: number) => {
     try {
       if (typeof window !== 'undefined' && (window as any).ethereum) {
-        // Switch to correct chain first if chainId is provided
         if (chainId) {
           try {
             await (window as any).ethereum.request({
@@ -122,7 +81,6 @@ export function AlienHUD() {
               params: [{ chainId: `0x${chainId.toString(16)}` }],
             });
           } catch (switchError: any) {
-            // Chain not added to wallet, try adding it
             if (switchError.code === 4902) {
               alert(`Please add the ${chainName} network to your wallet first, then try again.`);
               return;
@@ -174,6 +132,11 @@ export function AlienHUD() {
     );
   }
 
+  const baseEth = parseFloat(formatBalance(ethBalanceBase));
+  const blastEth = parseFloat(formatBalance(ethBalanceBlast));
+  const arbEth = parseFloat(formatBalance(ethBalanceArbitrum));
+  const gmbBase = parseFloat(gmbBalanceBase);
+
   return (
     <div style={{
       borderRadius: '8px',
@@ -199,97 +162,66 @@ export function AlienHUD() {
         </div>
 
         {isExpanded && (
-          <div className="space-y-3 text-sm">
-            <p className="text-gray-400">
-              <strong className="text-cyan-400">Wallet:</strong>{" "}
-              <span className="font-mono alien-code">{address?.slice(0, 6)}...{address?.slice(-4)}</span>
-            </p>
-
-            {/* Mainnet Balances - Only show chains with balance > 0 */}
-            {(parseFloat(formatBalance(ethBalanceBase)) > 0 ||
-              parseFloat(formatBalance(ethBalanceAbstract)) > 0 ||
-              parseFloat(formatBalance(ethBalanceBlast)) > 0 ||
-              parseFloat(formatBalance(ethBalanceArbitrum)) > 0) && (
-              <div className="space-y-2">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">MAINNET BALANCES:</p>
-                <div className="ml-3 space-y-1">
-                  {parseFloat(formatBalance(ethBalanceBase)) > 0 && (
-                    <p className="text-blue-400 alien-code">
-                      <strong>Base:</strong> {parseFloat(formatBalance(ethBalanceBase)).toFixed(4)} ETH
-                    </p>
-                  )}
-                  {parseFloat(formatBalance(ethBalanceAbstract)) > 0 && (
-                    <p className="text-purple-400 alien-code">
-                      <strong>Abstract:</strong> {parseFloat(formatBalance(ethBalanceAbstract)).toFixed(4)} ETH
-                    </p>
-                  )}
-                  {parseFloat(formatBalance(ethBalanceBlast)) > 0 && (
-                    <p className="text-yellow-400 alien-code">
-                      <strong>Blast:</strong> {parseFloat(formatBalance(ethBalanceBlast)).toFixed(4)} ETH
-                    </p>
-                  )}
-                  {parseFloat(formatBalance(ethBalanceArbitrum)) > 0 && (
-                    <p className="text-orange-400 alien-code">
-                      <strong>Arbitrum:</strong> {parseFloat(formatBalance(ethBalanceArbitrum)).toFixed(4)} ETH
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Testnet Balances - Only show chains with balance > 0 */}
-            {parseFloat(formatBalance(ethBalanceAbstractTestnet)) > 0 && (
-              <div className="space-y-2">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">TESTNET BALANCES:</p>
-                <div className="ml-3 space-y-1">
-                  <p className="text-pink-400 alien-code">
-                    <strong>Abstract Testnet:</strong> {parseFloat(formatBalance(ethBalanceAbstractTestnet)).toFixed(4)} ETH
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* GMB Holdings - Only show chains with balance > 0 */}
-            {(parseFloat(gmbBalanceBase) > 0 ||
-              parseFloat(gmbBalanceAbstract) > 0) && (
-              <div className="space-y-2">
-                <p className="text-xs text-gray-500 uppercase tracking-wider">GMB Holdings:</p>
-                <div className="ml-3 space-y-1">
-                  {parseFloat(gmbBalanceBase) > 0 && (
-                    <p className="text-blue-400 alien-code">
-                      <strong>Base:</strong> {gmbBalanceBase} GMB
-                    </p>
-                  )}
-                  {parseFloat(gmbBalanceAbstract) > 0 && (
-                    <p className="text-purple-400 alien-code">
-                      <strong>Abstract:</strong> {gmbBalanceAbstract} GMB
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div className="mt-4 pt-3 border-t border-cyan-500/30">
-              <p className="flex items-center gap-2">
-                <span className="text-cyan-400 font-bold">AlienPoints:</span>
-                <span className="text-3xl font-bold holographic-text font-alien">{alienPoints.toLocaleString()}</span>
-              </p>
-              <p className="text-xs text-gray-500 text-right mt-1">AP</p>
+          <div className="space-y-4">
+            {/* Wallet */}
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500 text-sm">Wallet</span>
+              <span className="font-mono text-cyan-400 text-base tracking-wide">{address?.slice(0, 6)}...{address?.slice(-4)}</span>
             </div>
 
-            {/* Add Token Buttons */}
-            <div className="mt-4 pt-3 border-t border-cyan-500/30 flex flex-col items-center space-y-2">
+            {/* Alien Points - hero section */}
+            <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg px-4 py-3">
+              <div className="text-gray-500 text-xs uppercase tracking-widest mb-1">Alien Points</div>
+              <div className="text-3xl font-bold holographic-text font-alien tracking-wide">
+                {alienPoints.toLocaleString()} <span className="text-base text-cyan-400/60">AP</span>
+              </div>
+            </div>
+
+            {/* Chain Balances */}
+            {(baseEth > 0 || blastEth > 0 || arbEth > 0) && (
+              <div className="space-y-2">
+                <div className="text-gray-500 text-xs uppercase tracking-widest">ETH Balances</div>
+                <div className="grid grid-cols-1 gap-1.5">
+                  {baseEth > 0 && (
+                    <div className="flex justify-between items-center bg-black/20 rounded px-3 py-1.5">
+                      <span className="text-blue-400 text-sm font-bold">Base</span>
+                      <span className="text-blue-300 text-sm font-mono">{baseEth.toFixed(4)} ETH</span>
+                    </div>
+                  )}
+                  {blastEth > 0 && (
+                    <div className="flex justify-between items-center bg-black/20 rounded px-3 py-1.5">
+                      <span className="text-yellow-400 text-sm font-bold">Blast</span>
+                      <span className="text-yellow-300 text-sm font-mono">{blastEth.toFixed(4)} ETH</span>
+                    </div>
+                  )}
+                  {arbEth > 0 && (
+                    <div className="flex justify-between items-center bg-black/20 rounded px-3 py-1.5">
+                      <span className="text-orange-400 text-sm font-bold">Arbitrum</span>
+                      <span className="text-orange-300 text-sm font-mono">{arbEth.toFixed(4)} ETH</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* GMB Holdings */}
+            {gmbBase > 0 && (
+              <div className="space-y-2">
+                <div className="text-gray-500 text-xs uppercase tracking-widest">GMB Holdings</div>
+                <div className="flex justify-between items-center bg-black/20 rounded px-3 py-1.5">
+                  <span className="text-blue-400 text-sm font-bold">Base</span>
+                  <span className="text-blue-300 text-sm font-mono">{gmbBalanceBase} GMB</span>
+                </div>
+              </div>
+            )}
+
+            {/* Add Token Button */}
+            <div className="pt-2 border-t border-cyan-500/20">
               <button
                 onClick={() => addTokenToMetaMask(GMB_TOKEN_ADDRESS_BASE, 'GMB', 18, 'Base', base.id)}
                 className="w-full px-4 py-2 text-sm font-bold tracking-wider alien-button alien-button-purple text-white rounded-lg transition-all duration-300 hover:scale-105"
               >
-                + Add GMB (Base)
-              </button>
-              <button
-                onClick={() => addTokenToMetaMask(GMB_TOKEN_ADDRESS_ABSTRACT, 'GMB', 18, 'Abstract', ABSTRACT_CHAIN_ID)}
-                className="w-full px-4 py-2 text-sm font-bold tracking-wider alien-button alien-button-gold text-black rounded-lg transition-all duration-300 hover:scale-105"
-              >
-                + Add GMB (Abstract)
+                + Add GMB to Wallet
               </button>
             </div>
           </div>
