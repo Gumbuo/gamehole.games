@@ -132,9 +132,18 @@ export interface PlayerStats {
 }
 
 // ============== MAP / POSITION ==============
+export type ZoneId = 'homeBase' | 'crystalCaverns' | 'bioSwamp' | 'quantumVault';
+
+export interface ZonePositions {
+  [zoneId: string]: { x: number; y: number };
+}
+
 export interface PlayerPosition {
   x: number;
-  currentStation: StationId | null;  // Which station player is at
+  y: number;
+  zoneId: ZoneId;
+  currentStation: StationId | null;
+  zonePositions?: ZonePositions;
 }
 
 // ============== PLAYER PROGRESS ==============

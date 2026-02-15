@@ -4,143 +4,146 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import {
   ArmorySaveState,
   StationId,
-  EquippedItems,
-  ArmoryItem,
+  ZoneId,
 } from "./types";
-import { STATIONS } from "./data/stations";
 import { getItem } from "./data/items";
+import { STATIONS } from "./data/stations";
+import { GameLoop } from "./engine/GameLoop";
+import { Camera } from "./engine/Camera";
+import { InputHandler } from "./engine/InputHandler";
+import { Renderer } from "./engine/Renderer";
+import { updateMovement } from "./engine/Movement";
+import { canMoveTo, getNearStation, getNearExit } from "./engine/Collision";
+import { GameState, FacingDirection, ZonePlayerPosition } from "./engine/types";
+import { getZone, getSpawnPoint } from "./data/zones";
 
 interface ArmoryMapProps {
   saveState: ArmorySaveState;
   onStationSelect: (stationId: StationId) => void;
-  onUpdatePosition: (position: { x: number; currentStation: StationId | null }) => void;
+  onUpdatePosition: (position: ZonePlayerPosition) => void;
+  onZoneChange?: (zoneId: ZoneId) => void;
 }
 
-// Station positions on the map (straight line layout)
-const STATION_POSITIONS: Record<StationId, { x: number; y: number; unlockLevel: number }> = {
-  plasmaRefinery: { x: 80, y: 150, unlockLevel: 1 },
-  assemblyBay: { x: 220, y: 150, unlockLevel: 1 },
-  voidForge: { x: 360, y: 150, unlockLevel: 2 },
-  bioLab: { x: 500, y: 150, unlockLevel: 3 },
-  quantumChamber: { x: 640, y: 150, unlockLevel: 5 },
-};
+const MIN_WIDTH = 720;
+const MIN_HEIGHT = 480;
 
-const STATION_ORDER: StationId[] = [
-  'plasmaRefinery',
-  'assemblyBay',
-  'voidForge',
-  'bioLab',
-  'quantumChamber'
-];
-
-const PLAYER_SPEED = 3;
-const STATION_RADIUS = 35;
-
-export default function ArmoryMap({ saveState, onStationSelect, onUpdatePosition }: ArmoryMapProps) {
+export default function ArmoryMap({
+  saveState,
+  onStationSelect,
+  onUpdatePosition,
+  onZoneChange,
+}: ArmoryMapProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [playerX, setPlayerX] = useState(saveState.playerPosition?.x ?? 80);
-  const [targetX, setTargetX] = useState<number | null>(null);
-  const [targetStation, setTargetStation] = useState<StationId | null>(null);
-  const [playerImage, setPlayerImage] = useState<HTMLImageElement | null>(null);
-  const [playerImageFlipped, setPlayerImageFlipped] = useState<HTMLImageElement | null>(null);
-  const [facingRight, setFacingRight] = useState(true);
-  const animationRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [canvasSize, setCanvasSize] = useState({ width: MIN_WIDTH, height: MIN_HEIGHT });
 
-  // Load player sprite
+  // Refs for game engine objects (survive re-renders)
+  const gameLoopRef = useRef<GameLoop | null>(null);
+  const cameraRef = useRef<Camera | null>(null);
+  const inputRef = useRef<InputHandler | null>(null);
+  const rendererRef = useRef<Renderer | null>(null);
+  const stateRef = useRef<GameState>({
+    playerX: saveState.playerPosition?.x ?? 15 * 32,
+    playerY: saveState.playerPosition?.y ?? 10 * 32,
+    facing: 'east' as FacingDirection,
+    currentZoneId: (saveState.playerPosition?.zoneId as ZoneId) ?? 'homeBase',
+    nearStation: null,
+    nearExit: null,
+    isTransitioning: false,
+    transitionAlpha: 0,
+  });
+  const saveStateRef = useRef(saveState);
+  const spritesRef = useRef<{ east: HTMLImageElement | null; west: HTMLImageElement | null }>({
+    east: null,
+    west: null,
+  });
+  const positionSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const zonePositionsRef = useRef<Record<string, { x: number; y: number }>>(
+    saveState.playerPosition?.zonePositions || {}
+  );
+  // Track transition state
+  const transitionRef = useRef<{
+    active: boolean;
+    targetZone: ZoneId;
+    targetSpawn: string;
+    phase: 'fadeOut' | 'fadeIn';
+  } | null>(null);
+
+  // Zone name toast
+  const [zoneToast, setZoneToast] = useState<string | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Keep saveState ref updated
   useEffect(() => {
-    const img = new Image();
-    img.src = "/images/armory/player/east.png";
-    img.onload = () => setPlayerImage(img);
+    saveStateRef.current = saveState;
+  }, [saveState]);
 
-    const imgFlipped = new Image();
-    imgFlipped.src = "/images/armory/player/west.png";
-    imgFlipped.onload = () => setPlayerImageFlipped(imgFlipped);
+  // Load player sprites
+  useEffect(() => {
+    const imgEast = new Image();
+    imgEast.src = "/images/armory/player/east.png";
+    imgEast.onload = () => { spritesRef.current.east = imgEast; };
+
+    const imgWest = new Image();
+    imgWest.src = "/images/armory/player/west.png";
+    imgWest.onload = () => { spritesRef.current.west = imgWest; };
   }, []);
 
-  // Get equipped item info
+  // Get equipped items for overlay
   const equippedWeapon = saveState.equipped?.weapon ? getItem(saveState.equipped.weapon.itemId) : null;
   const equippedArmor = saveState.equipped?.armor ? getItem(saveState.equipped.armor.itemId) : null;
 
-  // Calculate total stats
-  const totalAttack = (equippedWeapon?.stats.attack || 0);
-  const totalDefense = (equippedArmor?.stats.defense || 0);
-
-  // Handle click on canvas to move player
-  const handleCanvasClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
-
-    // Check if clicked on a station
-    for (const stationId of STATION_ORDER) {
-      const pos = STATION_POSITIONS[stationId];
-      const station = STATIONS[stationId];
-      const stationLevel = saveState.stationLevels[stationId];
-
-      // Check if station is unlocked
-      if (station && (stationLevel > 0 || saveState.progress.level >= station.unlockLevel)) {
-        const dx = clickX - pos.x;
-        const dy = clickY - pos.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance <= STATION_RADIUS) {
-          // Clicked on this station - move there
-          setTargetX(pos.x);
-          setTargetStation(stationId);
-          setFacingRight(pos.x > playerX);
-          return;
-        }
-      }
+  // Debounced position save
+  const savePosition = useCallback(() => {
+    if (positionSaveTimerRef.current) {
+      clearTimeout(positionSaveTimerRef.current);
     }
-
-    // Clicked empty space - just move horizontally
-    setTargetX(Math.max(50, Math.min(670, clickX)));
-    setTargetStation(null);
-    setFacingRight(clickX > playerX);
-  }, [playerX, saveState.stationLevels, saveState.progress.level]);
-
-  // Animation loop for player movement
-  useEffect(() => {
-    if (targetX === null) return;
-
-    const animate = () => {
-      setPlayerX((currentX) => {
-        const diff = targetX - currentX;
-
-        if (Math.abs(diff) < PLAYER_SPEED) {
-          // Arrived at destination
-          setTargetX(null);
-
-          // If we arrived at a station, select it
-          if (targetStation) {
-            onStationSelect(targetStation);
-            onUpdatePosition({ x: targetX, currentStation: targetStation });
-          } else {
-            onUpdatePosition({ x: targetX, currentStation: null });
-          }
-
-          return targetX;
-        }
-
-        return currentX + (diff > 0 ? PLAYER_SPEED : -PLAYER_SPEED);
+    positionSaveTimerRef.current = setTimeout(() => {
+      const s = stateRef.current;
+      onUpdatePosition({
+        zoneId: s.currentZoneId,
+        x: s.playerX,
+        y: s.playerY,
+        currentStation: s.nearStation,
+        zonePositions: zonePositionsRef.current,
       });
+    }, 2000);
+  }, [onUpdatePosition]);
 
-      animationRef.current = requestAnimationFrame(animate);
+  // Show zone toast
+  const showZoneToast = useCallback((zoneName: string) => {
+    setZoneToast(zoneName);
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => setZoneToast(null), 2000);
+  }, []);
+
+  // Handle zone transition
+  const startTransition = useCallback((targetZone: ZoneId, targetSpawn: string) => {
+    transitionRef.current = {
+      active: true,
+      targetZone,
+      targetSpawn,
+      phase: 'fadeOut',
+    };
+    stateRef.current.isTransitioning = true;
+  }, []);
+
+  // Responsive canvas sizing
+  useEffect(() => {
+    const updateSize = () => {
+      if (!containerRef.current) return;
+      const parentWidth = containerRef.current.parentElement?.clientWidth || MIN_WIDTH;
+      const w = Math.max(MIN_WIDTH, Math.min(parentWidth - 32, 1200));
+      const h = Math.max(MIN_HEIGHT, Math.round(w * 0.55));
+      setCanvasSize({ width: w, height: h });
     };
 
-    animationRef.current = requestAnimationFrame(animate);
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [targetX, targetStation, onStationSelect, onUpdatePosition]);
-
-  // Draw the map
+  // Main game engine setup
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -148,150 +151,216 @@ export default function ArmoryMap({ saveState, onStationSelect, onUpdatePosition
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Clear canvas
-    ctx.fillStyle = "#0a0a0f";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Initialize engine modules
+    const camera = new Camera(canvasSize.width, canvasSize.height);
+    const renderer = new Renderer(ctx, canvasSize.width, canvasSize.height);
 
-    // Draw floor/path line
-    ctx.strokeStyle = "#1a1a2e";
-    ctx.lineWidth = 40;
-    ctx.beginPath();
-    ctx.moveTo(30, 150);
-    ctx.lineTo(690, 150);
-    ctx.stroke();
+    // Snap camera to player immediately
+    const zone = getZone(stateRef.current.currentZoneId);
+    camera.snapTo(stateRef.current.playerX, stateRef.current.playerY, zone.width, zone.height);
 
-    // Draw path decorations
-    ctx.strokeStyle = "#66fcf1";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 10]);
-    ctx.beginPath();
-    ctx.moveTo(30, 150);
-    ctx.lineTo(690, 150);
-    ctx.stroke();
-    ctx.setLineDash([]);
+    const input = new InputHandler(canvas, (sx, sy) => camera.screenToWorld(sx, sy));
 
-    // Draw stations
-    for (const stationId of STATION_ORDER) {
-      const pos = STATION_POSITIONS[stationId];
-      const station = STATIONS[stationId];
-      const stationLevel = saveState.stationLevels[stationId];
-      const isUnlocked = stationLevel > 0 || (station && saveState.progress.level >= station.unlockLevel);
-      const hasActiveJobs = saveState.craftingQueues[stationId]?.length > 0;
+    cameraRef.current = camera;
+    inputRef.current = input;
+    rendererRef.current = renderer;
 
-      // Station circle
-      ctx.beginPath();
-      ctx.arc(pos.x, pos.y, STATION_RADIUS, 0, Math.PI * 2);
+    // Show initial zone toast
+    showZoneToast(zone.name);
 
-      if (!isUnlocked) {
-        ctx.fillStyle = "#1a1a2e";
-        ctx.strokeStyle = "#333";
-      } else if (hasActiveJobs) {
-        ctx.fillStyle = "#1a3a2e";
-        ctx.strokeStyle = "#66fcf1";
-      } else {
-        ctx.fillStyle = "#1a2a3e";
-        ctx.strokeStyle = "#45a29e";
+    // Game loop update function
+    const update = (dt: number) => {
+      const state = stateRef.current;
+      const currentZone = getZone(state.currentZoneId);
+
+      // Handle zone transition animation
+      if (transitionRef.current?.active) {
+        const tr = transitionRef.current;
+        if (tr.phase === 'fadeOut') {
+          state.transitionAlpha = Math.min(1, state.transitionAlpha + dt * 4);
+          if (state.transitionAlpha >= 1) {
+            // Switch zone
+            const newZone = getZone(tr.targetZone);
+            const spawn = getSpawnPoint(newZone, tr.targetSpawn);
+
+            // Save position in old zone
+            zonePositionsRef.current[state.currentZoneId] = {
+              x: state.playerX,
+              y: state.playerY,
+            };
+
+            state.currentZoneId = tr.targetZone;
+            state.playerX = spawn.x;
+            state.playerY = spawn.y;
+            state.nearStation = null;
+            state.nearExit = null;
+
+            camera.snapTo(spawn.x, spawn.y, newZone.width, newZone.height);
+            input.updateScreenToWorld((sx, sy) => camera.screenToWorld(sx, sy));
+
+            tr.phase = 'fadeIn';
+            showZoneToast(newZone.name);
+            onZoneChange?.(tr.targetZone);
+
+            // Save position immediately on zone change
+            onUpdatePosition({
+              zoneId: state.currentZoneId,
+              x: state.playerX,
+              y: state.playerY,
+              currentStation: null,
+              zonePositions: zonePositionsRef.current,
+            });
+          }
+        } else {
+          state.transitionAlpha = Math.max(0, state.transitionAlpha - dt * 4);
+          if (state.transitionAlpha <= 0) {
+            state.isTransitioning = false;
+            transitionRef.current = null;
+          }
+        }
+
+        // Render even during transition
+        renderer.render(
+          getZone(state.currentZoneId),
+          camera.getState(),
+          state,
+          spritesRef.current,
+          saveStateRef.current,
+          dt
+        );
+        return;
       }
 
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.stroke();
+      // Normal movement
+      const movResult = updateMovement(
+        state.playerX,
+        state.playerY,
+        state.facing,
+        input.state,
+        dt,
+        (x, y) => canMoveTo(x, y, currentZone)
+      );
 
-      // Station icon (emoji)
-      ctx.font = "24px Arial";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      state.playerX = movResult.x;
+      state.playerY = movResult.y;
+      state.facing = movResult.facing;
 
-      if (!isUnlocked) {
-        ctx.fillStyle = "#555";
-        ctx.fillText("🔒", pos.x, pos.y);
-      } else {
-        ctx.fillText(station?.icon || "⚙️", pos.x, pos.y);
+      if (movResult.moved) {
+        savePosition();
       }
 
-      // Station name below
-      ctx.font = "10px Orbitron, monospace";
-      ctx.fillStyle = isUnlocked ? "#66fcf1" : "#555";
-      ctx.fillText(station?.name || stationId, pos.x, pos.y + 50);
+      // Check station proximity
+      state.nearStation = getNearStation(state.playerX, state.playerY, currentZone.stations);
 
-      // Level indicator
-      if (isUnlocked && stationLevel > 0) {
-        ctx.font = "8px Orbitron, monospace";
-        ctx.fillStyle = "#45a29e";
-        ctx.fillText(`Lv.${stationLevel}`, pos.x, pos.y + 62);
+      // Check exit proximity
+      state.nearExit = getNearExit(state.playerX, state.playerY, currentZone.exits);
+
+      // Handle interaction
+      if (input.consumeInteract()) {
+        if (state.nearStation) {
+          const stationLevel = saveStateRef.current.stationLevels[state.nearStation];
+          const station = STATIONS[state.nearStation];
+          const isUnlocked = stationLevel > 0 || saveStateRef.current.progress.level >= station.unlockLevel;
+          if (isUnlocked && stationLevel > 0) {
+            onStationSelect(state.nearStation);
+          }
+        }
       }
 
-      // Active jobs indicator
-      if (hasActiveJobs) {
-        ctx.font = "12px Arial";
-        ctx.fillStyle = "#66fcf1";
-        ctx.fillText(`⏳${saveState.craftingQueues[stationId].length}`, pos.x + 30, pos.y - 25);
+      // Handle click on station (click target near a station)
+      if (input.state.clickTarget) {
+        const clickStation = getNearStation(
+          input.state.clickTarget.x,
+          input.state.clickTarget.y,
+          currentZone.stations
+        );
+        if (clickStation && clickStation === state.nearStation) {
+          const stationLevel = saveStateRef.current.stationLevels[clickStation];
+          const station = STATIONS[clickStation];
+          const isUnlocked = stationLevel > 0 || saveStateRef.current.progress.level >= station.unlockLevel;
+          if (isUnlocked && stationLevel > 0) {
+            input.state.clickTarget = null;
+            onStationSelect(clickStation);
+          }
+        }
       }
-    }
 
-    // Draw player
-    const playerY = 150;
-    const playerImg = facingRight ? playerImage : playerImageFlipped;
+      // Handle exit transition
+      if (state.nearExit && !state.isTransitioning) {
+        const exit = state.nearExit;
+        const playerLevel = saveStateRef.current.progress.level;
+        if (playerLevel >= exit.requiredLevel) {
+          startTransition(exit.targetZone, exit.targetSpawnId);
+        }
+      }
 
-    if (playerImg) {
-      // Draw player sprite (scaled up from 48x48 to 64x64)
-      const size = 64;
-      ctx.drawImage(playerImg, playerX - size/2, playerY - size/2 - 10, size, size);
-    } else {
-      // Fallback circle if image not loaded
-      ctx.beginPath();
-      ctx.arc(playerX, playerY - 20, 20, 0, Math.PI * 2);
-      ctx.fillStyle = "#00ff99";
-      ctx.fill();
-      ctx.strokeStyle = "#66fcf1";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
+      // Camera follow
+      camera.follow(state.playerX, state.playerY, currentZone.width, currentZone.height);
 
-    // Equipment indicators shown via HTML overlay instead of canvas
-    // (Canvas emoji rendering is unreliable on Windows)
+      // Render
+      renderer.render(
+        currentZone,
+        camera.getState(),
+        state,
+        spritesRef.current,
+        saveStateRef.current,
+        dt
+      );
+    };
 
-    // Draw stats display
-    ctx.fillStyle = "#0a0a0f";
-    ctx.fillRect(10, 10, 120, 50);
-    ctx.strokeStyle = "#66fcf1";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(10, 10, 120, 50);
+    const gameLoop = new GameLoop(update);
+    gameLoopRef.current = gameLoop;
+    gameLoop.start();
 
-    ctx.font = "10px Orbitron, monospace";
-    ctx.textAlign = "left";
-    ctx.fillStyle = "#ff6b6b";
-    ctx.fillText(`ATK: ${totalAttack}`, 20, 30);
-    ctx.fillStyle = "#4ecdc4";
-    ctx.fillText(`DEF: ${totalDefense}`, 20, 50);
+    // Focus canvas for keyboard input
+    canvas.focus();
 
-    // Instructions
-    ctx.font = "10px Orbitron, monospace";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#555";
-    ctx.fillText("Click a station to move there", 360, 230);
-
-  }, [playerX, playerImage, playerImageFlipped, facingRight, saveState, equippedWeapon, equippedArmor, totalAttack, totalDefense]);
+    return () => {
+      gameLoop.stop();
+      input.detach();
+      if (positionSaveTimerRef.current) {
+        clearTimeout(positionSaveTimerRef.current);
+      }
+    };
+  }, [canvasSize.width, canvasSize.height, onStationSelect, onUpdatePosition, onZoneChange, savePosition, showZoneToast, startTransition]);
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       <div className="relative inline-block">
         <canvas
           ref={canvasRef}
-          width={720}
-          height={250}
-          onClick={handleCanvasClick}
+          width={canvasSize.width}
+          height={canvasSize.height}
           className="border border-cyan-800 rounded-lg cursor-pointer"
           style={{ imageRendering: "pixelated" }}
         />
 
-        {/* Equipment overlay on player - positioned absolutely over canvas */}
+        {/* Zone transition toast */}
+        {zoneToast && (
+          <div
+            className="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none"
+            style={{
+              background: 'rgba(10, 10, 15, 0.9)',
+              border: '1px solid #66fcf1',
+              borderRadius: '8px',
+              padding: '8px 24px',
+              fontFamily: 'Orbitron, monospace',
+              fontSize: '16px',
+              color: '#66fcf1',
+              textShadow: '0 0 10px rgba(102, 252, 241, 0.5)',
+              animation: 'fadeInOut 2s ease-in-out',
+            }}
+          >
+            {zoneToast}
+          </div>
+        )}
+
+        {/* Equipment overlay */}
         <div
           className="absolute pointer-events-none"
           style={{
-            left: `${playerX - 40}px`,
-            top: '95px',
-            transition: 'left 0.1s ease-out',
+            left: `${(stateRef.current.playerX - (cameraRef.current?.x || 0)) - 40}px`,
+            top: `${(stateRef.current.playerY - (cameraRef.current?.y || 0)) - 45}px`,
           }}
         >
           {equippedWeapon && (
@@ -334,6 +403,15 @@ export default function ArmoryMap({ saveState, onStationSelect, onUpdatePosition
           )}
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeInOut {
+          0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+          15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+          80% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }

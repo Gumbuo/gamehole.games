@@ -50,8 +50,10 @@ function createNewSave(wallet: string): ArmorySaveState {
       armor: null,
     },
     playerPosition: {
-      x: 0,
-      currentStation: 'plasmaRefinery',
+      x: 15 * 32,
+      y: 10 * 32,
+      zoneId: 'homeBase',
+      currentStation: null,
     },
     lastUpdated: now,
     createdAt: now,
@@ -118,6 +120,20 @@ export async function GET(request: NextRequest) {
           { status: 500 }
         );
       }
+    }
+
+    // Migrate old position format to new zone-based format
+    if (saveState.playerPosition && !saveState.playerPosition.zoneId) {
+      saveState.playerPosition = {
+        x: 15 * 32,
+        y: 10 * 32,
+        zoneId: 'homeBase',
+        currentStation: saveState.playerPosition.currentStation || null,
+      };
+      saveState.lastUpdated = Date.now();
+      try {
+        await getRedis().set(saveKey, saveState);
+      } catch {}
     }
 
     // Check for completed crafting jobs
@@ -255,7 +271,7 @@ export async function PATCH(request: NextRequest) {
       saveState.equipped = { weapon: null, armor: null };
     }
     if (!saveState.playerPosition) {
-      saveState.playerPosition = { x: 0, currentStation: 'plasmaRefinery' };
+      saveState.playerPosition = { x: 15 * 32, y: 10 * 32, zoneId: 'homeBase', currentStation: null };
     }
 
     saveState.lastUpdated = Date.now();

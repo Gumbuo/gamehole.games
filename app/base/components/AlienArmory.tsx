@@ -10,6 +10,7 @@ import {
   Recipe,
   InventoryItem,
   EquipmentSlot,
+  PlayerPosition,
 } from "./armory/types";
 import { STATIONS, STATION_ORDER, getStationQueueSize } from "./armory/data/stations";
 import { RECIPES, getAvailableRecipes, canCraftRecipe, getRecipe } from "./armory/data/recipes";
@@ -340,7 +341,7 @@ export default function AlienArmory() {
   };
 
   // Update player position on map
-  const updatePlayerPosition = async (position: { x: number; currentStation: StationId | null }) => {
+  const updatePlayerPosition = async (position: PlayerPosition) => {
     if (!address) return;
 
     try {
