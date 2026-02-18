@@ -400,19 +400,23 @@ export default function HomePage() {
             <a
               href="/guildevents"
               style={{
-                padding: '8px 16px',
-                background: 'rgba(180, 77, 255, 0.15)',
-                border: '1px solid #b44dff',
-                borderRadius: '6px',
-                color: '#b44dff',
+                padding: '12px 28px',
+                background: 'linear-gradient(135deg, #b44dff, #8e2de2)',
+                border: '2px solid #b44dff',
+                borderRadius: '8px',
+                color: '#fff',
                 fontFamily: 'Orbitron, sans-serif',
-                fontSize: '12px',
+                fontSize: '14px',
                 textTransform: 'uppercase',
                 textDecoration: 'none',
                 fontWeight: 'bold',
+                boxShadow: '0 0 20px rgba(180, 77, 255, 0.5), 0 0 40px rgba(180, 77, 255, 0.2)',
+                letterSpacing: '1px',
+                animation: 'guildPulse 2s ease-in-out infinite',
               }}
             >
               Guild Events
+              <style>{`@keyframes guildPulse { 0%, 100% { box-shadow: 0 0 20px rgba(180, 77, 255, 0.5), 0 0 40px rgba(180, 77, 255, 0.2); } 50% { box-shadow: 0 0 30px rgba(180, 77, 255, 0.8), 0 0 60px rgba(180, 77, 255, 0.4); } }`}</style>
             </a>
           </div>
         </div>

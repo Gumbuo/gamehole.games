@@ -128,7 +128,7 @@ export default function GuildEventsPage() {
       </div>
 
       {/* Page content */}
-      <div style={{ maxWidth: "900px", margin: "0 auto", padding: "30px 16px" }}>
+      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "30px 16px" }}>
         {/* Title */}
         <h1
           style={{
@@ -183,8 +183,8 @@ export default function GuildEventsPage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "24px",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gap: "30px",
             marginBottom: "40px",
           }}
         >
@@ -194,11 +194,11 @@ export default function GuildEventsPage() {
               style={{
                 background: tier.bg,
                 border: `2px solid ${tier.border}`,
-                borderRadius: "12px",
-                padding: "24px 20px",
+                borderRadius: "16px",
+                padding: "30px 26px",
                 display: "flex",
                 flexDirection: "column",
-                gap: "14px",
+                gap: "18px",
               }}
             >
               {/* Tier header */}
@@ -206,10 +206,10 @@ export default function GuildEventsPage() {
                 <h2
                   style={{
                     color: tier.color,
-                    fontSize: "1.2rem",
+                    fontSize: "1.6rem",
                     margin: 0,
                     textTransform: "uppercase",
-                    letterSpacing: "2px",
+                    letterSpacing: "3px",
                   }}
                 >
                   {tier.name}
@@ -217,7 +217,7 @@ export default function GuildEventsPage() {
                 <span
                   style={{
                     color: "#888",
-                    fontSize: "0.75rem",
+                    fontSize: "0.9rem",
                     fontFamily: "Share Tech Mono, monospace",
                   }}
                 >
@@ -229,14 +229,14 @@ export default function GuildEventsPage() {
               <div
                 style={{
                   background: "rgba(0,0,0,0.4)",
-                  borderRadius: "8px",
-                  padding: "10px 14px",
-                  fontSize: "0.72rem",
+                  borderRadius: "10px",
+                  padding: "14px 18px",
+                  fontSize: "0.9rem",
                   color: "#aaa",
                   fontFamily: "Share Tech Mono, monospace",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "4px",
+                  gap: "6px",
                 }}
               >
                 <span>
@@ -258,7 +258,7 @@ export default function GuildEventsPage() {
                   margin: 0,
                   display: "flex",
                   flexDirection: "column",
-                  gap: "6px",
+                  gap: "8px",
                 }}
               >
                 {tier.items.map((item) => (
@@ -268,10 +268,10 @@ export default function GuildEventsPage() {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      padding: "6px 10px",
+                      padding: "10px 14px",
                       background: "rgba(0,0,0,0.3)",
-                      borderRadius: "6px",
-                      fontSize: "0.75rem",
+                      borderRadius: "8px",
+                      fontSize: "0.95rem",
                       fontFamily: "Share Tech Mono, monospace",
                     }}
                   >
@@ -282,7 +282,7 @@ export default function GuildEventsPage() {
                         <span
                           style={{
                             color: "#ffd700",
-                            fontSize: "0.65rem",
+                            fontSize: "0.8rem",
                             background: "rgba(255,215,0,0.15)",
                             padding: "2px 6px",
                             borderRadius: "4px",
