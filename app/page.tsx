@@ -495,6 +495,33 @@ export default function HomePage() {
               Your destination for the best crypto games. Play featured Web3 titles,
               discover community games, and share your own creations!
             </p>
+            <a
+              href="/guildevents"
+              style={{
+                display: 'inline-block',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                border: '3px solid #b44dff',
+                boxShadow: '0 0 30px rgba(180, 77, 255, 0.4)',
+                transition: 'all 0.3s ease',
+                maxWidth: '500px',
+                width: '100%',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 50px rgba(180, 77, 255, 0.7)';
+                e.currentTarget.style.transform = 'scale(1.02)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(180, 77, 255, 0.4)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              <img
+                src="/guild-banner.jpg"
+                alt="SpiderGang Guild"
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+            </a>
           </section>
 
           {/* Featured Crypto Games */}
