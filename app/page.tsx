@@ -397,7 +397,23 @@ export default function HomePage() {
                 {section}
               </button>
             ))}
-
+            <a
+              href="/guildevents"
+              style={{
+                padding: '8px 16px',
+                background: 'rgba(180, 77, 255, 0.15)',
+                border: '1px solid #b44dff',
+                borderRadius: '6px',
+                color: '#b44dff',
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '12px',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                fontWeight: 'bold',
+              }}
+            >
+              Guild Events
+            </a>
           </div>
         </div>
       </nav>
