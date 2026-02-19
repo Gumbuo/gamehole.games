@@ -117,7 +117,7 @@ const EVENTS: GuildEvent[] = [
       "Items must be sent to the guild vault before payout.",
       "Soil in Tier B is priced at $0.002 each (double the base rate).",
       "Tier D: Wood at $0.01 each, Stone at $0.001 each.",
-      "Tier caps are first-come, first-served — once the total cap is hit, the tier closes.",
+      "Caps are per player — unused budget rolls into future event pools.",
       "PM FoxHole on Discord to coordinate your exchange.",
     ],
   },
