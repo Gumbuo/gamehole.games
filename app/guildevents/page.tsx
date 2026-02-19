@@ -51,7 +51,7 @@ const EVENTS: GuildEvent[] = [
         border: "#00ff41",
         bg: "rgba(0, 255, 65, 0.08)",
         pricePerItem: "$0.00083",
-        playerCap: "$5 max per player",
+        playerCap: "$6 max per player",
         totalCap: "12,000 items",
         items: [
           { name: "Cotton", qty: "2k" },
@@ -69,7 +69,7 @@ const EVENTS: GuildEvent[] = [
         border: "#00d9ff",
         bg: "rgba(0, 217, 255, 0.08)",
         pricePerItem: "$0.0009",
-        playerCap: "$5 max per player",
+        playerCap: "$6 max per player",
         totalCap: "8,000 items",
         items: [
           { name: "Wrapped Potato", qty: "2k" },
@@ -85,7 +85,7 @@ const EVENTS: GuildEvent[] = [
         border: "#b44dff",
         bg: "rgba(180, 77, 255, 0.08)",
         pricePerItem: "varies",
-        playerCap: "$5 max per player",
+        playerCap: "$6 max per player",
         totalCap: "1,125 items",
         items: [
           { name: "Golden Potato Cake", qty: "x25", note: "$0.035 each" },
@@ -104,7 +104,7 @@ const EVENTS: GuildEvent[] = [
         border: "#ffd700",
         bg: "rgba(255, 215, 0, 0.08)",
         pricePerItem: "$0.009",
-        playerCap: "$5 max per player",
+        playerCap: "$7 max per player",
         totalCap: "3,000 items",
         items: [
           { name: "Wood", qty: "1.5k", note: "$0.009 each" },
@@ -113,7 +113,7 @@ const EVENTS: GuildEvent[] = [
       },
     ],
     rules: [
-      "Each player can earn up to $20 total ($5 max per tier × 4 tiers).",
+      "Each player can earn up to $25 total ($6 per tier A/B/C + $7 for tier D).",
       "Max event pool: $150.",
       "Items must be sent to the guild vault before payout.",
       "Soil in Tier B is priced at $0.002 each (double the base rate).",
