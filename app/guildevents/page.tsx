@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type EventStatus = "ACTIVE" | "UPCOMING" | "ENDED";
@@ -33,6 +34,7 @@ interface GuildEvent {
   description: string;
   status: EventStatus;
   dateRange: string;
+  startDate?: string;
   tiers: Tier[];
   rules: string[];
   faq?: FaqItem[];
@@ -41,13 +43,14 @@ interface GuildEvent {
 // ─── Event Data ───────────────────────────────────────────────────────────────
 
 const EVENTS: GuildEvent[] = [
-  // ── Event 2 (Active — shows on top) ──
+  // ── Event 2 (Upcoming — starts March 1) ──
   {
     id: "event-2",
     title: "NomStead Guild Item Exchange — Event 2",
     description:
       "Tiered item exchange event for NomStead guild members. Pick a tier, send your items, and receive payment based on the pricing below. Now includes Tier D — Tools & Materials!",
-    status: "ACTIVE",
+    status: "UPCOMING",
+    startDate: "2025-03-01T00:00:00",
     dateRange: "Mar 1 – Mar 31, 2025",
     tiers: [
       {
@@ -156,13 +159,13 @@ const EVENTS: GuildEvent[] = [
       },
     ],
   },
-  // ── Event 1 (Ended — shows below) ──
+  // ── Event 1 (Active — ends Feb 28) ──
   {
     id: "event-1",
     title: "NomStead Guild Item Exchange — Event 1",
     description:
       "Tiered item exchange event for NomStead guild members. Pick a tier, send your items, and receive payment based on the pricing below.",
-    status: "ENDED",
+    status: "ACTIVE",
     dateRange: "Feb 1 – Feb 28, 2025",
     tiers: [
       {
@@ -236,6 +239,97 @@ const STATUS_COLORS: Record<string, { bg: string; text: string; border: string }
 
 // ─── Sort: active/upcoming first, ended last ──────────────────────────────────
 const STATUS_ORDER: Record<EventStatus, number> = { ACTIVE: 0, UPCOMING: 1, ENDED: 2 };
+
+function CountdownTimer({ targetDate, label }: { targetDate: string; label: string }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date().getTime();
+      const target = new Date(targetDate).getTime();
+      const diff = Math.max(0, target - now);
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [targetDate]);
+
+  const boxes = [
+    { value: timeLeft.days, unit: "DAYS" },
+    { value: timeLeft.hours, unit: "HRS" },
+    { value: timeLeft.minutes, unit: "MIN" },
+    { value: timeLeft.seconds, unit: "SEC" },
+  ];
+
+  return (
+    <div
+      style={{
+        textAlign: "center",
+        margin: "50px 0",
+        padding: "30px 20px",
+        background: "rgba(255,215,0,0.05)",
+        border: "2px solid #ffd70040",
+        borderRadius: "16px",
+      }}
+    >
+      <p
+        style={{
+          color: "#ffd700",
+          fontSize: "0.85rem",
+          fontWeight: "bold",
+          letterSpacing: "2px",
+          textTransform: "uppercase",
+          marginTop: 0,
+          marginBottom: "20px",
+        }}
+      >
+        {label}
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
+        {boxes.map((box) => (
+          <div
+            key={box.unit}
+            style={{
+              background: "rgba(0,0,0,0.5)",
+              border: "2px solid #ffd70060",
+              borderRadius: "12px",
+              padding: "16px 20px",
+              minWidth: "80px",
+            }}
+          >
+            <div
+              style={{
+                color: "#ffd700",
+                fontSize: "2rem",
+                fontWeight: "bold",
+                fontFamily: "Orbitron, sans-serif",
+              }}
+            >
+              {String(box.value).padStart(2, "0")}
+            </div>
+            <div
+              style={{
+                color: "#888",
+                fontSize: "0.65rem",
+                letterSpacing: "2px",
+                marginTop: "4px",
+                fontFamily: "Share Tech Mono, monospace",
+              }}
+            >
+              {box.unit}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function EventSection({ event }: { event: GuildEvent }) {
   const statusStyle = STATUS_COLORS[event.status] ?? STATUS_COLORS.ACTIVE;
@@ -562,7 +656,9 @@ function EventSection({ event }: { event: GuildEvent }) {
 }
 
 export default function GuildEventsPage() {
-  const sorted = [...EVENTS].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
+  const active = EVENTS.filter((e) => e.status === "ACTIVE");
+  const upcoming = EVENTS.filter((e) => e.status === "UPCOMING");
+  const ended = EVENTS.filter((e) => e.status === "ENDED");
 
   return (
     <div
@@ -630,7 +726,26 @@ export default function GuildEventsPage() {
           Guild Events
         </h1>
 
-        {sorted.map((event) => (
+        {/* Active events first */}
+        {active.map((event) => (
+          <EventSection key={event.id} event={event} />
+        ))}
+
+        {/* Countdown + upcoming events */}
+        {upcoming.map((event) => (
+          <div key={event.id}>
+            {event.startDate && (
+              <CountdownTimer
+                targetDate={event.startDate}
+                label={`${event.title} starts in`}
+              />
+            )}
+            <EventSection event={event} />
+          </div>
+        ))}
+
+        {/* Ended events last */}
+        {ended.map((event) => (
           <EventSection key={event.id} event={event} />
         ))}
       </div>
