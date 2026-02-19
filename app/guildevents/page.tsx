@@ -128,7 +128,7 @@ const EVENTS: GuildEvent[] = [
     faq: [
       {
         q: "How does this work?",
-        a: "You gather in-game items from NomStead and send them to the guild vault. Once received, you get paid real money based on the prices listed for each item. Pick any tier you want — you can participate in all four.",
+        a: "You gather in-game items from NomStead and sell them to FoxHole's dropbox. PM FoxHole on Discord first to set up payment and arrange your drop-off. Pick any tier you want — you can participate in all four.",
       },
       {
         q: "How much can I earn?",
@@ -144,7 +144,7 @@ const EVENTS: GuildEvent[] = [
       },
       {
         q: "What if I can't fill a whole tier?",
-        a: "No problem! Send what you can. You get paid for every item you send, even if it's just a few. There's no minimum. Any money left unspent from the pool rolls into the next event.",
+        a: "No problem! You get paid per item at the listed price, so every single item counts. Send what you can, even if it's just a few. There's no minimum. Any money left unspent from the pool rolls into the next event.",
       },
       {
         q: "How do I get paid?",
