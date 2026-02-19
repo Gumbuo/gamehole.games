@@ -60,7 +60,7 @@ const EVENTS: GuildEvent[] = [
         border: "#00ff41",
         bg: "rgba(0, 255, 65, 0.08)",
         pricePerItem: "$0.00075",
-        playerCap: "$5 max per player",
+        playerCap: "$3.75 max per player",
         totalCap: "5,000 items",
         items: [
           { name: "Cotton", qty: "1k", note: "$0.00075 each" },
@@ -93,7 +93,7 @@ const EVENTS: GuildEvent[] = [
         border: "#b44dff",
         bg: "rgba(180, 77, 255, 0.08)",
         pricePerItem: "$0.015",
-        playerCap: "$5 max per player",
+        playerCap: "$0.15 max per player",
         totalCap: "10 cakes",
         items: [
           { name: "Golden Potato Cake", qty: "x2", note: "$0.015 each" },
@@ -120,7 +120,7 @@ const EVENTS: GuildEvent[] = [
       },
     ],
     rules: [
-      "Each player can earn up to ~$28 total ($5 for A/B/C + $19 for tier D).",
+      "Each player can earn up to ~$28 total ($3.75 from A + $5 from B + $0.15 from C + $19 from D).",
       "Max event pool: ~$168 (6 players).",
       "Items must be sent to FoxHole's dropbox before payout.",
       "Tier D: Wheat Flour $0.02, Wood & Stone $0.007 each.",
@@ -134,7 +134,7 @@ const EVENTS: GuildEvent[] = [
       },
       {
         q: "How much can I earn?",
-        a: "Up to ~$28 per player across all tiers: $5 from Tier A, $5 from Tier B, $5 from Tier C, and $19 from Tier D. You don't have to max every tier — earn as much or as little as you want.",
+        a: "Up to ~$28 per player across all tiers: $3.75 from Tier A, $5 from Tier B, $0.15 from Tier C, and $19 from Tier D. You don't have to max every tier — earn as much or as little as you want.",
       },
       {
         q: "What are the tiers?",
@@ -142,7 +142,7 @@ const EVENTS: GuildEvent[] = [
       },
       {
         q: "What does 'per player cap' mean?",
-        a: "It's the max dollar amount you can earn from a single tier. For example, Tier A has a $5 cap — once your items add up to $5, that tier is done for you. This ensures the pool is shared fairly across all players.",
+        a: "It's the max dollar amount you can earn from a single tier. For example, Tier A maxes out at $3.75 if you sell all 5,000 items. Tier D is the biggest earner at $19. This ensures the pool is shared fairly across all players.",
       },
       {
         q: "What if I can't fill a whole tier?",
