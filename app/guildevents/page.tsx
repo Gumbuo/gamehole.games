@@ -22,6 +22,11 @@ interface Tier {
   items: TierItem[];
 }
 
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
 interface GuildEvent {
   id: string;
   title: string;
@@ -30,6 +35,7 @@ interface GuildEvent {
   dateRange: string;
   tiers: Tier[];
   rules: string[];
+  faq?: FaqItem[];
 }
 
 // ─── Event Data ───────────────────────────────────────────────────────────────
@@ -118,6 +124,36 @@ const EVENTS: GuildEvent[] = [
       "Tier D: Wood and Stone at $0.0033 each.",
       "Caps are per player — unused budget rolls into future event pools.",
       "PM FoxHole on Discord to coordinate your exchange.",
+    ],
+    faq: [
+      {
+        q: "How does this work?",
+        a: "You gather in-game items from NomStead and send them to the guild vault. Once received, you get paid real money based on the prices listed for each item. Pick any tier you want — you can participate in all four.",
+      },
+      {
+        q: "How much can I earn?",
+        a: "Up to ~$27 per player across all tiers: $6 from Tier A, $6 from Tier B, $6 from Tier C, and $10 from Tier D. You don't have to max every tier — earn as much or as little as you want.",
+      },
+      {
+        q: "What are the tiers?",
+        a: "Each tier has different items at different price points. Tier A is basic crops and flowers (cheap but high quantity). Tier B is crafted food items (higher value per item). Tier C is rare cakes and materials. Tier D is wood and stone resources.",
+      },
+      {
+        q: "What does 'per player cap' mean?",
+        a: "It's the max dollar amount you can earn from a single tier. For example, Tier A has a $6 cap — once your items add up to $6, that tier is done for you. This ensures the pool is shared fairly across all players.",
+      },
+      {
+        q: "What if I can't fill a whole tier?",
+        a: "No problem! Send what you can. You get paid for every item you send, even if it's just a few. There's no minimum. Any money left unspent from the pool rolls into the next event.",
+      },
+      {
+        q: "How do I get paid?",
+        a: "PM FoxHole on Discord to coordinate. Once your items are verified in the guild vault, payment is sent to you. Details are arranged through Discord DMs.",
+      },
+      {
+        q: "What's the total pool?",
+        a: "~$164 across 6 players. This is the max FoxHole will pay out. If not everyone maxes every tier, the leftover rolls into a bigger pool for the next event.",
+      },
     ],
   },
   // ── Event 1 (Ended — shows below) ──
@@ -459,6 +495,68 @@ function EventSection({ event }: { event: GuildEvent }) {
           ))}
         </ul>
       </div>
+
+      {/* FAQ / How It Works */}
+      {event.faq && event.faq.length > 0 && (
+        <div
+          style={{
+            background: "rgba(0,0,0,0.4)",
+            border: "2px solid #00ff9940",
+            borderRadius: "12px",
+            padding: "24px 20px",
+            marginTop: "30px",
+          }}
+        >
+          <h3
+            style={{
+              color: "#00ff99",
+              fontSize: "1rem",
+              textTransform: "uppercase",
+              letterSpacing: "2px",
+              marginTop: 0,
+              marginBottom: "20px",
+            }}
+          >
+            How It Works — FAQ
+          </h3>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "18px",
+            }}
+          >
+            {event.faq.map((item, i) => (
+              <div key={i}>
+                <p
+                  style={{
+                    color: "#00d4ff",
+                    fontSize: "0.85rem",
+                    fontWeight: "bold",
+                    margin: "0 0 6px 0",
+                    fontFamily: "Share Tech Mono, monospace",
+                  }}
+                >
+                  {item.q}
+                </p>
+                <p
+                  style={{
+                    color: "#aaa",
+                    fontSize: "0.8rem",
+                    lineHeight: "1.7",
+                    margin: 0,
+                    paddingLeft: "12px",
+                    borderLeft: "2px solid #00ff9940",
+                    fontFamily: "Share Tech Mono, monospace",
+                  }}
+                >
+                  {item.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
