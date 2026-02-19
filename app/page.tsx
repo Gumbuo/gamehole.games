@@ -87,7 +87,7 @@ const featuredGames: FeaturedGame[] = [
     image: "/featured/machines-arena.png",
     playUrl: "https://www.themachinesarena.com/",
     youtubeTrailer: "JFahsRbzvsE",
-    tags: ["Hero Shooter", "4v4 PvP", "Ronin"],
+    tags: ["Hero Shooter", "4v4 PvP", "Ronin", "Great Team Game", "No TGE"],
     color: "#e63946",
     secondaryColor: "#1d3557",
   },
