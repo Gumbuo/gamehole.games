@@ -55,7 +55,7 @@ const EVENTS: GuildEvent[] = [
     tiers: [
       {
         name: "Tier A",
-        subtitle: "Basic Items",
+        subtitle: "Basic Items — Active Low-Level Members Only",
         color: "#00ff41",
         border: "#00ff41",
         bg: "rgba(0, 255, 65, 0.08)",
@@ -72,7 +72,7 @@ const EVENTS: GuildEvent[] = [
       },
       {
         name: "Tier B",
-        subtitle: "Mid-Tier Crafted Items",
+        subtitle: "Mid-Tier Crafted Items — Active Low-Level Members Only",
         color: "#00d9ff",
         border: "#00d9ff",
         bg: "rgba(0, 217, 255, 0.08)",
@@ -88,7 +88,7 @@ const EVENTS: GuildEvent[] = [
       },
       {
         name: "Tier C",
-        subtitle: "High-Tier Items",
+        subtitle: "High-Tier Items — OG Players Only",
         color: "#b44dff",
         border: "#b44dff",
         bg: "rgba(180, 77, 255, 0.08)",
@@ -105,7 +105,7 @@ const EVENTS: GuildEvent[] = [
       },
       {
         name: "Tier D",
-        subtitle: "Tools & Materials",
+        subtitle: "Tools & Materials — OG Players Only",
         color: "#ffd700",
         border: "#ffd700",
         bg: "rgba(255, 215, 0, 0.08)",
@@ -120,6 +120,7 @@ const EVENTS: GuildEvent[] = [
       },
     ],
     rules: [
+      "Tiers A & B are for active low-level members only. Tiers C & D are for OG players only.",
       "Each player can earn up to $27.50 total ($5 from A + $5 from B + $2.50 from C + $15 from D).",
       "Max event pool: $165 (6 players).",
       "Items must be sent to FoxHole's dropbox before payout.",
