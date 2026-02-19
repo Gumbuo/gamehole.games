@@ -107,8 +107,8 @@ const EVENTS: GuildEvent[] = [
         playerCap: "$5 max per player",
         totalCap: "2,000 items",
         items: [
-          { name: "Wood", qty: "1k", note: "$0.012 each" },
-          { name: "Stone", qty: "1k", note: "$0.0026 each" },
+          { name: "Wood", qty: "1k", note: "$0.007 each" },
+          { name: "Stone", qty: "1k", note: "$0.007 each" },
         ],
       },
     ],
