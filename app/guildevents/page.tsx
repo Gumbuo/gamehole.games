@@ -75,7 +75,7 @@ const EVENTS: GuildEvent[] = [
           { name: "Wrapped Potato", qty: "1k" },
           { name: "Fries", qty: "1k" },
           { name: "Veggie Salad", qty: "1k" },
-          { name: "Soil", qty: "1k", note: "$0.0018 each" },
+          { name: "Soil", qty: "1k", note: "$0.002 each" },
         ],
       },
       {
@@ -115,7 +115,7 @@ const EVENTS: GuildEvent[] = [
     rules: [
       "Each player is capped at $5 per tier.",
       "Items must be sent to the guild vault before payout.",
-      "Soil in Tier B is priced at $0.0018 each (double the base rate).",
+      "Soil in Tier B is priced at $0.002 each (double the base rate).",
       "Tier D: Wood and Stone at $0.007 each.",
       "Caps are per player — unused budget rolls into future event pools.",
       "PM FoxHole on Discord to coordinate your exchange.",
