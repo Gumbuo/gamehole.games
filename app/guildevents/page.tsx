@@ -50,8 +50,8 @@ const EVENTS: GuildEvent[] = [
     description:
       "Tiered item exchange event for NomStead guild members. Pick a tier, send your items, and receive payment based on the pricing below. Now includes Tier D — Tools & Materials!",
     status: "UPCOMING",
-    startDate: "2025-03-01T00:00:00",
-    dateRange: "Mar 1 – Mar 31, 2025",
+    startDate: "2026-03-01T00:00:00",
+    dateRange: "Mar 1 – Mar 31, 2026",
     tiers: [
       {
         name: "Tier A",
@@ -166,7 +166,7 @@ const EVENTS: GuildEvent[] = [
     description:
       "Tiered item exchange event for NomStead guild members. Pick a tier, send your items, and receive payment based on the pricing below.",
     status: "ACTIVE",
-    dateRange: "Feb 1 – Feb 28, 2025",
+    dateRange: "Feb 1 – Feb 28, 2026",
     tiers: [
       {
         name: "Tier A",
