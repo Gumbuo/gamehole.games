@@ -113,7 +113,8 @@ const EVENTS: GuildEvent[] = [
       },
     ],
     rules: [
-      "Each player is capped at $5 per tier.",
+      "Each player can earn up to $20 total ($5 max per tier × 4 tiers).",
+      "Max event pool: $120 (6 players × $20).",
       "Items must be sent to the guild vault before payout.",
       "Soil in Tier B is priced at $0.002 each (double the base rate).",
       "Tier D: Wood and Stone at $0.0075 each.",
