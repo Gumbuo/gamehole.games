@@ -38,6 +38,7 @@ interface GuildEvent {
   tiers: Tier[];
   rules: string[];
   faq?: FaqItem[];
+  participants?: string[];
 }
 
 // ─── Event Data ───────────────────────────────────────────────────────────────
@@ -119,10 +120,20 @@ const EVENTS: GuildEvent[] = [
         ],
       },
     ],
+    participants: [
+      "xidni_xazz",
+      "DevilFirst",
+      "Rachelle (KANIN)",
+      "steemit",
+      "abkhan",
+      "Ongbak",
+      "Alstar",
+      "Axolotoi",
+    ],
     rules: [
       "Tiers A & B are for active low-level members only. Tiers C & D are for OG players only.",
       "Each player can earn up to $27.50 total ($5 from A + $5 from B + $2.50 from C + $15 from D).",
-      "Max event pool: $165 (6 players).",
+      "Max event pool: $192.50 (7 players).",
       "Items must be sent to FoxHole's dropbox before payout.",
       "Tier D: Wheat Flour $0.02, Wood & Stone $0.005 each.",
       "Caps are per player — unused budget rolls into future event pools.",
@@ -155,7 +166,7 @@ const EVENTS: GuildEvent[] = [
       },
       {
         q: "What's the total pool?",
-        a: "$165 across 6 players. This is the max FoxHole will pay out. If not everyone maxes every tier, the leftover rolls into a bigger pool for the next event.",
+        a: "$192.50 across 7 players. This is the max FoxHole will pay out. If not everyone maxes every tier, the leftover rolls into a bigger pool for the next event.",
       },
     ],
   },
@@ -410,6 +421,54 @@ function EventSection({ event }: { event: GuildEvent }) {
       >
         {event.description}
       </p>
+
+      {/* Participants */}
+      {event.participants && event.participants.length > 0 && (
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "40px",
+          }}
+        >
+          <h3
+            style={{
+              color: "#00d4ff",
+              fontSize: "0.85rem",
+              textTransform: "uppercase",
+              letterSpacing: "2px",
+              marginBottom: "14px",
+            }}
+          >
+            Registered Players ({event.participants.length})
+          </h3>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            {event.participants.map((name) => (
+              <span
+                key={name}
+                style={{
+                  padding: "6px 16px",
+                  background: "rgba(0, 212, 255, 0.1)",
+                  border: "1px solid rgba(0, 212, 255, 0.3)",
+                  borderRadius: "20px",
+                  color: "#00d4ff",
+                  fontSize: "0.8rem",
+                  fontFamily: "Share Tech Mono, monospace",
+                  fontWeight: "bold",
+                }}
+              >
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Tier Cards */}
       <div
