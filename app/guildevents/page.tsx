@@ -9,6 +9,7 @@ interface TierItem {
   name: string;
   qty: string;
   note?: string;
+  cap?: string;
 }
 
 interface Tier {
@@ -60,15 +61,15 @@ const EVENTS: GuildEvent[] = [
         color: "#00ff41",
         border: "#00ff41",
         bg: "rgba(0, 255, 65, 0.08)",
-        pricePerItem: "$0.001",
+        pricePerItem: "$0.0005",
         playerCap: "$5 max per player",
-        totalCap: "5,000 items",
+        totalCap: "10,000 items",
         items: [
-          { name: "Cotton", qty: "1k", note: "$0.001 each" },
-          { name: "Potatoes", qty: "1k", note: "$0.001 each" },
-          { name: "Red Flower", qty: "1k", note: "$0.001 each" },
-          { name: "Blue Flower", qty: "1k", note: "$0.001 each" },
-          { name: "Yellow Flower", qty: "1k", note: "$0.001 each" },
+          { name: "Cotton", qty: "2k", note: "$0.0005 each", cap: "$1.00 max" },
+          { name: "Potatoes", qty: "2k", note: "$0.0005 each", cap: "$1.00 max" },
+          { name: "Red Flower", qty: "2k", note: "$0.0005 each", cap: "$1.00 max" },
+          { name: "Blue Flower", qty: "2k", note: "$0.0005 each", cap: "$1.00 max" },
+          { name: "Yellow Flower", qty: "2k", note: "$0.0005 each", cap: "$1.00 max" },
         ],
       },
       {
@@ -77,14 +78,14 @@ const EVENTS: GuildEvent[] = [
         color: "#00d9ff",
         border: "#00d9ff",
         bg: "rgba(0, 217, 255, 0.08)",
-        pricePerItem: "$0.0066",
-        playerCap: "$5 max per player",
-        totalCap: "760 items",
+        pricePerItem: "$0.001",
+        playerCap: "$5.10 max per player",
+        totalCap: "4,400 items",
         items: [
-          { name: "Wrapped Potato", qty: "x190", note: "$0.0066 each" },
-          { name: "Fries", qty: "x190", note: "$0.0066 each" },
-          { name: "Veggie Salad", qty: "x190", note: "$0.0066 each" },
-          { name: "Soil", qty: "x190", note: "$0.0066 each" },
+          { name: "Wrapped Potato", qty: "1.3k", note: "$0.001 each", cap: "$1.30 max" },
+          { name: "Fries", qty: "1.3k", note: "$0.001 each", cap: "$1.30 max" },
+          { name: "Veggie Salad", qty: "1.3k", note: "$0.001 each", cap: "$1.30 max" },
+          { name: "Soil", qty: "x500", note: "$0.0024 each", cap: "$1.20 max" },
         ],
       },
       {
@@ -93,15 +94,15 @@ const EVENTS: GuildEvent[] = [
         color: "#b44dff",
         border: "#b44dff",
         bg: "rgba(180, 77, 255, 0.08)",
-        pricePerItem: "$0.25",
+        pricePerItem: "$0.167",
         playerCap: "$2.50 max per player",
-        totalCap: "10 cakes",
+        totalCap: "15 cakes",
         items: [
-          { name: "Golden Potato Cake", qty: "x2", note: "$0.25 each" },
-          { name: "Pumpkin Spice Cake", qty: "x2", note: "$0.25 each" },
-          { name: "Carrot Cake", qty: "x2", note: "$0.25 each" },
-          { name: "Grape Tart Cake", qty: "x2", note: "$0.25 each" },
-          { name: "Upside-Down Tomato Cake", qty: "x2", note: "$0.25 each" },
+          { name: "Golden Potato Cake", qty: "x3", note: "$0.167 each", cap: "$0.50 max" },
+          { name: "Pumpkin Spice Cake", qty: "x3", note: "$0.167 each", cap: "$0.50 max" },
+          { name: "Carrot Cake", qty: "x3", note: "$0.167 each", cap: "$0.50 max" },
+          { name: "Grape Tart Cake", qty: "x3", note: "$0.167 each", cap: "$0.50 max" },
+          { name: "Upside-Down Tomato Cake", qty: "x3", note: "$0.167 each", cap: "$0.50 max" },
         ],
       },
       {
@@ -110,13 +111,13 @@ const EVENTS: GuildEvent[] = [
         color: "#ffd700",
         border: "#ffd700",
         bg: "rgba(255, 215, 0, 0.08)",
-        pricePerItem: "$0.001",
+        pricePerItem: "$0.00125–$0.001375",
         playerCap: "$15 max per player",
-        totalCap: "14,000 items",
+        totalCap: "11,000 items",
         items: [
-          { name: "Wheat Flour", qty: "5k", note: "$0.001 each" },
-          { name: "Wood", qty: "4k", note: "$0.00125 each" },
-          { name: "Stone", qty: "5k", note: "$0.001 each" },
+          { name: "Wheat Flour", qty: "1k", note: "$0.00125 each", cap: "$1.25 max" },
+          { name: "Wood", qty: "5k", note: "$0.001375 each", cap: "$6.88 max" },
+          { name: "Stone", qty: "5k", note: "$0.001375 each", cap: "$6.88 max" },
         ],
       },
     ],
@@ -131,13 +132,11 @@ const EVENTS: GuildEvent[] = [
       "Axolotoi",
     ],
     rules: [
-      "Tiers A & B are for active low-level members only. Tiers C & D are for OG players only.",
-      "Each player can earn up to $27.50 total ($5 from A + $5 from B + $2.50 from C + $15 from D).",
-      "Max event pool: $192.50 (7 players).",
-      "Items must be sent to FoxHole's dropbox before payout.",
-      "Tier D: Wheat Flour & Stone $0.001 each (5k), Wood $0.00125 each (4k).",
+      "Each player can earn up to $27.60 total ($5 from A + $5.10 from B + $2.50 from C + $15 from D).",
+      "Max event pool: $220.80 (8 players).",
+      "PM FoxHole on Discord before dropping items in the dropbox to make sure activities are acknowledged and paid for.",
+      "Tier D: Wheat Flour 1k × $0.00125, Wood & Stone 5k × $0.001375 each.",
       "Caps are per player — unused budget rolls into future event pools.",
-      "PM FoxHole on Discord to coordinate your exchange.",
     ],
     faq: [
       {
@@ -146,7 +145,7 @@ const EVENTS: GuildEvent[] = [
       },
       {
         q: "How much can I earn?",
-        a: "Up to $27.50 per player across all tiers: $5 from Tier A, $5 from Tier B, $2.50 from Tier C, and $15 from Tier D. You don't have to max every tier — earn as much or as little as you want.",
+        a: "Up to $27.60 per player across all tiers: $5 from Tier A, $5.10 from Tier B, $2.50 from Tier C, and $15 from Tier D. You don't have to max every tier — earn as much or as little as you want.",
       },
       {
         q: "What are the tiers?",
@@ -166,7 +165,7 @@ const EVENTS: GuildEvent[] = [
       },
       {
         q: "What's the total pool?",
-        a: "$192.50 across 7 players. This is the max FoxHole will pay out. If not everyone maxes every tier, the leftover rolls into a bigger pool for the next event.",
+        a: "$220.80 across 8 players. This is the max FoxHole will pay out. If not everyone maxes every tier, the leftover rolls into a bigger pool for the next event.",
       },
     ],
   },
@@ -580,6 +579,21 @@ function EventSection({ event }: { event: GuildEvent }) {
                         }}
                       >
                         {item.note}
+                      </span>
+                    )}
+                    {item.cap && (
+                      <span
+                        style={{
+                          color: "#00ff99",
+                          fontSize: "0.75rem",
+                          background: "rgba(0,255,153,0.12)",
+                          border: "1px solid rgba(0,255,153,0.3)",
+                          padding: "2px 8px",
+                          borderRadius: "4px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {item.cap}
                       </span>
                     )}
                   </span>
