@@ -31,6 +31,8 @@ interface FeaturedGame {
   secondaryColor?: string;
   guideUrl?: string;
   guideLabel?: string;
+  eventUrl?: string;
+  eventLabel?: string;
 }
 
 const featuredGames: FeaturedGame[] = [
@@ -58,6 +60,21 @@ const featuredGames: FeaturedGame[] = [
     guideLabel: "Spider Gang",
   },
   {
+    id: "nomstead",
+    title: "NomStead",
+    description: "Casual sandbox MMORPG where every player helps shape the world. Farm, craft, trade, and build your civilization on Immutable zkEVM — casually, on your phone, in your spare time.",
+    image: "/featured/nomstead.png",
+    playUrl: "https://play.immutable.com/games/nomstead/",
+    youtubeTrailer: "sdQtdwdVduY",
+    tags: ["Sandbox MMO", "Cozy", "Immutable"],
+    color: "#4ade80",
+    secondaryColor: "#0a1a10",
+    guideUrl: "/nomstead",
+    guideLabel: "NFT Guide",
+    eventUrl: "/guildevents",
+    eventLabel: "GUILD EVENT ACTIVE",
+  },
+  {
     id: "playa3ull",
     title: "Playa3ull Games",
     description: "Gaming ecosystem with multiple titles including Nexus, Starvin Martian, Dogs of War, and more. Play, compete, and earn!",
@@ -79,17 +96,6 @@ const featuredGames: FeaturedGame[] = [
     secondaryColor: "#1a1a1a",
     guideUrl: "/infinityrising",
     guideLabel: "File Nodes & Token Guide",
-  },
-  {
-    id: "machinesarena",
-    title: "The Machines Arena",
-    description: "Fast-paced 4v4 hero shooter with top-down PvP battles. Earn digital collectibles on the Ronin chain.",
-    image: "/featured/machines-arena.png",
-    playUrl: "https://www.themachinesarena.com/",
-    youtubeTrailer: "JFahsRbzvsE",
-    tags: ["Hero Shooter", "4v4 PvP", "Ronin", "Great Team Game", "No TGE"],
-    color: "#e63946",
-    secondaryColor: "#1d3557",
   },
   {
     id: "captaincompany",
@@ -191,19 +197,6 @@ const featuredGames: FeaturedGame[] = [
     tags: ["Extraction", "Shooter", "Immutable", "$FURY"],
     color: "#ff4444",
     secondaryColor: "#1a0505",
-  },
-  {
-    id: "nomstead",
-    title: "NomStead",
-    description: "Casual sandbox MMORPG where every player helps shape the world. Farm, craft, trade, and build your civilization on Immutable zkEVM — casually, on your phone, in your spare time.",
-    image: "/featured/nomstead.png",
-    playUrl: "https://play.immutable.com/games/nomstead/",
-    youtubeTrailer: "sdQtdwdVduY",
-    tags: ["Sandbox MMO", "Cozy", "Immutable"],
-    color: "#4ade80",
-    secondaryColor: "#0a1a10",
-    guideUrl: "/nomstead",
-    guideLabel: "NFT Guide",
   },
   {
     id: "wilderworld",
@@ -614,6 +607,33 @@ export default function HomePage() {
                       }}>
                         Coming Soon
                       </div>
+                    )}
+                    {game.eventUrl && (
+                      <a
+                        href={game.eventUrl}
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          padding: '10px 14px',
+                          background: 'linear-gradient(135deg, rgba(180, 77, 255, 0.95), rgba(142, 45, 226, 0.95))',
+                          color: '#fff',
+                          fontFamily: 'Orbitron, sans-serif',
+                          fontSize: '13px',
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          textTransform: 'uppercase',
+                          letterSpacing: '2px',
+                          zIndex: 10,
+                          animation: 'eventPulse 2s ease-in-out infinite',
+                        }}
+                      >
+                        {game.eventLabel ?? 'EVENT ACTIVE'}
+                        <style>{`@keyframes eventPulse { 0%, 100% { box-shadow: 0 0 15px rgba(180, 77, 255, 0.6); } 50% { box-shadow: 0 0 30px rgba(180, 77, 255, 0.9), 0 0 50px rgba(180, 77, 255, 0.4); } }`}</style>
+                      </a>
                     )}
                   </div>
 
