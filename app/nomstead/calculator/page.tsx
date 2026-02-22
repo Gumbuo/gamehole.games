@@ -34,6 +34,7 @@ export default function FarmCalculatorPage() {
   const [selectedCrop, setSelectedCrop] = useState(0);
   const [targetItems, setTargetItems] = useState(1000);
   const [timeframeHours, setTimeframeHours] = useState(24);
+  const [ownedTiles, setOwnedTiles] = useState(2);
 
   const crop = CROPS[selectedCrop];
 
@@ -615,6 +616,148 @@ export default function FarmCalculatorPage() {
                       <td style={{ padding: "8px", color: "#00d4ff", textAlign: "right" }}>{fmt(avgTile)}</td>
                       <td style={{ padding: "8px", color: "#ffd700", textAlign: "right", fontWeight: "bold" }}>{fmt(soil)}</td>
                       <td style={{ padding: "8px", color: "#4ade80", textAlign: "right", fontWeight: "bold" }}>{fmt(tiles)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ── Max Production Section ────────────────────────────────────── */}
+        <div
+          style={{
+            background: "rgba(0,0,0,0.5)",
+            border: "2px solid #ffd700",
+            borderRadius: "12px",
+            padding: "20px",
+            marginTop: "30px",
+          }}
+        >
+          <h3
+            style={{
+              color: "#ffd700",
+              fontSize: "1rem",
+              textTransform: "uppercase",
+              letterSpacing: "2px",
+              marginTop: 0,
+              marginBottom: "6px",
+              textAlign: "center",
+            }}
+          >
+            Max Production
+          </h3>
+          <p
+            style={{
+              textAlign: "center",
+              color: "#c5c6c7",
+              fontSize: "0.75rem",
+              marginBottom: "16px",
+            }}
+          >
+            How much can you produce with what you have?
+          </p>
+
+          {/* Tile input */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "12px",
+              marginBottom: "20px",
+            }}
+          >
+            <label
+              style={{
+                fontSize: "0.7rem",
+                color: "#c5c6c7",
+                letterSpacing: "1px",
+                textTransform: "uppercase",
+              }}
+            >
+              My Tiles:
+            </label>
+            <input
+              type="number"
+              value={ownedTiles}
+              onChange={(e) => setOwnedTiles(Math.max(1, Number(e.target.value)))}
+              min={1}
+              style={{
+                width: "80px",
+                padding: "8px 10px",
+                background: "rgba(0,0,0,0.6)",
+                border: "1px solid #ffd700",
+                borderRadius: "8px",
+                color: "#ffd700",
+                fontFamily: "Orbitron, sans-serif",
+                fontSize: "1rem",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            />
+            <span style={{ fontSize: "0.7rem", color: "#888" }}>
+              = {(ownedTiles * SOIL_PER_TILE).toLocaleString()} soil
+            </span>
+          </div>
+
+          <div style={{ overflowX: "auto" }}>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize: "0.68rem",
+              }}
+            >
+              <thead>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #ffd700",
+                    textAlign: "left",
+                  }}
+                >
+                  <th style={{ padding: "8px", color: "#888" }}>Crop</th>
+                  <th style={{ padding: "8px", color: "#888" }}>Growth</th>
+                  <th style={{ padding: "8px", color: "#888", textAlign: "right" }}>Harvests/{timeframeHours}h</th>
+                  <th style={{ padding: "8px", color: "#e74c3c", textAlign: "right" }}>Worst (4)</th>
+                  <th style={{ padding: "8px", color: "#00d4ff", textAlign: "right" }}>Average (6)</th>
+                  <th style={{ padding: "8px", color: "#4ade80", textAlign: "right" }}>Best (8)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {CROPS.map((c) => {
+                  const totalSoil = ownedTiles * SOIL_PER_TILE;
+                  const harv = Math.floor(totalMinutes / c.growthMinutes);
+                  const worst = totalSoil * harv * MIN_YIELD;
+                  const avg = totalSoil * harv * AVG_YIELD;
+                  const best = totalSoil * harv * MAX_YIELD;
+                  return (
+                    <tr
+                      key={c.name}
+                      style={{
+                        borderBottom: "1px solid rgba(255,255,255,0.05)",
+                        background:
+                          c.name === crop.name
+                            ? `${c.color}15`
+                            : "transparent",
+                      }}
+                    >
+                      <td style={{ padding: "8px", color: c.color, fontWeight: "bold" }}>
+                        {c.name}
+                      </td>
+                      <td style={{ padding: "8px", color: "#c5c6c7" }}>
+                        {c.growthLabel}
+                      </td>
+                      <td style={{ padding: "8px", color: "#fff", textAlign: "right" }}>{harv}</td>
+                      <td style={{ padding: "8px", color: "#e74c3c", textAlign: "right" }}>
+                        {worst.toLocaleString()}
+                      </td>
+                      <td style={{ padding: "8px", color: "#00d4ff", textAlign: "right", fontWeight: "bold" }}>
+                        {avg.toLocaleString()}
+                      </td>
+                      <td style={{ padding: "8px", color: "#4ade80", textAlign: "right" }}>
+                        {best.toLocaleString()}
+                      </td>
                     </tr>
                   );
                 })}
