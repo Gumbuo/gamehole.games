@@ -133,12 +133,13 @@ const EVENT2 = {
     },
   ],
   rules: [
-    "Each player can earn up to $27.60 total ($5 from A + $5.10 from B + $2.50 from C + $15 from D).",
-    "Max event pool: $220.80 (8 players).",
-    "PM FoxHole on Discord before dropping items in the dropbox to make sure activities are acknowledged and paid for.",
-    "Tier D: Wheat Flour 1k × $0.00125, Wood & Stone 5k × $0.001375 each.",
-    "Caps are per player — unused budget rolls into the July TGE Launch Event pool.",
-    "LOYALTY MULTIPLIER: Complete a full Tier D hand-in (all wheat flour, wood & stone) to earn $15 this event and unlock a permanent 1.25x multiplier — earning more from Tier D every month from Event 3 through the July TGE Launch. Earn it once, keep it all season. Tier D participants only.",
+    { text: "Each player can earn up to $27.60 total ($5 from A + $5.10 from B + $2.50 from C + $15 from D)." },
+    { text: "Max event pool: $220.80 (8 players)." },
+    { text: "PM FoxHole on Discord before dropping items in the dropbox to make sure activities are acknowledged and paid for." },
+    { text: "Tier D: Wheat Flour 1k × $0.00125, Wood & Stone 5k × $0.001375 each." },
+    { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
+    { text: "LOYALTY MULTIPLIER: Complete a full Tier D hand-in (all wheat flour, wood & stone) to earn $15 this event and unlock a permanent 1.25x multiplier — earning more from Tier D every month from Event 3 through the July TGE Launch. Earn it once, keep it all season. Tier D participants only." },
+    { text: "GOLD REQUIRED — The dropbox has a 0.01 gold minimum per item. FoxHole will list Wood in the dropbox at a high price. You must purchase that Wood first to return the gold before your items can be paid out.", warn: true },
   ],
   loyaltyNote:
     "Complete a full Tier D hand-in (1k Wheat Flour + 5k Wood + 5k Stone) and unlock a permanent 1.25× multiplier on Tier D. Instead of earning $15 max, you earn more every month through the July TGE Launch. Earn it once — keep it all season. Tier D participants only.",
@@ -232,11 +233,12 @@ const EVENT3 = {
     },
   ],
   rules: [
-    "Each player can earn up to $38.85 confirmed ($5 from A + $5.10 from B + $2.50 from C + $26.25 from D) — plus TBD from Tier E.",
-    "Wood & Stone price increased to $0.0025 each (up from $0.001375 in Event 2).",
-    "PM FoxHole on Discord before dropping items in the dropbox.",
-    "Caps are per player — unused budget rolls into the July TGE Launch Event pool.",
-    "LOYALTY MULTIPLIER HOLDERS: Your Tier D max is $32.81 this event (1.25× applied to $26.25).",
+    { text: "Each player can earn up to $38.85 confirmed ($5 from A + $5.10 from B + $2.50 from C + $26.25 from D) — plus TBD from Tier E." },
+    { text: "Wood & Stone price increased to $0.0025 each (up from $0.001375 in Event 2)." },
+    { text: "PM FoxHole on Discord before dropping items in the dropbox." },
+    { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
+    { text: "LOYALTY MULTIPLIER HOLDERS: Your Tier D max is $32.81 this event (1.25× applied to $26.25)." },
+    { text: "GOLD REQUIRED — The dropbox has a 0.01 gold minimum per item. FoxHole will list Wood in the dropbox at a high price. You must purchase that Wood first to return the gold before your items can be paid out.", warn: true },
   ],
   loyaltyNote:
     "If you earned the Loyalty Multiplier in Event 2, your Tier D cap this event is $32.81 (1.25× applied to $26.25). Wood and stone are now worth $0.0025 each — making Tier D the highest-value tier in the season so far.",
@@ -428,7 +430,9 @@ function StatusBadge({ status }: { status: keyof typeof STATUS_COLORS }) {
   );
 }
 
-function RulesBlock({ rules }: { rules: string[] }) {
+type Rule = { text: string; warn?: boolean };
+
+function RulesBlock({ rules }: { rules: Rule[] }) {
   return (
     <div style={{
       background: "rgba(0,0,0,0.6)", border: "2px solid #45a29e",
@@ -443,11 +447,25 @@ function RulesBlock({ rules }: { rules: string[] }) {
       <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
         {rules.map((rule, i) => (
           <li key={i} style={{
-            color: "#c5c6c7", fontSize: "0.78rem", lineHeight: "1.6",
-            paddingLeft: "18px", position: "relative",
+            color: rule.warn ? "#ff4757" : "#c5c6c7",
+            fontSize: rule.warn ? "0.8rem" : "0.78rem",
+            fontWeight: rule.warn ? "bold" : "normal",
+            lineHeight: "1.6", paddingLeft: "18px", position: "relative",
+            ...(rule.warn && {
+              background: "rgba(255,71,87,0.08)",
+              border: "1px solid rgba(255,71,87,0.4)",
+              borderRadius: "6px",
+              padding: "8px 10px 8px 28px",
+              marginTop: "4px",
+            }),
           }}>
-            <span style={{ position: "absolute", left: 0, color: "#45a29e", fontWeight: "bold" }}>•</span>
-            {rule}
+            <span style={{
+              position: "absolute", left: rule.warn ? 10 : 0,
+              color: rule.warn ? "#ff4757" : "#45a29e", fontWeight: "bold",
+            }}>
+              {rule.warn ? "⚠" : "•"}
+            </span>
+            {rule.text}
           </li>
         ))}
       </ul>
