@@ -18,17 +18,25 @@ const TC = [
 ];
 
 // ─── Player progress tracking (Event 2) ──────────────────────────────────────
+// tiers: array of { label, colorIdx (0=A … 4=E), items: [{ name, current, cap }] }
+// cap: 0 means TBD — displays "X / TBD" with no progress bar
 const PLAYERS = [
   {
     name: "steemit",
     // Update this string + the counts together each time you add a new batch
     lastCounted: "Feb 23, 2026 — batch ending ~16 min ago",
-    tierA: [
-      { name: "Cotton",        current: 291, cap: 2000 },
-      { name: "Potatoes",      current: 0,   cap: 2000 },
-      { name: "Red Flower",    current: 138, cap: 2000 },
-      { name: "Blue Flower",   current: 258, cap: 2000 },
-      { name: "Yellow Flower", current: 135, cap: 2000 },
+    tiers: [
+      {
+        label: "Tier A — Basic Items",
+        colorIdx: 0,
+        items: [
+          { name: "Cotton",        current: 291, cap: 2000 },
+          { name: "Potatoes",      current: 0,   cap: 2000 },
+          { name: "Red Flower",    current: 138, cap: 2000 },
+          { name: "Blue Flower",   current: 258, cap: 2000 },
+          { name: "Yellow Flower", current: 135, cap: 2000 },
+        ],
+      },
     ],
     other: [
       { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 30 },
@@ -40,12 +48,39 @@ const PLAYERS = [
   {
     name: "abkhan",
     lastCounted: "—",
-    tierA: [
-      { name: "Cotton",        current: 0, cap: 2000 },
-      { name: "Potatoes",      current: 0, cap: 2000 },
-      { name: "Red Flower",    current: 0, cap: 2000 },
-      { name: "Blue Flower",   current: 0, cap: 2000 },
-      { name: "Yellow Flower", current: 0, cap: 2000 },
+    tiers: [
+      {
+        label: "Tier A — Basic Items",
+        colorIdx: 0,
+        items: [
+          { name: "Cotton",        current: 0, cap: 2000 },
+          { name: "Potatoes",      current: 0, cap: 2000 },
+          { name: "Red Flower",    current: 0, cap: 2000 },
+          { name: "Blue Flower",   current: 0, cap: 2000 },
+          { name: "Yellow Flower", current: 0, cap: 2000 },
+        ],
+      },
+    ],
+    other: [],
+  },
+  {
+    name: "Gallard",
+    lastCounted: "Feb 23, 2026 — batch ending ~6 min ago",
+    tiers: [
+      {
+        label: "Tier B — Crafted Items",
+        colorIdx: 1,
+        items: [
+          { name: "Fries", current: 10, cap: 1300 },
+        ],
+      },
+      {
+        label: "Tier D — Tools & Materials",
+        colorIdx: 3,
+        items: [
+          { name: "Cotton Thread", current: 3, cap: 0 },
+        ],
+      },
     ],
     other: [],
   },
@@ -609,6 +644,9 @@ function ProgressBar({ current, cap }: { current: number; cap: number }) {
 function PlayerTracker() {
   const [active, setActive] = useState(0);
   const player = PLAYERS[active];
+  const hasItems =
+    player.tiers.some((t) => t.items.some((i) => i.current > 0)) ||
+    player.other.length > 0;
 
   return (
     <div style={{
@@ -623,7 +661,7 @@ function PlayerTracker() {
       </h3>
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+      <div style={{ display: "flex", gap: "8px", marginBottom: "12px", flexWrap: "wrap" }}>
         {PLAYERS.map((p, i) => (
           <button key={p.name} onClick={() => setActive(i)} style={{
             background: i === active ? "rgba(0,255,65,0.12)" : "rgba(0,0,0,0.4)",
@@ -651,23 +689,30 @@ function PlayerTracker() {
         <span style={{ color: "#c5c6c7", fontSize: "0.68rem" }}>{player.lastCounted}</span>
       </div>
 
-      {/* Tier A progress */}
-      <p style={{ color: TC[0].color, fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
-        Tier A — Basic Items
-      </p>
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px" }}>
-        {player.tierA.map((item) => (
-          <div key={item.name}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
-              <span style={{ color: "#e0e0e0", fontSize: "0.72rem" }}>{item.name}</span>
-              <span style={{ fontSize: "0.68rem", color: item.current === 0 ? "#555" : "#c5c6c7" }}>
-                {item.current.toLocaleString()} / {item.cap.toLocaleString()}
-              </span>
+      {/* Tier sections — flexible, works for any player */}
+      {player.tiers.map((tier) => {
+        const tc = TC[tier.colorIdx];
+        return (
+          <div key={tier.label} style={{ marginBottom: "20px" }}>
+            <p style={{ color: tc.color, fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
+              {tier.label}
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {tier.items.map((item) => (
+                <div key={item.name}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
+                    <span style={{ color: "#e0e0e0", fontSize: "0.72rem" }}>{item.name}</span>
+                    <span style={{ fontSize: "0.68rem", color: item.current === 0 ? "#555" : "#c5c6c7" }}>
+                      {item.current.toLocaleString()} / {item.cap === 0 ? "TBD" : item.cap.toLocaleString()}
+                    </span>
+                  </div>
+                  {item.cap > 0 && <ProgressBar current={item.current} cap={item.cap} />}
+                </div>
+              ))}
             </div>
-            <ProgressBar current={item.current} cap={item.cap} />
           </div>
-        ))}
-      </div>
+        );
+      })}
 
       {/* Other collected items */}
       {player.other.length > 0 && (
@@ -689,7 +734,7 @@ function PlayerTracker() {
         </>
       )}
 
-      {player.other.length === 0 && player.tierA.every(i => i.current === 0) && (
+      {!hasItems && (
         <p style={{ color: "#555", fontSize: "0.75rem", textAlign: "center", marginTop: "10px" }}>
           No items recorded yet.
         </p>
