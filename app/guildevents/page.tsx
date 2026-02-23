@@ -20,23 +20,50 @@ const TC = [
 // ─── Player progress tracking (Event 2) ──────────────────────────────────────
 // tiers: array of { label, colorIdx (0=A … 4=E), items: [{ name, current, cap }] }
 // cap: 0 means TBD — displays "X / TBD" with no progress bar
+// All players show all 4 tiers so uncompleted items are visible too.
+// Gallard is an exception — he crafts unique items, shown in his relevant tiers only.
+
+const BLANK_A = () => ({ label: "Tier A — Basic Items", colorIdx: 0, items: [
+  { name: "Cotton",        current: 0, cap: 2000 },
+  { name: "Potatoes",      current: 0, cap: 2000 },
+  { name: "Red Flower",    current: 0, cap: 2000 },
+  { name: "Blue Flower",   current: 0, cap: 2000 },
+  { name: "Yellow Flower", current: 0, cap: 2000 },
+]});
+const BLANK_B = () => ({ label: "Tier B — Crafted Items", colorIdx: 1, items: [
+  { name: "Wrapped Potato", current: 0, cap: 1300 },
+  { name: "Fries",          current: 0, cap: 1300 },
+  { name: "Veggie Salad",   current: 0, cap: 1300 },
+  { name: "Soil",           current: 0, cap: 500  },
+]});
+const BLANK_C = () => ({ label: "Tier C — High-Tier Items", colorIdx: 2, items: [
+  { name: "Golden Potato Cake",      current: 0, cap: 3 },
+  { name: "Pumpkin Spice Cake",      current: 0, cap: 3 },
+  { name: "Carrot Cake",             current: 0, cap: 3 },
+  { name: "Grape Tart Cake",         current: 0, cap: 3 },
+  { name: "Upside-Down Tomato Cake", current: 0, cap: 3 },
+]});
+const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, items: [
+  { name: "Wheat Flour", current: 0, cap: 1000 },
+  { name: "Wood",        current: 0, cap: 5000 },
+  { name: "Stone",       current: 0, cap: 5000 },
+]});
+
 const PLAYERS = [
   {
     name: "steemit",
-    // Update this string + the counts together each time you add a new batch
     lastCounted: "Feb 23, 2026 — batch ending ~16 min ago",
     tiers: [
-      {
-        label: "Tier A — Basic Items",
-        colorIdx: 0,
-        items: [
-          { name: "Cotton",        current: 291, cap: 2000 },
-          { name: "Potatoes",      current: 0,   cap: 2000 },
-          { name: "Red Flower",    current: 138, cap: 2000 },
-          { name: "Blue Flower",   current: 258, cap: 2000 },
-          { name: "Yellow Flower", current: 135, cap: 2000 },
-        ],
-      },
+      { label: "Tier A — Basic Items", colorIdx: 0, items: [
+        { name: "Cotton",        current: 291, cap: 2000 },
+        { name: "Potatoes",      current: 0,   cap: 2000 },
+        { name: "Red Flower",    current: 138, cap: 2000 },
+        { name: "Blue Flower",   current: 258, cap: 2000 },
+        { name: "Yellow Flower", current: 135, cap: 2000 },
+      ]},
+      BLANK_B(),
+      BLANK_C(),
+      BLANK_D(),
     ],
     other: [
       { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 30 },
@@ -48,36 +75,23 @@ const PLAYERS = [
   {
     name: "abkhan",
     lastCounted: "—",
-    tiers: [
-      {
-        label: "Tier A — Basic Items",
-        colorIdx: 0,
-        items: [
-          { name: "Cotton",        current: 0, cap: 2000 },
-          { name: "Potatoes",      current: 0, cap: 2000 },
-          { name: "Red Flower",    current: 0, cap: 2000 },
-          { name: "Blue Flower",   current: 0, cap: 2000 },
-          { name: "Yellow Flower", current: 0, cap: 2000 },
-        ],
-      },
-    ],
+    tiers: [ BLANK_A(), BLANK_B(), BLANK_C(), BLANK_D() ],
     other: [],
   },
   {
     name: "Rachelle (KANIN)",
     lastCounted: "—",
     tiers: [
-      {
-        label: "Tier C — High-Tier Items ✓",
-        colorIdx: 2,
-        items: [
-          { name: "Golden Potato Cake",      current: 3, cap: 3 },
-          { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
-          { name: "Carrot Cake",             current: 3, cap: 3 },
-          { name: "Grape Tart Cake",         current: 3, cap: 3 },
-          { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
-        ],
-      },
+      BLANK_A(),
+      BLANK_B(),
+      { label: "Tier C — High-Tier Items ✓", colorIdx: 2, items: [
+        { name: "Golden Potato Cake",      current: 3, cap: 3 },
+        { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
+        { name: "Carrot Cake",             current: 3, cap: 3 },
+        { name: "Grape Tart Cake",         current: 3, cap: 3 },
+        { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
+      ]},
+      BLANK_D(),
     ],
     other: [],
   },
@@ -85,47 +99,20 @@ const PLAYERS = [
     name: "DevilFirst",
     lastCounted: "—",
     tiers: [
-      {
-        label: "Tier A — Basic Items",
-        colorIdx: 0,
-        items: [
-          { name: "Cotton",        current: 0, cap: 2000 },
-          { name: "Potatoes",      current: 0, cap: 2000 },
-          { name: "Red Flower",    current: 0, cap: 2000 },
-          { name: "Blue Flower",   current: 0, cap: 2000 },
-          { name: "Yellow Flower", current: 0, cap: 2000 },
-        ],
-      },
-      {
-        label: "Tier B — Crafted Items",
-        colorIdx: 1,
-        items: [
-          { name: "Wrapped Potato", current: 0, cap: 1300 },
-          { name: "Fries",          current: 0, cap: 1300 },
-          { name: "Veggie Salad",   current: 0, cap: 1300 },
-          { name: "Soil",           current: 0, cap: 500  },
-        ],
-      },
-      {
-        label: "Tier C — High-Tier Items ✓",
-        colorIdx: 2,
-        items: [
-          { name: "Golden Potato Cake",      current: 3, cap: 3 },
-          { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
-          { name: "Carrot Cake",             current: 3, cap: 3 },
-          { name: "Grape Tart Cake",         current: 3, cap: 3 },
-          { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
-        ],
-      },
-      {
-        label: "Tier D — Tools & Materials ✓",
-        colorIdx: 3,
-        items: [
-          { name: "Wheat Flour", current: 1000, cap: 1000 },
-          { name: "Wood",        current: 5000, cap: 5000 },
-          { name: "Stone",       current: 5000, cap: 5000 },
-        ],
-      },
+      BLANK_A(),
+      BLANK_B(),
+      { label: "Tier C — High-Tier Items ✓", colorIdx: 2, items: [
+        { name: "Golden Potato Cake",      current: 3, cap: 3 },
+        { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
+        { name: "Carrot Cake",             current: 3, cap: 3 },
+        { name: "Grape Tart Cake",         current: 3, cap: 3 },
+        { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
+      ]},
+      { label: "Tier D — Tools & Materials ✓", colorIdx: 3, items: [
+        { name: "Wheat Flour", current: 1000, cap: 1000 },
+        { name: "Wood",        current: 5000, cap: 5000 },
+        { name: "Stone",       current: 5000, cap: 5000 },
+      ]},
     ],
     other: [],
   },
@@ -133,21 +120,37 @@ const PLAYERS = [
     name: "Gallard",
     lastCounted: "Feb 23, 2026 — batch ending ~6 min ago",
     tiers: [
-      {
-        label: "Tier B — Crafted Items",
-        colorIdx: 1,
-        items: [
-          { name: "Fries", current: 10, cap: 1300 },
-        ],
-      },
-      {
-        label: "Tier D — Tools & Materials",
-        colorIdx: 3,
-        items: [
-          { name: "Cotton Thread", current: 3, cap: 0 },
-        ],
-      },
+      { label: "Tier B — Crafted Items", colorIdx: 1, items: [
+        { name: "Fries", current: 10, cap: 1300 },
+      ]},
+      { label: "Tier D — Tools & Materials", colorIdx: 3, items: [
+        { name: "Cotton Thread", current: 3, cap: 0 },
+      ]},
     ],
+    other: [],
+  },
+  {
+    name: "xidni_xazz",
+    lastCounted: "—",
+    tiers: [ BLANK_A(), BLANK_B(), BLANK_C(), BLANK_D() ],
+    other: [],
+  },
+  {
+    name: "Ongbak",
+    lastCounted: "—",
+    tiers: [ BLANK_A(), BLANK_B(), BLANK_C(), BLANK_D() ],
+    other: [],
+  },
+  {
+    name: "Alstar",
+    lastCounted: "—",
+    tiers: [ BLANK_A(), BLANK_B(), BLANK_C(), BLANK_D() ],
+    other: [],
+  },
+  {
+    name: "Axolotoi",
+    lastCounted: "—",
+    tiers: [ BLANK_A(), BLANK_B(), BLANK_C(), BLANK_D() ],
     other: [],
   },
 ];
@@ -230,7 +233,7 @@ const EVENT2 = {
   status: "ACTIVE" as const,
   registeredPlayers: [
     "xidni_xazz", "DevilFirst", "Rachelle (KANIN)", "steemit",
-    "abkhan", "Ongbak", "Alstar", "Axolotoi",
+    "abkhan", "Ongbak", "Alstar", "Axolotoi", "Gallard",
   ],
   tiers: [
     {
