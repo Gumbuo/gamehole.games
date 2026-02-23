@@ -144,14 +144,14 @@ const PLAYERS = [
   },
   {
     name: "Alstar",
-    lastCounted: "Feb 23, 2026 — batch ending ~13 min ago (log cut off, may be short)",
+    lastCounted: "Feb 23, 2026 — batch ending ~41 min ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 0,  cap: 2000 },
         { name: "Potatoes",      current: 0,  cap: 2000 },
         { name: "Red Flower",    current: 0,  cap: 2000 },
         { name: "Blue Flower",   current: 12, cap: 2000 },
-        { name: "Yellow Flower", current: 0,  cap: 2000 },
+        { name: "Yellow Flower", current: 6,  cap: 2000 },
       ]},
       BLANK_B(),
       BLANK_C(),
