@@ -79,13 +79,13 @@ const PLAYERS = [
         ],
       },
       {
-        label: "Tier B — Crafted Items ✓",
+        label: "Tier B — Crafted Items",
         colorIdx: 1,
         items: [
-          { name: "Wrapped Potato", current: 1300, cap: 1300 },
-          { name: "Fries",          current: 1300, cap: 1300 },
-          { name: "Veggie Salad",   current: 1300, cap: 1300 },
-          { name: "Soil",           current: 500,  cap: 500  },
+          { name: "Wrapped Potato", current: 0, cap: 1300 },
+          { name: "Fries",          current: 0, cap: 1300 },
+          { name: "Veggie Salad",   current: 0, cap: 1300 },
+          { name: "Soil",           current: 0, cap: 500  },
         ],
       },
       {
