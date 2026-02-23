@@ -139,7 +139,7 @@ const EVENT2 = {
     { text: "Tier D: Wheat Flour 1k × $0.00125, Wood & Stone 5k × $0.001375 each." },
     { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
     { text: "LOYALTY MULTIPLIER: Complete a full Tier D hand-in (all wheat flour, wood & stone) to earn $15 this event and unlock a permanent 1.25x multiplier — earning more from Tier D every month from Event 3 through the July TGE Launch. Earn it once, keep it all season. Tier D participants only." },
-    { text: "GOLD REQUIRED — The dropbox has a 0.01 gold minimum per item. FoxHole will list Wood in the dropbox at a high price. You must purchase that Wood first to return the gold before your items can be paid out.", warn: true },
+    { text: "GOLD RETURN (FINAL STEP) — After your items are received, you must buy 1 Wood from FoxHole's dropbox listing as your last step. The Wood is priced high to return the gold back to FoxHole. Do not skip this — it completes the transaction.", warn: true },
   ],
   loyaltyNote:
     "Complete a full Tier D hand-in (1k Wheat Flour + 5k Wood + 5k Stone) and unlock a permanent 1.25× multiplier on Tier D. Instead of earning $15 max, you earn more every month through the July TGE Launch. Earn it once — keep it all season. Tier D participants only.",
@@ -238,7 +238,7 @@ const EVENT3 = {
     { text: "PM FoxHole on Discord before dropping items in the dropbox." },
     { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
     { text: "LOYALTY MULTIPLIER HOLDERS: Your Tier D max is $32.81 this event (1.25× applied to $26.25)." },
-    { text: "GOLD REQUIRED — The dropbox has a 0.01 gold minimum per item. FoxHole will list Wood in the dropbox at a high price. You must purchase that Wood first to return the gold before your items can be paid out.", warn: true },
+    { text: "GOLD RETURN (FINAL STEP) — After your items are received, you must buy 1 Wood from FoxHole's dropbox listing as your last step. The Wood is priced high to return the gold back to FoxHole. Do not skip this — it completes the transaction.", warn: true },
   ],
   loyaltyNote:
     "If you earned the Loyalty Multiplier in Event 2, your Tier D cap this event is $32.81 (1.25× applied to $26.25). Wood and stone are now worth $0.0025 each — making Tier D the highest-value tier in the season so far.",
