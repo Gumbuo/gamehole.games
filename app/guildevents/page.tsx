@@ -22,19 +22,19 @@ const PLAYERS = [
   {
     name: "steemit",
     // Update this string + the counts together each time you add a new batch
-    lastCounted: "Feb 23, 2026 — batch ending ~5 min ago",
+    lastCounted: "Feb 23, 2026 — batch ending ~16 min ago",
     tierA: [
-      { name: "Cotton",        current: 150, cap: 2000 },
+      { name: "Cotton",        current: 291, cap: 2000 },
       { name: "Potatoes",      current: 0,   cap: 2000 },
-      { name: "Red Flower",    current: 3,   cap: 2000 },
-      { name: "Blue Flower",   current: 258, cap: 2000 }, // 2 entries cut off in paste, may be slightly higher
+      { name: "Red Flower",    current: 138, cap: 2000 },
+      { name: "Blue Flower",   current: 258, cap: 2000 },
       { name: "Yellow Flower", current: 135, cap: 2000 },
     ],
     other: [
       { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 30 },
       { name: "Grape Must", qty: 1 },
-      { name: "Grapes — raw ingredient for Tier C cakes", qty: 111 },
-      { name: "Carrot — raw ingredient for Tier C cakes", qty: 27 },
+      { name: "Grapes — raw ingredient for Tier C cakes", qty: 225 },
+      { name: "Carrot — raw ingredient for Tier C cakes", qty: 60 },
     ],
   },
   {
