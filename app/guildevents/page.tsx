@@ -17,6 +17,35 @@ const TC = [
   { color: "#ff6b35", border: "#ff6b35", bg: "rgba(255,107,53,0.08)" }, // E
 ];
 
+// ─── Player progress tracking (Event 2) ──────────────────────────────────────
+const PLAYERS = [
+  {
+    name: "steemit",
+    tierA: [
+      { name: "Cotton",        current: 9,   cap: 2000 },
+      { name: "Potatoes",      current: 0,   cap: 2000 },
+      { name: "Red Flower",    current: 3,   cap: 2000 },
+      { name: "Blue Flower",   current: 126, cap: 2000 },
+      { name: "Yellow Flower", current: 135, cap: 2000 },
+    ],
+    other: [
+      { name: "Wheat (raw — needs processing into Wheat Flour for Tier D)", qty: 30 },
+      { name: "Grape Must", qty: 1 },
+    ],
+  },
+  {
+    name: "abkhan",
+    tierA: [
+      { name: "Cotton",        current: 0, cap: 2000 },
+      { name: "Potatoes",      current: 0, cap: 2000 },
+      { name: "Red Flower",    current: 0, cap: 2000 },
+      { name: "Blue Flower",   current: 0, cap: 2000 },
+      { name: "Yellow Flower", current: 0, cap: 2000 },
+    ],
+    other: [],
+  },
+];
+
 // ─── Shared tier items used across events ─────────────────────────────────────
 const TIER_A_ITEMS_2K = [
   { name: "Cotton",        qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
@@ -561,6 +590,96 @@ function SimpleUpcomingCard({ event }: { event: SimpleUpcoming }) {
   );
 }
 
+// ─── Player progress tracker ──────────────────────────────────────────────────
+function ProgressBar({ current, cap }: { current: number; cap: number }) {
+  const pct = Math.min((current / cap) * 100, 100);
+  const color = pct >= 100 ? "#00ff41" : pct >= 50 ? "#ffd700" : "#00d9ff";
+  return (
+    <div style={{ background: "rgba(255,255,255,0.07)", borderRadius: "4px", height: "5px", width: "100%", overflow: "hidden" }}>
+      <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: "4px" }} />
+    </div>
+  );
+}
+
+function PlayerTracker() {
+  const [active, setActive] = useState(0);
+  const player = PLAYERS[active];
+
+  return (
+    <div style={{
+      background: "rgba(0,0,0,0.5)", border: "2px solid #45a29e",
+      borderRadius: "12px", padding: "20px", marginBottom: "30px",
+    }}>
+      <h3 style={{
+        color: "#66fcf1", fontSize: "0.82rem", letterSpacing: "2px",
+        textTransform: "uppercase", margin: "0 0 16px 0",
+      }}>
+        Player Progress — Event 2
+      </h3>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+        {PLAYERS.map((p, i) => (
+          <button key={p.name} onClick={() => setActive(i)} style={{
+            background: i === active ? "rgba(0,255,65,0.12)" : "rgba(0,0,0,0.4)",
+            border: `2px solid ${i === active ? "#00ff41" : "#45a29e"}`,
+            color: i === active ? "#00ff41" : "#c5c6c7",
+            fontFamily: "Orbitron, sans-serif", fontSize: "0.72rem",
+            padding: "6px 16px", borderRadius: "6px", cursor: "pointer",
+            letterSpacing: "1px",
+          }}>
+            {p.name}
+          </button>
+        ))}
+      </div>
+
+      {/* Tier A progress */}
+      <p style={{ color: TC[0].color, fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
+        Tier A — Basic Items
+      </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px" }}>
+        {player.tierA.map((item) => (
+          <div key={item.name}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
+              <span style={{ color: "#e0e0e0", fontSize: "0.72rem" }}>{item.name}</span>
+              <span style={{ fontSize: "0.68rem", color: item.current === 0 ? "#555" : "#c5c6c7" }}>
+                {item.current.toLocaleString()} / {item.cap.toLocaleString()}
+              </span>
+            </div>
+            <ProgressBar current={item.current} cap={item.cap} />
+          </div>
+        ))}
+      </div>
+
+      {/* Other collected items */}
+      {player.other.length > 0 && (
+        <>
+          <p style={{ color: "#c5c6c7", fontSize: "0.68rem", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "10px" }}>
+            Other Collected
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            {player.other.map((item) => (
+              <div key={item.name} style={{
+                display: "flex", justifyContent: "space-between",
+                background: "rgba(0,0,0,0.3)", borderRadius: "6px", padding: "6px 10px",
+              }}>
+                <span style={{ color: "#c5c6c7", fontSize: "0.7rem" }}>{item.name}</span>
+                <span style={{ color: "#ffd700", fontSize: "0.7rem", fontWeight: "bold" }}>{item.qty}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {player.other.length === 0 && player.tierA.every(i => i.current === 0) && (
+        <p style={{ color: "#555", fontSize: "0.75rem", textAlign: "center", marginTop: "10px" }}>
+          No items recorded yet.
+        </p>
+      )}
+    </div>
+  );
+}
+
 // ─── Divider ──────────────────────────────────────────────────────────────────
 function Divider({ label }: { label: string }) {
   return (
@@ -645,6 +764,9 @@ export default function GuildEventsPage() {
             ))}
           </div>
         </div>
+
+        {/* Player Progress */}
+        <PlayerTracker />
 
         {/* Tiers */}
         <div style={{
