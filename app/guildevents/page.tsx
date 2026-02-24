@@ -52,25 +52,29 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 const PLAYERS = [
   {
     name: "steemit",
-    lastCounted: "Feb 24, 2026 — batch ending ~5 hrs ago (cotton cut off at end, value unknown)",
+    lastCounted: "Feb 24, 2026 — batch ending ~7 hrs ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 1443, cap: 2000 },
-        { name: "Potatoes",      current: 324,  cap: 2000 },
+        { name: "Cotton",        current: 1695, cap: 2000 },
+        { name: "Potatoes",      current: 420,  cap: 2000 },
         { name: "Red Flower",    current: 374,  cap: 2000 },
         { name: "Blue Flower",   current: 643,  cap: 2000 },
         { name: "Yellow Flower", current: 751,  cap: 2000 },
       ]},
       BLANK_B(),
       BLANK_C(),
-      BLANK_D(),
+      { label: "Tier D — Tools & Materials", colorIdx: 3, items: [
+        { name: "Wheat Flour", current: 10,  cap: 1000 },
+        { name: "Wood",        current: 0,   cap: 5000 },
+        { name: "Stone",       current: 0,   cap: 5000 },
+      ]},
     ],
     other: [
       { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 42 },
       { name: "Grape Must", qty: 1 },
-      { name: "Grapes — raw ingredient for Tier C cakes", qty: 309 },
-      { name: "Carrot — raw ingredient for Tier C cakes", qty: 204 },
-      { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 77 },
+      { name: "Grapes — raw ingredient for Tier C cakes", qty: 373 },
+      { name: "Carrot — raw ingredient for Tier C cakes", qty: 294 },
+      { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 242 },
       { name: "Cucumber", qty: 156 },
       { name: "Fern", qty: 279 },
       { name: "Tomato", qty: 27 },
@@ -80,12 +84,22 @@ const PLAYERS = [
       { name: "Orange Bluegill (fish)", qty: 8  },
       { name: "Yellow Bluegill (fish)", qty: 12 },
       { name: "Crucian Carp (fish)",    qty: 2  },
+      { name: "Bread",                  qty: 10 },
     ],
   },
   {
     name: "abkhan",
-    lastCounted: "—",
-    tiers: [ BLANK_A(), BLANK_B(), BLANK_C(), BLANK_D() ],
+    lastCounted: "Feb 24, 2026 — batch ending ~8 hrs ago",
+    tiers: [
+      { label: "Tier A — Basic Items", colorIdx: 0, items: [
+        { name: "Cotton",        current: 39, cap: 2000 },
+        { name: "Potatoes",      current: 0,  cap: 2000 },
+        { name: "Red Flower",    current: 0,  cap: 2000 },
+        { name: "Blue Flower",   current: 0,  cap: 2000 },
+        { name: "Yellow Flower", current: 0,  cap: 2000 },
+      ]},
+      BLANK_B(), BLANK_C(), BLANK_D(),
+    ],
     other: [],
   },
   {
