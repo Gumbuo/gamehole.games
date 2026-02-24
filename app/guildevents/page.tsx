@@ -92,7 +92,11 @@ const PLAYERS = [
         { name: "Grape Tart Cake",         current: 3, cap: 3 },
         { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
       ]},
-      BLANK_D(),
+      { label: "Tier D — Tools & Materials ✓", colorIdx: 3, items: [
+        { name: "Wheat Flour", current: 1000, cap: 1000 },
+        { name: "Wood",        current: 5000, cap: 5000 },
+        { name: "Stone",       current: 5000, cap: 5000 },
+      ]},
     ],
     other: [],
   },
