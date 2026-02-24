@@ -52,14 +52,14 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 const PLAYERS = [
   {
     name: "steemit",
-    lastCounted: "Feb 23, 2026 — batch ending ~1 min ago (cotton log cut off, may be short)",
+    lastCounted: "Feb 24, 2026 — batch ending ~1 hr ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 417, cap: 2000 },
+        { name: "Cotton",        current: 555, cap: 2000 },
         { name: "Potatoes",      current: 99,  cap: 2000 },
         { name: "Red Flower",    current: 138, cap: 2000 },
         { name: "Blue Flower",   current: 352, cap: 2000 },
-        { name: "Yellow Flower", current: 135, cap: 2000 },
+        { name: "Yellow Flower", current: 150, cap: 2000 },
       ]},
       BLANK_B(),
       BLANK_C(),
@@ -69,8 +69,10 @@ const PLAYERS = [
       { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 30 },
       { name: "Grape Must", qty: 1 },
       { name: "Grapes — raw ingredient for Tier C cakes", qty: 225 },
-      { name: "Carrot — raw ingredient for Tier C cakes", qty: 60 },
+      { name: "Carrot — raw ingredient for Tier C cakes", qty: 204 },
       { name: "Pumpkin — raw ingredient for Tier C cakes (log cut off, count may be short)", qty: 68 },
+      { name: "Cucumber", qty: 156 },
+      { name: "Fern", qty: 144 },
     ],
   },
   {
