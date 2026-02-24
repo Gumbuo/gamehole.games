@@ -85,10 +85,10 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Feb 24, 2026 — batch ending ~1 hr ago (last entry cut off, value unknown)",
+    lastCounted: "Feb 24, 2026 — batch ending ~14 min ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 47, cap: 2000 },
+        { name: "Cotton",        current: 79, cap: 2000 },
         { name: "Potatoes",      current: 0,  cap: 2000 },
         { name: "Red Flower",    current: 0,  cap: 2000 },
         { name: "Blue Flower",   current: 0,  cap: 2000 },
