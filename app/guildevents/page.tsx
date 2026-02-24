@@ -52,14 +52,14 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 const PLAYERS = [
   {
     name: "steemit",
-    lastCounted: "Feb 24, 2026 — batch ending ~1 hr ago (cotton log cut off, may be short)",
+    lastCounted: "Feb 24, 2026 — batch ending ~1 hr ago (red flower cut off, last entry value visible)",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 666, cap: 2000 },
         { name: "Potatoes",      current: 246, cap: 2000 },
-        { name: "Red Flower",    current: 138, cap: 2000 },
+        { name: "Red Flower",    current: 218, cap: 2000 },
         { name: "Blue Flower",   current: 643, cap: 2000 },
-        { name: "Yellow Flower", current: 423, cap: 2000 },
+        { name: "Yellow Flower", current: 613, cap: 2000 },
       ]},
       BLANK_B(),
       BLANK_C(),
