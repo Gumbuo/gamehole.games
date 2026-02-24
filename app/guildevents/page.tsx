@@ -292,11 +292,11 @@ const EVENT2 = {
     { text: "PM FoxHole on Discord before dropping items in the dropbox to make sure activities are acknowledged and paid for." },
     { text: "Tier D: Wheat Flour 1k × $0.00125, Wood & Stone 5k × $0.001375 each." },
     { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
-    { text: "LOYALTY MULTIPLIER: Complete a full Tier D hand-in (all wheat flour, wood & stone) to earn $15 this event and unlock a permanent 1.25x multiplier — earning more from Tier D every month from Event 3 through the July TGE Launch. Earn it once, keep it all season. Tier D participants only." },
+    { text: "TIER D REPEATABLE: Each full hand-in (1k Wheat Flour + 5k Wood + 5k Stone) earns more than the last — 1st: $15.00 · 2nd: $18.75 (1.25×) · 3rd: $22.50 (1.50×) · 4th: $26.25 (1.75×). Multiplier resets at the start of each new event month. Tier D participants only." },
     { text: "GOLD RETURN — After FoxHole receives your items, please return the gold by buying 1 Wood from FoxHole's dropbox. The Wood is priced high but will cost less than the gold you earned from the drop — so you keep the difference.", warn: true },
   ],
   loyaltyNote:
-    "Complete a full Tier D hand-in (1k Wheat Flour + 5k Wood + 5k Stone) and unlock a permanent 1.25× multiplier on Tier D. Instead of earning $15 max, you earn more every month through the July TGE Launch. Earn it once — keep it all season. Tier D participants only.",
+    "Tier D is repeatable every event month — and each full hand-in earns more than the last. Complete 1k Wheat Flour + 5k Wood + 5k Stone to claim your payout, then do it again for a bigger reward. 1st: $15.00 · 2nd: $18.75 (1.25×) · 3rd: $22.50 (1.50×) · 4th: $26.25 (1.75×). Multiplier resets at the start of each new event.",
   faqs: [
     {
       q: "How does this work?",
@@ -323,8 +323,8 @@ const EVENT2 = {
       a: "PM FoxHole on Discord to coordinate. Once your items are verified in the dropbox, payment is sent to you. Details are arranged through Discord DMs.",
     },
     {
-      q: "What's the Loyalty Multiplier?",
-      a: "Complete a full Tier D hand-in (all 1k wheat flour, 5k wood, and 5k stone) and you unlock a 1.25x multiplier on Tier D earnings — every month from Event 3 through the July TGE Launch. You only need to earn it once and it lasts all season. Tier D participants only.",
+      q: "Can I do Tier D more than once?",
+      a: "Yes — Tier D is repeatable every event month. Each full hand-in (1k Wheat Flour + 5k Wood + 5k Stone) earns more than the last: 1st at $15.00, 2nd at $18.75 (1.25×), 3rd at $22.50 (1.50×), 4th at $26.25 (1.75×). The multiplier resets at the start of each new event month.",
     },
     {
       q: "What's the total pool?",
@@ -391,11 +391,11 @@ const EVENT3 = {
     { text: "Wood & Stone price increased to $0.0025 each (up from $0.001375 in Event 2)." },
     { text: "PM FoxHole on Discord before dropping items in the dropbox." },
     { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
-    { text: "LOYALTY MULTIPLIER HOLDERS: Your Tier D max is $32.81 this event (1.25× applied to $26.25)." },
+    { text: "TIER D REPEATABLE: Each full hand-in (1k Wheat Flour + 5k Wood + 5k Stone) earns more than the last — 1st: $26.25 · 2nd: $32.81 (1.25×) · 3rd: $39.38 (1.50×) · 4th: $45.94 (1.75×). Multiplier resets at the start of each new event month. Tier D participants only." },
     { text: "GOLD RETURN — After FoxHole receives your items, please return the gold by buying 1 Wood from FoxHole's dropbox. The Wood is priced high but will cost less than the gold you earned from the drop — so you keep the difference.", warn: true },
   ],
   loyaltyNote:
-    "If you earned the Loyalty Multiplier in Event 2, your Tier D cap this event is $32.81 (1.25× applied to $26.25). Wood and stone are now worth $0.0025 each — making Tier D the highest-value tier in the season so far.",
+    "Tier D is repeatable every event month — and each full hand-in earns more than the last. With wood & stone at $0.0025 each, completing 1k Wheat Flour + 5k Wood + 5k Stone pays out more every time. 1st: $26.25 · 2nd: $32.81 (1.25×) · 3rd: $39.38 (1.50×) · 4th: $45.94 (1.75×). Multiplier resets at the start of each new event.",
 };
 
 // ─── Event 4 (UPCOMING — May 1, simple card) ──────────────────────────────────
