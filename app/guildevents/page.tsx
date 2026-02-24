@@ -63,11 +63,7 @@ const PLAYERS = [
       ]},
       BLANK_B(),
       BLANK_C(),
-      { label: "Tier D — Tools & Materials", colorIdx: 3, items: [
-        { name: "Wheat Flour", current: 10,  cap: 1000 },
-        { name: "Wood",        current: 0,   cap: 5000 },
-        { name: "Stone",       current: 0,   cap: 5000 },
-      ]},
+      BLANK_D(),
     ],
     other: [
       { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 42 },
