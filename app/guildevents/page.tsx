@@ -183,7 +183,7 @@ const PLAYERS = [
   },
   {
     name: "Alstar",
-    lastCounted: "Feb 24, 2026 — batch ending ~14 min ago",
+    lastCounted: "Feb 25, 2026 — batch ending ~2 hr ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 0,  cap: 2000 },
@@ -197,7 +197,7 @@ const PLAYERS = [
       BLANK_D(),
     ],
     other: [
-      { name: "Cotton Thread (spun)", qty: 4 },
+      { name: "Cotton Thread (spun)", qty: 14 },
     ],
   },
   {
