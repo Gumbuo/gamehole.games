@@ -102,7 +102,13 @@ const PLAYERS = [
     name: "Rachelle (KANIN)",
     lastCounted: "—",
     tiers: [
-      BLANK_A(),
+      { label: "Tier A — Basic Items ✓", colorIdx: 0, items: [
+        { name: "Cotton",        current: 2000, cap: 2000 },
+        { name: "Potatoes",      current: 2000, cap: 2000 },
+        { name: "Red Flower",    current: 2000, cap: 2000 },
+        { name: "Blue Flower",   current: 2000, cap: 2000 },
+        { name: "Yellow Flower", current: 2000, cap: 2000 },
+      ]},
       BLANK_B(),
       { label: "Tier C — High-Tier Items ✓", colorIdx: 2, items: [
         { name: "Golden Potato Cake",      current: 3, cap: 3 },
