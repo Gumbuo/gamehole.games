@@ -52,10 +52,10 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 const PLAYERS = [
   {
     name: "steemit",
-    lastCounted: "Feb 24, 2026 — batch ending ~7 hrs ago",
+    lastCounted: "Feb 24, 2026 — batch ending ~1 hr ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 1695, cap: 2000 },
+        { name: "Cotton",        current: 1789, cap: 2000 },
         { name: "Potatoes",      current: 420,  cap: 2000 },
         { name: "Red Flower",    current: 374,  cap: 2000 },
         { name: "Blue Flower",   current: 643,  cap: 2000 },
@@ -85,10 +85,10 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Feb 24, 2026 — batch ending ~18 min ago",
+    lastCounted: "Feb 24, 2026 — batch ending ~5 min ago (last entry cut off, value unknown)",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 129, cap: 2000 },
+        { name: "Cotton",        current: 167, cap: 2000 },
         { name: "Potatoes",      current: 0,  cap: 2000 },
         { name: "Red Flower",    current: 0,  cap: 2000 },
         { name: "Blue Flower",   current: 0,  cap: 2000 },
@@ -174,7 +174,7 @@ const PLAYERS = [
   },
   {
     name: "Alstar",
-    lastCounted: "Feb 23, 2026 — batch ending ~41 min ago",
+    lastCounted: "Feb 24, 2026 — batch ending ~14 min ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 0,  cap: 2000 },
@@ -187,7 +187,9 @@ const PLAYERS = [
       BLANK_C(),
       BLANK_D(),
     ],
-    other: [],
+    other: [
+      { name: "Cotton Thread (spun)", qty: 4 },
+    ],
   },
   {
     name: "Axolotoi",
