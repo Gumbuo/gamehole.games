@@ -85,10 +85,10 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Feb 24, 2026 — batch ending ~14 min ago",
+    lastCounted: "Feb 24, 2026 — batch ending ~18 min ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 79, cap: 2000 },
+        { name: "Cotton",        current: 129, cap: 2000 },
         { name: "Potatoes",      current: 0,  cap: 2000 },
         { name: "Red Flower",    current: 0,  cap: 2000 },
         { name: "Blue Flower",   current: 0,  cap: 2000 },
@@ -142,7 +142,7 @@ const PLAYERS = [
   },
   {
     name: "Gallard",
-    lastCounted: "Feb 24, 2026 — batch ending ~5 min ago",
+    lastCounted: "Feb 24, 2026 — batch ending ~1 hr ago (last grape must cut off, not counted)",
     tiers: [
       { label: "Tier B — Crafted Items", colorIdx: 1, items: [
         { name: "Fries", current: 13, cap: 1300 },
@@ -152,7 +152,7 @@ const PLAYERS = [
         { name: "Cotton Thread Yellow", current: 1, cap: 0 },
         { name: "Cotton Thread Green",  current: 1, cap: 0 },
         { name: "Cotton Thread Red",    current: 1, cap: 0 },
-        { name: "Grape Must",           current: 4, cap: 0 },
+        { name: "Grape Must",           current: 6, cap: 0 },
       ]},
     ],
     other: [
