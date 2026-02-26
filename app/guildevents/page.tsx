@@ -52,24 +52,24 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 const PLAYERS = [
   {
     name: "steemit",
-    lastCounted: "Feb 25, 2026 — batch ending ~6 hr ago",
+    lastCounted: "Feb 26, 2026 — batch ending ~3 hr ago (last yellow flower cut off, excluded)",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 2000, cap: 2000 },
-        { name: "Potatoes",      current: 894,  cap: 2000 },
-        { name: "Red Flower",    current: 413,  cap: 2000 },
-        { name: "Blue Flower",   current: 651,  cap: 2000 },
-        { name: "Yellow Flower", current: 1149, cap: 2000 },
+        { name: "Potatoes",      current: 990,  cap: 2000 },
+        { name: "Red Flower",    current: 515,  cap: 2000 },
+        { name: "Blue Flower",   current: 768,  cap: 2000 },
+        { name: "Yellow Flower", current: 1281, cap: 2000 },
       ]},
       BLANK_B(),
       BLANK_C(),
       BLANK_D(),
     ],
     other: [
-      { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 354 },
+      { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 490 },
       { name: "Grape Must", qty: 1 },
       { name: "Grapes — raw ingredient for Tier C cakes", qty: 373 },
-      { name: "Carrot — raw ingredient for Tier C cakes", qty: 294 },
+      { name: "Carrot — raw ingredient for Tier C cakes", qty: 315 },
       { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 242 },
       { name: "Cucumber", qty: 156 },
       { name: "Fern", qty: 279 },
@@ -85,14 +85,14 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Feb 25, 2026 — batch ending ~5 hr ago",
+    lastCounted: "Feb 26, 2026 — batch ending ~2 hr ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 167, cap: 2000 },
-        { name: "Potatoes",      current: 0,  cap: 2000 },
-        { name: "Red Flower",    current: 0,  cap: 2000 },
-        { name: "Blue Flower",   current: 0,  cap: 2000 },
-        { name: "Yellow Flower", current: 0,  cap: 2000 },
+        { name: "Potatoes",      current: 0,   cap: 2000 },
+        { name: "Red Flower",    current: 0,   cap: 2000 },
+        { name: "Blue Flower",   current: 126, cap: 2000 },
+        { name: "Yellow Flower", current: 3,   cap: 2000 },
       ]},
       BLANK_B(), BLANK_C(), BLANK_D(),
     ],
