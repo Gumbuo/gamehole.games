@@ -111,7 +111,12 @@ const PLAYERS = [
         { name: "Blue Flower",   current: 2000, cap: 2000 },
         { name: "Yellow Flower", current: 2000, cap: 2000 },
       ]},
-      BLANK_B(),
+      { label: "Tier B — Crafted Items ✓", colorIdx: 1, items: [
+        { name: "Wrapped Potato", current: 1300, cap: 1300 },
+        { name: "Fries",          current: 1300, cap: 1300 },
+        { name: "Veggie Salad",   current: 1300, cap: 1300 },
+        { name: "Soil",           current: 500,  cap: 500  },
+      ]},
       { label: "Tier C — High-Tier Items ✓", colorIdx: 2, items: [
         { name: "Golden Potato Cake",      current: 3, cap: 3 },
         { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
