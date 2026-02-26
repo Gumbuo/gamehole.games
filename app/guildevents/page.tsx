@@ -261,6 +261,20 @@ const TIER_A_ITEMS_2K = [
   { name: "Yellow Flower", qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
 ];
 
+const TIER_A_ITEMS_3 = [
+  { name: "Cotton",        qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Potatoes",      qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Red Flower",    qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Blue Flower",   qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Yellow Flower", qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Pumpkin",       qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Grapes",        qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Wheat",         qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Tomato",        qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Fern",          qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+  { name: "Carrots",       qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
+];
+
 const TIER_B_ITEMS = [
   { name: "Wrapped Potato", qty: "1.3k", price: "$0.001 each",  max: "$1.30 max" },
   { name: "Fries",          qty: "1.3k", price: "$0.001 each",  max: "$1.30 max" },
@@ -422,15 +436,15 @@ const EVENT3 = {
   dateRange: "Apr 1 – Apr 30, 2026",
   startDate: new Date("2026-04-01"),
   description:
-    "Monthly item exchange with all five tiers. Tiers A–C carry over from Event 2. Tier D increases wood & stone value to $0.0025 each — the biggest single-resource earner yet.",
+    "Monthly item exchange with all five tiers. Tiers B–D carry over from Event 2. Tier A now uses a passive tile system — players must plant and harvest on FoxHole's land tiles, and only the passive crop share FoxHole receives counts. Tier D increases wood & stone value to $0.0025 each — the biggest single-resource earner yet.",
   status: "UPCOMING" as const,
   tiers: [
     {
-      name: "Tier A", subtitle: "Basic Items",
+      name: "Tier A", subtitle: "Basic Items (Passive Tile System)",
       eligibility: "Active Low-Level Members Only",
       ...TC[0],
-      priceRange: "$0.0005", playerCap: "$5 max per player", totalCap: "10,000 items",
-      items: TIER_A_ITEMS_2K,
+      priceRange: "$0.0005", playerCap: "$11 max per player", totalCap: "22,000 items",
+      items: TIER_A_ITEMS_3,
     },
     {
       name: "Tier B", subtitle: "Mid-Tier Crafted Items",
@@ -468,7 +482,8 @@ const EVENT3 = {
     },
   ],
   rules: [
-    { text: "Each player can earn up to $38.85 confirmed ($5 from A + $5.10 from B + $2.50 from C + $26.25 from D) — plus TBD from Tier E." },
+    { text: "Each player can earn up to $44.85 confirmed ($11 from A + $5.10 from B + $2.50 from C + $26.25 from D) — plus TBD from Tier E." },
+    { text: "TIER A — PASSIVE TILE SYSTEM: To earn Tier A credit, you must plant and harvest on FoxHole's land tiles. Only the passive crop share that FoxHole receives counts toward your Tier A total — your own full harvest does not count. 11 crop types accepted, 2,000 of each, $0.0005 per item.", warn: true },
     { text: "Wood & Stone price increased to $0.0025 each (up from $0.001375 in Event 2)." },
     { text: "PM FoxHole on Discord before dropping items in the dropbox." },
     { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
