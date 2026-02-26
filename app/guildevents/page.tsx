@@ -301,10 +301,8 @@ const TIER_C_CAKES_3 = [
   { name: "Carrot Cake",             qty: "x3", price: "$0.167 each", max: "$0.50 max" },
   { name: "Grape Tart Cake",         qty: "x3", price: "$0.167 each", max: "$0.50 max" },
   { name: "Upside-Down Tomato Cake", qty: "x3", price: "$0.167 each", max: "$0.50 max" },
-  { name: "Chicken Feed",            qty: "x3", price: "$0.167 each", max: "$0.50 max" },
   { name: "Mushroom Omelette",       qty: "x3", price: "$0.167 each", max: "$0.50 max" },
   { name: "Mushroom Soup",           qty: "x3", price: "$0.167 each", max: "$0.50 max" },
-  { name: "Pumpkin Bread",           qty: "x3", price: "$0.167 each", max: "$0.50 max" },
   { name: "Tomato Omelette",         qty: "x3", price: "$0.167 each", max: "$0.50 max" },
 ];
 
@@ -470,7 +468,7 @@ const EVENT3 = {
       name: "Tier C", subtitle: "High-Tier Items",
       eligibility: "OG Players Only",
       ...TC[2],
-      priceRange: "$0.167 / item", playerCap: "$5 max per player", totalCap: "30 items",
+      priceRange: "$0.167 / item", playerCap: "$4 max per player", totalCap: "24 items",
       items: TIER_C_CAKES_3,
     },
     {
@@ -495,7 +493,7 @@ const EVENT3 = {
     },
   ],
   rules: [
-    { text: "Each player can earn up to $47.35 confirmed ($11 from A + $5.10 from B + $5 from C + $26.25 from D) — plus TBD from Tier E." },
+    { text: "Each player can earn up to $46.35 confirmed ($11 from A + $5.10 from B + $4 from C + $26.25 from D) — plus TBD from Tier E." },
     { text: "TIER A — PASSIVE TILE SYSTEM: To earn Tier A credit, you must plant and harvest on FoxHole's land tiles. Only the passive crop share that FoxHole receives counts toward your Tier A total — your own full harvest does not count. 11 crop types accepted, 2,000 of each, $0.0005 per item.", warn: true },
     { text: "Wood & Stone price increased to $0.0025 each (up from $0.001375 in Event 2)." },
     { text: "PM FoxHole on Discord before dropping items in the dropbox." },
