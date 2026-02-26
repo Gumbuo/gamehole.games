@@ -289,6 +289,7 @@ const TIER_B_ITEMS_3 = [
   { name: "Wheat Flour",    qty: "1k",   price: "$0.00125 each",  max: "$1.25 max" },
   { name: "Bread",          qty: "x500", price: "TBD" },
   { name: "Wine",           qty: "x500", price: "TBD" },
+  { name: "Fishing Rod",    qty: "TBD",  price: "TBD" },
 ];
 
 const TIER_C_CAKES = [
