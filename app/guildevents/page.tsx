@@ -272,7 +272,6 @@ const TIER_A_ITEMS_3 = [
   { name: "Wheat",         qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
   { name: "Tomato",        qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
   { name: "Fern",          qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
-  { name: "Carrots",       qty: "2k", price: "$0.0005 each", max: "$1.00 max" },
 ];
 
 const TIER_B_ITEMS = [
@@ -280,6 +279,16 @@ const TIER_B_ITEMS = [
   { name: "Fries",          qty: "1.3k", price: "$0.001 each",  max: "$1.30 max" },
   { name: "Veggie Salad",   qty: "1.3k", price: "$0.001 each",  max: "$1.30 max" },
   { name: "Soil",           qty: "x500", price: "$0.0024 each", max: "$1.20 max" },
+];
+
+const TIER_B_ITEMS_3 = [
+  { name: "Wrapped Potato", qty: "1.3k", price: "$0.001 each",    max: "$1.30 max" },
+  { name: "Fries",          qty: "1.3k", price: "$0.001 each",    max: "$1.30 max" },
+  { name: "Veggie Salad",   qty: "1.3k", price: "$0.001 each",    max: "$1.30 max" },
+  { name: "Soil",           qty: "x500", price: "$0.0024 each",   max: "$1.20 max" },
+  { name: "Wheat Flour",    qty: "1k",   price: "$0.00125 each",  max: "$1.25 max" },
+  { name: "Bread",          qty: "x500", price: "TBD" },
+  { name: "Wine",           qty: "x500", price: "TBD" },
 ];
 
 const TIER_C_CAKES = [
@@ -454,15 +463,15 @@ const EVENT3 = {
       name: "Tier A", subtitle: "Basic Items (Passive Tile System)",
       eligibility: "Active Low-Level Members Only",
       ...TC[0],
-      priceRange: "$0.0005", playerCap: "$11 max per player", totalCap: "22,000 items",
+      priceRange: "$0.0005", playerCap: "$10 max per player", totalCap: "20,000 items",
       items: TIER_A_ITEMS_3,
     },
     {
       name: "Tier B", subtitle: "Mid-Tier Crafted Items",
       eligibility: "Active Low-Level Members Only",
       ...TC[1],
-      priceRange: "$0.001", playerCap: "$5.10 max per player", totalCap: "4,400 items",
-      items: TIER_B_ITEMS,
+      priceRange: "$0.001–$0.00125", playerCap: "$6.35+ per player (Bread & Wine TBD)", totalCap: "TBD",
+      items: TIER_B_ITEMS_3,
     },
     {
       name: "Tier C", subtitle: "High-Tier Items",
@@ -475,12 +484,11 @@ const EVENT3 = {
       name: "Tier D", subtitle: "Tools & Materials",
       eligibility: "OG Players Only",
       ...TC[3],
-      // Wood & Stone up from $0.001375 → $0.0025 (+81% value)
-      priceRange: "$0.00125–$0.0025", playerCap: "$26.25 max per player", totalCap: "11,000 items",
+      // Wood & Stone up from $0.001375 → $0.0025 (+81% value). Wheat Flour moved to Tier B.
+      priceRange: "$0.0025", playerCap: "$25 max per player", totalCap: "10,000 items",
       items: [
-        { name: "Wheat Flour", qty: "1k", price: "$0.00125 each", max: "$1.25 max" },
-        { name: "Wood",        qty: "5k", price: "$0.0025 each",  max: "$12.50 max" },
-        { name: "Stone",       qty: "5k", price: "$0.0025 each",  max: "$12.50 max" },
+        { name: "Wood",  qty: "5k", price: "$0.0025 each", max: "$12.50 max" },
+        { name: "Stone", qty: "5k", price: "$0.0025 each", max: "$12.50 max" },
         ...TIER_D_TBD_ITEMS,
       ],
     },
@@ -493,16 +501,16 @@ const EVENT3 = {
     },
   ],
   rules: [
-    { text: "Each player can earn up to $46.35 confirmed ($11 from A + $5.10 from B + $4 from C + $26.25 from D) — plus TBD from Tier E." },
+    { text: "Each player can earn up to $43.35+ confirmed ($10 from A + $6.35 from B + $4 from C + $25 from D, Bread & Wine TBD) — plus TBD from Tier E." },
     { text: "TIER A — PASSIVE TILE SYSTEM: To earn Tier A credit, you must plant and harvest on FoxHole's land tiles. Only the passive crop share that FoxHole receives counts toward your Tier A total — your own full harvest does not count. 11 crop types accepted, 2,000 of each, $0.0005 per item.", warn: true },
     { text: "Wood & Stone price increased to $0.0025 each (up from $0.001375 in Event 2)." },
     { text: "PM FoxHole on Discord before dropping items in the dropbox." },
     { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
-    { text: "TIER D REPEATABLE: Each full hand-in (1k Wheat Flour + 5k Wood + 5k Stone) earns more than the last — 1st: $26.25 · 2nd: $32.81 (1.25×) · 3rd: $39.38 (1.50×) · 4th: $45.94 (1.75×). Multiplier resets at the start of each new event month. Tier D participants only." },
+    { text: "TIER D REPEATABLE: Each full hand-in (5k Wood + 5k Stone) earns more than the last — 1st: $25.00 · 2nd: $31.25 (1.25×) · 3rd: $37.50 (1.50×) · 4th: $43.75 (1.75×). Multiplier resets at the start of each new event month. Tier D participants only." },
     { text: "GOLD RETURN — After FoxHole receives your items, please return the gold by buying 1 Wood from FoxHole's dropbox. The Wood is priced high but will cost less than the gold you earned from the drop — so you keep the difference.", warn: true },
   ],
   loyaltyNote:
-    "Tier D is repeatable every event month — and each full hand-in earns more than the last. With wood & stone at $0.0025 each, completing 1k Wheat Flour + 5k Wood + 5k Stone pays out more every time. 1st: $26.25 · 2nd: $32.81 (1.25×) · 3rd: $39.38 (1.50×) · 4th: $45.94 (1.75×). Multiplier resets at the start of each new event.",
+    "Tier D is repeatable every event month — and each full hand-in earns more than the last. With wood & stone at $0.0025 each, completing 5k Wood + 5k Stone pays out more every time. 1st: $25.00 · 2nd: $31.25 (1.25×) · 3rd: $37.50 (1.50×) · 4th: $43.75 (1.75×). Multiplier resets at the start of each new event.",
 };
 
 // ─── Event 4 (UPCOMING — May 1, simple card) ──────────────────────────────────
