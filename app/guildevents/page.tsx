@@ -134,10 +134,27 @@ const PLAYERS = [
   },
   {
     name: "DevilFirst",
-    lastCounted: "—",
+    lastCounted: "Feb 26, 2026 — full turn-in",
     tiers: [
-      BLANK_A(),
-      BLANK_B(),
+      { label: "Tier A — Basic Items ✓", colorIdx: 0, items: [
+        { name: "Cotton",        current: 2000, cap: 2000 },
+        { name: "Potatoes",      current: 2000, cap: 2000 },
+        { name: "Red Flower",    current: 2000, cap: 2000 },
+        { name: "Blue Flower",   current: 2000, cap: 2000 },
+        { name: "Yellow Flower", current: 2000, cap: 2000 },
+      ]},
+      { label: "Tier B — Crafted Items ✓", colorIdx: 1, items: [
+        { name: "Wrapped Potato", current: 1300, cap: 1300 },
+        { name: "Fries",          current: 1300, cap: 1300 },
+        { name: "Veggie Salad",   current: 1300, cap: 1300 },
+        { name: "Soil",           current: 500,  cap: 500  },
+      ]},
+      { label: "Tier B — 2nd Hand-In ✓", colorIdx: 1, items: [
+        { name: "Wrapped Potato", current: 1300, cap: 1300 },
+        { name: "Fries",          current: 1300, cap: 1300 },
+        { name: "Veggie Salad",   current: 1300, cap: 1300 },
+        { name: "Soil",           current: 500,  cap: 500  },
+      ]},
       { label: "Tier C — High-Tier Items ✓", colorIdx: 2, items: [
         { name: "Golden Potato Cake",      current: 3, cap: 3 },
         { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
@@ -146,6 +163,11 @@ const PLAYERS = [
         { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
       ]},
       { label: "Tier D — Tools & Materials ✓", colorIdx: 3, items: [
+        { name: "Wheat Flour", current: 1000, cap: 1000 },
+        { name: "Wood",        current: 5000, cap: 5000 },
+        { name: "Stone",       current: 5000, cap: 5000 },
+      ]},
+      { label: "Tier D — 2nd Hand-In ✓ — MULTIPLIER EARNED", colorIdx: 4, items: [
         { name: "Wheat Flour", current: 1000, cap: 1000 },
         { name: "Wood",        current: 5000, cap: 5000 },
         { name: "Stone",       current: 5000, cap: 5000 },
@@ -176,8 +198,25 @@ const PLAYERS = [
   },
   {
     name: "xidni_xazz",
-    lastCounted: "—",
-    tiers: [ BLANK_A(), BLANK_B(), BLANK_C(), BLANK_D() ],
+    lastCounted: "Feb 26, 2026 — partial turn-in",
+    tiers: [
+      { label: "Tier A — Basic Items", colorIdx: 0, items: [
+        { name: "Cotton",        current: 0,    cap: 2000 },
+        { name: "Potatoes",      current: 2000, cap: 2000 },
+        { name: "Red Flower",    current: 2000, cap: 2000 },
+        { name: "Blue Flower",   current: 0,    cap: 2000 },
+        { name: "Yellow Flower", current: 0,    cap: 2000 },
+      ]},
+      BLANK_B(),
+      { label: "Tier C — High-Tier Items ✓", colorIdx: 2, items: [
+        { name: "Golden Potato Cake",      current: 3, cap: 3 },
+        { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
+        { name: "Carrot Cake",             current: 3, cap: 3 },
+        { name: "Grape Tart Cake",         current: 3, cap: 3 },
+        { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
+      ]},
+      BLANK_D(),
+    ],
     other: [],
   },
   {
