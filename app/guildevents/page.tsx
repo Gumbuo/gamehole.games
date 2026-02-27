@@ -53,14 +53,14 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 const PLAYERS = [
   {
     name: "steemit",
-    lastCounted: "Feb 26, 2026 — batch ending ~3 hr ago (last yellow flower cut off, excluded)",
+    lastCounted: "Feb 27, 2026 — batch ending ~3 hr ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 2000, cap: 2000 },
-        { name: "Potatoes",      current: 990,  cap: 2000 },
-        { name: "Red Flower",    current: 515,  cap: 2000 },
-        { name: "Blue Flower",   current: 768,  cap: 2000 },
-        { name: "Yellow Flower", current: 1281, cap: 2000 },
+        { name: "Potatoes",      current: 1551, cap: 2000 },
+        { name: "Red Flower",    current: 1155, cap: 2000 },
+        { name: "Blue Flower",   current: 1472, cap: 2000 },
+        { name: "Yellow Flower", current: 2000, cap: 2000 },
       ]},
       BLANK_B(),
       BLANK_C(),
@@ -69,11 +69,11 @@ const PLAYERS = [
     other: [
       { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 490 },
       { name: "Grape Must", qty: 1 },
-      { name: "Grapes — raw ingredient for Tier C cakes", qty: 373 },
+      { name: "Grapes — raw ingredient for Tier C cakes", qty: 493 },
       { name: "Carrot — raw ingredient for Tier C cakes", qty: 315 },
-      { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 242 },
+      { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 260 },
       { name: "Cucumber", qty: 156 },
-      { name: "Fern", qty: 279 },
+      { name: "Fern", qty: 426 },
       { name: "Tomato", qty: 27 },
       { name: "Flower Rose Red", qty: 81 },
       { name: "Flower Rose Pink", qty: 18 },
@@ -86,24 +86,25 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Feb 27, 2026 — batch ending ~11 min ago",
+    lastCounted: "Feb 27, 2026 — batch ending ~1 hr ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 296, cap: 2000 },
-        { name: "Potatoes",      current: 255, cap: 2000 },
-        { name: "Red Flower",    current: 0,   cap: 2000 },
-        { name: "Blue Flower",   current: 126, cap: 2000 },
+        { name: "Cotton",        current: 449, cap: 2000 },
+        { name: "Potatoes",      current: 259, cap: 2000 },
+        { name: "Red Flower",    current: 144, cap: 2000 },
+        { name: "Blue Flower",   current: 130, cap: 2000 },
         { name: "Yellow Flower", current: 255, cap: 2000 },
       ]},
       BLANK_B(), BLANK_C(), BLANK_D(),
     ],
     other: [
       { name: "Tomato",   qty: 354 },
-      { name: "Grapes",   qty: 147 },
+      { name: "Grapes",   qty: 180 },
       { name: "Cucumber", qty: 117 },
-      { name: "Fern",     qty: 27  },
-      { name: "Carrot",   qty: 9   },
-      { name: "Wood",     qty: 14  },
+      { name: "Fern",     qty: 105 },
+      { name: "Carrot",   qty: 37  },
+      { name: "Pumpkin",  qty: 114 },
+      { name: "Wood",     qty: 18  },
     ],
   },
   {
@@ -233,7 +234,7 @@ const PLAYERS = [
   },
   {
     name: "Alstar",
-    lastCounted: "Feb 25, 2026 — batch ending ~2 hr ago",
+    lastCounted: "Feb 27, 2026 — batch ending ~7 hr ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 0,  cap: 2000 },
@@ -247,7 +248,7 @@ const PLAYERS = [
       BLANK_D(),
     ],
     other: [
-      { name: "Cotton Thread (spun)", qty: 14 },
+      { name: "Cotton Thread (spun)", qty: 25 },
     ],
   },
   {
