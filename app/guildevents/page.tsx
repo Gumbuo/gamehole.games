@@ -131,6 +131,20 @@ const PLAYERS = [
         { name: "Grape Tart Cake",         current: 3, cap: 3 },
         { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
       ]},
+      { label: "Tier C — 2nd Hand-In ✓ — MULTIPLIER EARNED", colorIdx: 4, items: [
+        { name: "Golden Potato Cake",      current: 3, cap: 3 },
+        { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
+        { name: "Carrot Cake",             current: 3, cap: 3 },
+        { name: "Grape Tart Cake",         current: 3, cap: 3 },
+        { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
+      ]},
+      { label: "Tier C — 3rd Hand-In ✓ — MULTIPLIER EARNED", colorIdx: 4, items: [
+        { name: "Golden Potato Cake",      current: 3, cap: 3 },
+        { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
+        { name: "Carrot Cake",             current: 3, cap: 3 },
+        { name: "Grape Tart Cake",         current: 3, cap: 3 },
+        { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
+      ]},
       { label: "Tier D — Tools & Materials ✓", colorIdx: 3, items: [
         { name: "Wheat Flour", current: 1000, cap: 1000 },
         { name: "Wood",        current: 5000, cap: 5000 },
