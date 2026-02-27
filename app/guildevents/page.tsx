@@ -181,17 +181,17 @@ const PLAYERS = [
   },
   {
     name: "Gallard",
-    lastCounted: "Feb 24, 2026 — batch ending ~3 min ago",
+    lastCounted: "Feb 26, 2026 — batch ending ~1 hr ago",
     tiers: [
       { label: "Tier B — Crafted Items", colorIdx: 1, items: [
         { name: "Wrapped Potato", current: 3,  cap: 1300 },
         { name: "Fries",          current: 13, cap: 1300 },
       ]},
       { label: "Tier D — Tools & Materials", colorIdx: 3, items: [
-        { name: "Cotton Thread",        current: 13, cap: 0 },
+        { name: "Cotton Thread",        current: 15, cap: 0 },
         { name: "Cotton Thread Yellow", current: 1,  cap: 0 },
-        { name: "Cotton Thread Green",  current: 1,  cap: 0 },
-        { name: "Cotton Thread Red",    current: 1,  cap: 0 },
+        { name: "Cotton Thread Green",  current: 2,  cap: 0 },
+        { name: "Cotton Thread Red",    current: 2,  cap: 0 },
         { name: "Grape Must",           current: 8,  cap: 0 },
       ]},
     ],
