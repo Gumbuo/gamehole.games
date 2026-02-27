@@ -15,6 +15,7 @@ const TC = [
   { color: "#b44dff", border: "#b44dff", bg: "rgba(180,77,255,0.08)" }, // C
   { color: "#ffd700", border: "#ffd700", bg: "rgba(255,215,0,0.08)" },  // D
   { color: "#ff6b35", border: "#ff6b35", bg: "rgba(255,107,53,0.08)" }, // E
+  { color: "#00e5cc", border: "#00e5cc", bg: "rgba(0,229,204,0.08)" }, // F
 ];
 
 // ─── Player progress tracking (Event 2) ──────────────────────────────────────
@@ -359,6 +360,22 @@ const TIER_E_ITEMS = [
   { name: "Wool",        qty: "TBD" },
 ];
 
+const TIER_F_FISH = [
+  { name: "Albino Koi",     qty: "TBD", price: "$1.00 each" },
+  { name: "Blue Bluegill",  qty: "TBD", price: "$0.01 each" },
+  { name: "Orange Bluegill",qty: "TBD", price: "$0.01 each" },
+  { name: "Yellow Bluegill",qty: "TBD", price: "$0.01 each" },
+  { name: "Crucian Carp",   qty: "TBD", price: "TBD" },
+  { name: "Tadpole",        qty: "TBD", price: "TBD" },
+  { name: "Black Crappie",  qty: "TBD", price: "TBD" },
+  { name: "Grey Chubfish",  qty: "TBD", price: "TBD" },
+  { name: "Bullfrog",       qty: "TBD", price: "TBD" },
+  { name: "Yellow Chubfish",qty: "TBD", price: "TBD" },
+  { name: "Albino Catfish", qty: "TBD", price: "TBD" },
+  { name: "Red Chubfish",   qty: "TBD", price: "TBD" },
+  { name: "Catfish",        qty: "TBD", price: "TBD" },
+];
+
 // ─── Event 2 (ACTIVE) ─────────────────────────────────────────────────────────
 const EVENT2 = {
   title: "NomStead Guild Item Exchange — Event 2",
@@ -503,10 +520,18 @@ const EVENT3 = {
       priceRange: "TBD", playerCap: "TBD", totalCap: "TBD",
       items: TIER_E_ITEMS,
     },
+    {
+      name: "Tier F", subtitle: "Pond Fish (Passive)",
+      eligibility: "Anyone with pond access",
+      ...TC[5],
+      priceRange: "$0.01–$1.00 (varies)", playerCap: "TBD", totalCap: "TBD",
+      items: TIER_F_FISH,
+    },
   ],
   rules: [
-    { text: "Each player can earn up to $46.69+ confirmed ($10 from A + $6.35 from B + $5.34 from C + $25 from D, Bread, Wine & Fishing Rod TBD) — plus TBD from Tier E." },
-    { text: "TIER A — PASSIVE TILE SYSTEM: To earn Tier A credit, you must plant and harvest on FoxHole's land tiles. Only the passive crop share that FoxHole receives counts toward your Tier A total — your own full harvest does not count. 11 crop types accepted, 2,000 of each, $0.0005 per item.", warn: true },
+    { text: "Each player can earn up to $46.69+ confirmed ($10 from A + $6.35 from B + $5.34 from C + $25 from D, Bread, Wine & Fishing Rod TBD) — plus TBD from Tiers E & F." },
+    { text: "TIER A — PASSIVE TILE SYSTEM: To earn Tier A credit, you must plant and harvest on FoxHole's land tiles. Only the passive crop share that FoxHole receives counts toward your Tier A total — your own full harvest does not count. 10 crop types accepted, 2,000 of each, $0.0005 per item.", warn: true },
+    { text: "TIER F — PASSIVE POND SYSTEM: To earn Tier F credit, fish in FoxHole's pond. Each cast catches 3 fish — 2 go to FoxHole, 1 you keep. Only the 2 fish FoxHole receives per cast count toward your Tier F total. Caps and pricing TBD per fish type.", warn: true },
     { text: "Wood & Stone price increased to $0.0025 each (up from $0.001375 in Event 2)." },
     { text: "PM FoxHole on Discord before dropping items in the dropbox." },
     { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
