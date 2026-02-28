@@ -53,13 +53,13 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 const PLAYERS = [
   {
     name: "steemit",
-    lastCounted: "Feb 27, 2026 — batch ending ~3 hr ago",
+    lastCounted: "Feb 27, 2026 — batch ending ~5 min ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 2000, cap: 2000 },
-        { name: "Potatoes",      current: 1551, cap: 2000 },
-        { name: "Red Flower",    current: 1155, cap: 2000 },
-        { name: "Blue Flower",   current: 1472, cap: 2000 },
+        { name: "Potatoes",      current: 1863, cap: 2000 },
+        { name: "Red Flower",    current: 1566, cap: 2000 },
+        { name: "Blue Flower",   current: 2000, cap: 2000 },
         { name: "Yellow Flower", current: 2000, cap: 2000 },
       ]},
       BLANK_B(),
@@ -69,12 +69,12 @@ const PLAYERS = [
     other: [
       { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 490 },
       { name: "Grape Must", qty: 1 },
-      { name: "Grapes — raw ingredient for Tier C cakes", qty: 493 },
+      { name: "Grapes — raw ingredient for Tier C cakes", qty: 634 },
       { name: "Carrot — raw ingredient for Tier C cakes", qty: 315 },
-      { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 260 },
+      { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 548 },
       { name: "Cucumber", qty: 156 },
-      { name: "Fern", qty: 426 },
-      { name: "Tomato", qty: 27 },
+      { name: "Fern", qty: 582 },
+      { name: "Tomato", qty: 174 },
       { name: "Flower Rose Red", qty: 81 },
       { name: "Flower Rose Pink", qty: 18 },
       { name: "Blue Bluegill (fish)",   qty: 8  },
