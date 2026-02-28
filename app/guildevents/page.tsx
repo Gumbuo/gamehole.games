@@ -86,14 +86,14 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Feb 27, 2026 — batch ending ~23 min ago",
+    lastCounted: "Feb 27, 2026 — batch ending ~5 min ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 449, cap: 2000 },
-        { name: "Potatoes",      current: 333, cap: 2000 },
-        { name: "Red Flower",    current: 335, cap: 2000 },
-        { name: "Blue Flower",   current: 220, cap: 2000 },
-        { name: "Yellow Flower", current: 405, cap: 2000 },
+        { name: "Potatoes",      current: 804, cap: 2000 },
+        { name: "Red Flower",    current: 523, cap: 2000 },
+        { name: "Blue Flower",   current: 324, cap: 2000 },
+        { name: "Yellow Flower", current: 456, cap: 2000 },
       ]},
       BLANK_B(), BLANK_C(), BLANK_D(),
     ],
