@@ -392,6 +392,11 @@ export default function NomSteadPage() {
           }}
         >
           <LinkCard
+            label="Farm Navigator"
+            href="/nomstead/farms"
+            internal
+          />
+          <LinkCard
             label="Full Wiki & Item Guide"
             href="/nomstead/wiki"
             internal
