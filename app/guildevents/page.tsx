@@ -222,12 +222,12 @@ const PLAYERS = [
     name: "xidni_xazz",
     lastCounted: "Feb 26, 2026 — partial turn-in",
     tiers: [
-      { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 0,    cap: 2000 },
+      { label: "Tier A — Basic Items ✓", colorIdx: 0, items: [
+        { name: "Cotton",        current: 2000, cap: 2000 },
         { name: "Potatoes",      current: 2000, cap: 2000 },
         { name: "Red Flower",    current: 2000, cap: 2000 },
-        { name: "Blue Flower",   current: 0,    cap: 2000 },
-        { name: "Yellow Flower", current: 0,    cap: 2000 },
+        { name: "Blue Flower",   current: 2000, cap: 2000 },
+        { name: "Yellow Flower", current: 2000, cap: 2000 },
       ]},
       BLANK_B(),
       { label: "Tier C — High-Tier Items ✓", colorIdx: 2, items: [
