@@ -86,14 +86,14 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Feb 27, 2026 — batch ending ~5 min ago",
+    lastCounted: "Feb 27, 2026 — batch ending ~16 min ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 449, cap: 2000 },
         { name: "Potatoes",      current: 804, cap: 2000 },
         { name: "Red Flower",    current: 523, cap: 2000 },
         { name: "Blue Flower",   current: 324, cap: 2000 },
-        { name: "Yellow Flower", current: 456, cap: 2000 },
+        { name: "Yellow Flower", current: 571, cap: 2000 },
       ]},
       BLANK_B(), BLANK_C(), BLANK_D(),
     ],
@@ -103,7 +103,8 @@ const PLAYERS = [
       { name: "Cucumber", qty: 203 },
       { name: "Fern",     qty: 105 },
       { name: "Carrot",   qty: 37  },
-      { name: "Pumpkin",  qty: 114 },
+      { name: "Pumpkin",  qty: 116 },
+      { name: "Wheat",    qty: 28  },
       { name: "Wood",     qty: 18  },
     ],
   },
