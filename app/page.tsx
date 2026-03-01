@@ -35,6 +35,8 @@ interface FeaturedGame {
   eventLabel?: string;
   toolUrl?: string;
   toolLabel?: string;
+  tool2Url?: string;
+  tool2Label?: string;
 }
 
 const featuredGames: FeaturedGame[] = [
@@ -77,6 +79,8 @@ const featuredGames: FeaturedGame[] = [
     eventLabel: "GUILD EVENT ACTIVE",
     toolUrl: "/nomstead/calculator",
     toolLabel: "Farm Calculator",
+    tool2Url: "/nomstead/farms",
+    tool2Label: "Farm Navigator",
   },
   {
     id: "playa3ull",
@@ -859,6 +863,30 @@ export default function HomePage() {
                         }}
                       >
                         {game.toolLabel ?? 'Tools'} →
+                      </a>
+                    )}
+                    {game.tool2Url && (
+                      <a
+                        href={game.tool2Url}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          padding: '10px',
+                          background: `${game.color}15`,
+                          border: `1px solid ${game.color}60`,
+                          borderRadius: '8px',
+                          color: game.color,
+                          fontFamily: 'Orbitron, sans-serif',
+                          fontWeight: 'bold',
+                          fontSize: '12px',
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          textTransform: 'uppercase',
+                          marginBottom: '10px',
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        {game.tool2Label ?? 'Tool 2'} →
                       </a>
                     )}
 
