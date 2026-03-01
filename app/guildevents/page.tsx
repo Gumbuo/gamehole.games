@@ -91,7 +91,7 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Feb 27, 2026 — batch ending ~16 min ago",
+    lastCounted: "Mar 1, 2026 — batch ending ~10 min ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 449, cap: 2000 },
@@ -107,7 +107,7 @@ const PLAYERS = [
       { name: "Grapes",   qty: 180 },
       { name: "Cucumber", qty: 203 },
       { name: "Fern",     qty: 105 },
-      { name: "Carrot",   qty: 37  },
+      { name: "Carrot",   qty: 115 },
       { name: "Pumpkin",  qty: 116 },
       { name: "Wheat",    qty: 28  },
       { name: "Wood",     qty: 18  },
