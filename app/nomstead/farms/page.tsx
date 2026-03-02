@@ -166,6 +166,7 @@ const SECTIONS: Section[] = [
       { label: "m@lik", url: "https://nomstead.com/m@lik" },
       { label: "l3l", url: "https://nomstead.com/l3l/64b5b71c9a0293d21d8c720b" },
       { label: "kalentong", url: "https://nomstead.com/kalentong/688b886f1585b148c6a36384", count: 1 },
+      { label: "moonland", url: "https://nomstead.com/moonland/6686de4de33932506bc30f4f" },
     ],
   },
 ];
