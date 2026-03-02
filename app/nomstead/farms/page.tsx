@@ -172,6 +172,7 @@ const SECTIONS: Section[] = [
 ];
 
 const TIMER_PRESETS = [1, 2, 4, 6, 8, 12, 24];
+const DAY_PRESETS = [1, 2, 3, 4, 5];
 
 function fmtCountdown(ms: number): string {
   if (ms <= 0) return "READY";
@@ -349,7 +350,7 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
           onClick={(e) => e.stopPropagation()}
         >
           <div style={{ fontSize: "11px", color: "#9cf", marginBottom: "8px" }}>Set cooldown for <strong>{link.label}</strong>:</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "4px", marginBottom: "8px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "4px", marginBottom: "4px" }}>
             {TIMER_PRESETS.map((h) => (
               <button
                 key={h}
@@ -357,6 +358,17 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
                 style={{ background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "3px", padding: "4px", cursor: "pointer", fontSize: "12px" }}
               >
                 {h}h
+              </button>
+            ))}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "4px", marginBottom: "8px" }}>
+            {DAY_PRESETS.map((d) => (
+              <button
+                key={d}
+                onClick={() => { onSetTimer(d * 86400000); setPickerOpen(false); setCustomHrs(""); }}
+                style={{ background: "#1a2a4c", color: "#adf", border: "1px solid #2a4a7c", borderRadius: "3px", padding: "4px", cursor: "pointer", fontSize: "12px" }}
+              >
+                {d}d
               </button>
             ))}
           </div>
