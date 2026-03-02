@@ -171,8 +171,9 @@ const SECTIONS: Section[] = [
   },
 ];
 
-const TIMER_PRESETS = [1, 2, 4, 6, 8, 12, 24];
-const DAY_PRESETS = [1, 2, 3, 4, 5];
+const HOURS = Array.from({ length: 24 }, (_, i) => i + 1);
+const DAYS = [1, 2, 3, 4, 5];
+const MOD_HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 function fmtCountdown(ms: number): string {
   if (ms <= 0) return "READY";
@@ -294,10 +295,15 @@ type FarmLinkProps = {
 function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, onClearTimer }: FarmLinkProps) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [customHrs, setCustomHrs] = useState("");
+  const [selDay, setSelDay] = useState(0);
+  const [selHour, setSelHour] = useState(0);
 
   const remaining = expiry ? expiry - Date.now() : null;
   const hasTimer = remaining !== null;
   const isReady = hasTimer && remaining! <= 0;
+
+  function closePicker() { setPickerOpen(false); setSelDay(0); setSelHour(0); setCustomHrs(""); }
+  function applyTimer(ms: number) { onSetTimer(ms); closePicker(); }
 
   const bg = isActive ? "#0d3320" : THEME.cardBg;
   const borderColor = isActive ? "#4af080" : hasTimer ? (isReady ? "#4af08088" : "#2a3a5a") : "#1a3050";
@@ -312,9 +318,7 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
         onClick={onVisit}
         style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: bg, border: `1px solid ${borderColor}`, borderRadius: "6px", padding: "7px 10px", textDecoration: "none", color: textColor, fontSize: "13px", gap: "6px", flex: 1, minWidth: 0, transition: "border-color 0.15s, background 0.15s" }}
       >
-        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
-          {link.label}
-        </span>
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{link.label}</span>
         <span style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
           {link.note && <span style={{ fontSize: "10px", color: "#f90" }} title={link.note}>{link.note}</span>}
           {link.count !== undefined && (
@@ -325,75 +329,89 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
 
       {/* Timer display — click to clear */}
       {hasTimer && (
-        <span
-          onClick={onClearTimer}
-          title="Click to clear timer"
-          style={{ fontSize: "11px", padding: "3px 6px", borderRadius: "3px", border: `1px solid ${isReady ? "#4af080" : "#2a3a5a"}`, background: isReady ? "#0d3320" : "#0d1020", color: isReady ? "#4af080" : "#7a9", cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 }}
-        >
+        <span onClick={onClearTimer} title="Click to clear timer"
+          style={{ fontSize: "11px", padding: "3px 6px", borderRadius: "3px", border: `1px solid ${isReady ? "#4af080" : "#2a3a5a"}`, background: isReady ? "#0d3320" : "#0d1020", color: isReady ? "#4af080" : "#7a9", cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 }}>
           {isReady ? "READY ✓" : fmtCountdown(remaining!)}
         </span>
       )}
 
       {/* Timer set button */}
-      <button
-        onClick={(e) => { e.stopPropagation(); setPickerOpen((o) => !o); }}
-        title="Set cooldown timer"
-        style={{ background: "#0d1e33", border: "1px solid #1a3050", color: pickerOpen ? "#f90" : "#567", borderRadius: "3px", padding: "4px 6px", cursor: "pointer", fontSize: "12px", flexShrink: 0 }}
-      >
+      <button onClick={(e) => { e.stopPropagation(); pickerOpen ? closePicker() : setPickerOpen(true); }} title="Set cooldown timer"
+        style={{ background: "#0d1e33", border: "1px solid #1a3050", color: pickerOpen ? "#f90" : "#567", borderRadius: "3px", padding: "4px 6px", cursor: "pointer", fontSize: "12px", flexShrink: 0 }}>
         ⏱
       </button>
 
-      {/* Timer picker dropdown */}
+      {/* Timer picker — opens upward, right-aligned */}
       {pickerOpen && (
-        <div
-          style={{ position: "absolute", top: "100%", right: 0, zIndex: 100, background: "#0d1e33", border: "1px solid #2a5a8c", borderRadius: "6px", padding: "10px", marginTop: "4px", boxShadow: "0 4px 16px #000a", minWidth: "200px" }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div style={{ fontSize: "11px", color: "#9cf", marginBottom: "8px" }}>Set cooldown for <strong>{link.label}</strong>:</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "4px", marginBottom: "4px" }}>
-            {TIMER_PRESETS.map((h) => (
-              <button
-                key={h}
-                onClick={() => { onSetTimer(h * 3600000); setPickerOpen(false); setCustomHrs(""); }}
-                style={{ background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "3px", padding: "4px", cursor: "pointer", fontSize: "12px" }}
-              >
+        <div style={{ position: "absolute", bottom: "calc(100% + 4px)", right: 0, zIndex: 100, background: "#0d1e33", border: "1px solid #2a5a8c", borderRadius: "6px", padding: "10px", boxShadow: "0 4px 16px #000a", width: "236px" }}
+          onClick={(e) => e.stopPropagation()}>
+          <div style={{ fontSize: "11px", color: "#9cf", marginBottom: "6px", fontWeight: "bold" }}>Set cooldown:</div>
+
+          {/* Hours 1–24 instant set */}
+          <div style={{ fontSize: "10px", color: "#7a9", marginBottom: "4px" }}>Hours — click to set instantly</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "3px", marginBottom: "8px" }}>
+            {HOURS.map((h) => (
+              <button key={h} onClick={() => applyTimer(h * 3600000)}
+                style={{ background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "3px", padding: "3px 2px", cursor: "pointer", fontSize: "11px" }}>
                 {h}h
               </button>
             ))}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "4px", marginBottom: "8px" }}>
-            {DAY_PRESETS.map((d) => (
-              <button
-                key={d}
-                onClick={() => { onSetTimer(d * 86400000); setPickerOpen(false); setCustomHrs(""); }}
-                style={{ background: "#1a2a4c", color: "#adf", border: "1px solid #2a4a7c", borderRadius: "3px", padding: "4px", cursor: "pointer", fontSize: "12px" }}
-              >
+
+          <div style={{ borderTop: "1px solid #1a3050", margin: "2px 0 8px" }} />
+
+          {/* Days 1–5 (select then pick +hours) */}
+          <div style={{ fontSize: "10px", color: "#7a9", marginBottom: "4px" }}>Days</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "3px", marginBottom: "6px" }}>
+            {DAYS.map((d) => (
+              <button key={d}
+                onClick={() => { if (selDay === d) { setSelDay(0); setSelHour(0); } else { setSelDay(d); setSelHour(0); } }}
+                style={{ background: selDay === d ? "#2a4a8c" : "#1a2a4c", color: "#adf", border: "1px solid #2a4a7c", borderRadius: "3px", padding: "4px 2px", cursor: "pointer", fontSize: "11px" }}>
                 {d}d
               </button>
             ))}
           </div>
-          <div style={{ display: "flex", gap: "4px" }}>
-            <input
-              type="number"
-              placeholder="hrs"
-              min="0.5"
-              step="0.5"
-              value={customHrs}
+
+          {/* +Hours modifier when day selected */}
+          {selDay > 0 && (
+            <>
+              <div style={{ fontSize: "10px", color: "#7a9", marginBottom: "4px" }}>+ Extra hours</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "3px", marginBottom: "8px" }}>
+                {MOD_HOURS.map((h) => (
+                  <button key={h} onClick={() => setSelHour(h)}
+                    style={{ background: selHour === h ? "#2a4a8c" : "#0a1428", color: "#adf", border: "1px solid #2a4a7c", borderRadius: "3px", padding: "2px 1px", cursor: "pointer", fontSize: "10px" }}>
+                    +{h}h
+                  </button>
+                ))}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
+                <span style={{ flex: 1, color: "#adf", fontSize: "11px" }}>
+                  {selDay}d{selHour > 0 ? ` +${selHour}h` : ""}
+                </span>
+                <button onClick={() => applyTimer(selDay * 86400000 + selHour * 3600000)}
+                  style={{ background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "3px", padding: "4px 14px", cursor: "pointer", fontSize: "12px" }}>
+                  Set
+                </button>
+              </div>
+            </>
+          )}
+
+          <div style={{ borderTop: "1px solid #1a3050", margin: "2px 0 8px" }} />
+
+          {/* Custom input */}
+          <div style={{ display: "flex", gap: "4px", marginBottom: hasTimer ? "8px" : "0" }}>
+            <input type="number" placeholder="custom hrs" min="0.5" step="0.5" value={customHrs}
               onChange={(e) => setCustomHrs(e.target.value)}
-              style={{ flex: 1, background: "#0a1a2e", border: "1px solid #2a5a8c", color: "#9cf", borderRadius: "3px", padding: "4px 6px", fontSize: "12px" }}
-            />
-            <button
-              onClick={() => { const v = parseFloat(customHrs); if (v > 0) { onSetTimer(v * 3600000); setPickerOpen(false); setCustomHrs(""); } }}
-              style={{ background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "3px", padding: "4px 10px", cursor: "pointer", fontSize: "12px" }}
-            >
+              style={{ flex: 1, background: "#0a1a2e", border: "1px solid #2a5a8c", color: "#9cf", borderRadius: "3px", padding: "4px 6px", fontSize: "12px" }} />
+            <button onClick={() => { const v = parseFloat(customHrs); if (v > 0) applyTimer(v * 3600000); }}
+              style={{ background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "3px", padding: "4px 10px", cursor: "pointer", fontSize: "12px" }}>
               Set
             </button>
           </div>
+
           {hasTimer && (
-            <button
-              onClick={() => { onClearTimer(); setPickerOpen(false); }}
-              style={{ marginTop: "8px", width: "100%", background: "transparent", color: "#f66", border: "1px solid #f664", borderRadius: "3px", padding: "4px", cursor: "pointer", fontSize: "11px" }}
-            >
+            <button onClick={() => { onClearTimer(); closePicker(); }}
+              style={{ width: "100%", background: "transparent", color: "#f66", border: "1px solid #f664", borderRadius: "3px", padding: "4px", cursor: "pointer", fontSize: "11px" }}>
               Clear timer
             </button>
           )}
