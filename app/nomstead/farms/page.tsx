@@ -110,6 +110,7 @@ const SECTIONS: Section[] = [
       { label: "waltz7809 / home", url: "https://nomstead.com/waltz7809", count: 1 },
       { label: "la-terra-dei-cachi", url: "https://nomstead.com/la-terra-dei-cachi/61c1e894f016c29f48d9cdd4", count: 2 },
       { label: "sbhan", url: "https://nomstead.com/sbhan/688b8d92eef426de55378ffb" },
+      { label: "algerian-kingdom", url: "https://nomstead.com/algerian-kingdom" },
     ],
   },
   {
