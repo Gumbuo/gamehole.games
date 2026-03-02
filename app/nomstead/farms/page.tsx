@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const THEME = {
@@ -169,187 +170,223 @@ const SECTIONS: Section[] = [
   },
 ];
 
+const TIMER_PRESETS = [1, 2, 4, 6, 8, 12, 24];
+
+function fmtCountdown(ms: number): string {
+  if (ms <= 0) return "READY";
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return (h > 0 ? h + "h " : "") + (m > 0 || h > 0 ? m + "m " : "") + s + "s";
+}
+
 export default function FarmsPage() {
+  const [activeUrl, setActiveUrl] = useState<string | null>(null);
+  const [timers, setTimers] = useState<Record<string, number>>({});
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem("nomstead_timers") || "{}");
+      setTimers(stored);
+    } catch {}
+    const interval = setInterval(() => setTick((t) => t + 1), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  function handleSetTimer(url: string, ms: number) {
+    const next = { ...timers, [url]: Date.now() + ms };
+    setTimers(next);
+    localStorage.setItem("nomstead_timers", JSON.stringify(next));
+  }
+
+  function handleClearTimer(url: string) {
+    const next = { ...timers };
+    delete next[url];
+    setTimers(next);
+    localStorage.setItem("nomstead_timers", JSON.stringify(next));
+  }
+
   return (
-    <div
-      style={{
-        width: "100%",
-        minHeight: "100vh",
-        background: THEME.bg,
-        color: THEME.textMuted,
-        fontFamily: "system-ui, sans-serif",
-      }}
-    >
+    <div style={{ width: "100%", minHeight: "100vh", background: THEME.bg, color: THEME.textMuted, fontFamily: "system-ui, sans-serif" }}>
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "15px 20px",
-          background: THEME.headerGradient,
-          borderBottom: `2px solid ${THEME.secondary}`,
-        }}
-      >
-        <Link
-          href="/nomstead"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            color: THEME.primary,
-            textDecoration: "none",
-            fontFamily: THEME.font,
-            fontSize: "14px",
-            padding: "8px 16px",
-            background: "rgba(102, 252, 241, 0.1)",
-            border: `1px solid ${THEME.secondary}`,
-            borderRadius: "8px",
-          }}
-        >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "15px 20px", background: THEME.headerGradient, borderBottom: `2px solid ${THEME.secondary}` }}>
+        <Link href="/nomstead" style={{ display: "flex", alignItems: "center", gap: "8px", color: THEME.primary, textDecoration: "none", fontFamily: THEME.font, fontSize: "14px", padding: "8px 16px", background: "rgba(102, 252, 241, 0.1)", border: `1px solid ${THEME.secondary}`, borderRadius: "8px" }}>
           ← NomStead
         </Link>
-        <h1
-          style={{
-            fontFamily: THEME.font,
-            fontSize: "20px",
-            color: THEME.accent,
-            margin: 0,
-            textShadow: `0 0 10px rgba(74, 222, 128, 0.5)`,
-          }}
-        >
+        <h1 style={{ fontFamily: THEME.font, fontSize: "20px", color: THEME.accent, margin: 0, textShadow: "0 0 10px rgba(74,222,128,0.5)" }}>
           Farm Navigator
         </h1>
         <div style={{ width: "120px" }} />
       </div>
 
       {/* Content */}
-      <div
-        style={{
-          maxWidth: "900px",
-          margin: "0 auto",
-          padding: "24px 20px",
-        }}
-      >
+      <div style={{ maxWidth: "900px", margin: "0 auto", padding: "24px 20px" }}>
         <p style={{ fontSize: "13px", color: THEME.secondary, marginBottom: "24px" }}>
-          Click any tile to open it in a new tab. Use <strong style={{ color: THEME.primary }}>Open All</strong> to open every tile in a section at once.
+          Click any tile to open it. Last visited stays <strong style={{ color: "#afffcf" }}>highlighted</strong>. Use <strong style={{ color: "#f90" }}>⏱</strong> to set a cooldown timer — click the countdown to clear it.
         </p>
 
         {SECTIONS.map((section) => (
-          <FarmSection key={section.id} section={section} />
+          <FarmSection
+            key={section.id}
+            section={section}
+            activeUrl={activeUrl}
+            setActiveUrl={setActiveUrl}
+            timers={timers}
+            onSetTimer={handleSetTimer}
+            onClearTimer={handleClearTimer}
+          />
         ))}
       </div>
     </div>
   );
 }
 
-function FarmSection({ section }: { section: Section }) {
+type FarmSectionProps = {
+  section: Section;
+  activeUrl: string | null;
+  setActiveUrl: (url: string) => void;
+  timers: Record<string, number>;
+  onSetTimer: (url: string, ms: number) => void;
+  onClearTimer: (url: string) => void;
+};
+
+function FarmSection({ section, activeUrl, setActiveUrl, timers, onSetTimer, onClearTimer }: FarmSectionProps) {
   return (
     <div style={{ marginBottom: "32px" }}>
-      {/* Section header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "12px",
-          marginBottom: "12px",
-          borderBottom: `1px solid ${section.color}44`,
-          paddingBottom: "8px",
-        }}
-      >
-        <h2
-          style={{
-            fontFamily: THEME.font,
-            fontSize: "15px",
-            color: section.color,
-            margin: 0,
-            letterSpacing: "1px",
-          }}
-        >
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px", borderBottom: `1px solid ${section.color}44`, paddingBottom: "8px" }}>
+        <h2 style={{ fontFamily: THEME.font, fontSize: "15px", color: section.color, margin: 0, letterSpacing: "1px" }}>
           {section.title}
         </h2>
-        <span
-          style={{
-            fontSize: "12px",
-            color: THEME.secondary,
-          }}
-        >
-          {section.links.length} tiles
-        </span>
+        <span style={{ fontSize: "12px", color: THEME.secondary }}>{section.links.length} tiles</span>
         <OpenAllButton links={section.links} color={section.color} />
       </div>
-
-      {/* Links grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-          gap: "6px",
-        }}
-      >
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "6px" }}>
         {section.links.map((link) => (
-          <FarmLink key={link.url + link.label} link={link} accentColor={section.color} />
+          <FarmLink
+            key={link.url + link.label}
+            link={link}
+            accentColor={section.color}
+            isActive={activeUrl === link.url}
+            onVisit={() => setActiveUrl(link.url)}
+            expiry={timers[link.url]}
+            onSetTimer={(ms) => onSetTimer(link.url, ms)}
+            onClearTimer={() => onClearTimer(link.url)}
+          />
         ))}
       </div>
     </div>
   );
 }
 
-function FarmLink({ link, accentColor }: { link: FarmLink; accentColor: string }) {
+type FarmLinkProps = {
+  link: FarmLink;
+  accentColor: string;
+  isActive: boolean;
+  onVisit: () => void;
+  expiry?: number;
+  onSetTimer: (ms: number) => void;
+  onClearTimer: () => void;
+};
+
+function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, onClearTimer }: FarmLinkProps) {
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [customHrs, setCustomHrs] = useState("");
+
+  const remaining = expiry ? expiry - Date.now() : null;
+  const hasTimer = remaining !== null;
+  const isReady = hasTimer && remaining! <= 0;
+
+  const bg = isActive ? "#0d3320" : THEME.cardBg;
+  const borderColor = isActive ? "#4af080" : hasTimer ? (isReady ? "#4af08088" : "#2a3a5a") : "#1a3050";
+  const textColor = isActive ? "#afffcf" : "#9cf";
+
   return (
-    <a
-      href={link.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        background: THEME.cardBg,
-        border: `1px solid #1a3050`,
-        borderRadius: "6px",
-        padding: "7px 12px",
-        textDecoration: "none",
-        color: "#9cf",
-        fontSize: "13px",
-        gap: "8px",
-        transition: "border-color 0.15s, background 0.15s",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLAnchorElement).style.borderColor = accentColor + "88";
-        (e.currentTarget as HTMLAnchorElement).style.background = "#162a44";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLAnchorElement).style.borderColor = "#1a3050";
-        (e.currentTarget as HTMLAnchorElement).style.background = THEME.cardBg;
-      }}
-    >
-      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
-        {link.label}
-      </span>
-      <span style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
-        {link.note && (
-          <span style={{ fontSize: "11px", color: "#f90", fontStyle: "italic" }} title={link.note}>
-            {link.note}
-          </span>
-        )}
-        {link.count !== undefined && (
-          <span
-            style={{
-              background: "#1a3a20",
-              color: "#6d9",
-              border: "1px solid #2a5a30",
-              borderRadius: "3px",
-              padding: "1px 6px",
-              fontSize: "11px",
-              fontFamily: THEME.font,
-            }}
-          >
-            ×{link.count}
-          </span>
-        )}
-      </span>
-    </a>
+    <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "4px" }}>
+      <a
+        href={link.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onVisit}
+        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: bg, border: `1px solid ${borderColor}`, borderRadius: "6px", padding: "7px 10px", textDecoration: "none", color: textColor, fontSize: "13px", gap: "6px", flex: 1, minWidth: 0, transition: "border-color 0.15s, background 0.15s" }}
+      >
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
+          {link.label}
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
+          {link.note && <span style={{ fontSize: "10px", color: "#f90" }} title={link.note}>{link.note}</span>}
+          {link.count !== undefined && (
+            <span style={{ background: "#1a3a20", color: "#6d9", border: "1px solid #2a5a30", borderRadius: "3px", padding: "1px 5px", fontSize: "11px" }}>×{link.count}</span>
+          )}
+        </span>
+      </a>
+
+      {/* Timer display — click to clear */}
+      {hasTimer && (
+        <span
+          onClick={onClearTimer}
+          title="Click to clear timer"
+          style={{ fontSize: "11px", padding: "3px 6px", borderRadius: "3px", border: `1px solid ${isReady ? "#4af080" : "#2a3a5a"}`, background: isReady ? "#0d3320" : "#0d1020", color: isReady ? "#4af080" : "#7a9", cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 }}
+        >
+          {isReady ? "READY ✓" : fmtCountdown(remaining!)}
+        </span>
+      )}
+
+      {/* Timer set button */}
+      <button
+        onClick={(e) => { e.stopPropagation(); setPickerOpen((o) => !o); }}
+        title="Set cooldown timer"
+        style={{ background: "#0d1e33", border: "1px solid #1a3050", color: pickerOpen ? "#f90" : "#567", borderRadius: "3px", padding: "4px 6px", cursor: "pointer", fontSize: "12px", flexShrink: 0 }}
+      >
+        ⏱
+      </button>
+
+      {/* Timer picker dropdown */}
+      {pickerOpen && (
+        <div
+          style={{ position: "absolute", top: "100%", right: 0, zIndex: 100, background: "#0d1e33", border: "1px solid #2a5a8c", borderRadius: "6px", padding: "10px", marginTop: "4px", boxShadow: "0 4px 16px #000a", minWidth: "200px" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div style={{ fontSize: "11px", color: "#9cf", marginBottom: "8px" }}>Set cooldown for <strong>{link.label}</strong>:</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "4px", marginBottom: "8px" }}>
+            {TIMER_PRESETS.map((h) => (
+              <button
+                key={h}
+                onClick={() => { onSetTimer(h * 3600000); setPickerOpen(false); setCustomHrs(""); }}
+                style={{ background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "3px", padding: "4px", cursor: "pointer", fontSize: "12px" }}
+              >
+                {h}h
+              </button>
+            ))}
+          </div>
+          <div style={{ display: "flex", gap: "4px" }}>
+            <input
+              type="number"
+              placeholder="hrs"
+              min="0.5"
+              step="0.5"
+              value={customHrs}
+              onChange={(e) => setCustomHrs(e.target.value)}
+              style={{ flex: 1, background: "#0a1a2e", border: "1px solid #2a5a8c", color: "#9cf", borderRadius: "3px", padding: "4px 6px", fontSize: "12px" }}
+            />
+            <button
+              onClick={() => { const v = parseFloat(customHrs); if (v > 0) { onSetTimer(v * 3600000); setPickerOpen(false); setCustomHrs(""); } }}
+              style={{ background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "3px", padding: "4px 10px", cursor: "pointer", fontSize: "12px" }}
+            >
+              Set
+            </button>
+          </div>
+          {hasTimer && (
+            <button
+              onClick={() => { onClearTimer(); setPickerOpen(false); }}
+              style={{ marginTop: "8px", width: "100%", background: "transparent", color: "#f66", border: "1px solid #f664", borderRadius: "3px", padding: "4px", cursor: "pointer", fontSize: "11px" }}
+            >
+              Clear timer
+            </button>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -364,17 +401,7 @@ function OpenAllButton({ links, color }: { links: FarmLink[]; color: string }) {
   return (
     <button
       onClick={handleClick}
-      style={{
-        background: "transparent",
-        color: color,
-        border: `1px solid ${color}66`,
-        borderRadius: "4px",
-        padding: "3px 10px",
-        fontSize: "11px",
-        cursor: "pointer",
-        fontFamily: THEME.font,
-        marginLeft: "auto",
-      }}
+      style={{ background: "transparent", color, border: `1px solid ${color}66`, borderRadius: "4px", padding: "3px 10px", fontSize: "11px", cursor: "pointer", fontFamily: THEME.font, marginLeft: "auto" }}
       onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.background = color + "22")}
       onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "transparent")}
     >
