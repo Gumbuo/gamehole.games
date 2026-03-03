@@ -67,14 +67,14 @@ const PLAYERS = [
       BLANK_D(),
     ],
     other: [
-      { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 1023 },
+      { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 1267 },
       { name: "Grape Must", qty: 1 },
       { name: "Grapes — raw ingredient for Tier C cakes", qty: 919 },
       { name: "Carrot — raw ingredient for Tier C cakes", qty: 315 },
       { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 977 },
-      { name: "Cucumber", qty: 156 },
+      { name: "Cucumber", qty: 294 },
       { name: "Fern", qty: 582 },
-      { name: "Tomato", qty: 174 },
+      { name: "Tomato", qty: 219 },
       { name: "Flower Rose Red",    qty: 741 },
       { name: "Flower Rose Pink",   qty: 201 },
       { name: "Flower Rose Yellow", qty: 54  },
@@ -91,10 +91,10 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Mar 2, 2026",
+    lastCounted: "Mar 3, 2026",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 449, cap: 2000 },
+        { name: "Cotton",        current: 501, cap: 2000 },
         { name: "Potatoes",      current: 804, cap: 2000 },
         { name: "Red Flower",    current: 523, cap: 2000 },
         { name: "Blue Flower",   current: 324, cap: 2000 },
