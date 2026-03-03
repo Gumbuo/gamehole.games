@@ -186,12 +186,17 @@ function fmtCountdown(ms: number): string {
 export default function FarmsPage() {
   const [activeUrl, setActiveUrl] = useState<string | null>(null);
   const [timers, setTimers] = useState<Record<string, number>>({});
+  const [notes, setNotes] = useState<Record<string, string>>({});
   const [, setTick] = useState(0);
 
   useEffect(() => {
     try {
       const stored = JSON.parse(localStorage.getItem("nomstead_timers") || "{}");
       setTimers(stored);
+    } catch {}
+    try {
+      const storedNotes = JSON.parse(localStorage.getItem("nomstead_notes") || "{}");
+      setNotes(storedNotes);
     } catch {}
     const interval = setInterval(() => setTick((t) => t + 1), 1000);
     return () => clearInterval(interval);
@@ -208,6 +213,19 @@ export default function FarmsPage() {
     delete next[url];
     setTimers(next);
     localStorage.setItem("nomstead_timers", JSON.stringify(next));
+  }
+
+  function handleSetNote(url: string, text: string) {
+    const next = { ...notes, [url]: text };
+    setNotes(next);
+    localStorage.setItem("nomstead_notes", JSON.stringify(next));
+  }
+
+  function handleClearNote(url: string) {
+    const next = { ...notes };
+    delete next[url];
+    setNotes(next);
+    localStorage.setItem("nomstead_notes", JSON.stringify(next));
   }
 
   return (
@@ -238,6 +256,9 @@ export default function FarmsPage() {
             timers={timers}
             onSetTimer={handleSetTimer}
             onClearTimer={handleClearTimer}
+            notes={notes}
+            onSetNote={handleSetNote}
+            onClearNote={handleClearNote}
           />
         ))}
       </div>
@@ -252,9 +273,12 @@ type FarmSectionProps = {
   timers: Record<string, number>;
   onSetTimer: (url: string, ms: number) => void;
   onClearTimer: (url: string) => void;
+  notes: Record<string, string>;
+  onSetNote: (url: string, text: string) => void;
+  onClearNote: (url: string) => void;
 };
 
-function FarmSection({ section, activeUrl, setActiveUrl, timers, onSetTimer, onClearTimer }: FarmSectionProps) {
+function FarmSection({ section, activeUrl, setActiveUrl, timers, onSetTimer, onClearTimer, notes, onSetNote, onClearNote }: FarmSectionProps) {
   return (
     <div style={{ marginBottom: "32px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px", borderBottom: `1px solid ${section.color}44`, paddingBottom: "8px" }}>
@@ -275,6 +299,9 @@ function FarmSection({ section, activeUrl, setActiveUrl, timers, onSetTimer, onC
             expiry={timers[link.url]}
             onSetTimer={(ms) => onSetTimer(link.url, ms)}
             onClearTimer={() => onClearTimer(link.url)}
+            noteText={notes[link.url]}
+            onSetNote={(text) => onSetNote(link.url, text)}
+            onClearNote={() => onClearNote(link.url)}
           />
         ))}
       </div>
@@ -290,13 +317,18 @@ type FarmLinkProps = {
   expiry?: number;
   onSetTimer: (ms: number) => void;
   onClearTimer: () => void;
+  noteText?: string;
+  onSetNote: (text: string) => void;
+  onClearNote: () => void;
 };
 
-function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, onClearTimer }: FarmLinkProps) {
+function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, onClearTimer, noteText, onSetNote, onClearNote }: FarmLinkProps) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [customHrs, setCustomHrs] = useState("");
   const [selDay, setSelDay] = useState(0);
   const [selHour, setSelHour] = useState(0);
+  const [notePickerOpen, setNotePickerOpen] = useState(false);
+  const [noteDraft, setNoteDraft] = useState("");
 
   const remaining = expiry ? expiry - Date.now() : null;
   const hasTimer = remaining !== null;
@@ -340,6 +372,49 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
         style={{ background: "#0d1e33", border: "1px solid #1a3050", color: pickerOpen ? "#f90" : "#567", borderRadius: "3px", padding: "4px 6px", cursor: "pointer", fontSize: "12px", flexShrink: 0 }}>
         ⏱
       </button>
+
+      {/* Note display */}
+      {noteText && (
+        <span title={noteText} style={{ fontSize: "11px", color: "#f90", fontStyle: "italic", maxWidth: "120px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flexShrink: 1 }}>
+          📝 {noteText}
+        </span>
+      )}
+
+      {/* Note button */}
+      <button onClick={(e) => { e.stopPropagation(); if (notePickerOpen) { setNotePickerOpen(false); } else { setNoteDraft(noteText || ""); setNotePickerOpen(true); closePicker(); } }} title="Add/edit note"
+        style={{ background: "#0d1e33", border: "1px solid #1a3050", color: notePickerOpen || noteText ? "#f90" : "#567", borderRadius: "3px", padding: "4px 6px", cursor: "pointer", fontSize: "12px", flexShrink: 0 }}>
+        ✎
+      </button>
+
+      {/* Note picker — opens upward, left of note button */}
+      {notePickerOpen && (
+        <div style={{ position: "absolute", bottom: "calc(100% + 4px)", right: 0, zIndex: 200, background: "#0d1a2e", border: "1px solid #2a5a8c", borderRadius: "6px", padding: "10px", boxShadow: "0 4px 16px #000a", width: "240px" }}
+          onClick={(e) => e.stopPropagation()}>
+          <div style={{ fontSize: "11px", color: "#7a9", marginBottom: "6px" }}>Note for this link</div>
+          <textarea
+            value={noteDraft}
+            onChange={(e) => setNoteDraft(e.target.value)}
+            placeholder="e.g. cotton planted, mushrooms nearby..."
+            rows={3}
+            autoFocus
+            style={{ width: "100%", background: "#060e1a", color: "#c8d8e8", border: "1px solid #2a4a6a", borderRadius: "4px", padding: "6px", fontSize: "12px", resize: "vertical", boxSizing: "border-box", marginBottom: "8px" }}
+          />
+          <div style={{ display: "flex", gap: "6px" }}>
+            <button onClick={() => { const v = noteDraft.trim(); if (v) onSetNote(v); else onClearNote(); setNotePickerOpen(false); }}
+              style={{ flex: 1, background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "4px", padding: "4px", cursor: "pointer", fontSize: "12px" }}>
+              Save
+            </button>
+            <button onClick={() => { onClearNote(); setNotePickerOpen(false); }}
+              style={{ background: "transparent", color: "#f66", border: "1px solid #f664", borderRadius: "4px", padding: "4px 8px", cursor: "pointer", fontSize: "12px" }}>
+              Clear
+            </button>
+            <button onClick={() => setNotePickerOpen(false)}
+              style={{ background: "transparent", color: "#567", border: "1px solid #2a3a5a", borderRadius: "4px", padding: "4px 8px", cursor: "pointer", fontSize: "12px" }}>
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Timer picker — opens upward, right-aligned */}
       {pickerOpen && (
