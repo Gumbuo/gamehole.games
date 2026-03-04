@@ -260,14 +260,7 @@ const PLAYERS = [
         { name: "Grape Tart Cake",         current: 3, cap: 3 },
         { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
       ]},
-      { label: "Tier C — 3rd Hand-In ✓ — MULTIPLIER EARNED", colorIdx: 4, items: [
-        { name: "Golden Potato Cake",      current: 3, cap: 3 },
-        { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
-        { name: "Carrot Cake",             current: 3, cap: 3 },
-        { name: "Grape Tart Cake",         current: 3, cap: 3 },
-        { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
-      ]},
-      { label: "Tier C — 4th Hand-In ✓ — MULTIPLIER EARNED (1.75×) — $4.38", colorIdx: 4, items: [
+      { label: "Tier C — 3rd Hand-In ✓ — MULTIPLIER EARNED — MAX TIER", colorIdx: 4, items: [
         { name: "Golden Potato Cake",      current: 3, cap: 3 },
         { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
         { name: "Carrot Cake",             current: 3, cap: 3 },
@@ -435,7 +428,8 @@ const TIER_F_FISH = [
 
 // ─── Payout History ───────────────────────────────────────────────────────────
 const PAYOUTS: { date: string; player: string; amount: string; tier: string; notes: string }[] = [
-  { date: "Mar 3, 2026", player: "steemit", amount: "$5.00", tier: "Tier A", notes: "Tier A maxed — 5×2000 items (10,000 total)" },
+  { date: "Mar 3, 2026", player: "steemit",     amount: "$5.00",  tier: "Tier A",        notes: "Tier A maxed — 5×2000 items (10,000 total)" },
+  { date: "Mar 4, 2026", player: "xidni_xazz",  amount: "$14.38", tier: "Tier A + C ×3", notes: "Tier A $5.00 + Tier C 1st $2.50 / 2nd $3.13 / 3rd $3.75 (max)" },
 ];
 
 // ─── Event 2 (ACTIVE) ─────────────────────────────────────────────────────────
