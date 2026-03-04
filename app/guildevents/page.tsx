@@ -53,7 +53,7 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 const PLAYERS = [
   {
     name: "steemit",
-    lastCounted: "Mar 3, 2026",
+    lastCounted: "Mar 4, 2026",
     tiers: [
       { label: "Tier A — Basic Items ✓", colorIdx: 0, items: [
         { name: "Cotton",        current: 2000, cap: 2000 },
@@ -67,14 +67,15 @@ const PLAYERS = [
       BLANK_D(),
     ],
     other: [
-      { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 1267 },
+      { name: "Wheat — raw, needs processing into Wheat Flour (Tier D)", qty: 1799 },
       { name: "Grape Must", qty: 1 },
-      { name: "Grapes — raw ingredient for Tier C cakes", qty: 919 },
+      { name: "Grapes — raw ingredient for Tier C cakes", qty: 1030 },
       { name: "Carrot — raw ingredient for Tier C cakes", qty: 315 },
-      { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 977 },
-      { name: "Cucumber", qty: 294 },
+      { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 2324 },
+      { name: "Cucumber", qty: 456 },
       { name: "Fern", qty: 582 },
       { name: "Tomato", qty: 219 },
+      { name: "Potato", qty: 6 },
       { name: "Flower Rose Red",    qty: 741 },
       { name: "Flower Rose Pink",   qty: 201 },
       { name: "Flower Rose Yellow", qty: 54  },
@@ -82,19 +83,20 @@ const PLAYERS = [
       { name: "Flower Yellow (extra — Tier A complete)", qty: 777 },
       { name: "Flower Blue (extra — Tier A complete)",  qty: 135 },
       { name: "Wood",                   qty: 9  },
-      { name: "Blue Bluegill (fish)",   qty: 8  },
-      { name: "Orange Bluegill (fish)", qty: 8  },
-      { name: "Yellow Bluegill (fish)", qty: 12 },
+      { name: "Blue Bluegill (fish)",   qty: 10 },
+      { name: "Orange Bluegill (fish)", qty: 12 },
+      { name: "Yellow Bluegill (fish)", qty: 16 },
       { name: "Crucian Carp (fish)",    qty: 2  },
+      { name: "Black Crappie (fish)",   qty: 2  },
       { name: "Bread",                  qty: 10 },
     ],
   },
   {
     name: "abkhan",
-    lastCounted: "Mar 3, 2026",
+    lastCounted: "Mar 4, 2026",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 583, cap: 2000 },
+        { name: "Cotton",        current: 709, cap: 2000 },
         { name: "Potatoes",      current: 804, cap: 2000 },
         { name: "Red Flower",    current: 523, cap: 2000 },
         { name: "Blue Flower",   current: 324, cap: 2000 },
@@ -210,23 +212,26 @@ const PLAYERS = [
   },
   {
     name: "Gallard",
-    lastCounted: "Feb 26, 2026 — batch ending ~1 hr ago",
+    lastCounted: "Mar 4, 2026",
     tiers: [
       { label: "Tier B — Crafted Items", colorIdx: 1, items: [
         { name: "Wrapped Potato", current: 3,  cap: 1300 },
         { name: "Fries",          current: 13, cap: 1300 },
       ]},
       { label: "Tier D — Tools & Materials", colorIdx: 3, items: [
-        { name: "Cotton Thread",        current: 15, cap: 0 },
-        { name: "Cotton Thread Yellow", current: 1,  cap: 0 },
-        { name: "Cotton Thread Green",  current: 2,  cap: 0 },
+        { name: "Cotton Thread",        current: 19, cap: 0 },
+        { name: "Cotton Thread Yellow", current: 2,  cap: 0 },
+        { name: "Cotton Thread Green",  current: 3,  cap: 0 },
         { name: "Cotton Thread Red",    current: 2,  cap: 0 },
         { name: "Grape Must",           current: 8,  cap: 0 },
       ]},
     ],
     other: [
-      { name: "Orange Bluegill (fish)", qty: 4 },
-      { name: "Yellow Bluegill (fish)", qty: 2 },
+      { name: "Blue Bluegill (fish)",   qty: 4 },
+      { name: "Orange Bluegill (fish)", qty: 6 },
+      { name: "Yellow Bluegill (fish)", qty: 8 },
+      { name: "Tadpole (fish)",         qty: 4 },
+      { name: "Crucian Carp (fish)",    qty: 2 },
     ],
   },
   {
