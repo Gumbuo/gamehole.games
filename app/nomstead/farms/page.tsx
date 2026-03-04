@@ -141,7 +141,6 @@ const SECTIONS: Section[] = [
       { label: "la-terra-dei-cachi", url: "https://nomstead.com/la-terra-dei-cachi/61b7f8dcc5c5332553b750f3", count: 5 },
       { label: "moonz", url: "https://nomstead.com/moonz/66f638e6dda9cf2e408b022f" },
       { label: "cocineros", url: "https://nomstead.com/cocineros/6979ebcc24abb84a34c510f3", count: 3 },
-      { label: "hasishi / 688bbc4e", url: "https://nomstead.com/hasishi/688bbc4e9b194d2ee247de97", count: 8 },
       { label: "pardisland", url: "https://nomstead.com/pardisland/6985e0b0d8fb0c26f67f3b45" },
       { label: "jam", url: "https://nomstead.com/jam/68c805230864317123534675", count: 1 },
       { label: "carotandia", url: "https://nomstead.com/carotandia/61b916dabfb0aad6838a0f06", count: 1 },
