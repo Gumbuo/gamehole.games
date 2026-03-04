@@ -93,10 +93,10 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Mar 4, 2026",
+    lastCounted: "Mar 4, 2026 — batch ~1h ago",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 709, cap: 2000 },
+        { name: "Cotton",        current: 883, cap: 2000 },
         { name: "Potatoes",      current: 804, cap: 2000 },
         { name: "Red Flower",    current: 523, cap: 2000 },
         { name: "Blue Flower",   current: 324, cap: 2000 },
@@ -236,7 +236,7 @@ const PLAYERS = [
   },
   {
     name: "xidni_xazz",
-    lastCounted: "Feb 26, 2026 — partial turn-in",
+    lastCounted: "Mar 4, 2026",
     tiers: [
       { label: "Tier A — Basic Items ✓", colorIdx: 0, items: [
         { name: "Cotton",        current: 2000, cap: 2000 },
@@ -269,7 +269,9 @@ const PLAYERS = [
       ]},
       BLANK_D(),
     ],
-    other: [],
+    other: [
+      { name: "Grape Must (wine press)", qty: 41 },
+    ],
   },
   {
     name: "Ongbak",
