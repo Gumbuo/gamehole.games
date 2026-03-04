@@ -287,7 +287,7 @@ export default function FarmsPage() {
           if (found) { label = found.label; break; }
         }
         const note = notes[url];
-        const msg = `⏱ **Timer ready!** ${label}${note ? " — " + note : ""}\n<${url}>`;
+        const msg = `<@413793170896322580> ⏱ **Timer ready!** ${label}${note ? " — " + note : ""}\n<${url}>`;
         fetch(webhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
