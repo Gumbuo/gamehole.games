@@ -94,7 +94,7 @@ const PLAYERS = [
     lastCounted: "Mar 3, 2026",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 501, cap: 2000 },
+        { name: "Cotton",        current: 583, cap: 2000 },
         { name: "Potatoes",      current: 804, cap: 2000 },
         { name: "Red Flower",    current: 523, cap: 2000 },
         { name: "Blue Flower",   current: 324, cap: 2000 },
