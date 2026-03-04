@@ -267,6 +267,13 @@ const PLAYERS = [
         { name: "Grape Tart Cake",         current: 3, cap: 3 },
         { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
       ]},
+      { label: "Tier C — 4th Hand-In ✓ — MULTIPLIER EARNED (1.75×) — $4.38", colorIdx: 4, items: [
+        { name: "Golden Potato Cake",      current: 3, cap: 3 },
+        { name: "Pumpkin Spice Cake",      current: 3, cap: 3 },
+        { name: "Carrot Cake",             current: 3, cap: 3 },
+        { name: "Grape Tart Cake",         current: 3, cap: 3 },
+        { name: "Upside-Down Tomato Cake", current: 3, cap: 3 },
+      ]},
       BLANK_D(),
     ],
     other: [
