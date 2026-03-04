@@ -103,6 +103,7 @@ const SECTIONS: Section[] = [
       { label: "fsg-4", url: "https://nomstead.com/fsg-4/688b889464eac5c413e9dfc7" },
       { label: "dulba", url: "https://nomstead.com/dulba/68bf2787470072a8574dbc76", note: "~5 tiles" },
       { label: "rogue", url: "https://nomstead.com/rogue/69205f0d3ad1775f8479fdc3", note: "10+ tiles" },
+      { label: "asperitas", url: "https://nomstead.com/asperitas/68c7bbc0c0d978301fad2adc" },
     ],
   },
   {
