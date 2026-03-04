@@ -419,6 +419,11 @@ const TIER_F_FISH = [
   { name: "Catfish",        qty: "TBD", price: "TBD" },
 ];
 
+// ─── Payout History ───────────────────────────────────────────────────────────
+const PAYOUTS: { date: string; player: string; amount: string; tier: string; notes: string }[] = [
+  { date: "Mar 3, 2026", player: "steemit", amount: "$5.00", tier: "Tier A", notes: "Tier A maxed — 5×2000 items (10,000 total)" },
+];
+
 // ─── Event 2 (ACTIVE) ─────────────────────────────────────────────────────────
 const EVENT2 = {
   title: "NomStead Guild Item Exchange — Event 2",
@@ -834,6 +839,39 @@ function LoyaltyBlock({ note }: { note: string }) {
 }
 
 // ─── Simple upcoming card (Event 4+, TBD pricing) ────────────────────────────
+function PayoutHistory() {
+  if (PAYOUTS.length === 0) return null;
+  return (
+    <div style={{ marginTop: "40px", marginBottom: "40px" }}>
+      <h2 style={{
+        fontSize: "1.1rem", color: "#00e5cc", letterSpacing: "3px",
+        textTransform: "uppercase", textAlign: "center", marginBottom: "16px",
+        textShadow: "0 0 8px #00e5cc",
+      }}>
+        Payout History
+      </h2>
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px", maxWidth: "700px", margin: "0 auto" }}>
+        {[...PAYOUTS].reverse().map((p, i) => (
+          <div key={i} style={{
+            display: "grid", gridTemplateColumns: "110px 100px 70px 1fr",
+            gap: "12px", alignItems: "center",
+            background: "rgba(0,229,204,0.06)", border: "1px solid rgba(0,229,204,0.2)",
+            borderRadius: "8px", padding: "10px 16px", fontSize: "0.82rem",
+          }}>
+            <span style={{ color: "#7a9", fontSize: "0.75rem" }}>{p.date}</span>
+            <span style={{ color: "#00e5cc", fontWeight: "bold" }}>{p.player}</span>
+            <span style={{ color: "#4ade80", fontWeight: "bold" }}>{p.amount}</span>
+            <span style={{ color: "#c5c6c7", fontSize: "0.75rem" }}>{p.tier} — {p.notes}</span>
+          </div>
+        ))}
+        <div style={{ textAlign: "right", fontSize: "0.75rem", color: "#7a9", marginTop: "4px" }}>
+          Total paid: ${PAYOUTS.reduce((sum, p) => sum + parseFloat(p.amount.replace("$", "")), 0).toFixed(2)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 type SimpleUpcoming = typeof EVENT4;
 
 function SimpleUpcomingCard({ event }: { event: SimpleUpcoming }) {
@@ -1170,6 +1208,9 @@ export default function GuildEventsPage() {
 
         {/* ══════════════════ EVENT 4 — SIMPLE CARD ══════════════════ */}
         <SimpleUpcomingCard event={EVENT4} />
+
+        {/* ══════════════════ PAYOUT HISTORY ══════════════════ */}
+        <PayoutHistory />
 
       </div>
     </div>

@@ -29,6 +29,15 @@ type Section = {
 
 const SECTIONS: Section[] = [
   {
+    id: "my-land",
+    title: "My Land",
+    color: "#66fcf1",
+    links: [
+      { label: "fox-hole / home", url: "https://nomstead.com/fox-hole" },
+      { label: "fox-hole / wine tile", url: "https://nomstead.com/fox-hole/6979ec3f24abb84a34c52a02", count: 4 },
+    ],
+  },
+  {
     id: "open-farms",
     title: "Open Farms",
     color: "#4ade80",
@@ -101,6 +110,7 @@ const SECTIONS: Section[] = [
     title: "Wine",
     color: "#c084fc",
     links: [
+      { label: "fox-hole / wine tile", url: "https://nomstead.com/fox-hole/6979ec3f24abb84a34c52a02", count: 4 },
       { label: "kunafool", url: "https://nomstead.com/kunafool/68c7baaa6ff5961fef12e500", count: 1 },
       { label: "pardisland", url: "https://nomstead.com/pardisland/6979ec3924abb84a34c528d1", count: 1 },
       { label: "nihil", url: "https://nomstead.com/nihil/66c60a2c55ca2290ac767a84", count: 1 },
