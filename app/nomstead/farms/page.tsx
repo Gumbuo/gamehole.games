@@ -370,7 +370,6 @@ function FarmSection({ section, activeUrl, setActiveUrl, timers, onSetTimer, onC
           {section.title}
         </h2>
         <span style={{ fontSize: "12px", color: THEME.secondary }}>{section.links.length} tiles</span>
-        <OpenAllButton links={section.links} color={section.color} />
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "6px" }}>
         {section.links.map((link) => (
