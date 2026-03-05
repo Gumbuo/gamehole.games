@@ -53,7 +53,7 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 const PLAYERS = [
   {
     name: "steemit",
-    lastCounted: "Mar 4, 2026",
+    lastCounted: "Mar 5, 2026",
     tiers: [
       { label: "Tier A — Basic Items ✓", colorIdx: 0, items: [
         { name: "Cotton",        current: 2000, cap: 2000 },
@@ -74,8 +74,8 @@ const PLAYERS = [
       { name: "Pumpkin — raw ingredient for Tier C cakes", qty: 2324 },
       { name: "Cucumber", qty: 456 },
       { name: "Fern", qty: 582 },
-      { name: "Tomato", qty: 219 },
-      { name: "Potato", qty: 6 },
+      { name: "Tomato", qty: 225 },
+      { name: "Potato", qty: 12 },
       { name: "Flower Rose Red",    qty: 741 },
       { name: "Flower Rose Pink",   qty: 201 },
       { name: "Flower Rose Yellow", qty: 54  },
@@ -84,9 +84,10 @@ const PLAYERS = [
       { name: "Flower Blue (extra — Tier A complete)",  qty: 135 },
       { name: "Wood",                   qty: 9  },
       { name: "Blue Bluegill (fish)",   qty: 10 },
-      { name: "Orange Bluegill (fish)", qty: 12 },
-      { name: "Yellow Bluegill (fish)", qty: 16 },
-      { name: "Crucian Carp (fish)",    qty: 2  },
+      { name: "Orange Bluegill (fish)", qty: 18 },
+      { name: "Yellow Bluegill (fish)", qty: 24 },
+      { name: "Crucian Carp (fish)",    qty: 4  },
+      { name: "Tadpole (fish)",         qty: 4  },
       { name: "Black Crappie (fish)",   qty: 2  },
       { name: "Bread",                  qty: 10 },
     ],
@@ -281,7 +282,7 @@ const PLAYERS = [
   },
   {
     name: "Alstar",
-    lastCounted: "Feb 27, 2026 — batch ending ~7 hr ago",
+    lastCounted: "Mar 5, 2026",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 0,  cap: 2000 },
@@ -295,7 +296,7 @@ const PLAYERS = [
       BLANK_D(),
     ],
     other: [
-      { name: "Cotton Thread (spun)", qty: 25 },
+      { name: "Cotton Thread (spun)", qty: 45 },
     ],
   },
   {
@@ -303,6 +304,54 @@ const PLAYERS = [
     lastCounted: "—",
     tiers: [ BLANK_A(), BLANK_B(), BLANK_C(), BLANK_D() ],
     other: [],
+  },
+  {
+    name: "Jamie",
+    lastCounted: "Mar 5, 2026",
+    tiers: [
+      { label: "Tier A — Basic Items", colorIdx: 0, items: [
+        { name: "Cotton",        current: 0, cap: 2000 },
+        { name: "Potatoes",      current: 0, cap: 2000 },
+        { name: "Red Flower",    current: 0, cap: 2000 },
+        { name: "Blue Flower",   current: 0, cap: 2000 },
+        { name: "Yellow Flower", current: 0, cap: 2000 },
+      ]},
+      BLANK_B(), BLANK_C(), BLANK_D(),
+    ],
+    other: [
+      { name: "Wheat (raw)",                   qty: 88 },
+      { name: "Cotton Thread (spun)",          qty: 30 },
+      { name: "Cotton Thread Brown (dyed)",    qty: 4  },
+      { name: "Cotton Thread Red (dyed)",      qty: 5  },
+      { name: "Cotton Thread Blue (dyed)",     qty: 3  },
+      { name: "Cotton Thread Green (dyed)",    qty: 3  },
+      { name: "Cotton Thread Orange (dyed)",   qty: 3  },
+      { name: "Cotton Thread Yellow (dyed)",   qty: 3  },
+      { name: "Yellow Bluegill (fish)",        qty: 10 },
+      { name: "Orange Bluegill (fish)",        qty: 20 },
+      { name: "Blue Bluegill (fish)",          qty: 18 },
+      { name: "Crucian Carp (fish)",           qty: 6  },
+      { name: "Tadpole (fish)",                qty: 8  },
+    ],
+  },
+  {
+    name: "wiseman89",
+    lastCounted: "Mar 5, 2026",
+    tiers: [
+      { label: "Tier A — Basic Items", colorIdx: 0, items: [
+        { name: "Cotton",        current: 0,   cap: 2000 },
+        { name: "Potatoes",      current: 362, cap: 2000 },
+        { name: "Red Flower",    current: 24,  cap: 2000 },
+        { name: "Blue Flower",   current: 0,   cap: 2000 },
+        { name: "Yellow Flower", current: 147, cap: 2000 },
+      ]},
+      BLANK_B(), BLANK_C(), BLANK_D(),
+    ],
+    other: [
+      { name: "Pumpkin",  qty: 144 },
+      { name: "Cucumber", qty: 9   },
+      { name: "Grapes",   qty: 26  },
+    ],
   },
 ];
 
