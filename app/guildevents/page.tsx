@@ -300,12 +300,6 @@ const PLAYERS = [
     ],
   },
   {
-    name: "Axolotoi",
-    lastCounted: "—",
-    tiers: [ BLANK_A(), BLANK_B(), BLANK_C(), BLANK_D() ],
-    other: [],
-  },
-  {
     name: "Jamie",
     lastCounted: "Mar 5, 2026",
     tiers: [
@@ -490,7 +484,7 @@ const EVENT2 = {
   status: "ACTIVE" as const,
   registeredPlayers: [
     "xidni_xazz", "DevilFirst", "Rachelle (KANIN)", "steemit",
-    "abkhan", "Ongbak", "Alstar", "Axolotoi", "Gallard",
+    "abkhan", "Ongbak", "Alstar", "Gallard",
   ],
   tiers: [
     {
