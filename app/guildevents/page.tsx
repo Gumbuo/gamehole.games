@@ -94,10 +94,10 @@ const PLAYERS = [
   },
   {
     name: "abkhan",
-    lastCounted: "Mar 4, 2026 — batch ~1h ago",
+    lastCounted: "Mar 5, 2026",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 883, cap: 2000 },
+        { name: "Cotton",        current: 886, cap: 2000 },
         { name: "Potatoes",      current: 804, cap: 2000 },
         { name: "Red Flower",    current: 523, cap: 2000 },
         { name: "Blue Flower",   current: 324, cap: 2000 },
@@ -109,7 +109,7 @@ const PLAYERS = [
       { name: "Tomato",   qty: 684 },
       { name: "Grapes",   qty: 180 },
       { name: "Cucumber", qty: 203 },
-      { name: "Fern",     qty: 105 },
+      { name: "Fern",     qty: 221 },
       { name: "Carrot",            qty: 385 },
       { name: "Pumpkin",           qty: 116 },
       { name: "Wheat",             qty: 244 },
@@ -171,9 +171,9 @@ const PLAYERS = [
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 106, cap: 2000 },
-        { name: "Potatoes",      current: 22,  cap: 2000 },
+        { name: "Potatoes",      current: 34,  cap: 2000 },
         { name: "Red Flower",    current: 38,  cap: 2000 },
-        { name: "Blue Flower",   current: 116, cap: 2000 },
+        { name: "Blue Flower",   current: 120, cap: 2000 },
         { name: "Yellow Flower", current: 0,   cap: 2000 },
       ]},
       BLANK_B(), BLANK_C(), BLANK_D(),
@@ -202,18 +202,21 @@ const PLAYERS = [
     lastCounted: "Mar 5, 2026",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 0,   cap: 2000 },
-        { name: "Potatoes",      current: 362, cap: 2000 },
-        { name: "Red Flower",    current: 24,  cap: 2000 },
-        { name: "Blue Flower",   current: 0,   cap: 2000 },
-        { name: "Yellow Flower", current: 147, cap: 2000 },
+        { name: "Cotton",        current: 144, cap: 2000 },
+        { name: "Potatoes",      current: 460, cap: 2000 },
+        { name: "Red Flower",    current: 516, cap: 2000 },
+        { name: "Blue Flower",   current: 615, cap: 2000 },
+        { name: "Yellow Flower", current: 483, cap: 2000 },
       ]},
       BLANK_B(), BLANK_C(), BLANK_D(),
     ],
     other: [
-      { name: "Pumpkin",  qty: 144 },
-      { name: "Cucumber", qty: 9   },
-      { name: "Grapes",   qty: 26  },
+      { name: "Wheat",    qty: 1002 },
+      { name: "Pumpkin",  qty: 465  },
+      { name: "Cucumber", qty: 162  },
+      { name: "Grapes",   qty: 179  },
+      { name: "Fern",     qty: 182  },
+      { name: "Wood",     qty: 14   },
     ],
   },
 ];
