@@ -171,10 +171,10 @@ const PLAYERS = [
     lastCounted: "Mar 6, 2026",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
-        { name: "Cotton",        current: 106, cap: 2000 },
-        { name: "Potatoes",      current: 34,  cap: 2000 },
-        { name: "Red Flower",    current: 38,  cap: 2000 },
-        { name: "Blue Flower",   current: 228, cap: 2000 },
+        { name: "Cotton",        current: 117, cap: 2000 },
+        { name: "Potatoes",      current: 358, cap: 2000 },
+        { name: "Red Flower",    current: 142, cap: 2000 },
+        { name: "Blue Flower",   current: 380, cap: 2000 },
         { name: "Yellow Flower", current: 172, cap: 2000 },
       ]},
       BLANK_B(), BLANK_C(), BLANK_D(),
@@ -183,7 +183,7 @@ const PLAYERS = [
       { name: "Wheat (raw)",                   qty: 88  },
       { name: "Pumpkin",                       qty: 110 },
       { name: "Fern",                          qty: 35  },
-      { name: "Grapes",                        qty: 32  },
+      { name: "Grapes",                        qty: 233 },
       { name: "Carrot",                        qty: 22  },
       { name: "Tomato",                        qty: 14  },
       { name: "Cotton Thread (spun)",          qty: 30 },
