@@ -53,24 +53,25 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 // ─── Guild Activity Tracker (all members) ────────────────────────────────────
 // Update lastSeen + activity whenever a log batch is submitted.
 // lastSeen: null = no activity ever recorded.
+// gold: true = transferred gold to guild vault → never boot
 const GUILD_ACTIVITY = [
-  { name: "wiseman89",      lastSeen: "Mar 6, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 54)" },
-  { name: "steemit",        lastSeen: "Mar 6, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 18)" },
-  { name: "Jamie",          lastSeen: "Mar 6, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (pumpkin spice cake)" },
-  { name: "khan",           lastSeen: "Mar 5, 2026",  activity: "Harvesting on FoxHole tiles (cotton, fern)" },
-  { name: "Alstar",         lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 10)" },
-  { name: "NookXXXI",       lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 1)" },
-  { name: "Reixhm89",       lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 1)" },
-  { name: "GoldenDragonfly",lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 1)" },
-  { name: "JOVI",           lastSeen: null,            activity: "No activity recorded" },
-  { name: "kudo",           lastSeen: null,            activity: "No activity recorded" },
-  { name: "alerka1985",     lastSeen: null,            activity: "No activity recorded" },
-  { name: "Picksmale",      lastSeen: null,            activity: "No activity recorded" },
-  { name: "Cmokyc",         lastSeen: null,            activity: "No activity recorded" },
-  { name: "Sorata",         lastSeen: null,            activity: "No activity recorded" },
-  { name: "Prince of Persia",lastSeen: null,           activity: "No activity recorded" },
-  { name: "centelha",       lastSeen: null,            activity: "No activity recorded" },
-  { name: "Kirk",           lastSeen: null,            activity: "No activity recorded" },
+  { name: "wiseman89",       lastSeen: "Mar 6, 2026", activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 54) · vault (9 gold)", gold: true },
+  { name: "steemit",         lastSeen: "Mar 6, 2026", activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 18)", gold: false },
+  { name: "Jamie",           lastSeen: "Mar 6, 2026", activity: "Harvesting on FoxHole tiles · daily quest (pumpkin spice cake) · vault (2 gold)", gold: true },
+  { name: "khan",            lastSeen: "Mar 5, 2026", activity: "Harvesting on FoxHole tiles (cotton, fern)", gold: false },
+  { name: "Alstar",          lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 10) · vault (2 gold)", gold: true },
+  { name: "Kirk",            lastSeen: "Mar 6, 2026", activity: "Vault transfer (7 gold)", gold: true },
+  { name: "NookXXXI",        lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 1)", gold: false },
+  { name: "Reixhm89",        lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 1)", gold: false },
+  { name: "GoldenDragonfly", lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 1)", gold: false },
+  { name: "JOVI",            lastSeen: null,           activity: "No activity recorded", gold: false },
+  { name: "kudo",            lastSeen: null,           activity: "No activity recorded", gold: false },
+  { name: "alerka1985",      lastSeen: null,           activity: "No activity recorded", gold: false },
+  { name: "Picksmale",       lastSeen: null,           activity: "No activity recorded", gold: false },
+  { name: "Cmokyc",          lastSeen: null,           activity: "No activity recorded", gold: false },
+  { name: "Sorata",          lastSeen: null,           activity: "No activity recorded", gold: false },
+  { name: "Prince of Persia",lastSeen: null,           activity: "No activity recorded", gold: false },
+  { name: "centelha",        lastSeen: null,           activity: "No activity recorded", gold: false },
 ];
 
 const PLAYERS = [
@@ -891,8 +892,9 @@ function SimpleUpcomingCard({ event }: { event: SimpleUpcoming }) {
 
 // ─── Guild Activity Tracker component ────────────────────────────────────────
 function GuildActivityTracker() {
-  const active   = GUILD_ACTIVITY.filter((m) => m.lastSeen !== null);
-  const inactive = GUILD_ACTIVITY.filter((m) => m.lastSeen === null);
+  const gold     = GUILD_ACTIVITY.filter((m) => m.gold);
+  const active   = GUILD_ACTIVITY.filter((m) => !m.gold && m.lastSeen !== null);
+  const inactive = GUILD_ACTIVITY.filter((m) => !m.gold && m.lastSeen === null);
 
   return (
     <div style={{
@@ -904,26 +906,33 @@ function GuildActivityTracker() {
           Guild Activity — All Members
         </h3>
         <div style={{ display: "flex", gap: "10px", fontSize: "0.68rem" }}>
+          <span style={{ color: "#ffd700" }}>★ Gold: {gold.length}</span>
           <span style={{ color: "#00ff41" }}>● Active: {active.length}</span>
-          <span style={{ color: "#ff4757" }}>● Inactive: {inactive.length}</span>
+          <span style={{ color: "#ff4757" }}>○ Inactive: {inactive.length}</span>
         </div>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
         {GUILD_ACTIVITY.map((m) => {
+          const isGold   = m.gold;
           const isActive = m.lastSeen !== null;
+          const bg     = isGold ? "rgba(255,215,0,0.06)"  : isActive ? "rgba(0,255,65,0.04)"  : "rgba(255,71,87,0.06)";
+          const border = isGold ? "rgba(255,215,0,0.35)"  : isActive ? "rgba(0,255,65,0.2)"   : "rgba(255,71,87,0.25)";
+          const nameColor = isGold ? "#ffd700" : isActive ? "#00ff41" : "#ff4757";
+          const icon      = isGold ? "★" : isActive ? "●" : "○";
           return (
             <div key={m.name} style={{
-              display: "grid", gridTemplateColumns: "140px 110px 1fr",
+              display: "grid", gridTemplateColumns: "150px 110px 1fr",
               gap: "10px", alignItems: "center",
-              background: isActive ? "rgba(0,255,65,0.04)" : "rgba(255,71,87,0.06)",
-              border: `1px solid ${isActive ? "rgba(0,255,65,0.2)" : "rgba(255,71,87,0.25)"}`,
+              background: bg, border: `1px solid ${border}`,
               borderRadius: "6px", padding: "8px 12px",
             }}>
-              <span style={{ color: isActive ? "#00ff41" : "#ff4757", fontSize: "0.74rem", fontWeight: "bold" }}>
-                {isActive ? "●" : "○"} {m.name}
+              <span style={{ color: nameColor, fontSize: "0.74rem", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
+                <span>{icon}</span>
+                <span>{m.name}</span>
+                {isGold && <span style={{ fontSize: "0.55rem", color: "#ffd700", border: "1px solid #ffd700", borderRadius: "3px", padding: "1px 4px", letterSpacing: "1px" }}>GOLD</span>}
               </span>
-              <span style={{ color: "#ffd700", fontSize: "0.66rem" }}>
+              <span style={{ color: "#c5c6c7", fontSize: "0.66rem" }}>
                 {m.lastSeen ?? "—"}
               </span>
               <span style={{ color: "#c5c6c7", fontSize: "0.66rem" }}>
@@ -940,8 +949,7 @@ function GuildActivityTracker() {
           background: "rgba(255,71,87,0.08)", border: "1px solid rgba(255,71,87,0.4)",
           borderRadius: "6px", fontSize: "0.72rem", color: "#ff4757",
         }}>
-          ⚠ {inactive.length} member{inactive.length > 1 ? "s" : ""} with no recorded activity:{" "}
-          {inactive.map((m) => m.name).join(", ")}
+          ⚠ Boot candidates ({inactive.length}): {inactive.map((m) => m.name).join(", ")}
         </div>
       )}
     </div>
