@@ -39,6 +39,7 @@ const SECTIONS: Section[] = [
       { label: "fox-hole / 694a4ff3", url: "https://nomstead.com/fox-hole/694a4ff330cf4ef6f6381cb3" },
       { label: "fox-hole / 694b511b", url: "https://nomstead.com/fox-hole/694b511b8aa74b012c424e94" },
       { label: "fox-hole / 6963db26", url: "https://nomstead.com/fox-hole/6963db267760c9b34d2a079f" },
+      { label: "fox-hole / 69875d9b", url: "https://nomstead.com/fox-hole/69875d9b3afbdad97a3a695d" },
     ],
   },
   {
@@ -127,6 +128,7 @@ const SECTIONS: Section[] = [
       { label: "la-terra-dei-cachi", url: "https://nomstead.com/la-terra-dei-cachi/61c1e894f016c29f48d9cdd4", count: 2 },
       { label: "sbhan", url: "https://nomstead.com/sbhan/688b8d92eef426de55378ffb" },
       { label: "algerian-kingdom", url: "https://nomstead.com/algerian-kingdom" },
+      { label: "kalentong / 688b895a", url: "https://nomstead.com/kalentong/688b895a1607c56f2c03d329", count: 3 },
     ],
   },
   {
