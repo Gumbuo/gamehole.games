@@ -50,6 +50,29 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
   { name: "Stone",       current: 0, cap: 5000 },
 ]});
 
+// ─── Guild Activity Tracker (all members) ────────────────────────────────────
+// Update lastSeen + activity whenever a log batch is submitted.
+// lastSeen: null = no activity ever recorded.
+const GUILD_ACTIVITY = [
+  { name: "wiseman89",      lastSeen: "Mar 6, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 54)" },
+  { name: "steemit",        lastSeen: "Mar 6, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 18)" },
+  { name: "Jamie",          lastSeen: "Mar 6, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (pumpkin spice cake)" },
+  { name: "khan",           lastSeen: "Mar 5, 2026",  activity: "Harvesting on FoxHole tiles (cotton, fern)" },
+  { name: "Alstar",         lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 10)" },
+  { name: "NookXXXI",       lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 1)" },
+  { name: "Reixhm89",       lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 1)" },
+  { name: "GoldenDragonfly",lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 1)" },
+  { name: "JOVI",           lastSeen: null,            activity: "No activity recorded" },
+  { name: "kudo",           lastSeen: null,            activity: "No activity recorded" },
+  { name: "alerka1985",     lastSeen: null,            activity: "No activity recorded" },
+  { name: "Picksmale",      lastSeen: null,            activity: "No activity recorded" },
+  { name: "Cmokyc",         lastSeen: null,            activity: "No activity recorded" },
+  { name: "Sorata",         lastSeen: null,            activity: "No activity recorded" },
+  { name: "Prince of Persia",lastSeen: null,           activity: "No activity recorded" },
+  { name: "centelha",       lastSeen: null,            activity: "No activity recorded" },
+  { name: "Kirk",           lastSeen: null,            activity: "No activity recorded" },
+];
+
 const PLAYERS = [
   {
     name: "steemit",
@@ -866,6 +889,65 @@ function SimpleUpcomingCard({ event }: { event: SimpleUpcoming }) {
   );
 }
 
+// ─── Guild Activity Tracker component ────────────────────────────────────────
+function GuildActivityTracker() {
+  const active   = GUILD_ACTIVITY.filter((m) => m.lastSeen !== null);
+  const inactive = GUILD_ACTIVITY.filter((m) => m.lastSeen === null);
+
+  return (
+    <div style={{
+      background: "rgba(0,0,0,0.5)", border: "2px solid #45a29e",
+      borderRadius: "12px", padding: "20px", marginBottom: "30px",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "8px" }}>
+        <h3 style={{ color: "#66fcf1", fontSize: "0.82rem", letterSpacing: "2px", textTransform: "uppercase", margin: 0 }}>
+          Guild Activity — All Members
+        </h3>
+        <div style={{ display: "flex", gap: "10px", fontSize: "0.68rem" }}>
+          <span style={{ color: "#00ff41" }}>● Active: {active.length}</span>
+          <span style={{ color: "#ff4757" }}>● Inactive: {inactive.length}</span>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+        {GUILD_ACTIVITY.map((m) => {
+          const isActive = m.lastSeen !== null;
+          return (
+            <div key={m.name} style={{
+              display: "grid", gridTemplateColumns: "140px 110px 1fr",
+              gap: "10px", alignItems: "center",
+              background: isActive ? "rgba(0,255,65,0.04)" : "rgba(255,71,87,0.06)",
+              border: `1px solid ${isActive ? "rgba(0,255,65,0.2)" : "rgba(255,71,87,0.25)"}`,
+              borderRadius: "6px", padding: "8px 12px",
+            }}>
+              <span style={{ color: isActive ? "#00ff41" : "#ff4757", fontSize: "0.74rem", fontWeight: "bold" }}>
+                {isActive ? "●" : "○"} {m.name}
+              </span>
+              <span style={{ color: "#ffd700", fontSize: "0.66rem" }}>
+                {m.lastSeen ?? "—"}
+              </span>
+              <span style={{ color: "#c5c6c7", fontSize: "0.66rem" }}>
+                {m.activity}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {inactive.length > 0 && (
+        <div style={{
+          marginTop: "14px", padding: "10px 14px",
+          background: "rgba(255,71,87,0.08)", border: "1px solid rgba(255,71,87,0.4)",
+          borderRadius: "6px", fontSize: "0.72rem", color: "#ff4757",
+        }}>
+          ⚠ {inactive.length} member{inactive.length > 1 ? "s" : ""} with no recorded activity:{" "}
+          {inactive.map((m) => m.name).join(", ")}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Player progress tracker ──────────────────────────────────────────────────
 function ProgressBar({ current, cap }: { current: number; cap: number }) {
   const pct = Math.min((current / cap) * 100, 100);
@@ -1063,6 +1145,9 @@ export default function GuildEventsPage() {
             ))}
           </div>
         </div>
+
+        {/* Guild Activity */}
+        <GuildActivityTracker />
 
         {/* Player Progress */}
         <PlayerTracker />
