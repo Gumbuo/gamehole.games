@@ -167,7 +167,7 @@ const PLAYERS = [
   },
   {
     name: "Jamie",
-    lastCounted: "Mar 5, 2026",
+    lastCounted: "Mar 6, 2026",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 106, cap: 2000 },
@@ -195,11 +195,12 @@ const PLAYERS = [
       { name: "Blue Bluegill (fish)",          qty: 18 },
       { name: "Crucian Carp (fish)",           qty: 6  },
       { name: "Tadpole (fish)",                qty: 8  },
+      { name: "Wood",                          qty: 7  },
     ],
   },
   {
     name: "wiseman89",
-    lastCounted: "Mar 5, 2026",
+    lastCounted: "Mar 6, 2026",
     tiers: [
       { label: "Tier A — Basic Items", colorIdx: 0, items: [
         { name: "Cotton",        current: 144, cap: 2000 },
@@ -216,7 +217,7 @@ const PLAYERS = [
       { name: "Cucumber", qty: 162  },
       { name: "Grapes",   qty: 179  },
       { name: "Fern",     qty: 182  },
-      { name: "Wood",     qty: 14   },
+      { name: "Wood",     qty: 33   },
     ],
   },
 ];
