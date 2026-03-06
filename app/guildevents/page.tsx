@@ -61,17 +61,10 @@ const GUILD_ACTIVITY = [
   { name: "khan",            lastSeen: "Mar 5, 2026", activity: "Harvesting on FoxHole tiles (cotton, fern)", gold: false },
   { name: "Alstar",          lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 10) · vault (2 gold)", gold: true },
   { name: "Kirk",            lastSeen: "Mar 6, 2026", activity: "Vault transfer (7 gold)", gold: true },
-  { name: "NookXXXI",        lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 1)", gold: false },
   { name: "Reixhm89",        lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 1)", gold: false },
   { name: "GoldenDragonfly", lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 1)", gold: false },
-  { name: "JOVI",            lastSeen: null,           activity: "No activity recorded", gold: false },
-  { name: "kudo",            lastSeen: null,           activity: "No activity recorded", gold: false },
-  { name: "alerka1985",      lastSeen: null,           activity: "No activity recorded", gold: false },
-  { name: "Picksmale",       lastSeen: null,           activity: "No activity recorded", gold: false },
-  { name: "Cmokyc",          lastSeen: null,           activity: "No activity recorded", gold: false },
-  { name: "Sorata",          lastSeen: null,           activity: "No activity recorded", gold: false },
-  { name: "Prince of Persia",lastSeen: null,           activity: "No activity recorded", gold: false },
   { name: "centelha",        lastSeen: null,           activity: "No activity recorded", gold: false },
+  { name: "NomStead",        lastSeen: null,           activity: "New member", gold: false },
 ];
 
 const PLAYERS = [
