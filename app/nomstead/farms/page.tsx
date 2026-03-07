@@ -160,6 +160,7 @@ const SECTIONS: Section[] = [
       { label: "dyespinning-wheel", url: "https://nomstead.com/dyespinning-wheel/688b88eae48988acd89b0584" },
       { label: "hasishi / 66766518", url: "https://nomstead.com/hasishi/667665184dfc220fc8340766", count: 8 },
       { label: "espartacus / 688b8a3a", url: "https://nomstead.com/espartacus/688b8a3a1585b148c6a42be4", count: 1 },
+      { label: "7", url: "https://nomstead.com/7", count: 1 },
     ],
   },
   {
@@ -186,6 +187,7 @@ const SECTIONS: Section[] = [
       { label: "kalentong", url: "https://nomstead.com/kalentong/688b886f1585b148c6a36384", count: 1 },
       { label: "moonland", url: "https://nomstead.com/moonland/6686de4de33932506bc30f4f" },
       { label: "espartacus / 688b8a3a", url: "https://nomstead.com/espartacus/688b8a3a1585b148c6a42be4", count: 1 },
+      { label: "7", url: "https://nomstead.com/7", count: 1 },
     ],
   },
 ];
