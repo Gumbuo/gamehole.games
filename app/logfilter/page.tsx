@@ -2,6 +2,11 @@
 import { useState, useMemo, useRef } from "react";
 import Link from "next/link";
 
+const GUILD_MEMBERS = [
+  "wiseman89", "steemit", "Jamie", "khan", "Alstar",
+  "Kirk", "Reixhm89", "GoldenDragonfly", "centelha", "NomStead",
+];
+
 const THEME = {
   bg: "#0b0c10",
   headerGradient: "linear-gradient(to bottom, #1f2833, #0b0c10)",
@@ -146,8 +151,42 @@ export default function LogFilterPage() {
             {/* ── Filter bar ── */}
             <div style={{ background: "rgba(10,20,35,0.9)", border: `1px solid ${THEME.secondary}`, borderRadius: "8px", padding: "14px", marginBottom: "16px" }}>
               <div style={{ fontSize: "12px", color: THEME.secondary, marginBottom: "8px", fontFamily: THEME.font }}>
-                Filter — type a keyword to highlight matching lines
+                Filter — type a keyword or click a member name to highlight matching lines
               </div>
+
+              {/* Quick-add guild member buttons */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
+                {GUILD_MEMBERS.map((name) => {
+                  const active = filters.includes(name.toLowerCase());
+                  return (
+                    <button
+                      key={name}
+                      onClick={() => {
+                        const lower = name.toLowerCase();
+                        if (active) {
+                          setFilters((f) => f.filter((x) => x !== lower));
+                        } else {
+                          setFilters((f) => [...f, lower]);
+                        }
+                      }}
+                      style={{
+                        background: active ? "rgba(255,71,87,0.2)" : "rgba(69,162,158,0.1)",
+                        color: active ? "#ff7088" : THEME.secondary,
+                        border: `1px solid ${active ? "#ff4757" : THEME.secondary + "66"}`,
+                        borderRadius: "4px",
+                        padding: "4px 12px",
+                        cursor: "pointer",
+                        fontSize: "12px",
+                        fontFamily: THEME.font,
+                        transition: "all 0.1s",
+                      }}
+                    >
+                      {name}
+                    </button>
+                  );
+                })}
+              </div>
+
               <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "center" }}>
                 <input
                   ref={inputRef}
