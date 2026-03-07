@@ -161,6 +161,7 @@ const SECTIONS: Section[] = [
       { label: "hasishi / 66766518", url: "https://nomstead.com/hasishi/667665184dfc220fc8340766", count: 8 },
       { label: "espartacus / 688b8a3a", url: "https://nomstead.com/espartacus/688b8a3a1585b148c6a42be4", count: 1 },
       { label: "7", url: "https://nomstead.com/7", count: 1 },
+      { label: "moonland / 667aa3ee", url: "https://nomstead.com/moonland/667aa3ee211729e227c1afac", count: 2 },
     ],
   },
   {
