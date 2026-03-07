@@ -410,6 +410,11 @@ export default function NomSteadPage() {
             href="https://sphere.market/immutable/collection/0x213d44664cdf6c79abe73bf9310ec68e0329a2c6"
           />
           <LinkCard
+            label="Log Filter"
+            href="/logfilter"
+            internal
+          />
+          <LinkCard
             label="YouTube Trailer"
             href="https://www.youtube.com/watch?v=sdQtdwdVduY"
           />
