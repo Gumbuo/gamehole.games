@@ -133,6 +133,14 @@ const SECTIONS: Section[] = [
     ],
   },
   {
+    id: "mushrooms",
+    title: "Mushrooms",
+    color: "#c084fc",
+    links: [
+      { label: "dou / 68c858cc", url: "https://nomstead.com/dou/68c858cc78cd19a65dd3e4e0", note: "~3h spawn" },
+    ],
+  },
+  {
     id: "bread-ovens",
     title: "Bread Ovens",
     color: "#fb923c",
