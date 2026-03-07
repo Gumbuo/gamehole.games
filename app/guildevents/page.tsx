@@ -55,15 +55,15 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 // lastSeen: null = no activity ever recorded.
 // gold: true = transferred gold to guild vault → never boot
 const GUILD_ACTIVITY = [
-  { name: "wiseman89",       lastSeen: "Mar 6, 2026", activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 54) · vault (9 gold)", gold: true },
+  { name: "wiseman89",       lastSeen: "Mar 7, 2026", activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 54, Yellow Bluegill 36) · vault (9 gold)", gold: true },
   { name: "steemit",         lastSeen: "Mar 6, 2026", activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 18)", gold: false },
-  { name: "Jamie",           lastSeen: "Mar 6, 2026", activity: "Harvesting on FoxHole tiles · daily quest (pumpkin spice cake) · vault (2 gold)", gold: true },
+  { name: "Jamie",           lastSeen: "Mar 7, 2026", activity: "Harvesting on FoxHole tiles · daily quest (pumpkin spice cake, Yellow Bluegill 62) · vault (2 gold)", gold: true },
   { name: "khan",            lastSeen: "Mar 5, 2026", activity: "Harvesting on FoxHole tiles (cotton, fern)", gold: false },
-  { name: "Alstar",          lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 10) · vault (2 gold)", gold: true },
-  { name: "Kirk",            lastSeen: "Mar 6, 2026", activity: "Vault transfer (7 gold)", gold: true },
-  { name: "Reixhm89",        lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 1)", gold: false },
+  { name: "Alstar",          lastSeen: "Mar 7, 2026", activity: "Daily quest (cotton thread red 10, Yellow Bluegill 1) · vault (2 gold)", gold: true },
+  { name: "Kirk",            lastSeen: "Mar 7, 2026", activity: "Daily quest (Yellow Bluegill 3) · vault (7 gold)", gold: true },
+  { name: "Reixhm89",        lastSeen: "Mar 7, 2026", activity: "Daily quest (cotton thread red 1, Yellow Bluegill 2)", gold: false },
   { name: "GoldenDragonfly", lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 1)", gold: false },
-  { name: "centelha",        lastSeen: null,           activity: "No activity recorded", gold: false },
+  { name: "centelha",        lastSeen: "Mar 7, 2026", activity: "Daily quest (Yellow Bluegill 2)", gold: false },
   { name: "NomStead",        lastSeen: null,           activity: "New member", gold: false },
 ];
 
