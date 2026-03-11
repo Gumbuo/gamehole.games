@@ -55,16 +55,26 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 // lastSeen: null = no activity ever recorded.
 // gold: true = transferred gold to guild vault → never boot
 const GUILD_ACTIVITY = [
-  { name: "wiseman89",       lastSeen: "Mar 7, 2026", activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 54, Yellow Bluegill 36) · vault (9 gold)", gold: true },
-  { name: "steemit",         lastSeen: "Mar 6, 2026", activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 18)", gold: false },
-  { name: "Jamie",           lastSeen: "Mar 7, 2026", activity: "Harvesting on FoxHole tiles · daily quest (pumpkin spice cake, Yellow Bluegill 62) · vault (2 gold)", gold: true },
-  { name: "khan",            lastSeen: "Mar 5, 2026", activity: "Harvesting on FoxHole tiles (cotton, fern)", gold: false },
-  { name: "Alstar",          lastSeen: "Mar 7, 2026", activity: "Daily quest (cotton thread red 10, Yellow Bluegill 1) · vault (2 gold)", gold: true },
-  { name: "Kirk",            lastSeen: "Mar 7, 2026", activity: "Daily quest (Yellow Bluegill 3) · vault (7 gold)", gold: true },
-  { name: "Reixhm89",        lastSeen: "Mar 7, 2026", activity: "Daily quest (cotton thread red 1, Yellow Bluegill 2)", gold: false },
-  { name: "GoldenDragonfly", lastSeen: "Mar 6, 2026", activity: "Daily quest (cotton thread red 1)", gold: false },
-  { name: "centelha",        lastSeen: "Mar 7, 2026", activity: "Daily quest (Yellow Bluegill 2)", gold: false },
-  { name: "NomStead",        lastSeen: null,           activity: "New member", gold: false },
+  { name: "FoxHole",         lastSeen: "Mar 11, 2026", activity: "Guild leader", gold: true },
+  { name: "Alstar",          lastSeen: "Mar 7, 2026",  activity: "Daily quest (cotton thread red 10, Yellow Bluegill 1) · vault (2 gold)", gold: true },
+  { name: "Kirk",            lastSeen: "Mar 7, 2026",  activity: "Daily quest (Yellow Bluegill 3) · vault (7 gold)", gold: true },
+  { name: "Reixhm89",        lastSeen: "Mar 7, 2026",  activity: "Daily quest (cotton thread red 1, Yellow Bluegill 2)", gold: false },
+  { name: "steemit",         lastSeen: "Mar 6, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 18)", gold: false },
+  { name: "GoldenDragonfly", lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 1)", gold: false },
+  { name: "Jamie",           lastSeen: "Mar 7, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (pumpkin spice cake, Yellow Bluegill 62) · vault (2 gold)", gold: true },
+  { name: "khan",            lastSeen: "Mar 5, 2026",  activity: "Harvesting on FoxHole tiles (cotton, fern)", gold: false },
+  { name: "centelha",        lastSeen: "Mar 7, 2026",  activity: "Daily quest (Yellow Bluegill 2)", gold: false },
+  { name: "NomStead",        lastSeen: null,            activity: "New member", gold: false },
+  { name: "Sorata",          lastSeen: null,            activity: "New member", gold: false },
+  { name: "v3n8n",           lastSeen: null,            activity: "New member", gold: false },
+  { name: "Glitch",          lastSeen: null,            activity: "New member", gold: false },
+  { name: "Cmokyc",          lastSeen: null,            activity: "New member", gold: false },
+  { name: "ABADDON",         lastSeen: null,            activity: "New member", gold: false },
+  { name: "Qaziza",          lastSeen: null,            activity: "New member", gold: false },
+  { name: "moomoo26",        lastSeen: null,            activity: "New member", gold: false },
+  { name: "martex",          lastSeen: null,            activity: "New member", gold: false },
+  { name: "ralfff",          lastSeen: null,            activity: "New member", gold: false },
+  { name: "Alorid",          lastSeen: null,            activity: "New member", gold: false },
 ];
 
 const PLAYERS = [
