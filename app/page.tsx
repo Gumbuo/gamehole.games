@@ -37,6 +37,8 @@ interface FeaturedGame {
   toolLabel?: string;
   tool2Url?: string;
   tool2Label?: string;
+  tool3Url?: string;
+  tool3Label?: string;
 }
 
 const featuredGames: FeaturedGame[] = [
@@ -81,6 +83,8 @@ const featuredGames: FeaturedGame[] = [
     toolLabel: "Farm Calculator",
     tool2Url: "/nomstead/farms",
     tool2Label: "Farm Navigator",
+    tool3Url: "/logfilter",
+    tool3Label: "Log Filter",
   },
   {
     id: "playa3ull",
@@ -887,6 +891,30 @@ export default function HomePage() {
                         }}
                       >
                         {game.tool2Label ?? 'Tool 2'} →
+                      </a>
+                    )}
+                    {game.tool3Url && (
+                      <a
+                        href={game.tool3Url}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          padding: '10px',
+                          background: `${game.color}15`,
+                          border: `1px solid ${game.color}60`,
+                          borderRadius: '8px',
+                          color: game.color,
+                          fontFamily: 'Orbitron, sans-serif',
+                          fontWeight: 'bold',
+                          fontSize: '12px',
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          textTransform: 'uppercase',
+                          marginBottom: '10px',
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        {game.tool3Label ?? 'Tool 3'} →
                       </a>
                     )}
 
