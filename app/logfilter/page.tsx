@@ -158,6 +158,16 @@ export default function LogFilterPage() {
     flash();
   }
 
+  // Strip text from within lines (does not delete lines)
+  const STRIP_PRESETS: { label: string; pattern: RegExp }[] = [
+    { label: "Strip timestamps", pattern: /\s*(about \d+ \w+ ago|just now|a moment ago|\d+ seconds? ago|\d+ minutes? ago|\d+ hours? ago|\d+ days? ago|yesterday)\s*$/gi },
+    { label: "Strip «about»", pattern: /\babout\b /gi },
+  ];
+
+  function stripPattern(pattern: RegExp) {
+    setLines((prev) => prev.map((l) => l.replace(pattern, "").trim()));
+  }
+
   function exportForSheets() {
     const header = ["Player", "Action", "Details", "Time", "Raw Log"].join("\t");
     const rows = remaining.map((line) => {
@@ -279,6 +289,30 @@ export default function LogFilterPage() {
                   </div>
                 );
               })()}
+
+              {/* Strip buttons — remove text from within lines */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "12px", paddingBottom: "12px", borderBottom: `1px solid ${THEME.secondary}22` }}>
+                <span style={{ fontSize: "10px", color: "#555", fontFamily: THEME.font, alignSelf: "center", marginRight: "2px" }}>STRIP</span>
+                {STRIP_PRESETS.map(({ label, pattern }) => (
+                  <button
+                    key={label}
+                    onClick={() => stripPattern(pattern)}
+                    style={{
+                      background: "rgba(102,252,241,0.07)",
+                      color: THEME.primary,
+                      border: `1px solid ${THEME.primary}44`,
+                      borderRadius: "4px",
+                      padding: "4px 12px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                      fontFamily: THEME.font,
+                      transition: "all 0.1s",
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
 
               {/* Quick-add guild member buttons */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
