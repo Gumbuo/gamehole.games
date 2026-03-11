@@ -3,8 +3,10 @@ import { useState, useMemo, useRef } from "react";
 import Link from "next/link";
 
 const GUILD_MEMBERS = [
-  "wiseman89", "steemit", "Jamie", "khan", "Alstar",
-  "Kirk", "Reixhm89", "GoldenDragonfly", "centelha", "NomStead",
+  "FoxHole", "Alstar", "Kirk", "Reixhm89", "steemit",
+  "GoldenDragonfly", "Jamie", "khan", "centelha", "NomStead",
+  "Sorata", "v3n8n", "Glitch", "Cmokyc", "ABADDON",
+  "Qaziza", "moomoo26", "martex", "ralfff", "Alorid",
 ];
 
 const THEME = {
@@ -102,7 +104,28 @@ export default function LogFilterPage() {
   const [copied, setCopied]           = useState(false);
   const [loaded, setLoaded]           = useState(false);
   const [viewMode, setViewMode]       = useState<"list" | "table">("list");
+  const [savedToGuild, setSavedToGuild] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // ── Item count parser ─────────────────────────────────────────────────────
+  // Finds lines matching "received N ItemName" and sums totals per item
+  const itemCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    const re = /received\s+(\d+)\s+(.+)/i;
+    for (const line of remaining) {
+      // Strip time from end before parsing
+      let stripped = line.replace(/\s*(about \d+ \w+ ago|just now|a moment ago|\d+ seconds? ago|\d+ minutes? ago|\d+ hours? ago|\d+ days? ago|yesterday)\s*$/i, "").trim();
+      // Strip "from X" suffix
+      stripped = stripped.replace(/\s+from\s+\S.*$/i, "").trim();
+      const m = stripped.match(re);
+      if (m) {
+        const qty = parseInt(m[1], 10);
+        const item = m[2].trim();
+        counts[item] = (counts[item] ?? 0) + qty;
+      }
+    }
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  }, [remaining]);
 
   // ── Load ──────────────────────────────────────────────────────────────────
   function load() {
@@ -166,6 +189,16 @@ export default function LogFilterPage() {
 
   function stripPattern(pattern: RegExp) {
     setLines((prev) => prev.map((l) => l.replace(pattern, "").trim()));
+  }
+
+  function saveToGuildEvents() {
+    const payload = {
+      savedAt: new Date().toISOString(),
+      counts: Object.fromEntries(itemCounts),
+    };
+    localStorage.setItem("gamehole_passive_drops", JSON.stringify(payload));
+    setSavedToGuild(true);
+    setTimeout(() => setSavedToGuild(false), 3000);
   }
 
   function exportForSheets() {
@@ -544,6 +577,31 @@ export default function LogFilterPage() {
                     </tbody>
                   </table>
                 )}
+              </div>
+            )}
+
+            {/* ── Item Counts panel ── */}
+            {itemCounts.length > 0 && (
+              <div style={{ background: "rgba(10,20,35,0.9)", border: `1px solid ${THEME.accent}55`, borderRadius: "8px", padding: "14px", marginTop: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px", flexWrap: "wrap", gap: "8px" }}>
+                  <div style={{ fontFamily: THEME.font, fontSize: "11px", color: THEME.accent, letterSpacing: "1px" }}>
+                    ITEMS RECEIVED — {itemCounts.length} types · {itemCounts.reduce((s, [, n]) => s + n, 0).toLocaleString()} total
+                  </div>
+                  <button
+                    onClick={saveToGuildEvents}
+                    style={{ background: savedToGuild ? "rgba(74,222,128,0.3)" : "rgba(74,222,128,0.12)", color: THEME.accent, border: `1px solid ${THEME.accent}`, borderRadius: "5px", padding: "5px 14px", cursor: "pointer", fontSize: "11px", fontFamily: THEME.font, fontWeight: "bold" }}
+                  >
+                    {savedToGuild ? "✓ Saved to Guild Events!" : "Save to Guild Events →"}
+                  </button>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "6px" }}>
+                  {itemCounts.map(([item, qty]) => (
+                    <div key={item} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.15)", borderRadius: "5px", padding: "5px 10px" }}>
+                      <span style={{ fontSize: "12px", color: "#c8d8e8" }}>{item}</span>
+                      <span style={{ fontSize: "13px", color: THEME.accent, fontWeight: "bold", fontFamily: THEME.font }}>{qty.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 

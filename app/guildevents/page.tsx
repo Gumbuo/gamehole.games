@@ -1062,6 +1062,59 @@ function PlayerTracker() {
   );
 }
 
+// ─── Passive Drops (from Log Filter) ─────────────────────────────────────────
+function PassiveDrops() {
+  const [data, setData] = useState<{ savedAt: string; counts: Record<string, number> } | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("gamehole_passive_drops");
+      if (raw) setData(JSON.parse(raw));
+    } catch {}
+  }, []);
+
+  if (!data) return (
+    <div style={{ background: "rgba(0,0,0,0.4)", border: "1px dashed #333", borderRadius: "12px", padding: "20px", marginBottom: "30px", textAlign: "center" }}>
+      <p style={{ color: "#444", fontSize: "0.72rem", margin: 0 }}>
+        No passive drop data yet — use <strong style={{ color: "#45a29e" }}>Log Filter → Save to Guild Events</strong> to populate this panel.
+      </p>
+    </div>
+  );
+
+  const entries = Object.entries(data.counts).sort((a, b) => b[1] - a[1]);
+  const total = entries.reduce((s, [, n]) => s + n, 0);
+  const savedDate = new Date(data.savedAt).toLocaleString();
+
+  return (
+    <div style={{ background: "rgba(0,0,0,0.5)", border: "2px solid #4ade80", borderRadius: "12px", padding: "20px", marginBottom: "30px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "14px", flexWrap: "wrap", gap: "8px" }}>
+        <div>
+          <h3 style={{ color: "#4ade80", fontSize: "0.82rem", letterSpacing: "2px", textTransform: "uppercase", margin: "0 0 4px 0" }}>
+            My Passive Drops
+          </h3>
+          <span style={{ fontSize: "0.65rem", color: "#45a29e" }}>
+            {entries.length} item types · {total.toLocaleString()} total · saved {savedDate}
+          </span>
+        </div>
+        <button
+          onClick={() => { localStorage.removeItem("gamehole_passive_drops"); setData(null); }}
+          style={{ background: "transparent", color: "#555", border: "1px solid #333", borderRadius: "4px", padding: "3px 8px", cursor: "pointer", fontSize: "0.65rem" }}
+        >
+          Clear
+        </button>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "6px" }}>
+        {entries.map(([item, qty]) => (
+          <div key={item} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.18)", borderRadius: "5px", padding: "5px 10px" }}>
+            <span style={{ color: "#c5c6c7", fontSize: "0.72rem" }}>{item}</span>
+            <span style={{ color: "#4ade80", fontWeight: "bold", fontSize: "0.82rem" }}>{qty.toLocaleString()}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Divider ──────────────────────────────────────────────────────────────────
 function Divider({ label }: { label: string }) {
   return (
@@ -1146,6 +1199,9 @@ export default function GuildEventsPage() {
             ))}
           </div>
         </div>
+
+        {/* My Passive Drops */}
+        <PassiveDrops />
 
         {/* Guild Activity */}
         <GuildActivityTracker />
