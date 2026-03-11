@@ -242,8 +242,43 @@ export default function LogFilterPage() {
             {/* ── Filter bar ── */}
             <div style={{ background: "rgba(10,20,35,0.9)", border: `1px solid ${THEME.secondary}`, borderRadius: "8px", padding: "14px", marginBottom: "16px" }}>
               <div style={{ fontSize: "12px", color: THEME.secondary, marginBottom: "8px", fontFamily: THEME.font }}>
-                Highlight lines to delete — click a guild member or type a keyword
+                Highlight lines to delete — click an action, guild member, or type a keyword
               </div>
+
+              {/* Quick-add action keyword buttons */}
+              {(() => {
+                const ACTION_FILTERS = ["planted", "harvested"];
+                return (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "8px" }}>
+                    <span style={{ fontSize: "10px", color: "#555", fontFamily: THEME.font, alignSelf: "center", marginRight: "2px" }}>ACTIONS</span>
+                    {ACTION_FILTERS.map((kw) => {
+                      const active = filters.includes(kw);
+                      return (
+                        <button
+                          key={kw}
+                          onClick={() => {
+                            if (active) setFilters((f) => f.filter((x) => x !== kw));
+                            else setFilters((f) => [...f, kw]);
+                          }}
+                          style={{
+                            background: active ? "rgba(255,71,87,0.2)" : "rgba(255,165,0,0.08)",
+                            color: active ? "#ff7088" : "#ffaa44",
+                            border: `1px solid ${active ? "#ff4757" : "#ffaa4466"}`,
+                            borderRadius: "4px",
+                            padding: "4px 12px",
+                            cursor: "pointer",
+                            fontSize: "12px",
+                            fontFamily: THEME.font,
+                            transition: "all 0.1s",
+                          }}
+                        >
+                          {kw}
+                        </button>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
 
               {/* Quick-add guild member buttons */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
