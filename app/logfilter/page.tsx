@@ -111,7 +111,7 @@ export default function LogFilterPage() {
   // Finds lines matching "received N ItemName" and sums totals per item
   const itemCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    const re = /received\s+(\d+)\s+(.+)/i;
+    const re = /(?:received|harvested|crafted)\s+(\d+)\s+(.+)/i;
     for (const line of remaining) {
       // Strip time from end before parsing
       let stripped = line.replace(/\s*(about \d+ \w+ ago|just now|a moment ago|\d+ seconds? ago|\d+ minutes? ago|\d+ hours? ago|\d+ days? ago|yesterday)\s*$/i, "").trim();
@@ -164,6 +164,10 @@ export default function LogFilterPage() {
   // ── Actions ───────────────────────────────────────────────────────────────
   function deleteHighlighted() {
     setLines((prev) => prev.filter((l) => !lineMatches(l)));
+  }
+
+  function keepHighlightedOnly() {
+    setLines((prev) => prev.filter((l) => lineMatches(l)));
   }
 
   function flash(msg?: string) {
@@ -290,7 +294,7 @@ export default function LogFilterPage() {
 
               {/* Quick-add action keyword buttons */}
               {(() => {
-                const ACTION_FILTERS = ["planted", "harvested"];
+                const ACTION_FILTERS = ["planted", "harvested", "crafted"];
                 return (
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "8px" }}>
                     <span style={{ fontSize: "10px", color: "#555", fontFamily: THEME.font, alignSelf: "center", marginRight: "2px" }}>ACTIONS</span>
@@ -452,12 +456,20 @@ export default function LogFilterPage() {
 
               <div style={{ marginLeft: "auto", display: "flex", gap: "8px", flexWrap: "wrap" }}>
                 {matchCount > 0 && (
-                  <button
-                    onClick={deleteHighlighted}
-                    style={{ background: "#3a0a0a", color: "#ff4757", border: "1px solid #ff4757", borderRadius: "5px", padding: "6px 16px", cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}
-                  >
-                    Delete {matchCount} highlighted
-                  </button>
+                  <>
+                    <button
+                      onClick={keepHighlightedOnly}
+                      style={{ background: "rgba(102,252,241,0.12)", color: THEME.primary, border: `1px solid ${THEME.primary}`, borderRadius: "5px", padding: "6px 16px", cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}
+                    >
+                      Keep {matchCount} highlighted only
+                    </button>
+                    <button
+                      onClick={deleteHighlighted}
+                      style={{ background: "#3a0a0a", color: "#ff4757", border: "1px solid #ff4757", borderRadius: "5px", padding: "6px 16px", cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}
+                    >
+                      Delete {matchCount} highlighted
+                    </button>
+                  </>
                 )}
                 <button
                   onClick={exportForSheets}
