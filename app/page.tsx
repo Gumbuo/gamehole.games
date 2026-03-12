@@ -39,6 +39,8 @@ interface FeaturedGame {
   tool2Label?: string;
   tool3Url?: string;
   tool3Label?: string;
+  tool4Url?: string;
+  tool4Label?: string;
 }
 
 const featuredGames: FeaturedGame[] = [
@@ -85,6 +87,8 @@ const featuredGames: FeaturedGame[] = [
     tool2Label: "Farm Navigator",
     tool3Url: "/logfilter",
     tool3Label: "Log Filter",
+    tool4Url: "https://docs.nomstead.com",
+    tool4Label: "NomStead Docs",
   },
   {
     id: "playa3ull",
@@ -915,6 +919,32 @@ export default function HomePage() {
                         }}
                       >
                         {game.tool3Label ?? 'Tool 3'} →
+                      </a>
+                    )}
+                    {game.tool4Url && (
+                      <a
+                        href={game.tool4Url}
+                        target={game.tool4Url.startsWith('/') ? undefined : '_blank'}
+                        rel={game.tool4Url.startsWith('/') ? undefined : 'noopener noreferrer'}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          padding: '10px',
+                          background: `${game.color}15`,
+                          border: `1px solid ${game.color}60`,
+                          borderRadius: '8px',
+                          color: game.color,
+                          fontFamily: 'Orbitron, sans-serif',
+                          fontWeight: 'bold',
+                          fontSize: '12px',
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          textTransform: 'uppercase',
+                          marginBottom: '10px',
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        {game.tool4Label ?? 'Tool 4'} →
                       </a>
                     )}
 

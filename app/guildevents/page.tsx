@@ -317,8 +317,8 @@ const TIER_C_CAKES_3 = [
 ];
 
 const TIER_D_TBD_ITEMS = [
-  { name: "Wood Plank",           qty: "TBD" },
-  { name: "Stone Block",          qty: "TBD" },
+  { name: "Wood Plank (1 Wood → 3 Planks, ×2 without own tools)", qty: "TBD" },
+  { name: "Stone Block (1 Stone → 3 Blocks, ×2 without own tools)", qty: "TBD" },
   { name: "Stone Brick",          qty: "TBD" },
   { name: "Clay Brick",           qty: "TBD" },
   { name: "Metal Bar",            qty: "TBD" },
