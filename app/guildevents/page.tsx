@@ -54,39 +54,40 @@ const BLANK_D = () => ({ label: "Tier D — Tools & Materials", colorIdx: 3, ite
 // Update lastSeen + activity whenever a log batch is submitted.
 // lastSeen: null = no activity ever recorded.
 // gold: true = transferred gold to guild vault → never boot
+// protected: true = keep regardless of activity level
 const GUILD_ACTIVITY = [
-  { name: "FoxHole",         lastSeen: "Mar 11, 2026", activity: "Guild leader", gold: true },
-  { name: "Alstar",          lastSeen: "Mar 7, 2026",  activity: "Daily quest (cotton thread red 10, Yellow Bluegill 1) · vault (2 gold)", gold: true },
-  { name: "Kirk",            lastSeen: "Mar 7, 2026",  activity: "Daily quest (Yellow Bluegill 3) · vault (7 gold)", gold: true },
-  { name: "Jamie",           lastSeen: "Mar 7, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (pumpkin spice cake, Yellow Bluegill 62) · vault (2 gold)", gold: true },
-  { name: "Cmokyc",          lastSeen: "Apr 3, 2026",  activity: "Harvesting & fishing on FoxHole tiles", gold: true },
-  { name: "Nickoloy",        lastSeen: "Apr 3, 2026",  activity: "Harvesting, fishing & planting on FoxHole tiles", gold: true },
-  { name: "martex",          lastSeen: null,            activity: "New member", gold: false },
-  { name: "Sorata",          lastSeen: null,            activity: "New member", gold: false },
-  { name: "JMK",             lastSeen: null,            activity: "New member", gold: false },
-  { name: "steemit",         lastSeen: "Mar 6, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 18)", gold: true },
-  { name: "GoldenDragonfly", lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 1)", gold: false },
-  { name: "Reixhm89",        lastSeen: "Mar 7, 2026",  activity: "Daily quest (cotton thread red 1, Yellow Bluegill 2)", gold: false },
-  { name: "Qaziza",          lastSeen: "Apr 3, 2026",  activity: "Harvesting on FoxHole tiles (cotton)", gold: false },
-  { name: "Manyakol",        lastSeen: "Apr 3, 2026",  activity: "Mining on FoxHole tiles", gold: false },
-  { name: "yith",            lastSeen: "Apr 3, 2026",  activity: "Cutting trees on FoxHole tiles", gold: false },
-  { name: "Tampvan",         lastSeen: "Apr 3, 2026",  activity: "Cutting trees on FoxHole tiles", gold: false },
-  { name: "NoName",          lastSeen: "Apr 3, 2026",  activity: "Harvesting & fishing on FoxHole tiles", gold: false },
-  { name: "khan",            lastSeen: "Mar 5, 2026",  activity: "Harvesting on FoxHole tiles (cotton, fern)", gold: true },
-  { name: "Glitch",          lastSeen: null,            activity: "New member", gold: false },
-  { name: "moomoo26",        lastSeen: null,            activity: "New member", gold: false },
-  { name: "Xiopao",          lastSeen: null,            activity: "New member", gold: false },
-  { name: "Un4g1v3n",        lastSeen: null,            activity: "New member", gold: false },
-  { name: "Niel163",         lastSeen: null,            activity: "New member", gold: false },
-  { name: "awpoh",           lastSeen: null,            activity: "New member", gold: false },
-  { name: "Jessa",           lastSeen: null,            activity: "New member", gold: false },
-  { name: "Faizi",           lastSeen: null,            activity: "New member", gold: false },
-  { name: "premiu",          lastSeen: null,            activity: "New member", gold: false },
-  { name: "Amaterasured1",   lastSeen: null,            activity: "New member", gold: false },
-  { name: "fauz",            lastSeen: null,            activity: "New member", gold: false },
-  { name: "Shlema",          lastSeen: null,            activity: "New member", gold: false },
-  { name: "merlin",          lastSeen: null,            activity: "New member", gold: false },
-  { name: "sdsergio",        lastSeen: null,            activity: "New member", gold: false },
+  { name: "FoxHole",         lastSeen: "Mar 11, 2026", activity: "Guild leader",                                                                                          gold: true,  protected: false },
+  { name: "Alstar",          lastSeen: "Mar 7, 2026",  activity: "Daily quest (cotton thread red 10, Yellow Bluegill 1) · vault (2 gold)",                                gold: true,  protected: false },
+  { name: "Kirk",            lastSeen: "Mar 7, 2026",  activity: "Daily quest (Yellow Bluegill 3) · vault (7 gold)",                                                       gold: true,  protected: false },
+  { name: "Jamie",           lastSeen: "Mar 7, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (pumpkin spice cake, Yellow Bluegill 62) · vault (2 gold)",   gold: true,  protected: false },
+  { name: "Cmokyc",          lastSeen: "Apr 3, 2026",  activity: "Harvesting & fishing on FoxHole tiles",                                                                 gold: true,  protected: false },
+  { name: "Nickoloy",        lastSeen: "Apr 3, 2026",  activity: "Harvesting, fishing & planting on FoxHole tiles",                                                       gold: true,  protected: false },
+  { name: "steemit",         lastSeen: "Mar 6, 2026",  activity: "Harvesting on FoxHole tiles · daily quest (cotton thread red 18)",                                      gold: true,  protected: false },
+  { name: "khan",            lastSeen: "Mar 5, 2026",  activity: "Harvesting on FoxHole tiles (cotton, fern)",                                                            gold: true,  protected: false },
+  { name: "martex",          lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "Sorata",          lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "JMK",             lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "GoldenDragonfly", lastSeen: "Mar 6, 2026",  activity: "Daily quest (cotton thread red 1)",                                                                     gold: false, protected: false },
+  { name: "Reixhm89",        lastSeen: "Mar 7, 2026",  activity: "Daily quest (cotton thread red 1, Yellow Bluegill 2)",                                                  gold: false, protected: false },
+  { name: "Qaziza",          lastSeen: "Apr 3, 2026",  activity: "Harvesting on FoxHole tiles (cotton)",                                                                  gold: false, protected: false },
+  { name: "Manyakol",        lastSeen: "Apr 3, 2026",  activity: "Mining on FoxHole tiles",                                                                               gold: false, protected: false },
+  { name: "yith",            lastSeen: "Apr 3, 2026",  activity: "Cutting trees on FoxHole tiles",                                                                        gold: false, protected: false },
+  { name: "Tampvan",         lastSeen: "Apr 3, 2026",  activity: "Cutting trees on FoxHole tiles",                                                                        gold: false, protected: false },
+  { name: "NoName",          lastSeen: "Apr 3, 2026",  activity: "Harvesting & fishing on FoxHole tiles",                                                                 gold: false, protected: false },
+  { name: "Glitch",          lastSeen: null,            activity: "NTM guild alliance",                                                                                    gold: false, protected: true  },
+  { name: "moomoo26",        lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "Xiopao",          lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "Un4g1v3n",        lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "Niel163",         lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "awpoh",           lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "Jessa",           lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "Faizi",           lastSeen: null,            activity: "NTM guild alliance",                                                                                    gold: false, protected: true  },
+  { name: "premiu",          lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "Amaterasured1",   lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "fauz",            lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "Shlema",          lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "merlin",          lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
+  { name: "sdsergio",        lastSeen: null,            activity: "New member",                                                                                            gold: false, protected: false },
 ];
 
 const PLAYERS = [
@@ -1101,9 +1102,10 @@ function SimpleUpcomingCard({ event }: { event: SimpleUpcoming }) {
 
 // ─── Guild Activity Tracker component ────────────────────────────────────────
 function GuildActivityTracker() {
-  const gold     = GUILD_ACTIVITY.filter((m) => m.gold);
-  const active   = GUILD_ACTIVITY.filter((m) => !m.gold && m.lastSeen !== null);
-  const inactive = GUILD_ACTIVITY.filter((m) => !m.gold && m.lastSeen === null);
+  const gold      = GUILD_ACTIVITY.filter((m) => m.gold);
+  const protected_ = GUILD_ACTIVITY.filter((m) => !m.gold && m.protected);
+  const active    = GUILD_ACTIVITY.filter((m) => !m.gold && !m.protected && m.lastSeen !== null);
+  const inactive  = GUILD_ACTIVITY.filter((m) => !m.gold && !m.protected && m.lastSeen === null);
 
   return (
     <div style={{
@@ -1114,24 +1116,37 @@ function GuildActivityTracker() {
         <h3 style={{ color: "#66fcf1", fontSize: "0.82rem", letterSpacing: "2px", textTransform: "uppercase", margin: 0 }}>
           Guild Activity — All Members
         </h3>
-        <div style={{ display: "flex", gap: "10px", fontSize: "0.68rem" }}>
+        <div style={{ display: "flex", gap: "10px", fontSize: "0.68rem", flexWrap: "wrap" }}>
           <span style={{ color: "#ffd700" }}>★ Gold: {gold.length}</span>
+          <span style={{ color: "#66fcf1" }}>◆ Protected: {protected_.length}</span>
           <span style={{ color: "#00ff41" }}>● Active: {active.length}</span>
-          <span style={{ color: "#ff4757" }}>○ Inactive: {inactive.length}</span>
+          <span style={{ color: "#ff4757" }}>○ Boot candidates: {inactive.length}</span>
         </div>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
         {GUILD_ACTIVITY.map((m) => {
-          const isGold   = m.gold;
-          const isActive = m.lastSeen !== null;
-          const bg     = isGold ? "rgba(255,215,0,0.06)"  : isActive ? "rgba(0,255,65,0.04)"  : "rgba(255,71,87,0.06)";
-          const border = isGold ? "rgba(255,215,0,0.35)"  : isActive ? "rgba(0,255,65,0.2)"   : "rgba(255,71,87,0.25)";
-          const nameColor = isGold ? "#ffd700" : isActive ? "#00ff41" : "#ff4757";
-          const icon      = isGold ? "★" : isActive ? "●" : "○";
+          const isGold      = m.gold;
+          const isProtected = m.protected;
+          const isActive    = m.lastSeen !== null;
+
+          const bg     = isGold      ? "rgba(255,215,0,0.06)"
+                       : isProtected ? "rgba(102,252,241,0.05)"
+                       : isActive    ? "rgba(0,255,65,0.04)"
+                       : "rgba(255,71,87,0.06)";
+          const border = isGold      ? "rgba(255,215,0,0.35)"
+                       : isProtected ? "rgba(102,252,241,0.3)"
+                       : isActive    ? "rgba(0,255,65,0.2)"
+                       : "rgba(255,71,87,0.25)";
+          const nameColor = isGold      ? "#ffd700"
+                          : isProtected ? "#66fcf1"
+                          : isActive    ? "#00ff41"
+                          : "#ff4757";
+          const icon = isGold ? "★" : isProtected ? "◆" : isActive ? "●" : "○";
+
           return (
             <div key={m.name} style={{
-              display: "grid", gridTemplateColumns: "150px 110px 1fr",
+              display: "grid", gridTemplateColumns: "160px 110px 1fr",
               gap: "10px", alignItems: "center",
               background: bg, border: `1px solid ${border}`,
               borderRadius: "6px", padding: "8px 12px",
@@ -1139,7 +1154,8 @@ function GuildActivityTracker() {
               <span style={{ color: nameColor, fontSize: "0.74rem", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
                 <span>{icon}</span>
                 <span>{m.name}</span>
-                {isGold && <span style={{ fontSize: "0.55rem", color: "#ffd700", border: "1px solid #ffd700", borderRadius: "3px", padding: "1px 4px", letterSpacing: "1px" }}>GOLD</span>}
+                {isGold      && <span style={{ fontSize: "0.55rem", color: "#ffd700", border: "1px solid #ffd700",   borderRadius: "3px", padding: "1px 4px", letterSpacing: "1px" }}>GOLD</span>}
+                {isProtected && <span style={{ fontSize: "0.55rem", color: "#66fcf1", border: "1px solid #66fcf1", borderRadius: "3px", padding: "1px 4px", letterSpacing: "1px" }}>PROTECTED</span>}
               </span>
               <span style={{ color: "#c5c6c7", fontSize: "0.66rem" }}>
                 {m.lastSeen ?? "—"}
