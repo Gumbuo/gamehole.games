@@ -295,13 +295,14 @@ const TIER_B_ITEMS = [
 ];
 
 const TIER_B_ITEMS_3 = [
-  { name: "Wrapped Potato", qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
-  { name: "Fries",          qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
-  { name: "Veggie Salad",   qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
-  { name: "Soil",           qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
-  { name: "Wheat Flour",    qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
-  { name: "Bread",          qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
-  { name: "Wine",           qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Wrapped Potato", qty: "1k",  price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Fries",          qty: "1k",  price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Veggie Salad",   qty: "1k",  price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Soil",           qty: "1k",  price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Wheat Flour",    qty: "1k",  price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Bread",          qty: "1k",  price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Wine",           qty: "1k",  price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Grape Must",     qty: "TBD", price: "TBD" },
   { name: "Fishing Rod",    qty: "TBD", price: "TBD" },
 ];
 
@@ -515,15 +516,18 @@ const EVENT3 = {
       items: TIER_C_CAKES_3,
     },
     {
-      name: "Tier D", subtitle: "Tools & Materials",
+      name: "Tier D", subtitle: "Cotton Thread",
       eligibility: "OG Players Only",
       ...TC[3],
-      // Wood & Stone up from $0.001375 → $0.0025 (+81% value). Wheat Flour moved to Tier B.
-      priceRange: "$0.0025", playerCap: "$25 max per player", totalCap: "10,000 items",
+      priceRange: "TBD", playerCap: "TBD", totalCap: "TBD",
       items: [
-        { name: "Wood",  qty: "5k", price: "$0.0025 each", max: "$12.50 max" },
-        { name: "Stone", qty: "5k", price: "$0.0025 each", max: "$12.50 max" },
-        ...TIER_D_TBD_ITEMS,
+        { name: "Cotton Thread",        qty: "TBD" },
+        { name: "Cotton Thread Blue",   qty: "TBD" },
+        { name: "Cotton Thread Brown",  qty: "TBD" },
+        { name: "Cotton Thread Green",  qty: "TBD" },
+        { name: "Cotton Thread Orange", qty: "TBD" },
+        { name: "Cotton Thread Red",    qty: "TBD" },
+        { name: "Cotton Thread Yellow", qty: "TBD" },
       ],
     },
     {
@@ -535,17 +539,16 @@ const EVENT3 = {
     },
   ],
   rules: [
-    { text: "Each player can earn up to $49.74 confirmed ($10 from A + $8.40 from B + $5.34 from C + $25 from D + Fishing Rod TBD) — plus TBD from Tier F." },
+    { text: "Each player can earn up to $24.74 confirmed ($10 from A + $8.40 from B + $5.34 from C + Tier D/F TBD)." },
     { text: "TIER A — PASSIVE TILE SYSTEM: To earn Tier A credit, you must plant and harvest on FoxHole's land tiles. Only the passive crop share that FoxHole receives counts toward your Tier A total — your own full harvest does not count. 10 crop types accepted, 2,000 of each, $0.0005 per item.", warn: true },
+    { text: "TIER D — COTTON THREAD: All 7 cotton thread colours accepted. Pricing and caps TBD — PM FoxHole on Discord to discuss." },
     { text: "TIER F — PASSIVE POND SYSTEM: To earn Tier F credit, fish in FoxHole's pond. Each cast catches 3 fish — 2 go to FoxHole, 1 you keep. Only the 2 fish FoxHole receives per cast count toward your Tier F total. Caps and pricing TBD per fish type.", warn: true },
-    { text: "Wood & Stone price increased to $0.0025 each (up from $0.001375 in Event 2)." },
     { text: "PM FoxHole on Discord before dropping items in the dropbox." },
     { text: "Caps are per player — unused budget rolls into the July TGE Launch Event pool." },
-    { text: "TIER D REPEATABLE: Each full hand-in (5k Wood + 5k Stone) earns more than the last — 1st: $25.00 · 2nd: $31.25 (1.25×) · 3rd: $37.50 (1.50×) · 4th: $43.75 (1.75×). Multiplier resets at the start of each new event month. Tier D participants only." },
     { text: "GOLD RETURN — After FoxHole receives your items, please return the gold by buying 1 Wood from FoxHole's dropbox. The Wood is priced high but will cost less than the gold you earned from the drop — so you keep the difference.", warn: true },
   ],
   loyaltyNote:
-    "Tier D is repeatable every event month — and each full hand-in earns more than the last. With wood & stone at $0.0025 each, completing 5k Wood + 5k Stone pays out more every time. 1st: $25.00 · 2nd: $31.25 (1.25×) · 3rd: $37.50 (1.50×) · 4th: $43.75 (1.75×). Multiplier resets at the start of each new event.",
+    "Tier D is now the Cotton Thread tier — all 7 colours accepted. Pricing and caps are being set this event. Spin your cotton, dye it, and bring it to FoxHole's dropbox. PM FoxHole on Discord to arrange.",
 };
 
 // ─── Event 3 player harvest data (from activity log, Apr 3 2026) ─────────────
