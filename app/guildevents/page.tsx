@@ -326,7 +326,6 @@ const TIER_C_CAKES_3 = [
   { name: "Grape Tart Cake",         qty: "x4", price: "$0.167 each", max: "$0.668 max" },
   { name: "Upside-Down Tomato Cake", qty: "x4", price: "$0.167 each", max: "$0.668 max" },
   { name: "Mushroom Omelette",       qty: "x4", price: "$0.167 each", max: "$0.668 max" },
-  { name: "Mushroom Soup",           qty: "x4", price: "$0.167 each", max: "$0.668 max" },
   { name: "Tomato Omelette",         qty: "x4", price: "$0.167 each", max: "$0.668 max" },
 ];
 
