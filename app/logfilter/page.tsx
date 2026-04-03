@@ -112,6 +112,7 @@ export default function LogFilterPage() {
   const itemCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     const re = /(?:received|harvested|crafted)\s+(\d+)\s+(.+)/i;
+    const remaining = lines.filter((l) => !filters.some((f) => l.toLowerCase().includes(f)));
     for (const line of remaining) {
       // Strip time from end before parsing
       let stripped = line.replace(/\s*(about \d+ \w+ ago|just now|a moment ago|\d+ seconds? ago|\d+ minutes? ago|\d+ hours? ago|\d+ days? ago|yesterday)\s*$/i, "").trim();
@@ -125,7 +126,7 @@ export default function LogFilterPage() {
       }
     }
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  }, [remaining]);
+  }, [lines, filters]);
 
   // ── Load ──────────────────────────────────────────────────────────────────
   function load() {

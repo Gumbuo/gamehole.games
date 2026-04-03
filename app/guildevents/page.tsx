@@ -374,19 +374,20 @@ const TIER_F_FISH = [
 
 // ─── Payout History ───────────────────────────────────────────────────────────
 const PAYOUTS: { date: string; player: string; amount: string; tier: string; notes: string }[] = [
-  { date: "Mar 3, 2026", player: "steemit",     amount: "$5.00",  tier: "Tier A",        notes: "Tier A maxed — 5×2000 items (10,000 total)" },
-  { date: "Mar 4, 2026", player: "xidni_xazz",  amount: "$14.38", tier: "Tier A + C ×3", notes: "Tier A $5.00 + Tier C 1st $2.50 / 2nd $3.13 / 3rd $3.75 (max)" },
+  { date: "Mar 3, 2026",  player: "steemit",     amount: "$5.00",  tier: "Tier A",        notes: "Tier A maxed — 5×2000 items (10,000 total)" },
+  { date: "Mar 4, 2026",  player: "xidni_xazz",  amount: "$14.38", tier: "Tier A + C ×3", notes: "Tier A $5.00 + Tier C 1st $2.50 / 2nd $3.13 / 3rd $3.75 (max)" },
+  { date: "Mar 17, 2026", player: "devilfirst",   amount: "$28.75", tier: "Tier D ×4 + C",  notes: "Tier D 4th hand-in (1.75×) $26.25 + Tier C max $2.50" },
 ];
 
-// ─── Event 2 (ACTIVE) ─────────────────────────────────────────────────────────
+// ─── Event 2 (ENDED) ──────────────────────────────────────────────────────────
 const EVENT2 = {
   title: "NomStead Guild Item Exchange — Event 2",
   dateRange: "Mar 1 – Mar 31, 2026",
   description:
     "Tiered item exchange event for NomStead guild members. Pick a tier, send your items, and receive payment based on the pricing below. Now includes Tier D — Tools & Materials!",
-  status: "ACTIVE" as const,
+  status: "ENDED" as const,
   registeredPlayers: [
-    "steemit", "abkhan", "Alstar", "Gallard",
+    "steemit", "abkhan", "Alstar", "Gallard", "devilfirst",
   ],
   tiers: [
     {
@@ -470,16 +471,14 @@ const EVENT2 = {
   ],
 };
 
-// ─── Event 3 (UPCOMING — Apr 1) ───────────────────────────────────────────────
-// Wood and Stone price increased to $0.0025 each. Tiers A / B / C carry over
-// from Event 2. Tier E pricing TBD.
+// ─── Event 3 (ACTIVE — Apr 1) ─────────────────────────────────────────────────
 const EVENT3 = {
   title: "NomStead Guild Item Exchange — Event 3",
   dateRange: "Apr 1 – Apr 30, 2026",
-  startDate: new Date("2026-04-01"),
+  registeredPlayers: ["Cmokyc", "Nickoloy", "Reixhm89", "Qaziza", "NoName", "Jamie", "Tampvan", "Kirk"],
   description:
     "Monthly item exchange with all five tiers. Tiers B–D carry over from Event 2. Tier A now uses a passive tile system — players must plant and harvest on FoxHole's land tiles, and only the passive crop share FoxHole receives counts. Tier D increases wood & stone value to $0.0025 each — the biggest single-resource earner yet.",
-  status: "UPCOMING" as const,
+  status: "ACTIVE" as const,
   tiers: [
     {
       name: "Tier A", subtitle: "Basic Items (Passive Tile System)",
@@ -542,6 +541,201 @@ const EVENT3 = {
   loyaltyNote:
     "Tier D is repeatable every event month — and each full hand-in earns more than the last. With wood & stone at $0.0025 each, completing 5k Wood + 5k Stone pays out more every time. 1st: $25.00 · 2nd: $31.25 (1.25×) · 3rd: $37.50 (1.50×) · 4th: $43.75 (1.75×). Multiplier resets at the start of each new event.",
 };
+
+// ─── Event 3 player harvest data (from activity log, Apr 3 2026) ─────────────
+const E3_TIER_A_BLANK = () => ({ label: "Tier A — Basic Items", colorIdx: 0, items: [
+  { name: "Cotton",        current: 0, cap: 2000 },
+  { name: "Potatoes",      current: 0, cap: 2000 },
+  { name: "Red Flower",    current: 0, cap: 2000 },
+  { name: "Blue Flower",   current: 0, cap: 2000 },
+  { name: "Yellow Flower", current: 0, cap: 2000 },
+  { name: "Pumpkin",       current: 0, cap: 2000 },
+  { name: "Grapes",        current: 0, cap: 2000 },
+  { name: "Wheat",         current: 0, cap: 2000 },
+  { name: "Tomato",        current: 0, cap: 2000 },
+  { name: "Fern",          current: 0, cap: 2000 },
+]});
+
+const EVENT3_PLAYERS = [
+  {
+    name: "Cmokyc",
+    lastCounted: "Apr 3, 2026",
+    tiers: [
+      { label: "Tier A — Basic Items", colorIdx: 0, items: [
+        { name: "Cotton",        current: 1473, cap: 2000 },
+        { name: "Potatoes",      current: 0,    cap: 2000 },
+        { name: "Red Flower",    current: 2378, cap: 2000 },
+        { name: "Blue Flower",   current: 2506, cap: 2000 },
+        { name: "Yellow Flower", current: 500,  cap: 2000 },
+        { name: "Pumpkin",       current: 622,  cap: 2000 },
+        { name: "Grapes",        current: 0,    cap: 2000 },
+        { name: "Wheat",         current: 0,    cap: 2000 },
+        { name: "Tomato",        current: 0,    cap: 2000 },
+        { name: "Fern",          current: 0,    cap: 2000 },
+      ]},
+      { label: "Tier F — Fish (Passive)", colorIdx: 5, items: [
+        { name: "Blue Bluegill",    current: 236, cap: 0 },
+        { name: "Orange Bluegill",  current: 222, cap: 0 },
+        { name: "Yellow Bluegill",  current: 234, cap: 0 },
+        { name: "Black Crappie",    current: 30,  cap: 0 },
+        { name: "Crucian Carp",     current: 80,  cap: 0 },
+        { name: "Tadpole",          current: 58,  cap: 0 },
+        { name: "Bullfrog",         current: 10,  cap: 0 },
+        { name: "Grey Chubfish",    current: 4,   cap: 0 },
+        { name: "Yellow Chubfish",  current: 4,   cap: 0 },
+        { name: "Catfish",          current: 4,   cap: 0 },
+        { name: "Red Chubfish",     current: 2,   cap: 0 },
+        { name: "Albino Catfish",   current: 2,   cap: 0 },
+      ]},
+    ],
+    other: [
+      { name: "Wood (trees)",   qty: 44 },
+      { name: "Stone",          qty: 8  },
+      { name: "Clay",           qty: 7  },
+      { name: "Iron Ore",       qty: 4  },
+      { name: "Pure Gold Ore",  qty: 1  },
+    ],
+  },
+  {
+    name: "Nickoloy",
+    lastCounted: "Apr 3, 2026",
+    tiers: [
+      { label: "Tier A — Basic Items", colorIdx: 0, items: [
+        { name: "Cotton",        current: 585,  cap: 2000 },
+        { name: "Potatoes",      current: 0,    cap: 2000 },
+        { name: "Red Flower",    current: 1513, cap: 2000 },
+        { name: "Blue Flower",   current: 0,    cap: 2000 },
+        { name: "Yellow Flower", current: 285,  cap: 2000 },
+        { name: "Pumpkin",       current: 0,    cap: 2000 },
+        { name: "Grapes",        current: 0,    cap: 2000 },
+        { name: "Wheat",         current: 0,    cap: 2000 },
+        { name: "Tomato",        current: 0,    cap: 2000 },
+        { name: "Fern",          current: 0,    cap: 2000 },
+      ]},
+      { label: "Tier F — Fish (Passive)", colorIdx: 5, items: [
+        { name: "Blue Bluegill",   current: 142, cap: 0 },
+        { name: "Orange Bluegill", current: 110, cap: 0 },
+        { name: "Yellow Bluegill", current: 136, cap: 0 },
+        { name: "Black Crappie",   current: 12,  cap: 0 },
+        { name: "Crucian Carp",    current: 32,  cap: 0 },
+        { name: "Tadpole",         current: 30,  cap: 0 },
+        { name: "Bullfrog",        current: 6,   cap: 0 },
+        { name: "Golden Koi",      current: 4,   cap: 0 },
+        { name: "Yellow Chubfish", current: 4,   cap: 0 },
+        { name: "Grey Chubfish",   current: 2,   cap: 0 },
+        { name: "Red Chubfish",    current: 2,   cap: 0 },
+        { name: "Catfish",         current: 2,   cap: 0 },
+      ]},
+    ],
+    other: [
+      { name: "Wood (trees)", qty: 73 },
+      { name: "Cucumber",     qty: 52 },
+      { name: "Stone",        qty: 12 },
+      { name: "Clay",         qty: 6  },
+      { name: "Iron Ore",     qty: 5  },
+      { name: "Silver Ore",   qty: 5  },
+    ],
+  },
+  {
+    name: "Reixhm89",
+    lastCounted: "Apr 3, 2026",
+    tiers: [E3_TIER_A_BLANK()],
+    other: [
+      { name: "Yellow Flower (harvested)", qty: 76 },
+      { name: "Wood (trees)",              qty: 5  },
+    ],
+  },
+  {
+    name: "Qaziza",
+    lastCounted: "Apr 3, 2026",
+    tiers: [E3_TIER_A_BLANK()],
+    other: [
+      { name: "Cotton (harvested)", qty: 55 },
+      { name: "Wood (trees)",       qty: 7  },
+    ],
+  },
+  {
+    name: "NoName",
+    lastCounted: "Apr 3, 2026",
+    tiers: [E3_TIER_A_BLANK()],
+    other: [
+      { name: "Red Flower (harvested)",  qty: 37 },
+      { name: "Wood (trees)",            qty: 3  },
+      { name: "Yellow Bluegill (fish)",  qty: 10 },
+      { name: "Orange Bluegill (fish)",  qty: 8  },
+      { name: "Blue Bluegill (fish)",    qty: 2  },
+      { name: "Yellow Chubfish (fish)",  qty: 2  },
+      { name: "Tadpole (fish)",          qty: 2  },
+    ],
+  },
+  {
+    name: "Tampvan",
+    lastCounted: "Apr 3, 2026",
+    tiers: [],
+    other: [
+      { name: "Wood (trees)", qty: 12 },
+    ],
+  },
+  {
+    name: "Jamie",
+    lastCounted: "Apr 3, 2026",
+    tiers: [],
+    other: [
+      { name: "Wood (trees)", qty: 5 },
+    ],
+  },
+  {
+    name: "Kirk",
+    lastCounted: "Apr 3, 2026",
+    tiers: [],
+    other: [
+      { name: "Wood (trees)", qty: 2 },
+    ],
+  },
+];
+
+// ─── Event 3 planting totals (FoxHole's tiles only) ───────────────────────────
+const E3_PLANTING = [
+  {
+    name: "Cmokyc",
+    total: 2516,
+    items: [
+      { name: "Cotton",        planted: 810 },
+      { name: "Yellow Flower", planted: 689 },
+      { name: "Blue Flower",   planted: 657 },
+      { name: "Red Flower",    planted: 360 },
+    ],
+  },
+  {
+    name: "Nickoloy",
+    total: 1301,
+    items: [
+      { name: "Red Flower", planted: 1127 },
+      { name: "Fern",       planted: 142  },
+      { name: "Wheat",      planted: 32   },
+    ],
+  },
+  {
+    name: "FoxHole",
+    total: 249,
+    items: [
+      { name: "Yellow Flower", planted: 76 },
+      { name: "Cotton",        planted: 70 },
+      { name: "Blue Flower",   planted: 36 },
+      { name: "Red Flower",    planted: 34 },
+      { name: "Cucumber",      planted: 33 },
+    ],
+  },
+  {
+    name: "NoName",
+    total: 25,
+    items: [
+      { name: "Yellow Flower", planted: 16 },
+      { name: "Red Flower",    planted: 8  },
+      { name: "Fern",          planted: 1  },
+    ],
+  },
+];
 
 // ─── Event 4 (UPCOMING — May 1, simple card) ──────────────────────────────────
 const EVENT4 = {
@@ -1072,6 +1266,199 @@ function PlayerTracker() {
   );
 }
 
+// ─── Event 3 Player Tracker ───────────────────────────────────────────────────
+function Event3PlayerTracker() {
+  const [active, setActive] = useState(0);
+  const player = EVENT3_PLAYERS[active];
+  const hasItems =
+    player.tiers.some((t) => t.items.some((i) => i.current > 0)) ||
+    player.other.length > 0;
+
+  return (
+    <div style={{
+      background: "rgba(0,0,0,0.5)", border: "2px solid #00ff41",
+      borderRadius: "12px", padding: "20px", marginBottom: "30px",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "8px" }}>
+        <h3 style={{ color: "#00ff41", fontSize: "0.82rem", letterSpacing: "2px", textTransform: "uppercase", margin: 0 }}>
+          Player Progress — Event 3
+        </h3>
+        <span style={{ fontSize: "0.65rem", color: "#45a29e", letterSpacing: "1px" }}>
+          Logged from activity log · {player.lastCounted}
+        </span>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "12px", flexWrap: "wrap" }}>
+        {EVENT3_PLAYERS.map((p, i) => (
+          <button key={p.name} onClick={() => setActive(i)} style={{
+            background: i === active ? "rgba(0,255,65,0.12)" : "rgba(0,0,0,0.4)",
+            border: `2px solid ${i === active ? "#00ff41" : "#45a29e"}`,
+            color: i === active ? "#00ff41" : "#c5c6c7",
+            fontFamily: "Orbitron, sans-serif", fontSize: "0.72rem",
+            padding: "6px 16px", borderRadius: "6px", cursor: "pointer",
+            letterSpacing: "1px",
+          }}>
+            {p.name}
+          </button>
+        ))}
+      </div>
+
+      {/* Last counted */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: "8px",
+        marginBottom: "20px", padding: "7px 12px",
+        background: "rgba(0,255,65,0.04)", border: "1px solid rgba(0,255,65,0.25)",
+        borderRadius: "6px",
+      }}>
+        <span style={{ color: "#00ff41", fontSize: "0.65rem", letterSpacing: "1px", textTransform: "uppercase" }}>
+          Data through:
+        </span>
+        <span style={{ color: "#c5c6c7", fontSize: "0.68rem" }}>{player.lastCounted}</span>
+      </div>
+
+      {/* Tier sections */}
+      {player.tiers.map((tier) => {
+        const tc = TC[tier.colorIdx];
+        return (
+          <div key={tier.label} style={{ marginBottom: "20px" }}>
+            <p style={{ color: tc.color, fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
+              {tier.label}
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {tier.items.map((item) => (
+                <div key={item.name}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
+                    <span style={{ color: item.current > 0 ? "#e0e0e0" : "#555", fontSize: "0.72rem" }}>{item.name}</span>
+                    <span style={{ fontSize: "0.68rem", color: item.current === 0 ? "#555" : "#c5c6c7" }}>
+                      {item.current.toLocaleString()} / {item.cap === 0 ? "TBD" : item.cap.toLocaleString()}
+                    </span>
+                  </div>
+                  {item.cap > 0 && <ProgressBar current={item.current} cap={item.cap} />}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Other collected */}
+      {player.other.length > 0 && (
+        <>
+          <p style={{ color: "#c5c6c7", fontSize: "0.68rem", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "10px" }}>
+            Other Collected
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            {player.other.map((item) => (
+              <div key={item.name} style={{
+                display: "flex", justifyContent: "space-between",
+                background: "rgba(0,0,0,0.3)", borderRadius: "6px", padding: "6px 10px",
+              }}>
+                <span style={{ color: "#c5c6c7", fontSize: "0.7rem" }}>{item.name}</span>
+                <span style={{ color: "#ffd700", fontSize: "0.7rem", fontWeight: "bold" }}>{item.qty}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {!hasItems && (
+        <p style={{ color: "#555", fontSize: "0.75rem", textAlign: "center", marginTop: "10px" }}>
+          No items recorded yet.
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ─── Planting Leaderboard ─────────────────────────────────────────────────────
+function PlantingLeaderboard() {
+  const sorted = [...E3_PLANTING].sort((a, b) => b.total - a.total);
+  const maxTotal = sorted[0]?.total ?? 1;
+
+  const rankColors = ["#ffd700", "#c0c0c0", "#cd7f32", "#45a29e"];
+  const rankLabels = ["1ST", "2ND", "3RD", ""];
+
+  return (
+    <div style={{
+      background: "rgba(0,0,0,0.5)", border: "2px solid #ffd700",
+      borderRadius: "12px", padding: "20px", marginBottom: "30px",
+    }}>
+      <div style={{ marginBottom: "18px" }}>
+        <h3 style={{ color: "#ffd700", fontSize: "0.82rem", letterSpacing: "2px", textTransform: "uppercase", margin: "0 0 6px 0" }}>
+          ★ Planting Leaderboard — Event 3
+        </h3>
+        <p style={{ color: "#c5c6c7", fontSize: "0.72rem", margin: 0, lineHeight: "1.6" }}>
+          Total seeds &amp; spores planted on FoxHole's tiles. Planters do the heavy lifting —
+          every tile seeded creates the crops that fuel the whole event.
+        </p>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+        {sorted.map((player, i) => {
+          const pct = (player.total / maxTotal) * 100;
+          const color = rankColors[i] ?? rankColors[3];
+          return (
+            <div key={player.name}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
+                {rankLabels[i] ? (
+                  <span style={{
+                    fontSize: "0.6rem", fontWeight: "bold", color: color,
+                    border: `1px solid ${color}`, borderRadius: "4px",
+                    padding: "2px 6px", minWidth: "30px", textAlign: "center", letterSpacing: "1px",
+                    background: `${color}18`,
+                  }}>
+                    {rankLabels[i]}
+                  </span>
+                ) : (
+                  <span style={{ minWidth: "30px", textAlign: "center", color: "#45a29e", fontSize: "0.72rem" }}>
+                    {i + 1}
+                  </span>
+                )}
+                <span style={{ color: color, fontSize: "0.8rem", fontWeight: "bold", flex: 1 }}>
+                  {player.name}
+                </span>
+                <span style={{ color: "#fff", fontSize: "0.8rem", fontWeight: "bold" }}>
+                  {player.total.toLocaleString()} tiles
+                </span>
+              </div>
+
+              {/* Bar */}
+              <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: "4px", height: "6px", marginLeft: "40px", overflow: "hidden" }}>
+                <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: "4px", transition: "width 0.6s ease" }} />
+              </div>
+
+              {/* Item breakdown */}
+              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "8px", marginLeft: "40px" }}>
+                {player.items.map((item) => (
+                  <span key={item.name} style={{
+                    fontSize: "0.62rem", color: "#c5c6c7",
+                    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "4px", padding: "2px 8px",
+                  }}>
+                    {item.name}: <strong style={{ color }}>{item.planted.toLocaleString()}</strong>
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{
+        marginTop: "18px", padding: "10px 14px",
+        background: "rgba(255,215,0,0.06)", border: "1px solid rgba(255,215,0,0.3)",
+        borderRadius: "6px", fontSize: "0.7rem", color: "#c5c6c7", lineHeight: "1.6",
+      }}>
+        <strong style={{ color: "#ffd700" }}>Why planters matter:</strong> Every seed planted creates
+        a future harvest — without planters there's nothing to collect. Planting is more labour-intensive
+        than harvesting since you have to return to each tile individually.
+        Planting activity will be factored into bonus rewards.
+      </div>
+    </div>
+  );
+}
+
 // ─── Passive Drops (from Log Filter) ─────────────────────────────────────────
 function PassiveDrops() {
   const [data, setData] = useState<{ savedAt: string; counts: Record<string, number> } | null>(null);
@@ -1167,23 +1554,23 @@ export default function GuildEventsPage() {
 
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "30px 16px" }}>
 
-        {/* ══════════════════ EVENT 2 — ACTIVE ══════════════════ */}
+        {/* ══════════════════ EVENT 3 — ACTIVE ══════════════════ */}
         <h1 style={{
           fontSize: "1.8rem", textAlign: "center",
           textShadow: "0 0 15px #66fcf1", letterSpacing: "3px",
           textTransform: "uppercase", marginBottom: "6px",
         }}>
-          {EVENT2.title}
+          {EVENT3.title}
         </h1>
         <p style={{ textAlign: "center", color: "#ffd700", fontSize: "0.75rem", letterSpacing: "2px", marginBottom: "14px" }}>
-          {EVENT2.dateRange}
+          {EVENT3.dateRange}
         </p>
-        <StatusBadge status={EVENT2.status} />
+        <StatusBadge status={EVENT3.status} />
         <p style={{
           textAlign: "center", color: "#c5c6c7", fontSize: "0.85rem",
           lineHeight: "1.7", maxWidth: "680px", margin: "0 auto 34px auto",
         }}>
-          {EVENT2.description}
+          {EVENT3.description}
         </p>
 
         {/* Registered Players */}
@@ -1195,19 +1582,25 @@ export default function GuildEventsPage() {
             color: "#66fcf1", fontSize: "0.82rem", letterSpacing: "2px",
             textTransform: "uppercase", margin: "0 0 14px 0",
           }}>
-            Registered Players ({EVENT2.registeredPlayers.length})
+            Registered Players ({EVENT3.registeredPlayers.length})
           </h3>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-            {EVENT2.registeredPlayers.map((p) => (
-              <span key={p} style={{
-                padding: "4px 12px",
-                background: "rgba(0,255,65,0.08)", border: "1px solid #00ff41",
-                borderRadius: "20px", color: "#00ff41", fontSize: "0.72rem",
-              }}>
-                {p}
-              </span>
-            ))}
-          </div>
+          {EVENT3.registeredPlayers.length > 0 ? (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+              {EVENT3.registeredPlayers.map((p) => (
+                <span key={p} style={{
+                  padding: "4px 12px",
+                  background: "rgba(0,255,65,0.08)", border: "1px solid #00ff41",
+                  borderRadius: "20px", color: "#00ff41", fontSize: "0.72rem",
+                }}>
+                  {p}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p style={{ color: "#7a9", fontSize: "0.75rem", margin: 0 }}>
+              No players registered yet — PM FoxHole on Discord to join.
+            </p>
+          )}
         </div>
 
         {/* My Passive Drops */}
@@ -1216,20 +1609,23 @@ export default function GuildEventsPage() {
         {/* Guild Activity */}
         <GuildActivityTracker />
 
-        {/* Player Progress */}
-        <PlayerTracker />
+        {/* Event 3 Player Progress */}
+        <Event3PlayerTracker />
 
-        {/* Tiers */}
+        {/* Planting Leaderboard */}
+        <PlantingLeaderboard />
+
+        {/* Event 3 Tiers */}
         <div style={{
           display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
           gap: "20px", marginBottom: "30px",
         }}>
-          {EVENT2.tiers.map((tier) => <TierCard key={tier.name} tier={tier} />)}
+          {EVENT3.tiers.map((tier) => <TierCard key={tier.name} tier={tier} />)}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "24px", marginBottom: "30px" }}>
-          <LoyaltyBlock note={EVENT2.loyaltyNote} />
-          <RulesBlock rules={EVENT2.rules} />
+          <LoyaltyBlock note={EVENT3.loyaltyNote} />
+          <RulesBlock rules={EVENT3.rules} />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
@@ -1242,50 +1638,39 @@ export default function GuildEventsPage() {
           <FAQAccordion faqs={EVENT2.faqs} />
         </div>
 
-        {/* ══════════════════ EVENT 3 — UPCOMING ══════════════════ */}
+        {/* ══════════════════ EVENT 4 — SIMPLE CARD ══════════════════ */}
         <Divider label="Upcoming Events" />
+        <SimpleUpcomingCard event={EVENT4} />
 
-        <p style={{
-          textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem",
-          letterSpacing: "2px", marginBottom: "10px", textTransform: "uppercase",
-        }}>
-          Event 3 starts in
-        </p>
-        <Countdown target={EVENT3.startDate} />
+        {/* ══════════════════ EVENT 2 — ENDED ══════════════════ */}
+        <Divider label="Previous Events" />
 
         <h2 style={{
           fontSize: "1.5rem", textAlign: "center",
-          textShadow: "0 0 10px #ffd700", letterSpacing: "3px",
-          textTransform: "uppercase", marginBottom: "6px", color: "#ffd700",
+          textShadow: "0 0 10px #ff4757", letterSpacing: "3px",
+          textTransform: "uppercase", marginBottom: "6px", color: "#ff4757",
         }}>
-          {EVENT3.title}
+          {EVENT2.title}
         </h2>
-        <p style={{ textAlign: "center", color: "#ffd700", fontSize: "0.75rem", letterSpacing: "2px", marginBottom: "14px" }}>
-          {EVENT3.dateRange}
+        <p style={{ textAlign: "center", color: "#c5c6c7", fontSize: "0.75rem", letterSpacing: "2px", marginBottom: "14px" }}>
+          {EVENT2.dateRange}
         </p>
-        <StatusBadge status={EVENT3.status} />
-        <p style={{
-          textAlign: "center", color: "#c5c6c7", fontSize: "0.85rem",
-          lineHeight: "1.7", maxWidth: "680px", margin: "0 auto 34px auto",
-        }}>
-          {EVENT3.description}
-        </p>
+        <StatusBadge status={EVENT2.status} />
 
-        {/* Event 3 Tiers */}
+        {/* Player Progress (Event 2 data) */}
+        <PlayerTracker />
+
         <div style={{
           display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
           gap: "20px", marginBottom: "30px",
         }}>
-          {EVENT3.tiers.map((tier) => <TierCard key={tier.name} tier={tier} />)}
+          {EVENT2.tiers.map((tier) => <TierCard key={tier.name} tier={tier} />)}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "24px", marginBottom: "50px" }}>
-          <LoyaltyBlock note={EVENT3.loyaltyNote} />
-          <RulesBlock rules={EVENT3.rules} />
+          <LoyaltyBlock note={EVENT2.loyaltyNote} />
+          <RulesBlock rules={EVENT2.rules} />
         </div>
-
-        {/* ══════════════════ EVENT 4 — SIMPLE CARD ══════════════════ */}
-        <SimpleUpcomingCard event={EVENT4} />
 
         {/* ══════════════════ PAYOUT HISTORY ══════════════════ */}
         <PayoutHistory />
