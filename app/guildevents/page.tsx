@@ -295,14 +295,14 @@ const TIER_B_ITEMS = [
 ];
 
 const TIER_B_ITEMS_3 = [
-  { name: "Wrapped Potato", qty: "1.3k", price: "$0.001 each",    max: "$1.30 max" },
-  { name: "Fries",          qty: "1.3k", price: "$0.001 each",    max: "$1.30 max" },
-  { name: "Veggie Salad",   qty: "1.3k", price: "$0.001 each",    max: "$1.30 max" },
-  { name: "Soil",           qty: "x500", price: "$0.0024 each",   max: "$1.20 max" },
-  { name: "Wheat Flour",    qty: "1k",   price: "$0.00125 each",  max: "$1.25 max" },
-  { name: "Bread",          qty: "x500", price: "TBD" },
-  { name: "Wine",           qty: "x500", price: "TBD" },
-  { name: "Fishing Rod",    qty: "TBD",  price: "TBD" },
+  { name: "Wrapped Potato", qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Fries",          qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Veggie Salad",   qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Soil",           qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Wheat Flour",    qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Bread",          qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Wine",           qty: "1k", price: "$0.0012 each", max: "$1.20 max" },
+  { name: "Fishing Rod",    qty: "TBD", price: "TBD" },
 ];
 
 const TIER_C_CAKES = [
@@ -504,7 +504,7 @@ const EVENT3 = {
       name: "Tier B", subtitle: "Mid-Tier Crafted Items",
       eligibility: "Active Low-Level Members Only",
       ...TC[1],
-      priceRange: "$0.001–$0.00125", playerCap: "$6.35+ per player (Bread & Wine TBD)", totalCap: "TBD",
+      priceRange: "$0.0012", playerCap: "$1.20 per item · $8.40 max (7 items)", totalCap: "7,000 items",
       items: TIER_B_ITEMS_3,
     },
     {
@@ -527,13 +527,6 @@ const EVENT3 = {
       ],
     },
     {
-      name: "Tier E", subtitle: "Crafted Items & Structures",
-      eligibility: undefined,
-      ...TC[4],
-      priceRange: "TBD", playerCap: "TBD", totalCap: "TBD",
-      items: TIER_E_ITEMS,
-    },
-    {
       name: "Tier F", subtitle: "Pond Fish (Passive)",
       eligibility: "Anyone with pond access",
       ...TC[5],
@@ -542,7 +535,7 @@ const EVENT3 = {
     },
   ],
   rules: [
-    { text: "Each player can earn up to $46.69+ confirmed ($10 from A + $6.35 from B + $5.34 from C + $25 from D, Bread, Wine & Fishing Rod TBD) — plus TBD from Tiers E & F." },
+    { text: "Each player can earn up to $49.74 confirmed ($10 from A + $8.40 from B + $5.34 from C + $25 from D + Fishing Rod TBD) — plus TBD from Tier F." },
     { text: "TIER A — PASSIVE TILE SYSTEM: To earn Tier A credit, you must plant and harvest on FoxHole's land tiles. Only the passive crop share that FoxHole receives counts toward your Tier A total — your own full harvest does not count. 10 crop types accepted, 2,000 of each, $0.0005 per item.", warn: true },
     { text: "TIER F — PASSIVE POND SYSTEM: To earn Tier F credit, fish in FoxHole's pond. Each cast catches 3 fish — 2 go to FoxHole, 1 you keep. Only the 2 fish FoxHole receives per cast count toward your Tier F total. Caps and pricing TBD per fish type.", warn: true },
     { text: "Wood & Stone price increased to $0.0025 each (up from $0.001375 in Event 2)." },
