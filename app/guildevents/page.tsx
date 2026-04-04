@@ -551,7 +551,7 @@ const EVENT3 = {
 };
 
 // ─── Event 3 player harvest data (from activity log, Apr 3 2026) ─────────────
-const E3_TIER_A_BLANK = () => ({ label: "Tier A — Basic Items", colorIdx: 0, items: [
+const E3_TIER_A_BLANK = () => ({ label: "Tier A — Basic Items", colorIdx: 0, priceEach: 0.0005, items: [
   { name: "Cotton",        current: 0, cap: 2000 },
   { name: "Potatoes",      current: 0, cap: 2000 },
   { name: "Red Flower",    current: 0, cap: 2000 },
@@ -569,7 +569,7 @@ const EVENT3_PLAYERS = [
     name: "Cmokyc",
     lastCounted: "Apr 4, 2026",
     tiers: [
-      { label: "Tier A — Basic Items (4 maxed ✓)", colorIdx: 0, items: [
+      { label: "Tier A — Basic Items (4 maxed ✓)", colorIdx: 0, priceEach: 0.0005, items: [
         { name: "Cotton",        current: 2000, cap: 2000 },
         { name: "Potatoes",      current: 236,  cap: 2000 },
         { name: "Red Flower",    current: 2000, cap: 2000 },
@@ -608,7 +608,7 @@ const EVENT3_PLAYERS = [
     name: "Nickoloy",
     lastCounted: "Apr 4, 2026",
     tiers: [
-      { label: "Tier A — Basic Items (1 maxed ✓)", colorIdx: 0, items: [
+      { label: "Tier A — Basic Items (1 maxed ✓)", colorIdx: 0, priceEach: 0.0005, items: [
         { name: "Cotton",        current: 687,  cap: 2000 },
         { name: "Potatoes",      current: 888,  cap: 2000 },
         { name: "Red Flower",    current: 2000, cap: 2000 },
@@ -1308,6 +1308,16 @@ function Event3PlayerTracker() {
     player.tiers.some((t) => t.items.some((i) => i.current > 0)) ||
     player.other.length > 0;
 
+  // Calculate earnings from tiers that have priceEach defined
+  const earned = player.tiers.reduce((total, tier) => {
+    const price = (tier as { priceEach?: number }).priceEach;
+    if (!price) return total;
+    return total + tier.items.reduce((sum, item) => {
+      const counted = item.cap > 0 ? Math.min(item.current, item.cap) : item.current;
+      return sum + counted * price;
+    }, 0);
+  }, 0);
+
   return (
     <div style={{
       background: "rgba(0,0,0,0.5)", border: "2px solid #00ff41",
@@ -1341,7 +1351,7 @@ function Event3PlayerTracker() {
       {/* Last counted */}
       <div style={{
         display: "flex", alignItems: "center", gap: "8px",
-        marginBottom: "20px", padding: "7px 12px",
+        marginBottom: "12px", padding: "7px 12px",
         background: "rgba(0,255,65,0.04)", border: "1px solid rgba(0,255,65,0.25)",
         borderRadius: "6px",
       }}>
@@ -1349,6 +1359,34 @@ function Event3PlayerTracker() {
           Data through:
         </span>
         <span style={{ color: "#c5c6c7", fontSize: "0.68rem" }}>{player.lastCounted}</span>
+      </div>
+
+      {/* Earnings summary */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        marginBottom: "20px", padding: "12px 16px",
+        background: "rgba(255,215,0,0.07)", border: "2px solid rgba(255,215,0,0.5)",
+        borderRadius: "8px", flexWrap: "wrap", gap: "8px",
+      }}>
+        <div>
+          <div style={{ color: "#ffd700", fontSize: "0.65rem", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "2px" }}>
+            FoxHole owes {player.name}
+          </div>
+          <div style={{ color: "#c5c6c7", fontSize: "0.6rem" }}>
+            Based on tracked items · Tier F pricing TBD
+          </div>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <span style={{
+            color: "#ffd700", fontSize: "1.5rem", fontWeight: "bold",
+            textShadow: "0 0 10px rgba(255,215,0,0.5)",
+          }}>
+            ${earned.toFixed(2)}
+          </span>
+          {earned === 0 && (
+            <div style={{ color: "#555", fontSize: "0.6rem", marginTop: "2px" }}>no tracked earnings yet</div>
+          )}
+        </div>
       </div>
 
       {/* Tier sections */}
