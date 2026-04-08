@@ -1,4 +1,4 @@
-import { CameraState, ZoneDef, ZoneExit, GameState, ZoneDecoration, Projectile } from './types';
+import { CameraState, ZoneDef, ZoneExit, GameState, ZoneDecoration, Projectile, Enemy } from './types';
 import { StationId, ArmorySaveState } from '../types';
 import { STATIONS } from '../data/stations';
 
@@ -50,6 +50,9 @@ export class Renderer {
 
     // Draw stations
     this.drawStations(zone, cam, gameState, saveState);
+
+    // Draw enemies
+    this.drawEnemies(gameState.enemies, cam);
 
     // Draw player
     this.drawPlayer(gameState, cam, sprites, saveState);
@@ -518,6 +521,100 @@ export class Renderer {
     ctx.restore();
   }
 
+  private drawEnemies(enemies: Enemy[], cam: CameraState) {
+    const ctx = this.ctx;
+    for (const enemy of enemies) {
+      if (enemy.respawnTimer > 0) continue;
+      const sx = enemy.x - cam.x;
+      const sy = enemy.y - cam.y;
+      if (sx < -60 || sx > this.width + 60 || sy < -60 || sy > this.height + 60) continue;
+
+      ctx.save();
+      ctx.translate(sx, sy);
+
+      // Hit flash — pulse white
+      const isHit = enemy.hitTimer > 0;
+      const hitAlpha = isHit ? enemy.hitTimer / 0.15 : 0;
+
+      // Shadow
+      ctx.beginPath();
+      ctx.ellipse(0, 16, 10, 4, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.fill();
+
+      // Body glow (red for charger, orange for grunt)
+      const bodyColor = enemy.type === 'charger' ? '#ff3030' : '#ff6600';
+      const glowColor = enemy.type === 'charger' ? 'rgba(255,48,48,0.25)' : 'rgba(255,102,0,0.25)';
+      const pulse = 0.7 + Math.sin(this.animTime * 5 + enemy.id) * 0.2;
+      const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 28);
+      glow.addColorStop(0, glowColor.replace('0.25', String(0.3 * pulse)));
+      glow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(-28, -28, 56, 56);
+
+      // Body (oval)
+      ctx.beginPath();
+      ctx.ellipse(0, 2, 14, 16, 0, 0, Math.PI * 2);
+      ctx.fillStyle = isHit ? `rgba(255,255,255,${hitAlpha})` : bodyColor;
+      ctx.fill();
+      ctx.strokeStyle = isHit ? '#fff' : (enemy.type === 'charger' ? '#ff8888' : '#ffaa44');
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Head
+      ctx.beginPath();
+      ctx.ellipse(0, -14, 11, 10, 0, 0, Math.PI * 2);
+      ctx.fillStyle = isHit ? `rgba(255,255,255,${hitAlpha})` : bodyColor;
+      ctx.fill();
+      ctx.strokeStyle = ctx.strokeStyle;
+      ctx.stroke();
+
+      // Eyes — glowing yellow
+      if (!isHit) {
+        ctx.fillStyle = '#ffee00';
+        ctx.shadowColor = '#ffee00';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(-4, -15, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(4, -15, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      // Charger has spikes
+      if (enemy.type === 'charger') {
+        ctx.strokeStyle = '#ff8888';
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 4; i++) {
+          const angle = (i / 4) * Math.PI * 2 + this.animTime * 2;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(angle) * 14, 2 + Math.sin(angle) * 16);
+          ctx.lineTo(Math.cos(angle) * 22, 2 + Math.sin(angle) * 24);
+          ctx.stroke();
+        }
+      }
+
+      ctx.restore();
+
+      // HP bar (above enemy)
+      if (enemy.hp < enemy.maxHp) {
+        const barW = 32;
+        const barH = 4;
+        const bx = sx - barW / 2;
+        const by = sy - 38;
+        ctx.fillStyle = '#330000';
+        ctx.fillRect(bx, by, barW, barH);
+        ctx.fillStyle = '#ff3030';
+        ctx.fillRect(bx, by, barW * (enemy.hp / enemy.maxHp), barH);
+        ctx.strokeStyle = '#660000';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(bx, by, barW, barH);
+      }
+    }
+  }
+
   private drawProjectiles(projectiles: Projectile[], cam: CameraState) {
     const ctx = this.ctx;
     for (const p of projectiles) {
@@ -610,7 +707,7 @@ export class Renderer {
 
     // Stats box (top-left)
     const statsW = 140;
-    const statsH = 60;
+    const statsH = 65;
     ctx.fillStyle = 'rgba(10, 10, 15, 0.85)';
     ctx.beginPath();
     this.roundRect(ctx, 10, 10, statsW, statsH, 6);
@@ -640,6 +737,62 @@ export class Renderer {
     ctx.fillText(`ATK: ${equippedWeapon ? '?' : '0'}`, 20, 50);
     ctx.fillStyle = '#4ecdc4';
     ctx.fillText(`DEF: ${equippedArmor ? '?' : '0'}`, 80, 50);
+
+    // ---- Health bar ----
+    const hpBarW = 140;
+    const hpBarH = 14;
+    const hpBarX = 10;
+    const hpBarY = 80;
+    const hpPct = gameState.playerHp / gameState.playerMaxHp;
+    const hpColor = hpPct > 0.6 ? '#22c55e' : hpPct > 0.3 ? '#facc15' : '#ef4444';
+
+    // Background box
+    ctx.fillStyle = 'rgba(10, 10, 15, 0.85)';
+    ctx.beginPath();
+    this.roundRect(ctx, hpBarX, hpBarY, hpBarW, hpBarH + 18, 6);
+    ctx.fill();
+    ctx.strokeStyle = '#66fcf1';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    this.roundRect(ctx, hpBarX, hpBarY, hpBarW, hpBarH + 18, 6);
+    ctx.stroke();
+
+    // HP label
+    ctx.font = '9px Orbitron, monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = '#66fcf1';
+    ctx.fillText('HP', hpBarX + 6, hpBarY + 4);
+    ctx.fillStyle = '#aaa';
+    ctx.fillText(`${gameState.playerHp} / ${gameState.playerMaxHp}`, hpBarX + 26, hpBarY + 4);
+
+    // Bar track
+    const bx = hpBarX + 6;
+    const by = hpBarY + 16;
+    const bw = hpBarW - 12;
+    ctx.fillStyle = '#1a1a2e';
+    ctx.beginPath();
+    this.roundRect(ctx, bx, by, bw, 8, 4);
+    ctx.fill();
+
+    // Bar fill
+    if (hpPct > 0) {
+      ctx.fillStyle = hpColor;
+      // Flicker during invincibility
+      if (gameState.invincibilityTimer > 0 && Math.sin(this.animTime * 20) > 0) {
+        ctx.globalAlpha = 0.4;
+      }
+      ctx.beginPath();
+      this.roundRect(ctx, bx, by, bw * hpPct, 8, 4);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    this.roundRect(ctx, bx, by, bw, 8, 4);
+    ctx.stroke();
 
     // Controls hint (bottom center)
     ctx.font = '10px Orbitron, monospace';

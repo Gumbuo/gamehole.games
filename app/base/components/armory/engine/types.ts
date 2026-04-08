@@ -105,16 +105,35 @@ export interface Projectile {
   lifetime: number; // seconds remaining
 }
 
+// ============== ENEMY ==============
+export type EnemyType = 'grunt' | 'charger';
+
+export interface Enemy {
+  id: number;
+  x: number;
+  y: number;
+  hp: number;
+  maxHp: number;
+  speed: number;
+  type: EnemyType;
+  hitTimer: number;     // seconds of red-flash after being hit
+  respawnTimer: number; // > 0 means dead, counting down to respawn
+}
+
 // ============== GAME STATE ==============
 export interface GameState {
   playerX: number;
   playerY: number;
   facing: FacingDirection;
   isMoving: boolean;
+  playerHp: number;
+  playerMaxHp: number;
+  invincibilityTimer: number; // seconds of i-frames after player is hit
   currentZoneId: ZoneId;
   nearStation: StationId | null;
   nearExit: ZoneExit | null;
   isTransitioning: boolean;
   transitionAlpha: number;
   projectiles: Projectile[];
+  enemies: Enemy[];
 }

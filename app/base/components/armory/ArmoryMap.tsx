@@ -14,8 +14,41 @@ import { InputHandler } from "./engine/InputHandler";
 import { Renderer } from "./engine/Renderer";
 import { updateMovement } from "./engine/Movement";
 import { canMoveTo, getNearStation, getNearExit } from "./engine/Collision";
-import { GameState, FacingDirection, ZonePlayerPosition } from "./engine/types";
+import { GameState, FacingDirection, ZonePlayerPosition, Enemy, ZoneDef } from "./engine/types";
 import { getZone, getSpawnPoint } from "./data/zones";
+
+// ---- Enemy helpers (module-level, no React deps) ----
+function findValidSpawn(zone: ZoneDef, avoidX: number, avoidY: number): { x: number; y: number } {
+  const ts = zone.tileSize;
+  const cols = zone.collisionGrid[0]?.length ?? 0;
+  const rows = zone.collisionGrid.length;
+  for (let attempt = 0; attempt < 80; attempt++) {
+    const col = Math.floor(Math.random() * cols);
+    const row = Math.floor(Math.random() * rows);
+    if (zone.collisionGrid[row]?.[col] !== 0) continue;
+    const x = col * ts + ts / 2;
+    const y = row * ts + ts / 2;
+    const dist = Math.sqrt((x - avoidX) ** 2 + (y - avoidY) ** 2);
+    if (dist >= 200) return { x, y };
+  }
+  return { x: avoidX + 300, y: avoidY + 100 };
+}
+
+const ENEMY_TEMPLATES: Record<string, Pick<Enemy, 'hp' | 'maxHp' | 'speed' | 'type'>> = {
+  grunt:   { type: 'grunt',   hp: 2, maxHp: 2, speed: 70  },
+  charger: { type: 'charger', hp: 1, maxHp: 1, speed: 140 },
+};
+
+function spawnEnemiesForZone(zone: ZoneDef, playerX: number, playerY: number): Enemy[] {
+  const enemies: Enemy[] = [];
+  const count = 4;
+  for (let i = 0; i < count; i++) {
+    const tpl = i === 0 ? ENEMY_TEMPLATES.charger : ENEMY_TEMPLATES.grunt;
+    const pos = findValidSpawn(zone, playerX, playerY);
+    enemies.push({ ...tpl, id: performance.now() + i + Math.random(), ...pos, hitTimer: 0, respawnTimer: 0 });
+  }
+  return enemies;
+}
 
 interface ArmoryMapProps {
   saveState: ArmorySaveState;
@@ -56,12 +89,16 @@ export default function ArmoryMap({
     playerY: saveState.playerPosition?.y ?? 10 * 32,
     facing: 'east' as FacingDirection,
     isMoving: false,
+    playerHp: 100,
+    playerMaxHp: 100,
+    invincibilityTimer: 0,
     currentZoneId: (saveState.playerPosition?.zoneId as ZoneId) ?? 'homeBase',
     nearStation: null,
     nearExit: null,
     isTransitioning: false,
     transitionAlpha: 0,
     projectiles: [],
+    enemies: [],
   });
   const saveStateRef = useRef(saveState);
   const spritesRef = useRef<{ east: HTMLImageElement | null; west: HTMLImageElement | null }>({
@@ -190,6 +227,9 @@ export default function ArmoryMap({
     inputRef.current = input;
     rendererRef.current = renderer;
 
+    // Spawn initial enemies
+    stateRef.current.enemies = spawnEnemiesForZone(zone, stateRef.current.playerX, stateRef.current.playerY);
+
     // Show initial zone toast
     showZoneToast(zone.name);
 
@@ -227,6 +267,7 @@ export default function ArmoryMap({
             tr.phase = 'fadeIn';
             showZoneToast(newZone.name);
             onZoneChangeRef.current?.(tr.targetZone);
+            state.enemies = spawnEnemiesForZone(newZone, spawn.x, spawn.y);
 
             // Save position immediately on zone change
             onUpdatePositionRef.current({
@@ -331,7 +372,70 @@ export default function ArmoryMap({
         p.y += p.vy * dt;
         p.lifetime -= dt;
       }
-      state.projectiles = state.projectiles.filter(p => p.lifetime > 0);
+
+      // Projectile-enemy collision
+      state.projectiles = state.projectiles.filter(p => {
+        for (const enemy of state.enemies) {
+          if (enemy.respawnTimer > 0) continue;
+          const dx = p.x - enemy.x;
+          const dy = p.y - enemy.y;
+          if (dx * dx + dy * dy < 22 * 22) {
+            enemy.hp -= 1;
+            enemy.hitTimer = 0.15;
+            if (enemy.hp <= 0) {
+              enemy.respawnTimer = 5;
+            }
+            return false; // consume projectile
+          }
+        }
+        return p.lifetime > 0;
+      });
+
+      // Enemy AI + player damage
+      if (state.invincibilityTimer > 0) {
+        state.invincibilityTimer = Math.max(0, state.invincibilityTimer - dt);
+      }
+      for (const enemy of state.enemies) {
+        if (enemy.respawnTimer > 0) {
+          enemy.respawnTimer -= dt;
+          if (enemy.respawnTimer <= 0) {
+            const pos = findValidSpawn(currentZone, state.playerX, state.playerY);
+            enemy.x = pos.x;
+            enemy.y = pos.y;
+            enemy.hp = enemy.maxHp;
+            enemy.hitTimer = 0;
+          }
+          continue;
+        }
+        if (enemy.hitTimer > 0) enemy.hitTimer -= dt;
+
+        // Chase player
+        const edx = state.playerX - enemy.x;
+        const edy = state.playerY - enemy.y;
+        const dist = Math.sqrt(edx * edx + edy * edy);
+        if (dist > 18) {
+          const nx = edx / dist;
+          const ny = edy / dist;
+          const mx = nx * enemy.speed * dt;
+          const my = ny * enemy.speed * dt;
+          if (canMoveTo(enemy.x + mx, enemy.y, currentZone)) enemy.x += mx;
+          if (canMoveTo(enemy.x, enemy.y + my, currentZone)) enemy.y += my;
+        }
+
+        // Contact damage
+        if (dist < 22 && state.invincibilityTimer <= 0) {
+          state.playerHp = Math.max(0, state.playerHp - 10);
+          state.invincibilityTimer = 1.0;
+          if (state.playerHp <= 0) {
+            // Respawn player with full HP at zone start
+            state.playerHp = state.playerMaxHp;
+            const spawn = getSpawnPoint(currentZone, 'default');
+            state.playerX = spawn.x;
+            state.playerY = spawn.y;
+            camera.snapTo(spawn.x, spawn.y, currentZone.width, currentZone.height);
+          }
+        }
+      }
 
       // Handle exit transition
       if (state.nearExit && !state.isTransitioning) {
