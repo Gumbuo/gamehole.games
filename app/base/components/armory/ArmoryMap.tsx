@@ -35,7 +35,16 @@ export default function ArmoryMap({
 }: ArmoryMapProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [canvasSize, setCanvasSize] = useState({ width: MIN_WIDTH, height: MIN_HEIGHT });
+  // Canvas size as ref — avoids React re-renders and game loop restarts on resize
+  const canvasSizeRef = useRef({ width: MIN_WIDTH, height: MIN_HEIGHT });
+
+  // Stable refs for prop callbacks — game loop reads these without needing them as deps
+  const onStationSelectRef = useRef(onStationSelect);
+  const onUpdatePositionRef = useRef(onUpdatePosition);
+  const onZoneChangeRef = useRef(onZoneChange);
+  useEffect(() => { onStationSelectRef.current = onStationSelect; }, [onStationSelect]);
+  useEffect(() => { onUpdatePositionRef.current = onUpdatePosition; }, [onUpdatePosition]);
+  useEffect(() => { onZoneChangeRef.current = onZoneChange; }, [onZoneChange]);
 
   // Refs for game engine objects (survive re-renders)
   const gameLoopRef = useRef<GameLoop | null>(null);
@@ -51,6 +60,7 @@ export default function ArmoryMap({
     nearExit: null,
     isTransitioning: false,
     transitionAlpha: 0,
+    projectiles: [],
   });
   const saveStateRef = useRef(saveState);
   const spritesRef = useRef<{ east: HTMLImageElement | null; west: HTMLImageElement | null }>({
@@ -93,14 +103,14 @@ export default function ArmoryMap({
   const equippedWeapon = saveState.equipped?.weapon ? getItem(saveState.equipped.weapon.itemId) : null;
   const equippedArmor = saveState.equipped?.armor ? getItem(saveState.equipped.armor.itemId) : null;
 
-  // Debounced position save
+  // Debounced position save — uses ref so it never changes identity
   const savePosition = useCallback(() => {
     if (positionSaveTimerRef.current) {
       clearTimeout(positionSaveTimerRef.current);
     }
     positionSaveTimerRef.current = setTimeout(() => {
       const s = stateRef.current;
-      onUpdatePosition({
+      onUpdatePositionRef.current({
         zoneId: s.currentZoneId,
         x: s.playerX,
         y: s.playerY,
@@ -108,7 +118,7 @@ export default function ArmoryMap({
         zonePositions: zonePositionsRef.current,
       });
     }, 2000);
-  }, [onUpdatePosition]);
+  }, []);
 
   // Show zone toast
   const showZoneToast = useCallback((zoneName: string) => {
@@ -128,14 +138,26 @@ export default function ArmoryMap({
     stateRef.current.isTransitioning = true;
   }, []);
 
-  // Responsive canvas sizing
+  // Responsive canvas sizing — updates imperatively, never restarts game loop
   useEffect(() => {
     const updateSize = () => {
-      if (!containerRef.current) return;
+      if (!containerRef.current || !canvasRef.current) return;
       const parentWidth = containerRef.current.parentElement?.clientWidth || MIN_WIDTH;
       const w = Math.max(MIN_WIDTH, Math.min(parentWidth - 32, 1200));
       const h = Math.max(MIN_HEIGHT, Math.round(w * 0.55));
-      setCanvasSize({ width: w, height: h });
+      canvasSizeRef.current = { width: w, height: h };
+      // Update DOM directly
+      canvasRef.current.width = w;
+      canvasRef.current.height = h;
+      // Update engine objects if they exist
+      cameraRef.current?.resize(w, h);
+      rendererRef.current?.resize(w, h);
+      const zone = getZone(stateRef.current.currentZoneId);
+      cameraRef.current?.snapTo(stateRef.current.playerX, stateRef.current.playerY, zone.width, zone.height);
+      if (inputRef.current && cameraRef.current) {
+        const cam = cameraRef.current;
+        inputRef.current.updateScreenToWorld((sx, sy) => cam.screenToWorld(sx, sy));
+      }
     };
 
     updateSize();
@@ -143,7 +165,7 @@ export default function ArmoryMap({
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  // Main game engine setup
+  // Main game engine setup — runs once on mount only
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -151,9 +173,11 @@ export default function ArmoryMap({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const { width, height } = canvasSizeRef.current;
+
     // Initialize engine modules
-    const camera = new Camera(canvasSize.width, canvasSize.height);
-    const renderer = new Renderer(ctx, canvasSize.width, canvasSize.height);
+    const camera = new Camera(width, height);
+    const renderer = new Renderer(ctx, width, height);
 
     // Snap camera to player immediately
     const zone = getZone(stateRef.current.currentZoneId);
@@ -200,10 +224,10 @@ export default function ArmoryMap({
 
             tr.phase = 'fadeIn';
             showZoneToast(newZone.name);
-            onZoneChange?.(tr.targetZone);
+            onZoneChangeRef.current?.(tr.targetZone);
 
             // Save position immediately on zone change
-            onUpdatePosition({
+            onUpdatePositionRef.current({
               zoneId: state.currentZoneId,
               x: state.playerX,
               y: state.playerY,
@@ -255,35 +279,56 @@ export default function ArmoryMap({
       // Check exit proximity
       state.nearExit = getNearExit(state.playerX, state.playerY, currentZone.exits);
 
-      // Handle interaction
+      // Handle interaction (E key)
       if (input.consumeInteract()) {
         if (state.nearStation) {
           const stationLevel = saveStateRef.current.stationLevels[state.nearStation];
           const station = STATIONS[state.nearStation];
           const isUnlocked = stationLevel > 0 || saveStateRef.current.progress.level >= station.unlockLevel;
           if (isUnlocked && stationLevel > 0) {
-            onStationSelect(state.nearStation);
+            onStationSelectRef.current(state.nearStation);
           }
         }
       }
 
-      // Handle click on station (click target near a station)
-      if (input.state.clickTarget) {
-        const clickStation = getNearStation(
-          input.state.clickTarget.x,
-          input.state.clickTarget.y,
-          currentZone.stations
-        );
+      // Handle click — interact with station if near one, otherwise shoot
+      const shootTarget = input.consumeShoot();
+      if (shootTarget) {
+        const clickStation = getNearStation(shootTarget.x, shootTarget.y, currentZone.stations);
         if (clickStation && clickStation === state.nearStation) {
+          // Click on nearby station = open it
           const stationLevel = saveStateRef.current.stationLevels[clickStation];
           const station = STATIONS[clickStation];
           const isUnlocked = stationLevel > 0 || saveStateRef.current.progress.level >= station.unlockLevel;
           if (isUnlocked && stationLevel > 0) {
-            input.state.clickTarget = null;
-            onStationSelect(clickStation);
+            onStationSelectRef.current(clickStation);
+          }
+        } else {
+          // Click anywhere else = shoot
+          const dx = shootTarget.x - state.playerX;
+          const dy = shootTarget.y - state.playerY;
+          const len = Math.sqrt(dx * dx + dy * dy);
+          if (len > 4) {
+            const speed = 500;
+            state.projectiles.push({
+              id: performance.now() + Math.random(),
+              x: state.playerX,
+              y: state.playerY,
+              vx: (dx / len) * speed,
+              vy: (dy / len) * speed,
+              lifetime: 1.5,
+            });
           }
         }
       }
+
+      // Update projectiles
+      for (const p of state.projectiles) {
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.lifetime -= dt;
+      }
+      state.projectiles = state.projectiles.filter(p => p.lifetime > 0);
 
       // Handle exit transition
       if (state.nearExit && !state.isTransitioning) {
@@ -322,16 +367,17 @@ export default function ArmoryMap({
         clearTimeout(positionSaveTimerRef.current);
       }
     };
-  }, [canvasSize.width, canvasSize.height, onStationSelect, onUpdatePosition, onZoneChange, savePosition, showZoneToast, startTransition]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // runs once on mount — resize handled imperatively, callbacks via refs
 
   return (
     <div ref={containerRef} className="relative">
       <div className="relative inline-block">
         <canvas
           ref={canvasRef}
-          width={canvasSize.width}
-          height={canvasSize.height}
-          className="border border-cyan-800 rounded-lg cursor-pointer"
+          width={canvasSizeRef.current.width}
+          height={canvasSizeRef.current.height}
+          className="border border-cyan-800 rounded-lg cursor-crosshair"
           style={{ imageRendering: "pixelated" }}
         />
 

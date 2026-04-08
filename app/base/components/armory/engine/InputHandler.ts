@@ -1,4 +1,5 @@
 import { InputState, Vec2 } from './types';
+export type { Vec2 };
 
 const GAME_KEYS = new Set([
   'w', 'a', 's', 'd',
@@ -10,6 +11,7 @@ export class InputHandler {
   state: InputState = {
     keys: new Set(),
     clickTarget: null,
+    shootTarget: null,
     interactPressed: false,
   };
 
@@ -64,7 +66,10 @@ export class InputHandler {
     const rect = this.canvas.getBoundingClientRect();
     const sx = e.clientX - rect.left;
     const sy = e.clientY - rect.top;
-    this.state.clickTarget = this.screenToWorld(sx, sy);
+    const worldPos = this.screenToWorld(sx, sy);
+    // Left click = shoot, also store as clickTarget for station interaction check
+    this.state.shootTarget = worldPos;
+    this.state.clickTarget = worldPos;
   };
 
   private onKeyDown = (e: KeyboardEvent) => {
@@ -92,5 +97,14 @@ export class InputHandler {
       return true;
     }
     return false;
+  }
+
+  consumeShoot(): Vec2 | null {
+    const t = this.state.shootTarget;
+    if (t) {
+      this.state.shootTarget = null;
+      return t;
+    }
+    return null;
   }
 }

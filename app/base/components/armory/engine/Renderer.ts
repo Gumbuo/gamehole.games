@@ -1,4 +1,4 @@
-import { CameraState, ZoneDef, ZoneExit, GameState, ZoneDecoration } from './types';
+import { CameraState, ZoneDef, ZoneExit, GameState, ZoneDecoration, Projectile } from './types';
 import { StationId, ArmorySaveState } from '../types';
 import { STATIONS } from '../data/stations';
 
@@ -53,6 +53,9 @@ export class Renderer {
 
     // Draw player
     this.drawPlayer(gameState, cam, sprites, saveState);
+
+    // Draw projectiles
+    this.drawProjectiles(gameState.projectiles, cam);
 
     // Draw minimap
     this.drawMinimap(zone, gameState, cam);
@@ -387,6 +390,32 @@ export class Renderer {
     }
   }
 
+  private drawProjectiles(projectiles: Projectile[], cam: CameraState) {
+    const ctx = this.ctx;
+    for (const p of projectiles) {
+      const sx = p.x - cam.x;
+      const sy = p.y - cam.y;
+      if (sx < -10 || sx > this.width + 10 || sy < -10 || sy > this.height + 10) continue;
+
+      // Glow trail
+      const alpha = Math.min(1, p.lifetime * 2);
+      const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, 10);
+      glow.addColorStop(0, `rgba(0, 255, 153, ${alpha * 0.6})`);
+      glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(sx - 10, sy - 10, 20, 20);
+
+      // Core
+      ctx.beginPath();
+      ctx.arc(sx, sy, 4, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 255, 153, ${alpha})`;
+      ctx.fill();
+      ctx.strokeStyle = `rgba(102, 252, 241, ${alpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
   private drawMinimap(zone: ZoneDef, gameState: GameState, cam: CameraState) {
     const ctx = this.ctx;
     const mmW = 120;
@@ -488,7 +517,7 @@ export class Renderer {
     ctx.font = '10px Orbitron, monospace';
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(102, 252, 241, 0.4)';
-    ctx.fillText('WASD / Click to move | E to interact', this.width / 2, this.height - 14);
+    ctx.fillText('WASD to move | Click to shoot | E to interact', this.width / 2, this.height - 14);
   }
 
   private roundRect(

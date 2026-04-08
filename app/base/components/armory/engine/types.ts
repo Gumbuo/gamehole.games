@@ -91,7 +91,18 @@ export interface CameraState {
 export interface InputState {
   keys: Set<string>;
   clickTarget: Vec2 | null;
+  shootTarget: Vec2 | null;
   interactPressed: boolean;
+}
+
+// ============== PROJECTILE ==============
+export interface Projectile {
+  id: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  lifetime: number; // seconds remaining
 }
 
 // ============== GAME STATE ==============
@@ -104,4 +115,5 @@ export interface GameState {
   nearExit: ZoneExit | null;
   isTransitioning: boolean;
   transitionAlpha: number;
+  projectiles: Projectile[];
 }
