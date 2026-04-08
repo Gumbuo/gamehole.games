@@ -101,9 +101,11 @@ export default function ArmoryMap({
     enemies: [],
   });
   const saveStateRef = useRef(saveState);
-  const spritesRef = useRef<{ east: HTMLImageElement | null; west: HTMLImageElement | null }>({
+  const spritesRef = useRef<{ east: HTMLImageElement | null; west: HTMLImageElement | null; north: HTMLImageElement | null; south: HTMLImageElement | null }>({
     east: null,
     west: null,
+    north: null,
+    south: null,
   });
   const positionSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const zonePositionsRef = useRef<Record<string, { x: number; y: number }>>(
@@ -135,6 +137,14 @@ export default function ArmoryMap({
     const imgWest = new Image();
     imgWest.src = "/images/armory/player/west.png";
     imgWest.onload = () => { spritesRef.current.west = imgWest; };
+
+    const imgNorth = new Image();
+    imgNorth.src = "/images/armory/player/north.png";
+    imgNorth.onload = () => { spritesRef.current.north = imgNorth; };
+
+    const imgSouth = new Image();
+    imgSouth.src = "/images/armory/player/south.png";
+    imgSouth.onload = () => { spritesRef.current.south = imgSouth; };
   }, []);
 
   // Get equipped items for overlay

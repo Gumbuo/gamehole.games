@@ -5,6 +5,8 @@ import { STATIONS } from '../data/stations';
 interface PlayerSprites {
   east: HTMLImageElement | null;
   west: HTMLImageElement | null;
+  north: HTMLImageElement | null;
+  south: HTMLImageElement | null;
 }
 
 export class Renderer {
@@ -363,162 +365,22 @@ export class Renderer {
     const sy = gameState.playerY - cam.y;
     const size = 64;
 
-    const facing = gameState.facing;
     const isMoving = gameState.isMoving;
+    const bob = isMoving ? Math.sin(this.animTime * 10) * 2 : 0;
+    const spriteMap = { east: sprites.east, west: sprites.west, north: sprites.north, south: sprites.south };
+    const sprite = spriteMap[gameState.facing] ?? sprites.east;
 
-    if (facing === 'east' || facing === 'west') {
-      // Walk bob for east/west
-      const bob = isMoving ? Math.sin(this.animTime * 10) * 2 : 0;
-      const sprite = facing === 'west' ? sprites.west : sprites.east;
-      if (sprite) {
-        ctx.drawImage(sprite, sx - size / 2, sy - size / 2 + bob, size, size);
-      } else {
-        this.drawFallbackPlayer(ctx, sx, sy + bob);
-      }
+    if (sprite) {
+      ctx.drawImage(sprite, sx - size / 2, sy - size / 2 + bob, size, size);
     } else {
-      // North / South — draw animated top-down character (no sprite files needed)
-      this.drawNorthSouthPlayer(ctx, sx, sy, facing, isMoving);
-    }
-  }
-
-  private drawFallbackPlayer(ctx: CanvasRenderingContext2D, sx: number, sy: number) {
-    ctx.beginPath();
-    ctx.arc(sx, sy - 10, 20, 0, Math.PI * 2);
-    ctx.fillStyle = '#00ff99';
-    ctx.fill();
-    ctx.strokeStyle = '#66fcf1';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-  }
-
-  private drawNorthSouthPlayer(
-    ctx: CanvasRenderingContext2D,
-    sx: number,
-    sy: number,
-    facing: 'north' | 'south',
-    isMoving: boolean
-  ) {
-    // Walking cycle: two alternating leg positions
-    const walkPhase = this.animTime * 8;
-    const bob = isMoving ? Math.sin(walkPhase) * 2 : 0;
-    const legSwing = isMoving ? Math.sin(walkPhase) * 6 : 0;
-    const armSwing = isMoving ? -Math.sin(walkPhase) * 5 : 0;
-
-    ctx.save();
-    ctx.translate(sx, sy + bob);
-
-    // Shadow
-    ctx.beginPath();
-    ctx.ellipse(0, 14, 12, 5, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0,0,0,0.35)';
-    ctx.fill();
-
-    if (facing === 'south') {
-      // Body (facing camera — show front)
-      // Legs
-      ctx.fillStyle = '#1a3a5a';
       ctx.beginPath();
-      ctx.roundRect(-8 + legSwing * 0.5, 8, 7, 12, 3);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.roundRect(1 - legSwing * 0.5, 8, 7, 12, 3);
-      ctx.fill();
-
-      // Torso
-      ctx.fillStyle = '#00cc77';
-      ctx.beginPath();
-      ctx.roundRect(-11, -8, 22, 18, 5);
-      ctx.fill();
-      ctx.strokeStyle = '#66fcf1';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Arms
-      ctx.fillStyle = '#00aa66';
-      ctx.beginPath();
-      ctx.roundRect(-17, -6 + armSwing, 7, 14, 3);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.roundRect(10, -6 - armSwing, 7, 14, 3);
-      ctx.fill();
-
-      // Head
-      ctx.beginPath();
-      ctx.arc(0, -18, 13, 0, Math.PI * 2);
+      ctx.arc(sx, sy - 10 + bob, 20, 0, Math.PI * 2);
       ctx.fillStyle = '#00ff99';
       ctx.fill();
       ctx.strokeStyle = '#66fcf1';
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 2;
       ctx.stroke();
-
-      // Eyes
-      ctx.fillStyle = '#001a0d';
-      ctx.beginPath();
-      ctx.arc(-4, -18, 3, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(4, -18, 3, 0, Math.PI * 2);
-      ctx.fill();
-      // Eye shine
-      ctx.fillStyle = '#66fcf1';
-      ctx.beginPath();
-      ctx.arc(-3, -19, 1, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(5, -19, 1, 0, Math.PI * 2);
-      ctx.fill();
-    } else {
-      // North — show back of character
-      // Legs
-      ctx.fillStyle = '#1a3a5a';
-      ctx.beginPath();
-      ctx.roundRect(-8 + legSwing * 0.5, 8, 7, 12, 3);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.roundRect(1 - legSwing * 0.5, 8, 7, 12, 3);
-      ctx.fill();
-
-      // Torso (back — slightly darker)
-      ctx.fillStyle = '#00994d';
-      ctx.beginPath();
-      ctx.roundRect(-11, -8, 22, 18, 5);
-      ctx.fill();
-      ctx.strokeStyle = '#45a29e';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Arms (back view — arms slightly behind body)
-      ctx.fillStyle = '#007744';
-      ctx.beginPath();
-      ctx.roundRect(-17, -6 + armSwing, 7, 14, 3);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.roundRect(10, -6 - armSwing, 7, 14, 3);
-      ctx.fill();
-
-      // Head (back — no eyes visible)
-      ctx.beginPath();
-      ctx.arc(0, -18, 13, 0, Math.PI * 2);
-      ctx.fillStyle = '#00cc77';
-      ctx.fill();
-      ctx.strokeStyle = '#45a29e';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Antenna / back-of-head detail
-      ctx.strokeStyle = '#66fcf1';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(0, -31);
-      ctx.lineTo(0, -36);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(0, -37, 2, 0, Math.PI * 2);
-      ctx.fillStyle = '#66fcf1';
-      ctx.fill();
     }
-
-    ctx.restore();
   }
 
   private drawEnemies(enemies: Enemy[], cam: CameraState) {
