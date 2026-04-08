@@ -204,14 +204,14 @@ const EVENT3_PLAYERS = [
     tiers: [
       { label: "Tier A — Basic Items (4 maxed ✓)", colorIdx: 0, priceEach: 0.0005, items: [
         { name: "Cotton",        current: 2000, cap: 2000 },
-        { name: "Potatoes",      current: 236,  cap: 2000 },
+        { name: "Potatoes",      current: 1652, cap: 2000 },
         { name: "Red Flower",    current: 2000, cap: 2000 },
         { name: "Blue Flower",   current: 2000, cap: 2000 },
         { name: "Yellow Flower", current: 610,  cap: 2000 },
         { name: "Pumpkin",       current: 2000, cap: 2000 },
-        { name: "Grapes",        current: 0,    cap: 2000 },
-        { name: "Wheat",         current: 269,  cap: 2000 },
-        { name: "Tomato",        current: 50,   cap: 2000 },
+        { name: "Grapes",        current: 36,   cap: 2000 },
+        { name: "Wheat",         current: 311,  cap: 2000 },
+        { name: "Tomato",        current: 158,  cap: 2000 },
         { name: "Fern",          current: 0,    cap: 2000 },
       ]},
       { label: "Tier F — Fish (Passive)", colorIdx: 5, items: [
@@ -259,17 +259,17 @@ const EVENT3_PLAYERS = [
     name: "Nickoloy",
     lastCounted: "Apr 8, 2026",
     tiers: [
-      { label: "Tier A — Basic Items (1 maxed ✓)", colorIdx: 0, priceEach: 0.0005, items: [
-        { name: "Cotton",        current: 687,  cap: 2000 },
+      { label: "Tier A — Basic Items (3 maxed ✓)", colorIdx: 0, priceEach: 0.0005, items: [
+        { name: "Cotton",        current: 2000, cap: 2000 },
         { name: "Potatoes",      current: 888,  cap: 2000 },
         { name: "Red Flower",    current: 2000, cap: 2000 },
-        { name: "Blue Flower",   current: 753,  cap: 2000 },
-        { name: "Yellow Flower", current: 285,  cap: 2000 },
-        { name: "Pumpkin",       current: 0,    cap: 2000 },
-        { name: "Grapes",        current: 0,    cap: 2000 },
-        { name: "Wheat",         current: 94,   cap: 2000 },
-        { name: "Tomato",        current: 0,    cap: 2000 },
-        { name: "Fern",          current: 0,    cap: 2000 },
+        { name: "Blue Flower",   current: 821,  cap: 2000 },
+        { name: "Yellow Flower", current: 887,  cap: 2000 },
+        { name: "Pumpkin",       current: 876,  cap: 2000 },
+        { name: "Grapes",        current: 20,   cap: 2000 },
+        { name: "Wheat",         current: 2000, cap: 2000 },
+        { name: "Tomato",        current: 228,  cap: 2000 },
+        { name: "Fern",          current: 1324, cap: 2000 },
       ]},
       { label: "Tier F — Fish (Passive)", colorIdx: 5, items: [
         { name: "Blue Bluegill",   current: 142, cap: 0 },
@@ -328,7 +328,18 @@ const EVENT3_PLAYERS = [
   {
     name: "Qaziza",
     lastCounted: "Apr 8, 2026",
-    tiers: [E3_TIER_A_BLANK()],
+    tiers: [{ label: "Tier A — Basic Items", colorIdx: 0, priceEach: 0.0005, items: [
+      { name: "Cotton",        current: 0,  cap: 2000 },
+      { name: "Potatoes",      current: 0,  cap: 2000 },
+      { name: "Red Flower",    current: 0,  cap: 2000 },
+      { name: "Blue Flower",   current: 0,  cap: 2000 },
+      { name: "Yellow Flower", current: 0,  cap: 2000 },
+      { name: "Pumpkin",       current: 0,  cap: 2000 },
+      { name: "Grapes",        current: 0,  cap: 2000 },
+      { name: "Wheat",         current: 0,  cap: 2000 },
+      { name: "Tomato",        current: 0,  cap: 2000 },
+      { name: "Fern",          current: 58, cap: 2000 },
+    ]}],
     other: [
       { name: "Wood (trees)",                qty: 34  },
       { name: "Cotton (harvested)",          qty: 55  },
@@ -348,7 +359,18 @@ const EVENT3_PLAYERS = [
   {
     name: "NoName",
     lastCounted: "Apr 8, 2026",
-    tiers: [E3_TIER_A_BLANK()],
+    tiers: [{ label: "Tier A — Basic Items", colorIdx: 0, priceEach: 0.0005, items: [
+      { name: "Cotton",        current: 196, cap: 2000 },
+      { name: "Potatoes",      current: 0,   cap: 2000 },
+      { name: "Red Flower",    current: 0,   cap: 2000 },
+      { name: "Blue Flower",   current: 0,   cap: 2000 },
+      { name: "Yellow Flower", current: 0,   cap: 2000 },
+      { name: "Pumpkin",       current: 0,   cap: 2000 },
+      { name: "Grapes",        current: 0,   cap: 2000 },
+      { name: "Wheat",         current: 0,   cap: 2000 },
+      { name: "Tomato",        current: 0,   cap: 2000 },
+      { name: "Fern",          current: 0,   cap: 2000 },
+    ]}],
     other: [
       { name: "Wood (trees)",                qty: 62  },
       { name: "Stone",                       qty: 6   },
@@ -483,7 +505,18 @@ const EVENT3_PLAYERS = [
   {
     name: "premiu",
     lastCounted: "Apr 8, 2026",
-    tiers: [],
+    tiers: [{ label: "Tier A — Basic Items", colorIdx: 0, priceEach: 0.0005, items: [
+      { name: "Cotton",        current: 96, cap: 2000 },
+      { name: "Potatoes",      current: 0,  cap: 2000 },
+      { name: "Red Flower",    current: 0,  cap: 2000 },
+      { name: "Blue Flower",   current: 0,  cap: 2000 },
+      { name: "Yellow Flower", current: 0,  cap: 2000 },
+      { name: "Pumpkin",       current: 0,  cap: 2000 },
+      { name: "Grapes",        current: 0,  cap: 2000 },
+      { name: "Wheat",         current: 0,  cap: 2000 },
+      { name: "Tomato",        current: 0,  cap: 2000 },
+      { name: "Fern",          current: 0,  cap: 2000 },
+    ]}],
     other: [
       { name: "Wood (trees)",     qty: 2  },
       { name: "Quest — Cucumber", qty: 13 },
@@ -591,7 +624,18 @@ const EVENT3_PLAYERS = [
   {
     name: "Un4g1v3n",
     lastCounted: "Apr 8, 2026",
-    tiers: [],
+    tiers: [{ label: "Tier A — Basic Items", colorIdx: 0, priceEach: 0.0005, items: [
+      { name: "Cotton",        current: 0,   cap: 2000 },
+      { name: "Potatoes",      current: 0,   cap: 2000 },
+      { name: "Red Flower",    current: 0,   cap: 2000 },
+      { name: "Blue Flower",   current: 0,   cap: 2000 },
+      { name: "Yellow Flower", current: 0,   cap: 2000 },
+      { name: "Pumpkin",       current: 0,   cap: 2000 },
+      { name: "Grapes",        current: 100, cap: 2000 },
+      { name: "Wheat",         current: 0,   cap: 2000 },
+      { name: "Tomato",        current: 0,   cap: 2000 },
+      { name: "Fern",          current: 0,   cap: 2000 },
+    ]}],
     other: [
       { name: "Quest — Veggie Salad", qty: 1 },
     ],
@@ -610,26 +654,29 @@ const EVENT3_PLAYERS = [
 const E3_PLANTING = [
   {
     name: "Cmokyc",
-    total: 4994,
+    total: 6705,
     items: [
-      { name: "Pumpkin",       planted: 974 },
-      { name: "Tomato",        planted: 625 },
-      { name: "Potato",        planted: 575 },
-      { name: "Cotton",        planted: 810 },
-      { name: "Wheat",         planted: 285 },
-      { name: "Blue Flower",   planted: 657 },
-      { name: "Yellow Flower", planted: 708 },
-      { name: "Red Flower",    planted: 360 },
+      { name: "Cotton",        planted: 1848 },
+      { name: "Pumpkin",       planted: 1264 },
+      { name: "Blue Flower",   planted: 893  },
+      { name: "Yellow Flower", planted: 708  },
+      { name: "Red Flower",    planted: 507  },
+      { name: "Tomato",        planted: 625  },
+      { name: "Potato",        planted: 575  },
+      { name: "Wheat",         planted: 285  },
     ],
   },
   {
     name: "Nickoloy",
-    total: 2734,
+    total: 4634,
     items: [
       { name: "Red Flower",  planted: 1616 },
+      { name: "Tomato",      planted: 601  },
       { name: "Blue Flower", planted: 883  },
-      { name: "Fern",        planted: 142  },
-      { name: "Wheat",       planted: 93   },
+      { name: "Wheat",       planted: 721  },
+      { name: "Fern",        planted: 432  },
+      { name: "Potato",      planted: 281  },
+      { name: "Cotton",      planted: 100  },
     ],
   },
   {
@@ -645,14 +692,22 @@ const E3_PLANTING = [
   },
   {
     name: "NoName",
-    total: 207,
+    total: 274,
     items: [
       { name: "Blue Flower",   planted: 107 },
+      { name: "Grapes",        planted: 67  },
       { name: "Red Flower",    planted: 42  },
       { name: "Cotton",        planted: 33  },
       { name: "Yellow Flower", planted: 16  },
       { name: "Potato",        planted: 8   },
       { name: "Fern",          planted: 1   },
+    ],
+  },
+  {
+    name: "Un4g1v3n",
+    total: 34,
+    items: [
+      { name: "Cotton", planted: 34 },
     ],
   },
 ];
