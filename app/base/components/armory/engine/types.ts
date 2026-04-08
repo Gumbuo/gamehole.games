@@ -110,6 +110,7 @@ export interface GameState {
   playerX: number;
   playerY: number;
   facing: FacingDirection;
+  isMoving: boolean;
   currentZoneId: ZoneId;
   nearStation: StationId | null;
   nearExit: ZoneExit | null;

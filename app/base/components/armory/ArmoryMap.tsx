@@ -55,6 +55,7 @@ export default function ArmoryMap({
     playerX: saveState.playerPosition?.x ?? 15 * 32,
     playerY: saveState.playerPosition?.y ?? 10 * 32,
     facing: 'east' as FacingDirection,
+    isMoving: false,
     currentZoneId: (saveState.playerPosition?.zoneId as ZoneId) ?? 'homeBase',
     nearStation: null,
     nearExit: null,
@@ -199,6 +200,7 @@ export default function ArmoryMap({
 
       // Handle zone transition animation
       if (transitionRef.current?.active) {
+        state.isMoving = false;
         const tr = transitionRef.current;
         if (tr.phase === 'fadeOut') {
           state.transitionAlpha = Math.min(1, state.transitionAlpha + dt * 4);
@@ -268,6 +270,7 @@ export default function ArmoryMap({
       state.playerX = movResult.x;
       state.playerY = movResult.y;
       state.facing = movResult.facing;
+      state.isMoving = movResult.moved;
 
       if (movResult.moved) {
         savePosition();
