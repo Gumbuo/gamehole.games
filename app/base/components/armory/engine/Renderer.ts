@@ -7,6 +7,10 @@ interface PlayerSprites {
   west: HTMLImageElement | null;
   north: HTMLImageElement | null;
   south: HTMLImageElement | null;
+  walkEast: HTMLImageElement[];
+  walkWest: HTMLImageElement[];
+  walkNorth: HTMLImageElement[];
+  walkSouth: HTMLImageElement[];
 }
 
 export class Renderer {
@@ -366,15 +370,35 @@ export class Renderer {
     const size = 64;
 
     const isMoving = gameState.isMoving;
-    const bob = isMoving ? Math.sin(this.animTime * 10) * 2 : 0;
-    const spriteMap = { east: sprites.east, west: sprites.west, north: sprites.north, south: sprites.south };
-    const sprite = spriteMap[gameState.facing] ?? sprites.east;
+    const WALK_FPS = 10;
+    const WALK_FRAMES = 8;
+
+    let sprite: HTMLImageElement | null = null;
+
+    if (isMoving) {
+      // Pick walk frame based on animTime
+      const frameIdx = Math.floor(this.animTime * WALK_FPS) % WALK_FRAMES;
+      const walkMap = {
+        east:  sprites.walkEast,
+        west:  sprites.walkWest,
+        north: sprites.walkNorth,
+        south: sprites.walkSouth,
+      };
+      const frames = walkMap[gameState.facing];
+      sprite = frames?.[frameIdx] ?? null;
+    }
+
+    // Fall back to idle rotation sprite if walk frame not loaded yet
+    if (!sprite) {
+      const idleMap = { east: sprites.east, west: sprites.west, north: sprites.north, south: sprites.south };
+      sprite = idleMap[gameState.facing] ?? null;
+    }
 
     if (sprite) {
-      ctx.drawImage(sprite, sx - size / 2, sy - size / 2 + bob, size, size);
+      ctx.drawImage(sprite, sx - size / 2, sy - size / 2, size, size);
     } else {
       ctx.beginPath();
-      ctx.arc(sx, sy - 10 + bob, 20, 0, Math.PI * 2);
+      ctx.arc(sx, sy - 10, 20, 0, Math.PI * 2);
       ctx.fillStyle = '#00ff99';
       ctx.fill();
       ctx.strokeStyle = '#66fcf1';

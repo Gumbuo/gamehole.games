@@ -101,11 +101,24 @@ export default function ArmoryMap({
     enemies: [],
   });
   const saveStateRef = useRef(saveState);
-  const spritesRef = useRef<{ east: HTMLImageElement | null; west: HTMLImageElement | null; north: HTMLImageElement | null; south: HTMLImageElement | null }>({
+  const spritesRef = useRef<{
+    east: HTMLImageElement | null;
+    west: HTMLImageElement | null;
+    north: HTMLImageElement | null;
+    south: HTMLImageElement | null;
+    walkEast: HTMLImageElement[];
+    walkWest: HTMLImageElement[];
+    walkNorth: HTMLImageElement[];
+    walkSouth: HTMLImageElement[];
+  }>({
     east: null,
     west: null,
     north: null,
     south: null,
+    walkEast: [],
+    walkWest: [],
+    walkNorth: [],
+    walkSouth: [],
   });
   const positionSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const zonePositionsRef = useRef<Record<string, { x: number; y: number }>>(
@@ -130,21 +143,35 @@ export default function ArmoryMap({
 
   // Load player sprites
   useEffect(() => {
-    const imgEast = new Image();
-    imgEast.src = "/images/armory/player/east.png";
-    imgEast.onload = () => { spritesRef.current.east = imgEast; };
+    const loadImg = (src: string, cb: (img: HTMLImageElement) => void) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => cb(img);
+    };
 
-    const imgWest = new Image();
-    imgWest.src = "/images/armory/player/west.png";
-    imgWest.onload = () => { spritesRef.current.west = imgWest; };
+    loadImg('/images/armory/player/east.png',  img => { spritesRef.current.east  = img; });
+    loadImg('/images/armory/player/west.png',  img => { spritesRef.current.west  = img; });
+    loadImg('/images/armory/player/north.png', img => { spritesRef.current.north = img; });
+    loadImg('/images/armory/player/south.png', img => { spritesRef.current.south = img; });
 
-    const imgNorth = new Image();
-    imgNorth.src = "/images/armory/player/north.png";
-    imgNorth.onload = () => { spritesRef.current.north = imgNorth; };
-
-    const imgSouth = new Image();
-    imgSouth.src = "/images/armory/player/south.png";
-    imgSouth.onload = () => { spritesRef.current.south = imgSouth; };
+    const WALK_FRAMES = 8;
+    const dirs: Array<{ dir: string; key: 'walkEast' | 'walkWest' | 'walkNorth' | 'walkSouth' }> = [
+      { dir: 'east',  key: 'walkEast'  },
+      { dir: 'west',  key: 'walkWest'  },
+      { dir: 'north', key: 'walkNorth' },
+      { dir: 'south', key: 'walkSouth' },
+    ];
+    for (const { dir, key } of dirs) {
+      const frames: HTMLImageElement[] = new Array(WALK_FRAMES).fill(null);
+      spritesRef.current[key] = frames;
+      for (let i = 0; i < WALK_FRAMES; i++) {
+        const idx = i;
+        loadImg(
+          `/images/armory/player/walk-${dir}/frame_00${idx}.png`,
+          img => { frames[idx] = img; }
+        );
+      }
+    }
   }, []);
 
   // Get equipped items for overlay
