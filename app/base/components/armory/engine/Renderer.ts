@@ -1,6 +1,7 @@
 import { CameraState, ZoneDef, ZoneExit, GameState, ZoneDecoration, Projectile, Enemy } from './types';
 import { StationId, ArmorySaveState } from '../types';
 import { STATIONS } from '../data/stations';
+import { BLUEPRINTS, countFilledSlots, countRequiredSlots } from '../data/blueprints';
 
 interface PlayerSprites {
   east: HTMLImageElement | null;
@@ -220,7 +221,7 @@ export class Renderer {
 
       const station = STATIONS[s.stationId];
       const stationLevel = saveState.stationLevels[s.stationId];
-      const isUnlocked = stationLevel > 0 || saveState.progress.level >= station.unlockLevel;
+      const isBuilt = stationLevel > 0;
       const isNear = gameState.nearStation === s.stationId;
       const hasActiveJobs = saveState.craftingQueues[s.stationId]?.length > 0;
 
@@ -230,7 +231,7 @@ export class Renderer {
       const py = sy - platSize / 2;
 
       // Proximity glow
-      if (isNear && isUnlocked) {
+      if (isNear) {
         const pulse = 0.4 + Math.sin(this.animTime * 4) * 0.2;
         const glow = ctx.createRadialGradient(sx, sy, 10, sx, sy, 60);
         glow.addColorStop(0, `rgba(102, 252, 241, ${pulse})`);
@@ -240,13 +241,17 @@ export class Renderer {
       }
 
       // Platform
-      ctx.fillStyle = isUnlocked ? 'rgba(26, 42, 62, 0.9)' : 'rgba(26, 26, 46, 0.9)';
+      ctx.fillStyle = isBuilt ? 'rgba(26, 42, 62, 0.9)' : 'rgba(20, 20, 30, 0.85)';
       ctx.beginPath();
       this.roundRect(ctx, px, py, platSize, platSize, 8);
       ctx.fill();
 
-      // Border ring
-      ctx.strokeStyle = !isUnlocked ? '#333'
+      // Border ring — dashed for unbuilt
+      if (!isBuilt) {
+        ctx.setLineDash([4, 4]);
+        ctx.lineDashOffset = -this.animTime * 15;
+      }
+      ctx.strokeStyle = !isBuilt ? '#44aa66'
         : hasActiveJobs ? '#66fcf1'
         : isNear ? '#66fcf1'
         : '#45a29e';
@@ -254,28 +259,71 @@ export class Renderer {
       ctx.beginPath();
       this.roundRect(ctx, px, py, platSize, platSize, 8);
       ctx.stroke();
+      ctx.setLineDash([]);
 
-      // Icon
-      ctx.font = '28px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      if (!isUnlocked) {
-        ctx.fillStyle = '#555';
-        ctx.fillText('\uD83D\uDD12', sx, sy); // lock emoji
-      } else {
-        ctx.fillText(station.icon, sx, sy);
-      }
+      if (stationLevel === 0) {
+        // ---- Unbuilt: draw a construction plot ----
+        const blueprint = BLUEPRINTS[s.stationId as StationId];
+        const buildGrid = saveState.stationBuilds?.[s.stationId as StationId] ?? [];
+        const filled = countFilledSlots(blueprint, buildGrid);
+        const total = countRequiredSlots(blueprint);
+        const buildPct = total > 0 ? filled / total : 0;
 
-      // Name label
-      ctx.font = '10px Orbitron, monospace';
-      ctx.fillStyle = isUnlocked ? '#66fcf1' : '#555';
-      ctx.fillText(station.name, sx, sy + platSize / 2 + 14);
+        // 4×4 sub-tile grid overlay
+        const subSize = platSize / 4;
+        for (let r = 0; r < 4; r++) {
+          for (let c = 0; c < 4; c++) {
+            const cellX = px + c * subSize;
+            const cellY = py + r * subSize;
+            const cellRequired = blueprint.grid[r][c] !== null;
+            const cellFilled = buildGrid[r]?.[c] === true;
+            ctx.fillStyle = cellFilled
+              ? 'rgba(74, 222, 128, 0.25)'
+              : cellRequired
+                ? 'rgba(102, 252, 241, 0.06)'
+                : 'rgba(0,0,0,0.1)';
+            ctx.fillRect(cellX + 1, cellY + 1, subSize - 2, subSize - 2);
+            if (cellRequired && !cellFilled) {
+              ctx.strokeStyle = 'rgba(102, 252, 241, 0.3)';
+              ctx.lineWidth = 0.5;
+              ctx.strokeRect(cellX + 1, cellY + 1, subSize - 2, subSize - 2);
+            }
+          }
+        }
 
-      // Level
-      if (isUnlocked && stationLevel > 0) {
+        // Hammer icon
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🔨', sx, sy - 4);
+
+        // Name label
+        ctx.font = '9px Orbitron, monospace';
+        ctx.fillStyle = '#66fcf1';
+        ctx.fillText(station.name, sx, sy + platSize / 2 + 14);
+
+        // Build progress text
         ctx.font = '8px Orbitron, monospace';
-        ctx.fillStyle = '#45a29e';
-        ctx.fillText(`Lv.${stationLevel}`, sx, sy + platSize / 2 + 26);
+        ctx.fillStyle = buildPct === 1 ? '#4ade80' : '#45a29e';
+        ctx.fillText(`${filled}/${total} built`, sx, sy + platSize / 2 + 26);
+      } else {
+        // ---- Built: normal icon ----
+        ctx.font = '28px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(station.icon, sx, sy);
+
+        // Name label
+        ctx.font = '10px Orbitron, monospace';
+        ctx.fillStyle = '#66fcf1';
+        ctx.fillText(station.name, sx, sy + platSize / 2 + 14);
+
+        // Level
+        if (stationLevel > 0) {
+          ctx.font = '8px Orbitron, monospace';
+          ctx.fillStyle = '#45a29e';
+          ctx.fillText(`Lv.${stationLevel}`, sx, sy + platSize / 2 + 26);
+        }
       }
 
       // Active jobs indicator
@@ -285,21 +333,19 @@ export class Renderer {
         ctx.fillText(`\u23F3${saveState.craftingQueues[s.stationId].length}`, sx + platSize / 2 + 8, sy - platSize / 2 + 4);
       }
 
-      // "E to interact" prompt
-      if (isNear && isUnlocked && stationLevel > 0) {
-        const promptY = sy - platSize / 2 - 16;
+      // Interact / build prompt
+      if (isNear) {
+        const promptLabel = isBuilt ? '[E] Interact' : '[E] Build';
+        const promptY = py - 16;
         ctx.font = '11px Orbitron, monospace';
         ctx.fillStyle = '#66fcf1';
         ctx.textAlign = 'center';
-
-        // Background for prompt
-        const textWidth = ctx.measureText('[E] Interact').width;
+        const textWidth = ctx.measureText(promptLabel).width;
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         this.roundRect(ctx, sx - textWidth / 2 - 6, promptY - 8, textWidth + 12, 18, 4);
         ctx.fill();
-
-        ctx.fillStyle = '#66fcf1';
-        ctx.fillText('[E] Interact', sx, promptY);
+        ctx.fillStyle = isBuilt ? '#66fcf1' : '#4ade80';
+        ctx.fillText(promptLabel, sx, promptY);
       }
     }
   }

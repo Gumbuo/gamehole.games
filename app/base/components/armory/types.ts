@@ -159,12 +159,25 @@ export interface ArmoryProgress {
   lastLoginDate: string;     // YYYY-MM-DD format
 }
 
+// ============== STATION BUILD STATE ==============
+// 4x4 grid per station — true = resource placed in that slot
+export type StationBuildGrid = boolean[][];
+
+export interface StationBuilds {
+  plasmaRefinery: StationBuildGrid;
+  voidForge: StationBuildGrid;
+  bioLab: StationBuildGrid;
+  quantumChamber: StationBuildGrid;
+  assemblyBay: StationBuildGrid;
+}
+
 // ============== MAIN SAVE STATE ==============
 export interface ArmorySaveState {
   wallet: string;
   resources: ArmoryResources;
   craftingQueues: CraftingQueue;
   stationLevels: StationLevels;
+  stationBuilds: StationBuilds;  // Physical build progress for each station
   inventory: InventoryItem[];
   progress: ArmoryProgress;
   equipped: EquippedItems;     // Currently equipped weapon/armor

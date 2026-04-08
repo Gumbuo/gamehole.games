@@ -10,9 +10,12 @@ import {
 import {
   DEFAULT_RESOURCES,
   DEFAULT_STATION_LEVELS,
+  DEFAULT_STATION_BUILDS,
   DEFAULT_PROGRESS,
   XP_REQUIREMENTS,
 } from "../../base/components/armory/constants";
+import { BLUEPRINTS, makeEmptyBuildGrid } from "../../base/components/armory/data/blueprints";
+import { StationId } from "../../base/components/armory/types";
 
 // Lazy initialization using fromEnv() - automatically reads UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN
 let _redis: Redis | null = null;
@@ -43,6 +46,13 @@ function createNewSave(wallet: string): ArmorySaveState {
       assemblyBay: [],
     },
     stationLevels: { ...DEFAULT_STATION_LEVELS },
+    stationBuilds: {
+      plasmaRefinery: makeEmptyBuildGrid(),
+      voidForge: makeEmptyBuildGrid(),
+      bioLab: makeEmptyBuildGrid(),
+      quantumChamber: makeEmptyBuildGrid(),
+      assemblyBay: makeEmptyBuildGrid(),
+    },
     inventory: [],
     progress: { ...DEFAULT_PROGRESS },
     equipped: {
@@ -120,6 +130,26 @@ export async function GET(request: NextRequest) {
           { status: 500 }
         );
       }
+    }
+
+    // Migrate: add stationBuilds if missing (existing saves before build system)
+    if (!saveState.stationBuilds) {
+      saveState.stationBuilds = {
+        plasmaRefinery: makeEmptyBuildGrid(),
+        voidForge: makeEmptyBuildGrid(),
+        bioLab: makeEmptyBuildGrid(),
+        quantumChamber: makeEmptyBuildGrid(),
+        assemblyBay: makeEmptyBuildGrid(),
+      };
+      // Any station already at level > 0 is auto-marked as fully built
+      for (const sid of Object.keys(saveState.stationLevels) as StationId[]) {
+        if (saveState.stationLevels[sid] > 0) {
+          const bp = BLUEPRINTS[sid];
+          saveState.stationBuilds[sid] = bp.grid.map(row => row.map(cell => cell !== null));
+        }
+      }
+      saveState.lastUpdated = Date.now();
+      try { await getRedis().set(saveKey, saveState); } catch {}
     }
 
     // Migrate old position format to new zone-based format

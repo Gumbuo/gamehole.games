@@ -93,14 +93,32 @@ export const homeBase: ZoneDef = {
   stations: [
     {
       stationId: 'plasmaRefinery',
-      x: 4 * 32 + 16,   // Upper-left room
+      x: 4 * 32 + 16,    // Upper-left room
       y: 5 * 32 + 16,
       interactionRadius: 48,
     },
     {
       stationId: 'assemblyBay',
-      x: 22 * 32 + 16,  // Center-right
+      x: 22 * 32 + 16,   // Upper-center main hall
       y: 8 * 32 + 16,
+      interactionRadius: 48,
+    },
+    {
+      stationId: 'voidForge',
+      x: 33 * 32 + 16,   // Right-side structure room
+      y: 7 * 32 + 16,
+      interactionRadius: 48,
+    },
+    {
+      stationId: 'bioLab',
+      x: 10 * 32 + 16,   // Lower-left open area
+      y: 21 * 32 + 16,
+      interactionRadius: 48,
+    },
+    {
+      stationId: 'quantumChamber',
+      x: 22 * 32 + 16,   // Lower-center open area
+      y: 22 * 32 + 16,
       interactionRadius: 48,
     },
   ],

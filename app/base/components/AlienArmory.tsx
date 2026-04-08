@@ -17,6 +17,7 @@ import { RECIPES, getAvailableRecipes, canCraftRecipe, getRecipe } from "./armor
 import { ITEMS, getItem } from "./armory/data/items";
 import ArmoryMap from "./armory/ArmoryMap";
 import RecipeChart from "./armory/RecipeChart";
+import StationBuildPanel from "./armory/StationBuildPanel";
 import {
   MATERIAL_COSTS,
   MATERIAL_NAMES,
@@ -48,6 +49,7 @@ export default function AlienArmory() {
   const [loading, setLoading] = useState(true);
   const [activeModal, setActiveModal] = useState<ModalType>("none");
   const [selectedStation, setSelectedStation] = useState<StationId | null>(null);
+  const [buildStation, setBuildStation] = useState<StationId | null>(null);
   const [notification, setNotification] = useState<{ message: string; type: "success" | "error" | "info" } | null>(null);
   const [completedJobsReady, setCompletedJobsReady] = useState(0);
   const [showRecipeChart, setShowRecipeChart] = useState(false);
@@ -359,12 +361,41 @@ export default function AlienArmory() {
   // Handle station select from map click
   const handleMapStationSelect = (stationId: StationId) => {
     const stationLevel = saveState?.stationLevels[stationId] || 0;
-    const station = STATIONS[stationId];
-    const isUnlocked = stationLevel > 0 || (saveState && saveState.progress.level >= station.unlockLevel);
-
-    if (isUnlocked && stationLevel > 0) {
+    if (stationLevel > 0) {
       setSelectedStation(stationId);
       setActiveModal("crafting");
+    } else {
+      // Station not built yet — open build panel
+      setBuildStation(stationId);
+    }
+  };
+
+  // Place a resource into a build slot
+  const handlePlaceBuildResource = async (stationId: StationId, row: number, col: number) => {
+    if (!address) return;
+    try {
+      const res = await fetch("/api/armory/build", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wallet: address, stationId, row, col }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSaveState(prev => prev ? {
+          ...prev,
+          resources: data.data.resources,
+          stationBuilds: data.data.stationBuilds,
+          stationLevels: data.data.stationLevels,
+        } : null);
+        if (data.data.buildComplete) {
+          showNotification(`${STATIONS[stationId].name} is now operational!`, "success");
+          setBuildStation(null);
+        }
+      } else {
+        showNotification(data.error || "Failed to place resource", "error");
+      }
+    } catch {
+      showNotification("Failed to place resource", "error");
     }
   };
 
@@ -683,6 +714,16 @@ export default function AlienArmory() {
           ))}
         </div>
       </div>
+
+      {/* Station Build Panel */}
+      {buildStation && saveState && (
+        <StationBuildPanel
+          stationId={buildStation}
+          saveState={saveState}
+          onPlaceResource={handlePlaceBuildResource}
+          onClose={() => setBuildStation(null)}
+        />
+      )}
 
       {/* Armory Map */}
       <div style={{

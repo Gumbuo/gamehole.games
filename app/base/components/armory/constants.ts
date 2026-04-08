@@ -1,4 +1,5 @@
-import { ArmoryResources, StationLevels, ArmoryProgress, RawResourceKey } from './types';
+import { ArmoryResources, StationLevels, StationBuilds, ArmoryProgress, RawResourceKey } from './types';
+import { makeEmptyBuildGrid } from './data/blueprints';
 
 // ============== SHOP PRICES ==============
 export const MATERIAL_COSTS: Record<RawResourceKey, number> = {
@@ -95,11 +96,19 @@ export const DEFAULT_RESOURCES: ArmoryResources = {
 };
 
 export const DEFAULT_STATION_LEVELS: StationLevels = {
-  plasmaRefinery: 1,   // Starts unlocked
-  voidForge: 0,        // Locked
-  bioLab: 0,           // Locked
-  quantumChamber: 0,   // Locked
-  assemblyBay: 1,      // Starts unlocked
+  plasmaRefinery: 0,  // Must be physically built
+  voidForge: 0,
+  bioLab: 0,
+  quantumChamber: 0,
+  assemblyBay: 0,
+};
+
+export const DEFAULT_STATION_BUILDS: StationBuilds = {
+  plasmaRefinery: makeEmptyBuildGrid(),
+  voidForge: makeEmptyBuildGrid(),
+  bioLab: makeEmptyBuildGrid(),
+  quantumChamber: makeEmptyBuildGrid(),
+  assemblyBay: makeEmptyBuildGrid(),
 };
 
 export const DEFAULT_PROGRESS: ArmoryProgress = {

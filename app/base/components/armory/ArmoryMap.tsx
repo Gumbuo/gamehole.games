@@ -363,12 +363,7 @@ export default function ArmoryMap({
       // Handle interaction (E key)
       if (input.consumeInteract()) {
         if (state.nearStation) {
-          const stationLevel = saveStateRef.current.stationLevels[state.nearStation];
-          const station = STATIONS[state.nearStation];
-          const isUnlocked = stationLevel > 0 || saveStateRef.current.progress.level >= station.unlockLevel;
-          if (isUnlocked && stationLevel > 0) {
-            onStationSelectRef.current(state.nearStation);
-          }
+          onStationSelectRef.current(state.nearStation);
         }
       }
 
@@ -377,13 +372,7 @@ export default function ArmoryMap({
       if (shootTarget) {
         const clickStation = getNearStation(shootTarget.x, shootTarget.y, currentZone.stations);
         if (clickStation && clickStation === state.nearStation) {
-          // Click on nearby station = open it
-          const stationLevel = saveStateRef.current.stationLevels[clickStation];
-          const station = STATIONS[clickStation];
-          const isUnlocked = stationLevel > 0 || saveStateRef.current.progress.level >= station.unlockLevel;
-          if (isUnlocked && stationLevel > 0) {
-            onStationSelectRef.current(clickStation);
-          }
+          onStationSelectRef.current(clickStation);
         } else {
           // Click anywhere else = shoot
           const dx = shootTarget.x - state.playerX;
