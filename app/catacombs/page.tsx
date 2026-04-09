@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { RawResourceKey } from "../base/components/armory/types";
 import { MATERIAL_NAMES, MATERIAL_ICONS } from "../base/components/armory/constants";
 
@@ -146,7 +147,8 @@ export default function CatacombsPage() {
         gap: 16,
       }}>
         <div style={{ fontSize: 48 }}>👾</div>
-        <div style={{ fontSize: 18 }}>Connect your wallet to enter the Alien Catacombs</div>
+        <div style={{ fontSize: 18, marginBottom: 24 }}>Connect your wallet to enter the Alien Catacombs</div>
+        <ConnectButton />
       </div>
     );
   }
