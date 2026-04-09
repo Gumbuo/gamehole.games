@@ -32,7 +32,7 @@ export default function StationBuildPanel({
     const resource = blueprint.grid[row][col];
     if (!resource) return;
     if (buildGrid[row]?.[col]) return;
-    const have = (saveState.resources as Record<string, number>)[resource] ?? 0;
+    const have = (saveState.resources as unknown as Record<string, number>)[resource] ?? 0;
     if (have < 1) return;
 
     const key = `${row}-${col}`;
@@ -130,7 +130,7 @@ export default function StationBuildPanel({
             rowCells.map((cell, c) => {
               const isFilled = buildGrid[r]?.[c] === true;
               const isRequired = cell !== null;
-              const have = isRequired ? ((saveState.resources as Record<string, number>)[cell] ?? 0) : 0;
+              const have = isRequired ? ((saveState.resources as unknown as Record<string, number>)[cell] ?? 0) : 0;
               const canPlace = isRequired && !isFilled && have >= 1;
               const isPlacing = placing === `${r}-${c}`;
 
@@ -198,7 +198,7 @@ export default function StationBuildPanel({
                 if (!needed[cell]) {
                   needed[cell] = {
                     count: 0,
-                    have: (saveState.resources as Record<string, number>)[cell] ?? 0,
+                    have: (saveState.resources as unknown as Record<string, number>)[cell] ?? 0,
                   };
                 }
                 needed[cell].count++;
