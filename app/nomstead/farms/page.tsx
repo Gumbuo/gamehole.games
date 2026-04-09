@@ -35,11 +35,14 @@ const SECTIONS: Section[] = [
     links: [
       { label: "fox-hole / home", url: "https://nomstead.com/fox-hole" },
       { label: "fox-hole / wine tile", url: "https://nomstead.com/fox-hole/6979ec3f24abb84a34c52a02", count: 4 },
-      { label: "fox-hole / 69869c10", url: "https://nomstead.com/fox-hole/69869c10ee56d377117996b7" },
-      { label: "fox-hole / 694a4ff3", url: "https://nomstead.com/fox-hole/694a4ff330cf4ef6f6381cb3" },
-      { label: "fox-hole / 694b511b", url: "https://nomstead.com/fox-hole/694b511b8aa74b012c424e94" },
-      { label: "fox-hole / 6963db26", url: "https://nomstead.com/fox-hole/6963db267760c9b34d2a079f" },
+      { label: "fox-hole / 69204565", url: "https://nomstead.com/fox-hole/692045654379b3599a87f07f" },
+      { label: "fox-hole / 698d6eaf", url: "https://nomstead.com/fox-hole/698d6eaf88dc7185472f9273" },
+      { label: "fox-hole / 69869c42", url: "https://nomstead.com/fox-hole/69869c42d8fb0c26f6813633" },
       { label: "fox-hole / 69875d9b", url: "https://nomstead.com/fox-hole/69875d9b3afbdad97a3a695d" },
+      { label: "fox-hole / 69869c10", url: "https://nomstead.com/fox-hole/69869c10ee56d377117996b7", note: "🏰 guild" },
+      { label: "fox-hole / 694a4ff3", url: "https://nomstead.com/fox-hole/694a4ff330cf4ef6f6381cb3", note: "🏰 guild" },
+      { label: "fox-hole / 694b511b", url: "https://nomstead.com/fox-hole/694b511b8aa74b012c424e94", note: "🏰 guild" },
+      { label: "fox-hole / 6963db26", url: "https://nomstead.com/fox-hole/6963db267760c9b34d2a079f", note: "🏰 guild" },
     ],
   },
   {

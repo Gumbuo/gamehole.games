@@ -42,7 +42,11 @@ interface PlayerLevelInfo {
   totalXpEarned: number;
 }
 
-export default function AlienArmory() {
+interface AlienArmoryProps {
+  onClose?: () => void;
+}
+
+export default function AlienArmory({ onClose }: AlienArmoryProps = {}) {
   const { address, isConnected } = useAccount();
   const [saveState, setSaveState] = useState<ArmorySaveState | null>(null);
   const [apBalance, setApBalance] = useState(0);
@@ -540,6 +544,25 @@ export default function AlienArmory() {
           alignItems: "center",
           gap: "16px",
         }}>
+          {/* Close button (when used as overlay) */}
+          {onClose && (
+            <button
+              onClick={onClose}
+              style={{
+                background: "rgba(255,50,50,0.15)",
+                border: "1px solid #ef4444",
+                color: "#ef4444",
+                borderRadius: 8,
+                padding: "8px 16px",
+                fontFamily: "Orbitron, monospace",
+                fontSize: 12,
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              ✕ CLOSE ARMORY
+            </button>
+          )}
           {/* Player Level Bar */}
           {playerLevel && (
             <div style={{
