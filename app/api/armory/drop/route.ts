@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
 
     const key = resource as RawResourceKey;
     const current = (saveState.resources[key] as number) || 0;
-    (saveState.resources as Record<string, number>)[key] = current + qty;
+    (saveState.resources as unknown as Record<string, number>)[key] = current + qty;
     saveState.lastUpdated = Date.now();
 
     await redis.set(saveKey, saveState);

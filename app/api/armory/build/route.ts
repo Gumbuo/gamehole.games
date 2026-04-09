@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Consume resource
-    (saveState.resources as Record<string, number>)[requiredResource] = resourceAmount - 1;
+    (saveState.resources as unknown as Record<string, number>)[requiredResource] = resourceAmount - 1;
 
     // Fill slot
     if (!buildGrid[row]) buildGrid[row] = Array(4).fill(false);
