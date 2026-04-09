@@ -1,0 +1,20 @@
+Export the Godot project (alien-catacombs) as HTML5 and place the files here.
+
+Steps in Godot editor:
+  1. Project → Export
+  2. Add preset → HTML5
+  3. Set export path to this folder: public/games/alien-catacombs/index.html
+  4. Click "Export Project"
+
+Expected files after export:
+  - index.html
+  - index.js
+  - index.wasm
+  - index.pck
+  - index.audio.worklet.js  (may vary by Godot version)
+
+Once exported, the game will be live at:
+  https://www.gamehole.games/games/alien-catacombs/index.html
+
+And the catacombs page at:
+  https://www.gamehole.games/catacombs
