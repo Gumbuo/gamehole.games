@@ -41,9 +41,9 @@ const SECTIONS: Section[] = [
       { label: "fox-hole / 69875d9b", url: "https://nomstead.com/fox-hole/69875d9b3afbdad97a3a695d" },
       { label: "fox-hole / 69869c10", url: "https://nomstead.com/fox-hole/69869c10ee56d377117996b7", note: "🏰 guild" },
       { label: "fox-hole / 694a4ff3", url: "https://nomstead.com/fox-hole/694a4ff330cf4ef6f6381cb3", note: "🏰 guild" },
-      { label: "fox-hole / 694b511b", url: "https://nomstead.com/fox-hole/694b511b8aa74b012c424e94", note: "🏰 guild" },
+      { label: "fox-hole / 694b511b", url: "https://nomstead.com/fox-hole/694b511b8aa74b012c424e94", note: "🐝 beehive" },
       { label: "fox-hole / 6963db26", url: "https://nomstead.com/fox-hole/6963db267760c9b34d2a079f", note: "🏰 guild" },
-      { label: "fox-hole / 6931ed79", url: "https://nomstead.com/fox-hole/6931ed79d442282485aff5b2" },
+      { label: "fox-hole / 6931ed79", url: "https://nomstead.com/fox-hole/6931ed79d442282485aff5b2", note: "🐝 beehive" },
     ],
   },
   {
