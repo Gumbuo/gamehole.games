@@ -228,7 +228,7 @@ const featuredGames: FeaturedGame[] = [
 
 // Community Games
 const communityGames = {
-  catacombs: { title: "Alien Catacombs", src: "/alien-catacombs.html", badge: "ALPHA" },
+  catacombs: { title: "FoxStead", src: "/games/foxstead/index.html", badge: "ALPHA" },
   armory: { title: "Alien Armory", href: "/armory", badge: "NEW" },
   dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY" },
   invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY" },
