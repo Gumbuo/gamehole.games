@@ -460,6 +460,144 @@ export default function HomePage() {
             </p>
           </section>
 
+          {/* Community Games */}
+          <section style={{ marginBottom: '60px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <h2 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '28px',
+                  color: '#00ff99',
+                }}>
+                  🕹️ Community Games
+                </h2>
+                <span style={{
+                  padding: '4px 12px',
+                  background: 'linear-gradient(135deg, #00ff99, #00cc77)',
+                  borderRadius: '20px',
+                  color: '#000',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '10px',
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase',
+                }}>
+                  Play Free
+                </span>
+              </div>
+
+              <button
+                onClick={() => setShowSubmitModal(true)}
+                style={{
+                  padding: '10px 20px',
+                  background: 'rgba(0, 255, 153, 0.1)',
+                  border: '2px solid #00ff99',
+                  borderRadius: '8px',
+                  color: '#00ff99',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 'bold',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                }}
+              >
+                + Submit Your Game
+              </button>
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '20px',
+            }}>
+              {Object.entries(communityGames).map(([key, game]) => {
+                const hasImage = 'image' in game && game.image;
+                const description = 'description' in game ? game.description : null;
+                return (
+                <div
+                  key={key}
+                  onClick={() => playGame(key)}
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
+                    border: '2px solid #00ff9940',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#00ff99';
+                    e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 255, 153, 0.3)';
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#00ff9940';
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  {hasImage && (
+                    <img
+                      src={(game as { image: string }).image}
+                      alt={game.title}
+                      style={{ width: '100%', height: 'auto', display: 'block' }}
+                    />
+                  )}
+                  <div style={{ padding: '16px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: description ? '10px' : '12px' }}>
+                      <h3 style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '18px',
+                        color: '#00ff99',
+                        margin: 0,
+                      }}>
+                        {game.title}
+                      </h3>
+                      <span style={{
+                        padding: '3px 8px',
+                        background: game.badge === 'NEW' ? 'rgba(255, 107, 0, 0.2)' : game.badge === 'ALPHA' ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 255, 153, 0.2)',
+                        border: `1px solid ${game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99'}`,
+                        borderRadius: '4px',
+                        color: game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99',
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '9px',
+                        fontWeight: 'bold',
+                        flexShrink: 0,
+                        marginLeft: '8px',
+                      }}>
+                        {game.badge}
+                      </span>
+                    </div>
+
+                    {description && (
+                      <p style={{
+                        fontFamily: 'Share Tech Mono, monospace',
+                        fontSize: '11px',
+                        color: '#888',
+                        margin: '0 0 10px 0',
+                        lineHeight: '1.5',
+                      }}>
+                        {description}
+                      </p>
+                    )}
+
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      color: '#666',
+                      fontFamily: 'Share Tech Mono, monospace',
+                      fontSize: '12px',
+                    }}>
+                      <span>🎮</span>
+                      <span>Click to Play</span>
+                    </div>
+                  </div>
+                </div>
+                );
+              })}
+            </div>
+          </section>
+
           {/* Featured Crypto Games */}
           <section style={{ marginBottom: '60px' }}>
             <div style={{ marginBottom: '30px' }}>
@@ -1077,144 +1215,6 @@ export default function HomePage() {
                 ))}
               </div>
             )}
-          </section>
-
-{/* Community Games */}
-          <section style={{ marginBottom: '60px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <h2 style={{
-                  fontFamily: 'Orbitron, sans-serif',
-                  fontSize: '28px',
-                  color: '#00ff99',
-                }}>
-                  🕹️ Community Games
-                </h2>
-                <span style={{
-                  padding: '4px 12px',
-                  background: 'linear-gradient(135deg, #00ff99, #00cc77)',
-                  borderRadius: '20px',
-                  color: '#000',
-                  fontFamily: 'Orbitron, sans-serif',
-                  fontSize: '10px',
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase',
-                }}>
-                  Play Free
-                </span>
-              </div>
-
-              <button
-                onClick={() => setShowSubmitModal(true)}
-                style={{
-                  padding: '10px 20px',
-                  background: 'rgba(0, 255, 153, 0.1)',
-                  border: '2px solid #00ff99',
-                  borderRadius: '8px',
-                  color: '#00ff99',
-                  fontFamily: 'Orbitron, sans-serif',
-                  fontWeight: 'bold',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                  textTransform: 'uppercase',
-                }}
-              >
-                + Submit Your Game
-              </button>
-            </div>
-
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '20px',
-            }}>
-              {Object.entries(communityGames).map(([key, game]) => {
-                const hasImage = 'image' in game && game.image;
-                const description = 'description' in game ? game.description : null;
-                return (
-                <div
-                  key={key}
-                  onClick={() => playGame(key)}
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
-                    border: '2px solid #00ff9940',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#00ff99';
-                    e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 255, 153, 0.3)';
-                    e.currentTarget.style.transform = 'translateY(-3px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#00ff9940';
-                    e.currentTarget.style.boxShadow = 'none';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  {hasImage && (
-                    <img
-                      src={(game as { image: string }).image}
-                      alt={game.title}
-                      style={{ width: '100%', height: 'auto', display: 'block' }}
-                    />
-                  )}
-                  <div style={{ padding: '16px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: description ? '10px' : '12px' }}>
-                      <h3 style={{
-                        fontFamily: 'Orbitron, sans-serif',
-                        fontSize: '18px',
-                        color: '#00ff99',
-                        margin: 0,
-                      }}>
-                        {game.title}
-                      </h3>
-                      <span style={{
-                        padding: '3px 8px',
-                        background: game.badge === 'NEW' ? 'rgba(255, 107, 0, 0.2)' : game.badge === 'ALPHA' ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 255, 153, 0.2)',
-                        border: `1px solid ${game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99'}`,
-                        borderRadius: '4px',
-                        color: game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99',
-                        fontFamily: 'Orbitron, sans-serif',
-                        fontSize: '9px',
-                        fontWeight: 'bold',
-                        flexShrink: 0,
-                        marginLeft: '8px',
-                      }}>
-                        {game.badge}
-                      </span>
-                    </div>
-
-                    {description && (
-                      <p style={{
-                        fontFamily: 'Share Tech Mono, monospace',
-                        fontSize: '11px',
-                        color: '#888',
-                        margin: '0 0 10px 0',
-                        lineHeight: '1.5',
-                      }}>
-                        {description}
-                      </p>
-                    )}
-
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      color: '#666',
-                      fontFamily: 'Share Tech Mono, monospace',
-                      fontSize: '12px',
-                    }}>
-                      <span>🎮</span>
-                      <span>Click to Play</span>
-                    </div>
-                  </div>
-                </div>
-                );
-              })}
-            </div>
           </section>
 
         </div>
