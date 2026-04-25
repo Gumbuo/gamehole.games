@@ -228,7 +228,7 @@ const featuredGames: FeaturedGame[] = [
 
 // Community Games
 const communityGames = {
-  catacombs: { title: "FoxStead", src: "/games/foxstead/index.html", badge: "ALPHA" },
+  catacombs: { title: "FoxStead", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/foxstead-banner.png", description: "Playable now — early development. World map, catacombs, fishing & refinery all in. Very unbalanced, just getting it all to exist." },
   dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY" },
   invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY" },
 };
@@ -1128,7 +1128,10 @@ export default function HomePage() {
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
               gap: '20px',
             }}>
-              {Object.entries(communityGames).map(([key, game]) => (
+              {Object.entries(communityGames).map(([key, game]) => {
+                const hasImage = 'image' in game && game.image;
+                const description = 'description' in game ? game.description : null;
+                return (
                 <div
                   key={key}
                   onClick={() => playGame(key)}
@@ -1136,7 +1139,7 @@ export default function HomePage() {
                     background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
                     border: '2px solid #00ff9940',
                     borderRadius: '12px',
-                    padding: '20px',
+                    overflow: 'hidden',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
                   }}
@@ -1151,41 +1154,66 @@ export default function HomePage() {
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '15px' }}>
-                    <h3 style={{
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '18px',
-                      color: '#00ff99',
-                    }}>
-                      {game.title}
-                    </h3>
-                    <span style={{
-                      padding: '3px 8px',
-                      background: game.badge === 'NEW' ? 'rgba(255, 107, 0, 0.2)' : game.badge === 'ALPHA' ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 255, 153, 0.2)',
-                      border: `1px solid ${game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99'}`,
-                      borderRadius: '4px',
-                      color: game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99',
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '9px',
-                      fontWeight: 'bold',
-                    }}>
-                      {game.badge}
-                    </span>
-                  </div>
+                  {hasImage && (
+                    <img
+                      src={(game as { image: string }).image}
+                      alt={game.title}
+                      style={{ width: '100%', height: 'auto', display: 'block' }}
+                    />
+                  )}
+                  <div style={{ padding: '16px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: description ? '10px' : '12px' }}>
+                      <h3 style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '18px',
+                        color: '#00ff99',
+                        margin: 0,
+                      }}>
+                        {game.title}
+                      </h3>
+                      <span style={{
+                        padding: '3px 8px',
+                        background: game.badge === 'NEW' ? 'rgba(255, 107, 0, 0.2)' : game.badge === 'ALPHA' ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 255, 153, 0.2)',
+                        border: `1px solid ${game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99'}`,
+                        borderRadius: '4px',
+                        color: game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99',
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '9px',
+                        fontWeight: 'bold',
+                        flexShrink: 0,
+                        marginLeft: '8px',
+                      }}>
+                        {game.badge}
+                      </span>
+                    </div>
 
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    color: '#666',
-                    fontFamily: 'Share Tech Mono, monospace',
-                    fontSize: '12px',
-                  }}>
-                    <span>🎮</span>
-                    <span>Click to Play</span>
+                    {description && (
+                      <p style={{
+                        fontFamily: 'Share Tech Mono, monospace',
+                        fontSize: '11px',
+                        color: '#888',
+                        margin: '0 0 10px 0',
+                        lineHeight: '1.5',
+                      }}>
+                        {description}
+                      </p>
+                    )}
+
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      color: '#666',
+                      fontFamily: 'Share Tech Mono, monospace',
+                      fontSize: '12px',
+                    }}>
+                      <span>🎮</span>
+                      <span>Click to Play</span>
+                    </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </section>
 
