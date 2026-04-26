@@ -79,6 +79,8 @@ const featuredGames: FeaturedGame[] = [
     secondaryColor: "#0a1a10",
     guideUrl: "/nomstead",
     guideLabel: "NFT Guide",
+    eventUrl: "/guildevents",
+    eventLabel: "GUILD EVENT ACTIVE",
     toolUrl: "/nomstead/calculator",
     toolLabel: "Farm Calculator",
     tool2Url: "/nomstead/farms",
@@ -381,6 +383,27 @@ export default function HomePage() {
                 {section}
               </button>
             ))}
+            <a
+              href="/guildevents"
+              style={{
+                padding: '12px 28px',
+                background: 'linear-gradient(135deg, #b44dff, #8e2de2)',
+                border: '2px solid #b44dff',
+                borderRadius: '8px',
+                color: '#fff',
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '14px',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                fontWeight: 'bold',
+                boxShadow: '0 0 20px rgba(180, 77, 255, 0.5), 0 0 40px rgba(180, 77, 255, 0.2)',
+                letterSpacing: '1px',
+                animation: 'guildPulse 2s ease-in-out infinite',
+              }}
+            >
+              Guild Events
+              <style>{`@keyframes guildPulse { 0%, 100% { box-shadow: 0 0 20px rgba(180, 77, 255, 0.5), 0 0 40px rgba(180, 77, 255, 0.2); } 50% { box-shadow: 0 0 30px rgba(180, 77, 255, 0.8), 0 0 60px rgba(180, 77, 255, 0.4); } }`}</style>
+            </a>
           </div>
         </div>
       </nav>
@@ -458,6 +481,33 @@ export default function HomePage() {
               Your destination for the best crypto games. Play featured Web3 titles,
               discover community games, and share your own creations!
             </p>
+            <a
+              href="/guildevents"
+              style={{
+                display: 'inline-block',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                border: '3px solid #b44dff',
+                boxShadow: '0 0 30px rgba(180, 77, 255, 0.4)',
+                transition: 'all 0.3s ease',
+                maxWidth: '500px',
+                width: '100%',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 50px rgba(180, 77, 255, 0.7)';
+                e.currentTarget.style.transform = 'scale(1.02)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(180, 77, 255, 0.4)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              <img
+                src="/guild-banner.jpg"
+                alt="SpiderGang Guild"
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+            </a>
           </section>
 
           {/* Community Games */}
