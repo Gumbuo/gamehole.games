@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 
-export default function FoxSteadPage() {
+export default function AlienCatacombsPage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [gameLoaded, setGameLoaded] = useState(false);
 
@@ -23,7 +23,7 @@ export default function FoxSteadPage() {
         justifyContent: "space-between",
         padding: "8px 20px",
         background: "rgba(10,10,20,0.95)",
-        borderBottom: "1px solid #2a3a2a",
+        borderBottom: "1px solid #1a2a3a",
         flexShrink: 0,
       }}>
         <Link href="/" style={{
@@ -36,10 +36,10 @@ export default function FoxSteadPage() {
           ← MOTHERSHIP
         </Link>
         <span style={{ color: "#4ade80", fontSize: 13, fontWeight: "bold", letterSpacing: "0.1em" }}>
-          🦊 FOXSTEAD
+          👾 ALIEN CATACOMBS
         </span>
         <span style={{ fontSize: 11, color: "#555", letterSpacing: "0.05em" }}>
-          a link to the pasture
+          survive the underground
         </span>
       </div>
 
@@ -52,14 +52,14 @@ export default function FoxSteadPage() {
             background: "#0a0a0f", color: "#4ade80", fontSize: 14,
             flexDirection: "column", gap: 12, zIndex: 4,
           }}>
-            <div style={{ fontSize: 40 }}>🦊</div>
-            <div>Loading FoxStead...</div>
+            <div style={{ fontSize: 40 }}>👾</div>
+            <div>Loading Alien Catacombs...</div>
           </div>
         )}
 
         <iframe
           ref={iframeRef}
-          src="/games/foxstead/index.html"
+          src="/games/alien-catacombs/index.html"
           style={{
             width: "100%",
             height: "100%",
