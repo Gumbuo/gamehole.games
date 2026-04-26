@@ -59,7 +59,7 @@ export default function AlienCatacombsPage() {
 
         <iframe
           ref={iframeRef}
-          src="/games/alien-catacombs/index.html"
+          src="/games/foxstead/index.html"
           style={{
             width: "100%",
             height: "100%",
