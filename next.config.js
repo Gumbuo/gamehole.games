@@ -2,17 +2,6 @@
 const path = require('path');
 
 module.exports = {
-  async headers() {
-    return [
-      {
-        source: '/games/:path*',
-        headers: [
-          { key: 'Cross-Origin-Opener-Policy',   value: 'same-origin' },
-          { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
-        ],
-      },
-    ];
-  },
   webpack: (config, { isServer }) => {
     // Handle optional Wagmi connector dependencies by aliasing to empty module
     const emptyModule = path.resolve(__dirname, 'app/lib/empty-module.js');
