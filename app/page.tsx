@@ -238,6 +238,7 @@ const communityGames = {
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState<"home" | "play" | "leaderboard" | "credits">("home");
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
+  const [iframeUnlocked, setIframeUnlocked] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [submitForm, setSubmitForm] = useState({ title: '', url: '', description: '', contact: '' });
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success'>('idle');
@@ -301,6 +302,7 @@ export default function HomePage() {
   const playGame = (gameKey: string) => {
     setSelectedGame(gameKey);
     setActiveSection("play");
+    setIframeUnlocked(false);
   };
 
   return (
@@ -445,11 +447,44 @@ export default function HomePage() {
             const game = communityGames[selectedGame as keyof typeof communityGames];
             if (game && 'src' in game) {
               return (
-                <iframe
-                  src={game.src}
-                  style={{ width: '100%', height: 'calc(100% - 50px)', border: 'none' }}
-                  title={game.title}
-                />
+                <div style={{ position: 'relative', width: '100%', height: 'calc(100% - 50px)' }}>
+                  <iframe
+                    src={game.src}
+                    style={{ width: '100%', height: '100%', border: 'none' }}
+                    title={game.title}
+                    allow="autoplay"
+                  />
+                  {!iframeUnlocked && (
+                    <div
+                      onClick={() => setIframeUnlocked(true)}
+                      style={{
+                        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                        display: 'flex', flexDirection: 'column',
+                        alignItems: 'center', justifyContent: 'center',
+                        background: 'rgba(0,0,0,0.72)',
+                        cursor: 'pointer', zIndex: 10,
+                      }}
+                    >
+                      <div style={{
+                        fontSize: '64px', marginBottom: '16px',
+                        filter: 'drop-shadow(0 0 16px #00ff99)',
+                      }}>▶</div>
+                      <div style={{
+                        fontFamily: 'Orbitron, sans-serif', fontSize: '22px',
+                        color: '#00ff99', marginBottom: '8px',
+                        textShadow: '0 0 12px #00ff99',
+                      }}>
+                        Click to Start
+                      </div>
+                      <div style={{
+                        fontFamily: 'Share Tech Mono, monospace', fontSize: '13px',
+                        color: '#888',
+                      }}>
+                        (enables game audio)
+                      </div>
+                    </div>
+                  )}
+                </div>
               );
             }
             return null;
