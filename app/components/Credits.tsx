@@ -35,7 +35,7 @@ export default function Credits() {
           textAlign: 'center',
           marginBottom: '40px',
         }}>
-          The amazing team behind Game Hole
+          The amazing people behind Game Hole and FoxStead
         </p>
 
         {/* Credits Sections */}
@@ -118,7 +118,7 @@ export default function Credits() {
             </div>
           </div>
 
-          {/* Art & Assets */}
+          {/* Artist Credits — Coming Soon */}
           <div style={{
             background: 'linear-gradient(135deg, #1a1a2e, #0f0f1e)',
             border: '2px solid #8e44ad',
@@ -126,34 +126,103 @@ export default function Credits() {
             padding: '30px',
             boxShadow: '0 0 40px rgba(142, 68, 173, 0.3)',
           }}>
-            <h2 style={{
-              fontFamily: 'Orbitron, sans-serif',
-              fontSize: '28px',
-              fontWeight: 'bold',
-              color: '#8e44ad',
-              marginBottom: '20px',
-              textTransform: 'uppercase',
-            }}>
-              Art & Assets
-            </h2>
-            <div style={{
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px', flexWrap: 'wrap' }}>
+              <h2 style={{
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '28px',
+                fontWeight: 'bold',
+                color: '#8e44ad',
+                textTransform: 'uppercase',
+                margin: 0,
+              }}>
+                Art Credits
+              </h2>
+              <span style={{
+                padding: '5px 14px',
+                background: 'rgba(142, 68, 173, 0.2)',
+                border: '1px solid #8e44ad',
+                borderRadius: '20px',
+                color: '#ce93d8',
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '11px',
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+              }}>
+                Being Updated
+              </span>
+            </div>
+
+            <p style={{
               fontFamily: 'Share Tech Mono, monospace',
-              fontSize: '16px',
-              color: '#00ff99',
-              lineHeight: '2',
+              fontSize: '15px',
+              color: '#aaa',
+              lineHeight: '1.8',
+              marginBottom: '24px',
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid rgba(142, 68, 173, 0.2)' }}>
-                <span>Pixel Art Generation</span>
-                <span style={{ color: '#00d4ff', fontWeight: 'bold' }}>PixelLab AI</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px', paddingBottom: '10px', borderBottom: '1px solid rgba(142, 68, 173, 0.2)' }}>
-                <span>Character Sprites & Tilesets</span>
-                <span style={{ color: '#00d4ff', fontWeight: 'bold' }}>AI-Generated Assets</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px' }}>
-                <span>Zelda Futuristic Asset Pack</span>
-                <span style={{ color: '#00d4ff', fontWeight: 'bold' }}>Deakcor (@deakcor)</span>
-              </div>
+              FoxStead uses art from some incredible creators. We are actively compiling
+              full credits for every asset pack, tileset, sprite, and sound used across
+              the game. If you made art that appears here and want credit listed —
+              or want it removed — please reach out.
+            </p>
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              marginBottom: '28px',
+            }}>
+              {[
+                { label: 'Zelda Futuristic Tileset', credit: 'Deakcor (@deakcor)', link: null },
+                { label: 'Character Sprites (AI-assisted)', credit: 'PixelLab', link: null },
+                { label: 'Sound Effects', credit: 'Various — full list coming soon', link: null },
+                { label: 'Additional Art Packs', credit: 'Credits being compiled…', link: null },
+              ].map((item, i) => (
+                <div key={i} style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '12px 0',
+                  borderBottom: '1px solid rgba(142, 68, 173, 0.2)',
+                  flexWrap: 'wrap',
+                  gap: '8px',
+                }}>
+                  <span style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '15px', color: '#00ff99' }}>
+                    {item.label}
+                  </span>
+                  <span style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '14px', color: '#ce93d8', fontWeight: 'bold' }}>
+                    {item.credit}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{
+              background: 'rgba(142, 68, 173, 0.1)',
+              border: '1px dashed rgba(142, 68, 173, 0.5)',
+              borderRadius: '10px',
+              padding: '20px',
+              textAlign: 'center',
+            }}>
+              <p style={{
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '13px',
+                color: '#ce93d8',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+              }}>
+                Are you an artist whose work appears in FoxStead?
+              </p>
+              <p style={{
+                fontFamily: 'Share Tech Mono, monospace',
+                fontSize: '13px',
+                color: '#888',
+                lineHeight: '1.6',
+              }}>
+                We want to credit you properly. Contact us and we will add your name,
+                link, and a description of your work to this page.
+              </p>
             </div>
           </div>
 
