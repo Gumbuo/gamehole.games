@@ -22,6 +22,7 @@ export default function Leaderboard() {
 
   const games = [
     { key: "all", title: "All Games" },
+    { key: "foxstead", title: "FoxStead" },
     { key: "catacombs", title: "Alien Catacombs" },
     { key: "dungeon", title: "Dungeon Crawler" },
     { key: "invasion", title: "Gumbuo Invasion" },
@@ -54,6 +55,7 @@ export default function Leaderboard() {
   // Group scores by game for "All Games" view
   const groupedScores = () => {
     const groups: { [key: string]: ScoreEntry[] } = {
+      foxstead: [],
       catacombs: [],
       dungeon: [],
       invasion: [],
