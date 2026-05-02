@@ -624,7 +624,7 @@ export default function HomePage() {
                     <img
                       src={(game as { image: string }).image}
                       alt={game.title}
-                      style={{ width: '100%', height: 'auto', display: 'block' }}
+                      style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }}
                     />
                   )}
                   <div style={{ padding: '16px' }}>
@@ -692,7 +692,7 @@ export default function HomePage() {
                 <img
                   src="/foxstead-banner.png"
                   alt="FoxStead"
-                  style={{ width: '100%', height: 'auto', display: 'block', opacity: 0.85 }}
+                  style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block', opacity: 0.85 }}
                 />
                 <div style={{ padding: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '10px' }}>
@@ -737,7 +737,7 @@ export default function HomePage() {
                     fontSize: '12px',
                   }}>
                     <span>🛠️</span>
-                    <span>Under Development — MVP Expected July 2025</span>
+                    <span>Under Development — MVP Expected July 2026</span>
                   </div>
                 </div>
               </div>
