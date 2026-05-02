@@ -230,7 +230,7 @@ const featuredGames: FeaturedGame[] = [
 
 // Community Games
 const communityGames = {
-  catacombs: { title: "FoxStead", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/foxstead-banner.png", description: "Playable now — early development. World map, catacombs, fishing & refinery all in. Very unbalanced, just getting it all to exist." },
+  catacombs: { title: "ALIEN AF", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/alien-af-banner.png", description: "Shoot-em-up action — survive alien waves across multiple zones. World map, volcano world, catacombs. Grenades, guns, melee — Alien AF." },
   dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY" },
   invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY" },
 };
