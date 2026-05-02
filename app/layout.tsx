@@ -9,14 +9,14 @@ import dynamic from "next/dynamic";
 const IframeAwareGlobals = dynamic(() => import("./components/IframeAwareGlobals"), { ssr: false });
 
 export const metadata: Metadata = {
-  title: "Game Hole - Web3 Gaming Platform",
-  description: "Play amazing browser games including Alien Catacombs, Alien Arena, and more! Connect your wallet to earn rewards.",
+  title: "Game Hole - Free Browser Games",
+  description: "Play free browser games — Alien AF, Alien Arena, and more. Jump in and play instantly, no sign-up required.",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Game Hole - Web3 Gaming Platform",
-    description: "Play amazing browser games including Alien Catacombs, Alien Arena, and more! Connect your wallet to earn rewards.",
+    title: "Game Hole - Free Browser Games",
+    description: "Play free browser games — Alien AF, Alien Arena, and more. Jump in and play instantly, no sign-up required.",
     url: "https://www.gamehole.games",
     siteName: "Game Hole",
     images: [
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Game Hole - Web3 Gaming Platform",
-    description: "Play amazing browser games including Alien Catacombs, Alien Arena, and more! Connect your wallet to earn rewards.",
+    title: "Game Hole - Free Browser Games",
+    description: "Play free browser games — Alien AF, Alien Arena, and more. Jump in and play instantly, no sign-up required.",
     images: ["https://www.gamehole.games/logo.png"],
   },
 };

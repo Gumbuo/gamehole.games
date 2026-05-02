@@ -513,7 +513,7 @@ export default function HomePage() {
               maxWidth: '600px',
               margin: '0 auto 30px',
             }}>
-              Your destination for the best crypto games. Play featured Web3 titles,
+              Your destination for free browser games. Play our originals,
               discover community games, and share your own creations!
             </p>
             <a
@@ -683,7 +683,7 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Featured Crypto Games */}
+          {/* Featured Games */}
           <section style={{ marginBottom: '60px' }}>
             <div style={{ marginBottom: '30px' }}>
               <h2 style={{
