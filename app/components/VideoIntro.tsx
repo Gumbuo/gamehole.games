@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface Props {
   onDismiss: () => void;
@@ -7,15 +7,12 @@ interface Props {
 
 export default function VideoIntro({ onDismiss }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [watching, setWatching] = useState(false);
 
   useEffect(() => {
-    // Auto-play the video muted so it starts immediately
     if (videoRef.current) {
-      videoRef.current.volume = 0.6;
       videoRef.current.play().catch(() => {});
     }
-  }, [watching]);
+  }, []);
 
   return (
     <div style={{
@@ -64,6 +61,7 @@ export default function VideoIntro({ onDismiss }: Props) {
             src="/fox-club-wow.mp4"
             style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }}
             playsInline
+            muted
             onEnded={onDismiss}
           />
         </div>
