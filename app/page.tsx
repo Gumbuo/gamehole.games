@@ -251,34 +251,7 @@ export default function HomePage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative' }}>
-      {/* Background video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: -1,
-        }}
-        src="/alien.mp4"
-      />
-      {/* Dark overlay so content stays readable */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: 'rgba(5, 5, 20, 0.75)',
-        zIndex: -1,
-      }} />
+    <div style={{ minHeight: '100vh' }}>
       {/* Navigation */}
       <nav style={{
         position: 'sticky',

@@ -6,6 +6,8 @@ import { Providers } from "./providers";
 import MusicPlayer from "./components/MusicPlayer";
 import dynamic from "next/dynamic";
 
+const BackgroundVideo = dynamic(() => import("./components/BackgroundVideo"), { ssr: false });
+
 const IframeAwareGlobals = dynamic(() => import("./components/IframeAwareGlobals"), { ssr: false });
 
 export const metadata: Metadata = {
@@ -45,10 +47,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Audiowide&family=Share+Tech+Mono&family=Iceland&family=Electrolize&display=swap" rel="stylesheet" />
       </head>
-      <body className="min-h-screen bg-black">
+      <body className="min-h-screen" style={{ background: "transparent" }}>
+        <BackgroundVideo />
         <Providers>
           <IframeAwareGlobals />
-          {children}
+          <div style={{ position: "relative", zIndex: 2 }}>
+            {children}
+          </div>
           <MusicPlayer />
         </Providers>
       </body>
