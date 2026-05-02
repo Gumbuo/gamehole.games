@@ -624,7 +624,7 @@ export default function HomePage() {
                     <img
                       src={(game as { image: string }).image}
                       alt={game.title}
-                      style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }}
+                      style={{ width: '100%', height: 'auto', display: 'block' }}
                     />
                   )}
                   <div style={{ padding: '16px' }}>
