@@ -461,33 +461,6 @@ export default function HomePage() {
               Your destination for free browser games. Play our originals,
               discover community games, and share your own creations!
             </p>
-            <a
-              href="/guildevents"
-              style={{
-                display: 'inline-block',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                border: '3px solid #b44dff',
-                boxShadow: '0 0 30px rgba(180, 77, 255, 0.4)',
-                transition: 'all 0.3s ease',
-                maxWidth: '500px',
-                width: '100%',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 50px rgba(180, 77, 255, 0.7)';
-                e.currentTarget.style.transform = 'scale(1.02)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 30px rgba(180, 77, 255, 0.4)';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              <img
-                src="/guild-banner.jpg"
-                alt="SpiderGang Guild"
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
-            </a>
           </section>
 
           {/* Community Games */}
@@ -688,6 +661,35 @@ export default function HomePage() {
               </div>
 
             </div>
+
+            {/* Guild Banner — smaller, under community games */}
+            <a
+              href="/guildevents"
+              style={{
+                display: 'block',
+                marginTop: '30px',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                border: '2px solid #b44dff60',
+                boxShadow: '0 0 20px rgba(180, 77, 255, 0.25)',
+                maxWidth: '420px',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 35px rgba(180, 77, 255, 0.55)';
+                e.currentTarget.style.borderColor = '#b44dff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(180, 77, 255, 0.25)';
+                e.currentTarget.style.borderColor = '#b44dff60';
+              }}
+            >
+              <img
+                src="/guild-banner.jpg"
+                alt="SpiderGang Guild Events"
+                style={{ width: '100%', height: '120px', objectFit: 'cover', display: 'block' }}
+              />
+            </a>
           </section>
 
           {/* Featured Games */}
@@ -1307,6 +1309,117 @@ export default function HomePage() {
                 ))}
               </div>
             )}
+          </section>
+
+          {/* Guild Events Banner */}
+          <section style={{ marginBottom: '80px', textAlign: 'center' }}>
+            <h2 style={{
+              fontFamily: 'Orbitron, sans-serif',
+              fontSize: '28px',
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #b44dff, #8e2de2)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '20px',
+              textTransform: 'uppercase',
+            }}>
+              ⚔️ Guild Events
+            </h2>
+            <p style={{
+              fontFamily: 'Share Tech Mono, monospace',
+              color: '#aaa',
+              fontSize: '15px',
+              maxWidth: '500px',
+              margin: '0 auto 30px',
+              lineHeight: '1.7',
+            }}>
+              Join the SpiderGang community — weekly guild events, exclusive guides, and organized play across multiple games.
+            </p>
+            <a
+              href="/guildevents"
+              style={{
+                display: 'inline-block',
+                padding: '16px 48px',
+                background: 'linear-gradient(135deg, #b44dff, #8e2de2)',
+                border: '2px solid #b44dff',
+                borderRadius: '10px',
+                color: '#fff',
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                textDecoration: 'none',
+                textTransform: 'uppercase',
+                letterSpacing: '2px',
+                boxShadow: '0 0 30px rgba(180, 77, 255, 0.5)',
+              }}
+            >
+              View Guild Events →
+            </a>
+          </section>
+
+          {/* About Section */}
+          <section style={{ marginBottom: '80px' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(0, 255, 153, 0.06))',
+              border: '1px solid rgba(0, 212, 255, 0.2)',
+              borderRadius: '20px',
+              padding: '50px 40px',
+              textAlign: 'center',
+            }}>
+              <h2 style={{
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '26px',
+                color: '#00d4ff',
+                marginBottom: '20px',
+                textTransform: 'uppercase',
+              }}>
+                What is Game Hole?
+              </h2>
+              <p style={{
+                fontFamily: 'Share Tech Mono, monospace',
+                color: '#999',
+                fontSize: '15px',
+                maxWidth: '680px',
+                margin: '0 auto 30px',
+                lineHeight: '1.8',
+              }}>
+                Game Hole is a community-built hub for free browser games. We build and host our own originals like Alien AF, curate our favorite games from across the web, and run guild events for the games we actually play. No accounts required — just drop in and play.
+              </p>
+              <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                {[
+                  { label: 'Games Hosted', value: '5+' },
+                  { label: 'Free to Play', value: '100%' },
+                  { label: 'No Sign-up', value: 'Ever' },
+                ].map((stat) => (
+                  <div key={stat.label} style={{
+                    padding: '20px 30px',
+                    background: 'rgba(0, 212, 255, 0.08)',
+                    border: '1px solid rgba(0, 212, 255, 0.3)',
+                    borderRadius: '12px',
+                    minWidth: '130px',
+                  }}>
+                    <div style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '28px',
+                      color: '#00ff99',
+                      fontWeight: 'bold',
+                      marginBottom: '6px',
+                    }}>
+                      {stat.value}
+                    </div>
+                    <div style={{
+                      fontFamily: 'Share Tech Mono, monospace',
+                      fontSize: '11px',
+                      color: '#666',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px',
+                    }}>
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </section>
 
         </div>
