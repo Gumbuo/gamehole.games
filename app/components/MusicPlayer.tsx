@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import VideoIntro from "./VideoIntro";
 
 // Available music tracks
 const TRACKS = [
@@ -15,15 +16,27 @@ export default function MusicPlayer() {
   const [selectedTrack, setSelectedTrack] = useState(TRACKS[4]); // Galactic Groove
   const [isExpanded, setIsExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     setMounted(true);
-    // Check if we're inside an iframe - don't show player
     if (typeof window !== "undefined" && window.self !== window.top) {
       return;
     }
+    // Show intro popup to get user interaction (unlocks autoplay)
+    setShowIntro(true);
   }, []);
+
+  const handleIntroDismiss = () => {
+    setShowIntro(false);
+    // User has interacted — autoplay is now allowed
+    if (audioRef.current) {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch(() => {});
+    }
+  };
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -86,6 +99,8 @@ export default function MusicPlayer() {
   if (typeof window !== "undefined" && window.self !== window.top) return null;
 
   return (
+    <>
+      {showIntro && <VideoIntro onDismiss={handleIntroDismiss} />}
     <div style={{
       position: "fixed",
       bottom: "20px",
@@ -260,5 +275,6 @@ export default function MusicPlayer() {
         </div>
       )}
     </div>
+    </>
   );
 }
