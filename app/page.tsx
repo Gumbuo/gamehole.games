@@ -680,6 +680,68 @@ export default function HomePage() {
                 </div>
                 );
               })}
+
+              {/* FoxStead — coming soon card */}
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
+                border: '2px solid rgba(255, 180, 50, 0.3)',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                cursor: 'default',
+              }}>
+                <img
+                  src="/foxstead-banner.png"
+                  alt="FoxStead"
+                  style={{ width: '100%', height: 'auto', display: 'block', opacity: 0.85 }}
+                />
+                <div style={{ padding: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '10px' }}>
+                    <h3 style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '18px',
+                      color: '#ffb432',
+                      margin: 0,
+                    }}>
+                      FoxStead
+                    </h3>
+                    <span style={{
+                      padding: '3px 8px',
+                      background: 'rgba(255, 180, 50, 0.15)',
+                      border: '1px solid #ffb432',
+                      borderRadius: '4px',
+                      color: '#ffb432',
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '9px',
+                      fontWeight: 'bold',
+                      flexShrink: 0,
+                      marginLeft: '8px',
+                    }}>
+                      IN DEV
+                    </span>
+                  </div>
+                  <p style={{
+                    fontFamily: 'Share Tech Mono, monospace',
+                    fontSize: '11px',
+                    color: '#888',
+                    margin: '0 0 10px 0',
+                    lineHeight: '1.5',
+                  }}>
+                    A chill farming and combat RPG — build your homestead, fight off alien invaders, and explore a living world.
+                  </p>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    color: '#ffb432',
+                    fontFamily: 'Share Tech Mono, monospace',
+                    fontSize: '12px',
+                  }}>
+                    <span>🛠️</span>
+                    <span>Under Development — MVP Expected July 2025</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </section>
 
