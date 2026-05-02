@@ -687,7 +687,7 @@ export default function HomePage() {
               <img
                 src="/guild-banner.jpg"
                 alt="SpiderGang Guild Events"
-                style={{ width: '100%', height: '120px', objectFit: 'cover', display: 'block' }}
+                style={{ width: '100%', height: '120px', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
               />
             </a>
           </section>
