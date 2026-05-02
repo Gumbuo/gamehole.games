@@ -231,8 +231,8 @@ const featuredGames: FeaturedGame[] = [
 // Community Games
 const communityGames = {
   catacombs: { title: "ALIEN AF", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/alien-af-banner.png", description: "Shoot-em-up action — survive alien waves across multiple zones. World map, volcano world, catacombs. Grenades, guns, melee — Alien AF." },
-  dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY" },
-  invasion: { title: "Gumbuo Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY" },
+  dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY", image: "/dungeon-crawler-banner.png" },
+  invasion: { title: "Alien Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY", image: "/alien-invasion-banner.png" },
 };
 
 export default function HomePage() {
