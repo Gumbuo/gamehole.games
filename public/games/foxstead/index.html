@@ -114,7 +114,7 @@
 	</style>
 <link id='-gd-engine-icon' rel='icon' type='image/png' href='index.icon.png' />
 <link rel='apple-touch-icon' href='index.apple-touch-icon.png'/>
-
+<script>(function(){function r(){var c=window.GodotAudio&&window.GodotAudio.ctx;if(c&&c.state!=='running')c.resume();}['click','keydown','touchstart','pointerdown'].forEach(function(e){document.addEventListener(e,r,{passive:true});});setInterval(r,1000);window.addEventListener('message',function(e){if(e.data&&e.data.type==='GAMEHOLE_UNLOCK_AUDIO'){var n=0,id=setInterval(function(){r();if(++n>360)clearInterval(id);},500);}});})();</script>
 </head>
 <body>
 	<canvas id='canvas'>
@@ -137,38 +137,6 @@
 	</div>
 
 	<script type='text/javascript' src='index.js'></script>
-	<script type='text/javascript'>
-		(function() {
-			var _resumed = false;
-
-			function tryResume() {
-				var ctx = window.GodotAudio && window.GodotAudio.ctx;
-				if (!ctx) return;
-				if (ctx.state === 'running') { _resumed = true; return; }
-				ctx.resume().then(function() { _resumed = true; }).catch(function() {});
-			}
-
-			// Any interaction directly inside the iframe (most reliable path)
-			['click', 'keydown', 'touchstart', 'pointerdown'].forEach(function(evt) {
-				document.addEventListener(evt, tryResume, { passive: true });
-			});
-
-			// Parent page signals overlay dismissed — poll for up to 3 minutes
-			// (the 32 MB PCK can take >30 s to download on slow connections)
-			window.addEventListener('message', function(e) {
-				if (!e.data || e.data.type !== 'GAMEHOLE_UNLOCK_AUDIO') return;
-				var n = 0;
-				var id = setInterval(function() {
-					tryResume();
-					if (_resumed || ++n > 360) clearInterval(id); // 360 × 500 ms = 3 min
-				}, 500);
-			});
-
-			// Continuous background poll — never stops, no timeout
-			// Catches the case where the first interaction beat GodotAudio init
-			setInterval(tryResume, 1000);
-		})();
-	</script>
 	<script type='text/javascript'>//<![CDATA[
 
 		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":32895008,"index.wasm":19796835},"focusCanvas":true,"gdnativeLibs":[]};
