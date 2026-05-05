@@ -538,7 +538,14 @@ export default function HomePage() {
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  {'youtubeTrailer' in game && game.youtubeTrailer ? (
+                  {hasImage && (
+                    <img
+                      src={(game as { image: string }).image}
+                      alt={game.title}
+                      style={{ width: '100%', height: 'auto', display: 'block' }}
+                    />
+                  )}
+                  {'youtubeTrailer' in game && game.youtubeTrailer && (
                     <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
                       <iframe
                         width="100%"
@@ -551,12 +558,6 @@ export default function HomePage() {
                         style={{ border: 'none' }}
                       />
                     </div>
-                  ) : hasImage && (
-                    <img
-                      src={(game as { image: string }).image}
-                      alt={game.title}
-                      style={{ width: '100%', height: 'auto', display: 'block' }}
-                    />
                   )}
                   <div style={{ padding: '16px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: description ? '10px' : '12px' }}>
