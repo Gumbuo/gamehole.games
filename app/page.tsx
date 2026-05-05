@@ -686,7 +686,7 @@ export default function HomePage() {
                 overflow: 'hidden',
                 border: '2px solid #b44dff60',
                 boxShadow: '0 0 20px rgba(180, 77, 255, 0.25)',
-                maxWidth: '420px',
+                maxWidth: '520px',
                 transition: 'all 0.3s ease',
               }}
               onMouseEnter={(e) => {
@@ -701,7 +701,7 @@ export default function HomePage() {
               <img
                 src="/foxhole-banner.png"
                 alt="Foxhole Productions"
-                style={{ width: '100%', height: '120px', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+                style={{ width: '100%', height: 'auto', display: 'block' }}
               />
             </a>
           </section>
