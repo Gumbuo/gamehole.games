@@ -597,16 +597,23 @@ export default function HomePage() {
                       </p>
                     )}
 
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      color: '#666',
-                      fontFamily: 'Share Tech Mono, monospace',
-                      fontSize: '12px',
-                    }}>
-                      <span>🎮</span>
-                      <span>Click to Play</span>
+                    <div
+                      style={{
+                        display: 'inline-block',
+                        padding: '8px 22px',
+                        background: 'linear-gradient(135deg, rgba(0,255,153,0.15), rgba(0,255,153,0.05))',
+                        border: '1px solid #00ff99',
+                        borderRadius: '6px',
+                        color: '#00ff99',
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        letterSpacing: '1px',
+                        boxShadow: '0 0 12px rgba(0,255,153,0.25)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      ▶ PLAY NOW
                     </div>
                   </div>
                 </div>
