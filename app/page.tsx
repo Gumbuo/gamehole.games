@@ -683,34 +683,63 @@ export default function HomePage() {
 
             </div>
 
-            {/* Guild Banner — smaller, under community games */}
-            <a
-              href="/guildevents"
-              style={{
-                display: 'block',
-                marginTop: '30px',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                border: '2px solid #b44dff60',
-                boxShadow: '0 0 20px rgba(180, 77, 255, 0.25)',
-                maxWidth: '520px',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 35px rgba(180, 77, 255, 0.55)';
-                e.currentTarget.style.borderColor = '#b44dff';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(180, 77, 255, 0.25)';
-                e.currentTarget.style.borderColor = '#b44dff60';
-              }}
-            >
-              <img
-                src="/foxhole-banner.png"
-                alt="Foxhole Productions"
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
-            </a>
+            {/* Guild Banners — side by side */}
+            <div style={{ display: 'flex', gap: '16px', marginTop: '30px', flexWrap: 'wrap' }}>
+              <a
+                href="/guildevents"
+                style={{
+                  display: 'block',
+                  flex: '1 1 240px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  border: '2px solid #b44dff60',
+                  boxShadow: '0 0 20px rgba(180, 77, 255, 0.25)',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 35px rgba(180, 77, 255, 0.55)';
+                  e.currentTarget.style.borderColor = '#b44dff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(180, 77, 255, 0.25)';
+                  e.currentTarget.style.borderColor = '#b44dff60';
+                }}
+              >
+                <img
+                  src="/foxhole-banner.png"
+                  alt="Foxhole Productions"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              </a>
+              <a
+                href="https://www.spidergang.xyz"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  flex: '1 1 240px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  border: '2px solid #b44dff60',
+                  boxShadow: '0 0 20px rgba(180, 77, 255, 0.25)',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 35px rgba(180, 77, 255, 0.55)';
+                  e.currentTarget.style.borderColor = '#b44dff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(180, 77, 255, 0.25)';
+                  e.currentTarget.style.borderColor = '#b44dff60';
+                }}
+              >
+                <img
+                  src="/guild-banner.jpg"
+                  alt="SpiderGang Guild Events"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </a>
+            </div>
           </section>
 
           {/* Featured Games */}
