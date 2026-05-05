@@ -401,7 +401,15 @@ export default function HomePage() {
                   />
                   {!iframeUnlocked && (
                     <div
-                      onClick={() => setIframeUnlocked(true)}
+                      onClick={() => {
+                        setIframeUnlocked(true);
+                        // Signal the Godot iframe to resume its audio context
+                        setTimeout(() => {
+                          document.querySelectorAll('iframe').forEach((f) => {
+                            try { f.contentWindow?.postMessage({ type: 'GAMEHOLE_UNLOCK_AUDIO' }, '*'); } catch (_) {}
+                          });
+                        }, 150);
+                      }}
                       style={{
                         position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
                         display: 'flex', flexDirection: 'column',

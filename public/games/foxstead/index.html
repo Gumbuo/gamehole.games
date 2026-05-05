@@ -138,16 +138,40 @@
 
 	<script type='text/javascript' src='index.js'></script>
 	<script type='text/javascript'>
-		// Resume Godot audio context on first user interaction (browser autoplay policy blocks audio until gesture)
 		(function() {
-			function resumeGodotAudio() {
-				if (window.GodotAudio && window.GodotAudio.ctx) {
-					window.GodotAudio.ctx.resume();
+			var _audioResumed = false;
+
+			function tryResumeAudio() {
+				if (_audioResumed) return;
+				var ctx = window.GodotAudio && window.GodotAudio.ctx;
+				if (ctx) {
+					ctx.resume().then(function() { _audioResumed = true; }).catch(function() {});
 				}
 			}
+
+			// Resume on any direct interaction inside the iframe
 			['click', 'keydown', 'touchstart', 'pointerdown'].forEach(function(evt) {
-				document.addEventListener(evt, resumeGodotAudio);
+				document.addEventListener(evt, tryResumeAudio, { passive: true });
 			});
+
+			// Parent page sends this when the "Click to Start" overlay is dismissed
+			window.addEventListener('message', function(e) {
+				if (e.data && e.data.type === 'GAMEHOLE_UNLOCK_AUDIO') {
+					// Poll until GodotAudio.ctx is ready (it may not exist yet at message time)
+					var attempts = 0;
+					var poll = setInterval(function() {
+						tryResumeAudio();
+						if (_audioResumed || ++attempts > 30) clearInterval(poll);
+					}, 300);
+				}
+			});
+
+			// Background poll — catches the case where a user gesture happened
+			// before GodotAudio initialised its context
+			var bgPoll = setInterval(function() {
+				tryResumeAudio();
+				if (_audioResumed) clearInterval(bgPoll);
+			}, 800);
 		})();
 	</script>
 	<script type='text/javascript'>//<![CDATA[
