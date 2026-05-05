@@ -271,6 +271,29 @@
 				}).then(() => {
 					setStatusMode('hidden');
 					initializing = false;
+
+					// Show a small in-game overlay so the user makes ONE click
+					// inside this iframe — that unlocks the Godot AudioContext.
+					var audioOverlay = document.createElement('div');
+					audioOverlay.id = 'audio-unlock';
+					audioOverlay.style.cssText = [
+						'position:fixed','top:0','left:0','right:0','bottom:0',
+						'display:flex','flex-direction:column',
+						'align-items:center','justify-content:center',
+						'background:rgba(0,0,0,0.72)','z-index:9999','cursor:pointer'
+					].join(';');
+					audioOverlay.innerHTML =
+						'<div style="font-size:64px;margin-bottom:14px;filter:drop-shadow(0 0 16px #00ff99)">&#9654;</div>' +
+						'<div style="font-family:monospace;font-size:22px;color:#00ff99;text-shadow:0 0 12px #00ff99">CLICK TO PLAY</div>';
+
+					audioOverlay.addEventListener('click', function() {
+						// This click is inside the iframe — guaranteed user gesture
+						var ctx = window.GodotAudio && window.GodotAudio.ctx;
+						if (ctx) ctx.resume();
+						audioOverlay.parentNode && audioOverlay.parentNode.removeChild(audioOverlay);
+					}, { once: true });
+
+					document.body.appendChild(audioOverlay);
 				}, displayFailureNotice);
 			}
 		})();
