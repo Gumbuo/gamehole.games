@@ -139,39 +139,34 @@
 	<script type='text/javascript' src='index.js'></script>
 	<script type='text/javascript'>
 		(function() {
-			var _audioResumed = false;
+			var _resumed = false;
 
-			function tryResumeAudio() {
-				if (_audioResumed) return;
+			function tryResume() {
 				var ctx = window.GodotAudio && window.GodotAudio.ctx;
-				if (ctx) {
-					ctx.resume().then(function() { _audioResumed = true; }).catch(function() {});
-				}
+				if (!ctx) return;
+				if (ctx.state === 'running') { _resumed = true; return; }
+				ctx.resume().then(function() { _resumed = true; }).catch(function() {});
 			}
 
-			// Resume on any direct interaction inside the iframe
+			// Any interaction directly inside the iframe (most reliable path)
 			['click', 'keydown', 'touchstart', 'pointerdown'].forEach(function(evt) {
-				document.addEventListener(evt, tryResumeAudio, { passive: true });
+				document.addEventListener(evt, tryResume, { passive: true });
 			});
 
-			// Parent page sends this when the "Click to Start" overlay is dismissed
+			// Parent page signals overlay dismissed — poll for up to 3 minutes
+			// (the 32 MB PCK can take >30 s to download on slow connections)
 			window.addEventListener('message', function(e) {
-				if (e.data && e.data.type === 'GAMEHOLE_UNLOCK_AUDIO') {
-					// Poll until GodotAudio.ctx is ready (it may not exist yet at message time)
-					var attempts = 0;
-					var poll = setInterval(function() {
-						tryResumeAudio();
-						if (_audioResumed || ++attempts > 30) clearInterval(poll);
-					}, 300);
-				}
+				if (!e.data || e.data.type !== 'GAMEHOLE_UNLOCK_AUDIO') return;
+				var n = 0;
+				var id = setInterval(function() {
+					tryResume();
+					if (_resumed || ++n > 360) clearInterval(id); // 360 × 500 ms = 3 min
+				}, 500);
 			});
 
-			// Background poll — catches the case where a user gesture happened
-			// before GodotAudio initialised its context
-			var bgPoll = setInterval(function() {
-				tryResumeAudio();
-				if (_audioResumed) clearInterval(bgPoll);
-			}, 800);
+			// Continuous background poll — never stops, no timeout
+			// Catches the case where the first interaction beat GodotAudio init
+			setInterval(tryResume, 1000);
 		})();
 	</script>
 	<script type='text/javascript'>//<![CDATA[
