@@ -137,6 +137,19 @@
 	</div>
 
 	<script type='text/javascript' src='index.js'></script>
+	<script type='text/javascript'>
+		// Resume Godot audio context on first user interaction (browser autoplay policy blocks audio until gesture)
+		(function() {
+			function resumeGodotAudio() {
+				if (window.GodotAudio && window.GodotAudio.ctx) {
+					window.GodotAudio.ctx.resume();
+				}
+			}
+			['click', 'keydown', 'touchstart', 'pointerdown'].forEach(function(evt) {
+				document.addEventListener(evt, resumeGodotAudio);
+			});
+		})();
+	</script>
 	<script type='text/javascript'>//<![CDATA[
 
 		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":32895008,"index.wasm":19796835},"focusCanvas":true,"gdnativeLibs":[]};
