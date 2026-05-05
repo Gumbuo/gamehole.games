@@ -175,7 +175,7 @@ const featuredGames: FeaturedGame[] = [
 
 // Community Games
 const communityGames = {
-  catacombs: { title: "ALIEN AF", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/alien-af-banner.png", description: "Shoot-em-up action — survive alien waves across multiple zones. World map, volcano world, catacombs. Grenades, guns, melee — Alien AF." },
+  catacombs: { title: "ALIEN AF", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/alien-af-banner.png", description: "Shoot-em-up action — survive alien waves across multiple zones. World map, volcano world, catacombs. Grenades, guns, melee — Alien AF.", youtubeTrailer: "Fs-Hik2Lizo", youtubeStart: 6 },
   dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY", image: "/dungeon-crawler-banner.png" },
   invasion: { title: "Alien Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY", image: "/alien-invasion-banner.png" },
 };
@@ -538,7 +538,20 @@ export default function HomePage() {
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  {hasImage && (
+                  {'youtubeTrailer' in game && game.youtubeTrailer ? (
+                    <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        src={`https://www.youtube.com/embed/${game.youtubeTrailer}${'youtubeStart' in game && game.youtubeStart ? `?start=${game.youtubeStart}` : ''}`}
+                        title={`${game.title} Trailer`}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{ border: 'none' }}
+                      />
+                    </div>
+                  ) : hasImage && (
                     <img
                       src={(game as { image: string }).image}
                       alt={game.title}
