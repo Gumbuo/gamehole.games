@@ -685,8 +685,8 @@ export default function HomePage() {
               }}
             >
               <img
-                src="/guild-banner.jpg"
-                alt="SpiderGang Guild Events"
+                src="/foxhole-banner.png"
+                alt="Foxhole Productions"
                 style={{ width: '100%', height: '120px', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
               />
             </a>
