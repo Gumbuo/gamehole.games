@@ -114,7 +114,7 @@
 	</style>
 <link id='-gd-engine-icon' rel='icon' type='image/png' href='index.icon.png' />
 <link rel='apple-touch-icon' href='index.apple-touch-icon.png'/>
-<script>(function(){function r(){var c=window.GodotAudio&&window.GodotAudio.ctx;if(c&&c.state!=='running')c.resume();}['click','keydown','touchstart','pointerdown'].forEach(function(e){document.addEventListener(e,r,{passive:true});});setInterval(r,1000);window.addEventListener('message',function(e){if(e.data&&e.data.type==='GAMEHOLE_UNLOCK_AUDIO'){var n=0,id=setInterval(function(){r();if(++n>360)clearInterval(id);},500);}});})();</script>
+<script>(function(){function r(){var c=window.GodotAudio&&window.GodotAudio.ctx;if(c&&c.state!=='running')c.resume();}['click','keydown','touchstart','pointerdown'].forEach(function(e){document.addEventListener(e,r,{passive:true,capture:true});});setInterval(r,500);window.addEventListener('message',function(e){if(e.data&&e.data.type==='GAMEHOLE_UNLOCK_AUDIO')r();});document.addEventListener('DOMContentLoaded',function(){var b=document.createElement('button');b.id='_snd';b.textContent='🔊 Sound';b.style.cssText='position:fixed;top:6px;left:6px;z-index:9999;background:#001800;color:#00ff99;border:1px solid #00ff99;border-radius:4px;padding:3px 8px;font-size:12px;font-family:monospace;cursor:pointer;';document.body.appendChild(b);b.addEventListener('click',function(){r();b.style.display='none';});var t=setInterval(function(){var c=window.GodotAudio&&window.GodotAudio.ctx;if(c&&c.state==='running'){clearInterval(t);b.style.display='none';}},500);});})();</script>
 </head>
 <body>
 	<canvas id='canvas'>
@@ -139,7 +139,7 @@
 	<script type='text/javascript' src='index.js'></script>
 	<script type='text/javascript'>//<![CDATA[
 
-		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":32895456,"index.wasm":19796835},"focusCanvas":true,"gdnativeLibs":[]};
+		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":32896192,"index.wasm":19796835},"focusCanvas":true,"gdnativeLibs":[]};
 		var engine = new Engine(GODOT_CONFIG);
 
 		(function() {
