@@ -284,7 +284,7 @@ type FarmSectionProps = {
   section: Section;
   activeUrl: string | null;
   setActiveUrl: (url: string) => void;
-  timers: Record<string, number>;
+  timers: Record<string, TimerEntry>;
   onSetTimer: (url: string, ms: number) => void;
   onClearTimer: (url: string) => void;
   notes: Record<string, string>;
