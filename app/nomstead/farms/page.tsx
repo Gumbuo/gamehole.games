@@ -49,6 +49,7 @@ const SECTIONS: Section[] = [
     links: [
       { label: "fox-hole / wine tile", url: "https://nomstead.com/fox-hole/6979ec3f24abb84a34c52a02", count: 4 },
       { label: "fox-hole / pond", url: "https://nomstead.com/fox-hole/68c7bc3fc0d978301fad2ca0" },
+      { label: "fox tools shop", url: "https://nomstead.com/fox-alchmey/6952eca517bccce7626cdfbe" },
     ],
   },
   {
