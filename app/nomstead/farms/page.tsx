@@ -56,78 +56,7 @@ const SECTIONS: Section[] = [
     id: "open-farms",
     title: "Open Farms",
     color: "#4ade80",
-    links: [
-      { label: "goldv / 68c7b9f1", url: "https://nomstead.com/goldv/68c7b9f1791656b0bc384abf" },
-      { label: "goldv / 6979ebcf", url: "https://nomstead.com/goldv/6979ebcf24abb84a34c511b6" },
-      { label: "mbt / 6948864e", url: "https://nomstead.com/mbt/6948864e2f87c02ee30a2aba" },
-      { label: "mbt / 69477191", url: "https://nomstead.com/mbt/69477191e9b4f164c2b41fd3" },
-      { label: "mbt / 69234cfe", url: "https://nomstead.com/mbt/69234cfebd7614ed911ae1fa" },
-      { label: "algerian-kingdom", url: "https://nomstead.com/algerian-kingdom/667e92766ffeedef849f44a1" },
-      { label: "clear-crossing-academy / 64ae902e", url: "https://nomstead.com/clear-crossing-academy/64ae902e72d58ade1b34ecd7" },
-      { label: "falconia", url: "https://nomstead.com/falconia/68c7bb7fc0d978301fad29f4" },
-      { label: "nullland", url: "https://nomstead.com/nullland/68c7ba776ff5961fef12e44c" },
-      { label: "gabyluky1904 / 69204469", url: "https://nomstead.com/gabyluky1904/692044693ad1775f8441df47" },
-      { label: "gabyluky1904 / 69077f8f", url: "https://nomstead.com/gabyluky1904/69077f8f1deed8fd9acddae7" },
-      { label: "gabyluky1904 / 68b01910", url: "https://nomstead.com/gabyluky1904/68b019104afc277d427618bb" },
-      { label: "gabyluky1904 / 688b8ae8", url: "https://nomstead.com/gabyluky1904/688b8ae8eef426de5535a490" },
-      { label: "wfh365days", url: "https://nomstead.com/wfh365days/68d2cbfc80b9dc2c85fec7cf" },
-      { label: "charazy-world (A)", url: "https://nomstead.com/charazy-world/6890e2b029877c5fad6ad189" },
-      { label: "charazy-world (B)", url: "https://nomstead.com/charazy-world/6890e2b029877c5fad6ad18c" },
-      { label: "velania", url: "https://nomstead.com/velania/68c7baf56ff5961fef12e60c" },
-      { label: "nanto / 6919d5e8", url: "https://nomstead.com/nanto/6919d5e879757ff165ad7dc6", note: "🍄 mushrooms near forest pond" },
-      { label: "nanto / 68c7bbbb", url: "https://nomstead.com/nanto/68c7bbbbc0d978301fad2acc" },
-      { label: "clear-crossing-academy / 68c7b9d9", url: "https://nomstead.com/clear-crossing-academy/68c7b9d9791656b0bc384a6b" },
-      { label: "logg", url: "https://nomstead.com/logg/68c7bc30c0d978301fad2c6c" },
-      { label: "khris", url: "https://nomstead.com/khris/68c7bb89c0d978301fad2a18" },
-      { label: "lorztwitch-empire", url: "https://nomstead.com/lorztwitch-empire/68c7bbe8c0d978301fad2b68" },
-      { label: "lk / 6913101a", url: "https://nomstead.com/lk/6913101a19dee60a43a3c4d8" },
-      { label: "lk / 688b88ac (A)", url: "https://nomstead.com/lk/688b88ac824d90422c6ef0e4" },
-      { label: "lk / 688b88ac (B)", url: "https://nomstead.com/lk/688b88ac824d90422c6ef0dd" },
-      { label: "lk / 664062ef", url: "https://nomstead.com/lk/664062efaed3071e0cbf8b86" },
-      { label: "lk / 6941435c", url: "https://nomstead.com/lk/6941435c0dbaac1c4498ddab" },
-      { label: "lk / 688ba7fe", url: "https://nomstead.com/lk/688ba7fe9b194d2ee238f1d9" },
-      { label: "lk / 69414350", url: "https://nomstead.com/lk/69414350e9b4f164c20eb2ca" },
-      { label: "lk / 690ce13d", url: "https://nomstead.com/lk/690ce13d4a50130682afd101" },
-      { label: "lk / 693034aa", url: "https://nomstead.com/lk/693034aab7fef9264eeebb99" },
-      { label: "darkside", url: "https://nomstead.com/darkside/688d5ca96f9089549597f7c4" },
-      { label: "root", url: "https://nomstead.com/root/688b9778eef426de55401180" },
-      { label: "sbhan / 688b8d92 (A)", url: "https://nomstead.com/sbhan/688b8d92eef426de55378ffe" },
-      { label: "m@lik / 68c7ba92", url: "https://nomstead.com/m@lik/68c7ba926ff5961fef12e4ac" },
-      { label: "sbhan / 68c7ba95", url: "https://nomstead.com/sbhan/68c7ba956ff5961fef12e4b8" },
-      { label: "m@lik / 68bf2d30", url: "https://nomstead.com/m@lik/68bf2d30f0767fabff4900f6" },
-      { label: "sbhan / 6979ec00", url: "https://nomstead.com/sbhan/6979ec0024abb84a34c51c5b" },
-      { label: "sbhan / 688b8d92 (B)", url: "https://nomstead.com/sbhan/688b8d92eef426de55378ffb" },
-      { label: "geto-dacia", url: "https://nomstead.com/geto-dacia/68c7bad56ff5961fef12e59c" },
-      { label: "huyen", url: "https://nomstead.com/huyen/68b02c8937f6d81482857890" },
-      { label: "usop-empire (farm)", url: "https://nomstead.com/usop-empire/688b88946845397e4973227d" },
-      { label: "kalentong / 69093f93", url: "https://nomstead.com/kalentong/69093f93b5fe037716593feb" },
-      { label: "kalentong / 68c7bbc5", url: "https://nomstead.com/kalentong/68c7bbc5c0d978301fad2af0" },
-      { label: "kalentong / 68c49bff", url: "https://nomstead.com/kalentong/68c49bff34c18c4ba26fdd16" },
-      { label: "kalentong / 688b8a9a", url: "https://nomstead.com/kalentong/688b8a9a8656cded28fd5abb" },
-      { label: "kalentong / 693f0b35", url: "https://nomstead.com/kalentong/693f0b35ef3330f4950aeea8" },
-      { label: "kalentong / 6979ebeb", url: "https://nomstead.com/kalentong/6979ebeb24abb84a34c5179c" },
-      { label: "kiethcath-land / 68f6e25c (A)", url: "https://nomstead.com/kiethcath-land/68f6e25c6efb8522e44a6bd7" },
-      { label: "kiethcath-land / 68f6e25c (B)", url: "https://nomstead.com/kiethcath-land/68f6e25c6efb8522e44a6bd4" },
-      { label: "kiethcath-land / 693258df", url: "https://nomstead.com/kiethcath-land/693258df425202d08014c4c5" },
-      { label: "kiethcath-land / 692066a2", url: "https://nomstead.com/kiethcath-land/692066a27b32330db3b7d1d0" },
-      { label: "kiethcath-land / 6979ec21", url: "https://nomstead.com/kiethcath-land/6979ec2124abb84a34c523a4" },
-      { label: "ashling", url: "https://nomstead.com/ashling/68f3c03b37d4d5c64efb4b89", note: "~12 pond tiles" },
-      { label: "turkiye", url: "https://nomstead.com/turkiye/68f117ea8a0edfe1c615bb5e" },
-      { label: "owlnite", url: "https://nomstead.com/owlnite/68c7bb9dc0d978301fad2a60", note: "few ponds, no doil yet" },
-      { label: "dyespinning-wheel", url: "https://nomstead.com/dyespinning-wheel/688b88dae48988acd89b012f" },
-      { label: "fsg-4", url: "https://nomstead.com/fsg-4/688b889464eac5c413e9dfc7" },
-      { label: "dulba", url: "https://nomstead.com/dulba/68bf2787470072a8574dbc76", note: "~5 tiles" },
-      { label: "rogue", url: "https://nomstead.com/rogue/69205f0d3ad1775f8479fdc3", note: "10+ tiles" },
-      { label: "asperitas", url: "https://nomstead.com/asperitas/68c7bbc0c0d978301fad2adc" },
-    ],
-  },
-  {
-    id: "mushrooms",
-    title: "🍄 Mushrooms",
-    color: "#c084fc",
-    links: [
-      { label: "dou / 68c858cc", url: "https://nomstead.com/dou/68c858cc78cd19a65dd3e4e0", note: "~3h spawn" },
-    ],
+    links: [],
   },
   {
     id: "wine",
@@ -207,12 +136,7 @@ const SECTIONS: Section[] = [
     id: "guild-members",
     title: "Guild Members",
     color: "#a78bfa",
-    links: [
-      { label: "nickoloy-kingdom", url: "https://nomstead.com/nickoloy-kingdom" },
-      { label: "cmhall", url: "https://nomstead.com/cmhall" },
-      { label: "steemit", url: "https://nomstead.com/steemit" },
-      { label: "glitch", url: "https://nomstead.com/glitch" },
-    ],
+    links: [],
   },
 ];
 
@@ -335,23 +259,6 @@ export default function FarmsPage() {
             <h2 style={{ fontFamily: THEME.font, fontSize: "15px", color: "#fbbf24", margin: 0, letterSpacing: "1px" }}>Guild Goals</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <div style={{ background: "rgba(251,191,36,0.06)", border: "1px solid #fbbf24", borderRadius: "10px", padding: "14px 16px" }}>
-              <div style={{ fontFamily: THEME.font, fontSize: "13px", color: "#fbbf24", marginBottom: "8px", letterSpacing: "1px" }}>🍞 BREAD OVEN</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "13px", color: "#c5c6c7" }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Wood Plank</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>10,000</span></div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Stone Brick</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>100,000</span></div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Clay Brick</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>200</span></div>
-              </div>
-            </div>
-            <div style={{ background: "rgba(102,252,241,0.06)", border: "1px solid #66fcf1", borderRadius: "10px", padding: "14px 16px" }}>
-              <div style={{ fontFamily: THEME.font, fontSize: "13px", color: "#66fcf1", marginBottom: "8px", letterSpacing: "1px" }}>⚙ MILL</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "13px", color: "#c5c6c7" }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Wood Plank</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>100,000</span></div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Stone Brick</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>10,000</span></div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Clay Brick</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>500</span></div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Cotton</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>1,000</span></div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
