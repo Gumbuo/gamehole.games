@@ -245,9 +245,6 @@ export default function FarmsPage() {
   const [activeUrl, setActiveUrl] = useState<string | null>(null);
   const [timers, setTimers] = useState<Record<string, number>>({});
   const [notes, setNotes] = useState<Record<string, string>>({});
-  const [webhookUrl, setWebhookUrl] = useState("");
-  const [webhookInput, setWebhookInput] = useState("");
-  const [webhookStatus, setWebhookStatus] = useState("");
   const notifiedTimers = useRef<Set<string>>(new Set());
   const [, setTick] = useState(0);
 
@@ -260,9 +257,6 @@ export default function FarmsPage() {
       const storedNotes = JSON.parse(localStorage.getItem("nomstead_notes") || "{}");
       setNotes(storedNotes);
     } catch {}
-    const saved = localStorage.getItem("nomstead_webhook") || "";
-    setWebhookUrl(saved);
-    setWebhookInput(saved);
 
     const interval = setInterval(() => setTick((t) => t + 1), 1000);
     return () => clearInterval(interval);
@@ -287,28 +281,6 @@ export default function FarmsPage() {
     localStorage.setItem("nomstead_notes", JSON.stringify(next));
   }
 
-  function saveWebhook() {
-    const val = webhookInput.trim();
-    localStorage.setItem("nomstead_webhook", val);
-    setWebhookUrl(val);
-    setWebhookStatus(val ? "✓ Saved" : "Cleared");
-    setTimeout(() => setWebhookStatus(""), 2000);
-  }
-
-  async function testWebhook() {
-    if (!webhookUrl) { alert("No webhook URL saved yet."); return; }
-    setWebhookStatus("Sending…");
-    try {
-      const r = await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: "✅ NomStead Navigator webhook is working!" }),
-      });
-      setWebhookStatus(r.ok ? "✓ Ping sent!" : `✗ Error ${r.status}`);
-    } catch { setWebhookStatus("✗ Failed (check URL)"); }
-    setTimeout(() => setWebhookStatus(""), 3000);
-  }
-
   function handleClearTimer(url: string) {
     const next = { ...timers };
     delete next[url];
@@ -320,19 +292,17 @@ export default function FarmsPage() {
   useEffect(() => {
     const now = Date.now();
     Object.entries(timers).forEach(([url, expiry]) => {
-      if (expiry - now <= 0 && !notifiedTimers.current.has(url) && webhookUrl) {
+      if (expiry - now <= 0 && !notifiedTimers.current.has(url)) {
         notifiedTimers.current.add(url);
         let label = url;
         for (const sec of SECTIONS) {
           const found = sec.links.find((l) => l.url === url);
           if (found) { label = found.label; break; }
         }
-        const note = notes[url];
-        const msg = `<@413793170896322580> ⏱ **Timer ready!** ${label}${note ? " — " + note : ""}\n<${url}>`;
-        fetch(webhookUrl, {
+        fetch("/api/nomstead/ping", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: msg }),
+          body: JSON.stringify({ label, tileUrl: url, note: notes[url] }),
         }).catch(() => {});
       }
     });
@@ -356,21 +326,6 @@ export default function FarmsPage() {
         <p style={{ fontSize: "13px", color: THEME.secondary, marginBottom: "16px" }}>
           Click any tile to open it. Last visited stays <strong style={{ color: "#afffcf" }}>highlighted</strong>. Use <strong style={{ color: "#f90" }}>⏱</strong> to set a cooldown timer — click the countdown to clear it.
         </p>
-
-        {/* Discord Webhook Settings */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "24px", background: "#0d1a2e", border: "1px solid #2a3a5a", borderRadius: "6px", padding: "8px 12px", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "12px", color: "#7df", whiteSpace: "nowrap" }}>Discord Webhook:</span>
-          <input
-            type="text"
-            placeholder="Paste your Discord webhook URL here…"
-            value={webhookInput}
-            onChange={(e) => setWebhookInput(e.target.value)}
-            style={{ flex: 1, minWidth: "200px", background: "#060e1a", color: "#c8d8e8", border: "1px solid #2a4a6a", borderRadius: "4px", padding: "5px 8px", fontSize: "12px" }}
-          />
-          <button onClick={saveWebhook} style={{ background: "#1a3a5c", color: "#7df", border: "1px solid #2a5a8c", borderRadius: "4px", padding: "5px 12px", cursor: "pointer", fontSize: "12px", whiteSpace: "nowrap" }}>Save</button>
-          <button onClick={testWebhook} style={{ background: "transparent", color: "#6d9", border: "1px solid #6d9440", borderRadius: "4px", padding: "5px 12px", cursor: "pointer", fontSize: "12px", whiteSpace: "nowrap" }}>Test ping</button>
-          {webhookStatus && <span style={{ fontSize: "11px", color: "#7a9" }}>{webhookStatus}</span>}
-        </div>
 
         {SECTIONS.map((section) => (
           <FarmSection
