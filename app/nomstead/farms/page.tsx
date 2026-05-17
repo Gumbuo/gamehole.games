@@ -13,6 +13,20 @@ const THEME = {
   textMuted: "#c5c6c7",
 };
 
+const SEEDS = [
+  { name: "Cotton",        h: 2 },
+  { name: "Tomato",        h: 2 },
+  { name: "Red Flower",    h: 4 },
+  { name: "Blue Flower",   h: 4 },
+  { name: "Yellow Flower", h: 4 },
+  { name: "Grapes",        h: 4 },
+  { name: "Pumpkin",       h: 4 },
+  { name: "Potatoes",      h: 3 },
+  { name: "Fern",          h: 2,      label: "2h" },
+  { name: "Carrots",       h: 5 / 60, label: "5m" },
+  { name: "Wheat",         h: 24 },
+];
+
 type FarmLink = {
   label: string;
   url: string;
@@ -35,15 +49,20 @@ const SECTIONS: Section[] = [
     links: [
       { label: "fox-hole / home", url: "https://nomstead.com/fox-hole" },
       { label: "fox-hole / wine tile", url: "https://nomstead.com/fox-hole/6979ec3f24abb84a34c52a02", count: 4 },
-      { label: "fox-hole / 69204565", url: "https://nomstead.com/fox-hole/692045654379b3599a87f07f" },
-      { label: "fox-hole / 698d6eaf", url: "https://nomstead.com/fox-hole/698d6eaf88dc7185472f9273" },
-      { label: "fox-hole / 69869c42", url: "https://nomstead.com/fox-hole/69869c42d8fb0c26f6813633" },
-      { label: "fox-hole / 69875d9b", url: "https://nomstead.com/fox-hole/69875d9b3afbdad97a3a695d" },
+      { label: "fox-hole / pond", url: "https://nomstead.com/fox-hole/68c7bc3fc0d978301fad2ca0" },
+      { label: "fox-hole / 69204565", url: "https://nomstead.com/fox-hole/692045654379b3599a87f07f", note: "🌐 public" },
+      { label: "fox-hole / 698d6eaf", url: "https://nomstead.com/fox-hole/698d6eaf88dc7185472f9273", note: "🌐 public" },
+      { label: "fox-hole / 69869c42", url: "https://nomstead.com/fox-hole/69869c42d8fb0c26f6813633", note: "🌐 public" },
+      { label: "fox-hole / 69875d9b", url: "https://nomstead.com/fox-hole/69875d9b3afbdad97a3a695d", note: "🌐 public" },
       { label: "fox-hole / 69869c10", url: "https://nomstead.com/fox-hole/69869c10ee56d377117996b7", note: "🏰 guild" },
       { label: "fox-hole / 694a4ff3", url: "https://nomstead.com/fox-hole/694a4ff330cf4ef6f6381cb3", note: "🏰 guild" },
       { label: "fox-hole / 694b511b", url: "https://nomstead.com/fox-hole/694b511b8aa74b012c424e94", note: "🐝 beehive" },
-      { label: "fox-hole / 6963db26", url: "https://nomstead.com/fox-hole/6963db267760c9b34d2a079f", note: "🏰 guild" },
       { label: "fox-hole / 6931ed79", url: "https://nomstead.com/fox-hole/6931ed79d442282485aff5b2", note: "🐝 beehive" },
+      { label: "fox-hole / 6963db26", url: "https://nomstead.com/fox-hole/6963db267760c9b34d2a079f", note: "🏰 guild" },
+      { label: "fox-hole / 688bbe48", url: "https://nomstead.com/fox-hole/688bbe48343238ebc6edcbad", note: "🏰 guild" },
+      { label: "fox-hole / 688bbc4e", url: "https://nomstead.com/fox-hole/688bbc4e9b194d2ee247de9e", note: "🏰 guild" },
+      { label: "fox-hole / 69204169", url: "https://nomstead.com/fox-hole/6920416976db71b7c0c7b633", note: "🏰 guild" },
+      { label: "amoybaktidol", url: "https://nomstead.com/amoybaktidol", note: "🏰 guild" },
     ],
   },
   {
@@ -93,7 +112,7 @@ const SECTIONS: Section[] = [
       { label: "sbhan / 688b8d92 (B)", url: "https://nomstead.com/sbhan/688b8d92eef426de55378ffb" },
       { label: "geto-dacia", url: "https://nomstead.com/geto-dacia/68c7bad56ff5961fef12e59c" },
       { label: "huyen", url: "https://nomstead.com/huyen/68b02c8937f6d81482857890" },
-      { label: "usop-empire", url: "https://nomstead.com/usop-empire/688b88946845397e4973227d" },
+      { label: "usop-empire (farm)", url: "https://nomstead.com/usop-empire/688b88946845397e4973227d" },
       { label: "kalentong / 69093f93", url: "https://nomstead.com/kalentong/69093f93b5fe037716593feb" },
       { label: "kalentong / 68c7bbc5", url: "https://nomstead.com/kalentong/68c7bbc5c0d978301fad2af0" },
       { label: "kalentong / 68c49bff", url: "https://nomstead.com/kalentong/68c49bff34c18c4ba26fdd16" },
@@ -116,6 +135,14 @@ const SECTIONS: Section[] = [
     ],
   },
   {
+    id: "mushrooms",
+    title: "🍄 Mushrooms",
+    color: "#c084fc",
+    links: [
+      { label: "dou / 68c858cc", url: "https://nomstead.com/dou/68c858cc78cd19a65dd3e4e0", note: "~3h spawn" },
+    ],
+  },
+  {
     id: "wine",
     title: "Wine",
     color: "#c084fc",
@@ -131,17 +158,10 @@ const SECTIONS: Section[] = [
       { label: "waltz7809 / home", url: "https://nomstead.com/waltz7809", count: 1 },
       { label: "la-terra-dei-cachi", url: "https://nomstead.com/la-terra-dei-cachi/61c1e894f016c29f48d9cdd4", count: 2 },
       { label: "sbhan", url: "https://nomstead.com/sbhan/688b8d92eef426de55378ffb" },
-      { label: "algerian-kingdom", url: "https://nomstead.com/algerian-kingdom" },
+      { label: "dyespinning-wheel", url: "https://nomstead.com/dyespinning-wheel/688b88dae48988acd89b012c" },
       { label: "kalentong / 688b895a", url: "https://nomstead.com/kalentong/688b895a1607c56f2c03d329", count: 3 },
       { label: "espartacus / 688b89eb", url: "https://nomstead.com/espartacus/688b89ebe48988acd89b8070", count: 2 },
-    ],
-  },
-  {
-    id: "mushrooms",
-    title: "Mushrooms",
-    color: "#c084fc",
-    links: [
-      { label: "dou / 68c858cc", url: "https://nomstead.com/dou/68c858cc78cd19a65dd3e4e0", note: "~3h spawn" },
+      { label: "ottoman1453", url: "https://nomstead.com/ottoman1453/688b88961585b148c6a36d0f", count: 1 },
     ],
   },
   {
@@ -149,21 +169,16 @@ const SECTIONS: Section[] = [
     title: "Bread Ovens",
     color: "#fb923c",
     links: [
-      { label: "usop-empire", url: "https://nomstead.com/usop-empire/6586c17984e117ad477d68c2", count: 6 },
       { label: "marben", url: "https://nomstead.com/marben", count: 10 },
       { label: "black-hole", url: "https://nomstead.com/black-hole/688b8ac0824d90422c6fe80c", count: 2 },
       { label: "bread-oven", url: "https://nomstead.com/bread-oven", count: 4 },
       { label: "la-terra-dei-cachi", url: "https://nomstead.com/la-terra-dei-cachi/61b7f8dcc5c5332553b750f3", count: 5 },
       { label: "moonz", url: "https://nomstead.com/moonz/66f638e6dda9cf2e408b022f" },
       { label: "cocineros", url: "https://nomstead.com/cocineros/6979ebcc24abb84a34c510f3", count: 3 },
-      { label: "pardisland", url: "https://nomstead.com/pardisland/6985e0b0d8fb0c26f67f3b45" },
-      { label: "jam", url: "https://nomstead.com/jam/68c805230864317123534675", count: 1 },
-      { label: "carotandia", url: "https://nomstead.com/carotandia/61b916dabfb0aad6838a0f06", count: 1 },
       { label: "laizen", url: "https://nomstead.com/laizen/688ee6254470af38c4df0a09", count: 4 },
       { label: "geto-dacia", url: "https://nomstead.com/geto-dacia", count: 2 },
       { label: "l3l", url: "https://nomstead.com/l3l/62a33d835103e8e6490ff6fb", count: 2 },
       { label: "trung-thc", url: "https://nomstead.com/trung-thc/68aec146c53034996eb6bdf9", count: 6 },
-      { label: "clear-crossing-academy", url: "https://nomstead.com/clear-crossing-academy/637465873369a0c6d1a10c6f", count: 1 },
       { label: "nihil", url: "https://nomstead.com/nihil", count: 5 },
       { label: "funjunkmans-lair", url: "https://nomstead.com/funjunkmans-lair", count: 1 },
       { label: "sbhan", url: "https://nomstead.com/sbhan" },
@@ -173,7 +188,6 @@ const SECTIONS: Section[] = [
       { label: "hasishi / 66766518", url: "https://nomstead.com/hasishi/667665184dfc220fc8340766", count: 8 },
       { label: "espartacus / 688b8a3a", url: "https://nomstead.com/espartacus/688b8a3a1585b148c6a42be4", count: 1 },
       { label: "7", url: "https://nomstead.com/7", count: 1 },
-      { label: "moonland / 667aa3ee", url: "https://nomstead.com/moonland/667aa3ee211729e227c1afac", count: 2 },
     ],
   },
   {
@@ -181,12 +195,10 @@ const SECTIONS: Section[] = [
     title: "Mills",
     color: "#fbbf24",
     links: [
-      { label: "chainers-land", url: "https://nomstead.com/chainers-land/6968c8d45810521f9b2f16b2", count: 1 },
+      { label: "usop-empire / 688b88b6", url: "https://nomstead.com/usop-empire/688b88b664eac5c413e9ea5a", count: 3 },
       { label: "sembawang", url: "https://nomstead.com/sembawang/691878c2a8ceee6de5c5e158", count: 2 },
-      { label: "laizen", url: "https://nomstead.com/laizen/68a52828486df650e3411db7", count: 1 },
       { label: "pardisland", url: "https://nomstead.com/pardisland/690ca9969247d04106b82de0", count: 1 },
       { label: "goldv", url: "https://nomstead.com/goldv/6519ce1376805122fa9fa3c3", count: 1 },
-      { label: "nihil", url: "https://nomstead.com/nihil/66c60a2c55ca2290ac767a84", count: 2 },
       { label: "hilmyron", url: "https://nomstead.com/hilmyron/665f41dbf46670cb14ff5cec", count: 1 },
       { label: "the-47th-society", url: "https://nomstead.com/the-47th-society/65c106417d8c2c075d336757", count: 1 },
       { label: "la-terra-dei-cachi", url: "https://nomstead.com/la-terra-dei-cachi/61b7f8dcc5c5332553b750f3", count: 1 },
@@ -199,14 +211,26 @@ const SECTIONS: Section[] = [
       { label: "l3l", url: "https://nomstead.com/l3l/64b5b71c9a0293d21d8c720b" },
       { label: "kalentong", url: "https://nomstead.com/kalentong/688b886f1585b148c6a36384", count: 1 },
       { label: "moonland", url: "https://nomstead.com/moonland/6686de4de33932506bc30f4f" },
+      { label: "hakkeijima", url: "https://nomstead.com/hakkeijima/68c8ba7d3cb7a45f08849c19", count: 2 },
       { label: "espartacus / 688b8a3a", url: "https://nomstead.com/espartacus/688b8a3a1585b148c6a42be4", count: 1 },
       { label: "7", url: "https://nomstead.com/7", count: 1 },
+    ],
+  },
+  {
+    id: "guild-members",
+    title: "Guild Members",
+    color: "#a78bfa",
+    links: [
+      { label: "nickoloy-kingdom", url: "https://nomstead.com/nickoloy-kingdom" },
+      { label: "cmhall", url: "https://nomstead.com/cmhall" },
+      { label: "steemit", url: "https://nomstead.com/steemit" },
+      { label: "glitch", url: "https://nomstead.com/glitch" },
     ],
   },
 ];
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i + 1);
-const DAYS = [1, 2, 3, 4, 5];
+const DAYS = [1, 2, 3, 4, 5, 6];
 const MOD_HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 function fmtCountdown(ms: number): string {
@@ -293,13 +317,11 @@ export default function FarmsPage() {
     notifiedTimers.current.delete(url);
   }
 
-  // Check timers each tick and fire webhook on first ready
   useEffect(() => {
     const now = Date.now();
     Object.entries(timers).forEach(([url, expiry]) => {
       if (expiry - now <= 0 && !notifiedTimers.current.has(url) && webhookUrl) {
         notifiedTimers.current.add(url);
-        // Find label from SECTIONS data
         let label = url;
         for (const sec of SECTIONS) {
           const found = sec.links.find((l) => l.url === url);
@@ -364,6 +386,32 @@ export default function FarmsPage() {
             onClearNote={handleClearNote}
           />
         ))}
+
+        {/* Guild Goals */}
+        <div style={{ marginBottom: "32px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px", borderBottom: "1px solid #fbbf2444", paddingBottom: "8px" }}>
+            <h2 style={{ fontFamily: THEME.font, fontSize: "15px", color: "#fbbf24", margin: 0, letterSpacing: "1px" }}>Guild Goals</h2>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ background: "rgba(251,191,36,0.06)", border: "1px solid #fbbf24", borderRadius: "10px", padding: "14px 16px" }}>
+              <div style={{ fontFamily: THEME.font, fontSize: "13px", color: "#fbbf24", marginBottom: "8px", letterSpacing: "1px" }}>🍞 BREAD OVEN</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "13px", color: "#c5c6c7" }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Wood Plank</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>10,000</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Stone Brick</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>100,000</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Clay Brick</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>200</span></div>
+              </div>
+            </div>
+            <div style={{ background: "rgba(102,252,241,0.06)", border: "1px solid #66fcf1", borderRadius: "10px", padding: "14px 16px" }}>
+              <div style={{ fontFamily: THEME.font, fontSize: "13px", color: "#66fcf1", marginBottom: "8px", letterSpacing: "1px" }}>⚙ MILL</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "13px", color: "#c5c6c7" }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Wood Plank</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>100,000</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Stone Brick</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>10,000</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Clay Brick</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>500</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span>Cotton</span><span style={{ color: "#66fcf1", fontWeight: "bold" }}>1,000</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -488,7 +536,7 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
         ✎
       </button>
 
-      {/* Note picker — opens upward, left of note button */}
+      {/* Note picker */}
       {notePickerOpen && (
         <div style={{ position: "absolute", bottom: "calc(100% + 4px)", right: 0, zIndex: 200, background: "#0d1a2e", border: "1px solid #2a5a8c", borderRadius: "6px", padding: "10px", boxShadow: "0 4px 16px #000a", width: "240px" }}
           onClick={(e) => e.stopPropagation()}>
@@ -518,11 +566,27 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
         </div>
       )}
 
-      {/* Timer picker — opens upward, right-aligned */}
+      {/* Timer picker */}
       {pickerOpen && (
         <div style={{ position: "absolute", bottom: "calc(100% + 4px)", right: 0, zIndex: 100, background: "#0d1e33", border: "1px solid #2a5a8c", borderRadius: "6px", padding: "10px", boxShadow: "0 4px 16px #000a", width: "236px" }}
           onClick={(e) => e.stopPropagation()}>
-          <div style={{ fontSize: "11px", color: "#9cf", marginBottom: "6px", fontWeight: "bold" }}>Set cooldown:</div>
+
+          {/* Seed presets */}
+          <div style={{ fontSize: "10px", color: "#9cf", marginBottom: "5px", fontWeight: "bold" }}>🌱 Seed presets</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "3px", marginBottom: "8px" }}>
+            {SEEDS.map((seed) => {
+              const lbl = seed.label || (seed.h % 1 === 0 ? seed.h + "h" : Math.round(seed.h * 60) + "m");
+              return (
+                <button key={seed.name} onClick={() => applyTimer(seed.h * 3600000)}
+                  style={{ background: "#0d2010", border: "1px solid #1a4020", borderRadius: "4px", padding: "5px 3px", cursor: "pointer", textAlign: "center" }}>
+                  <span style={{ display: "block", fontSize: "10px", color: "#9cf", lineHeight: 1.2 }}>{seed.name}</span>
+                  <span style={{ display: "block", fontSize: "9px", color: "#7a9", marginTop: "1px" }}>{lbl}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div style={{ borderTop: "1px solid #1a3050", margin: "0 0 8px" }} />
 
           {/* Hours 1–24 instant set */}
           <div style={{ fontSize: "10px", color: "#7a9", marginBottom: "4px" }}>Hours — click to set instantly</div>
@@ -537,9 +601,9 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
 
           <div style={{ borderTop: "1px solid #1a3050", margin: "2px 0 8px" }} />
 
-          {/* Days 1–5 (select then pick +hours) */}
+          {/* Days 1–6 */}
           <div style={{ fontSize: "10px", color: "#7a9", marginBottom: "4px" }}>Days</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "3px", marginBottom: "6px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "3px", marginBottom: "6px" }}>
             {DAYS.map((d) => (
               <button key={d}
                 onClick={() => { if (selDay === d) { setSelDay(0); setSelHour(0); } else { setSelDay(d); setSelHour(0); } }}
@@ -549,7 +613,6 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
             ))}
           </div>
 
-          {/* +Hours modifier when day selected */}
           {selDay > 0 && (
             <>
               <div style={{ fontSize: "10px", color: "#7a9", marginBottom: "4px" }}>+ Extra hours</div>
@@ -595,25 +658,5 @@ function FarmLink({ link, accentColor, isActive, onVisit, expiry, onSetTimer, on
         </div>
       )}
     </div>
-  );
-}
-
-function OpenAllButton({ links, color }: { links: FarmLink[]; color: string }) {
-  const handleClick = () => {
-    if (links.length > 10) {
-      if (!window.confirm(`Open ${links.length} tabs at once?`)) return;
-    }
-    links.forEach((l) => window.open(l.url, "_blank"));
-  };
-
-  return (
-    <button
-      onClick={handleClick}
-      style={{ background: "transparent", color, border: `1px solid ${color}66`, borderRadius: "4px", padding: "3px 10px", fontSize: "11px", cursor: "pointer", fontFamily: THEME.font, marginLeft: "auto" }}
-      onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.background = color + "22")}
-      onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "transparent")}
-    >
-      Open All
-    </button>
   );
 }
