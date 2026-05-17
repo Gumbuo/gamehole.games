@@ -144,6 +144,8 @@ const HOURS = Array.from({ length: 24 }, (_, i) => i + 1);
 const DAYS = [1, 2, 3, 4, 5, 6];
 const MOD_HOURS = Array.from({ length: 24 }, (_, i) => i);
 
+type TimerEntry = { expiry: number; label: string; note?: string };
+
 function fmtCountdown(ms: number): string {
   if (ms <= 0) return "READY";
   const h = Math.floor(ms / 3600000);
@@ -154,29 +156,44 @@ function fmtCountdown(ms: number): string {
 
 export default function FarmsPage() {
   const [activeUrl, setActiveUrl] = useState<string | null>(null);
-  const [timers, setTimers] = useState<Record<string, number>>({});
+  const [timers, setTimers] = useState<Record<string, TimerEntry>>({});
   const [notes, setNotes] = useState<Record<string, string>>({});
   const notifiedTimers = useRef<Set<string>>(new Set());
   const [, setTick] = useState(0);
 
-  useEffect(() => {
+  async function fetchTimers() {
     try {
-      const stored = JSON.parse(localStorage.getItem("nomstead_timers") || "{}");
-      setTimers(stored);
+      const res = await fetch("/api/nomstead/timers");
+      const data = await res.json();
+      setTimers(data.timers ?? {});
     } catch {}
+  }
+
+  useEffect(() => {
+    fetchTimers();
     try {
       const storedNotes = JSON.parse(localStorage.getItem("nomstead_notes") || "{}");
       setNotes(storedNotes);
     } catch {}
 
-    const interval = setInterval(() => setTick((t) => t + 1), 1000);
-    return () => clearInterval(interval);
+    const poll = setInterval(fetchTimers, 10000);
+    const tick = setInterval(() => setTick((t) => t + 1), 1000);
+    return () => { clearInterval(poll); clearInterval(tick); };
   }, []);
 
-  function handleSetTimer(url: string, ms: number) {
-    const next = { ...timers, [url]: Date.now() + ms };
-    setTimers(next);
-    localStorage.setItem("nomstead_timers", JSON.stringify(next));
+  async function handleSetTimer(url: string, ms: number) {
+    const expiry = Date.now() + ms;
+    let label = url;
+    for (const sec of SECTIONS) {
+      const found = sec.links.find((l) => l.url === url);
+      if (found) { label = found.label; break; }
+    }
+    setTimers((prev) => ({ ...prev, [url]: { expiry, label } }));
+    await fetch("/api/nomstead/timers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url, label, expiry, note: notes[url] }),
+    }).catch(() => {});
   }
 
   function handleSetNote(url: string, text: string) {
@@ -192,28 +209,25 @@ export default function FarmsPage() {
     localStorage.setItem("nomstead_notes", JSON.stringify(next));
   }
 
-  function handleClearTimer(url: string) {
-    const next = { ...timers };
-    delete next[url];
-    setTimers(next);
-    localStorage.setItem("nomstead_timers", JSON.stringify(next));
+  async function handleClearTimer(url: string) {
+    setTimers((prev) => { const next = { ...prev }; delete next[url]; return next; });
     notifiedTimers.current.delete(url);
+    await fetch("/api/nomstead/timers", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+    }).catch(() => {});
   }
 
   useEffect(() => {
     const now = Date.now();
-    Object.entries(timers).forEach(([url, expiry]) => {
-      if (expiry - now <= 0 && !notifiedTimers.current.has(url)) {
+    Object.entries(timers).forEach(([url, timer]) => {
+      if (timer.expiry - now <= 0 && !notifiedTimers.current.has(url)) {
         notifiedTimers.current.add(url);
-        let label = url;
-        for (const sec of SECTIONS) {
-          const found = sec.links.find((l) => l.url === url);
-          if (found) { label = found.label; break; }
-        }
         fetch("/api/nomstead/ping", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ label, tileUrl: url, note: notes[url] }),
+          body: JSON.stringify({ label: timer.label, tileUrl: url, note: timer.note ?? notes[url] }),
         }).catch(() => {});
       }
     });
@@ -295,7 +309,7 @@ function FarmSection({ section, activeUrl, setActiveUrl, timers, onSetTimer, onC
             accentColor={section.color}
             isActive={activeUrl === link.url}
             onVisit={() => setActiveUrl(link.url)}
-            expiry={timers[link.url]}
+            expiry={timers[link.url]?.expiry}
             onSetTimer={(ms) => onSetTimer(link.url, ms)}
             onClearTimer={() => onClearTimer(link.url)}
             noteText={notes[link.url]}
