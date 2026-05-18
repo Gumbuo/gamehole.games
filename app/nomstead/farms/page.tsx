@@ -63,6 +63,8 @@ const SECTIONS: Section[] = [
     title: "Wine",
     color: "#c084fc",
     links: [
+      { label: "mrfaf", url: "https://nomstead.com/the-new-beginning/68e5ae1a81116d685ef16958", count: 3 },
+      { label: "pawel", url: "https://nomstead.com/pzone/69077c571deed8fd9ac724e2", count: 4 },
       { label: "fox-hole / wine tile", url: "https://nomstead.com/fox-hole/6979ec3f24abb84a34c52a02", count: 4 },
       { label: "kunafool", url: "https://nomstead.com/kunafool/68c7baaa6ff5961fef12e500", count: 1 },
       { label: "pardisland", url: "https://nomstead.com/pardisland/6979ec3924abb84a34c528d1", count: 1 },
@@ -85,6 +87,7 @@ const SECTIONS: Section[] = [
     title: "Bread Ovens",
     color: "#fb923c",
     links: [
+      { label: "mrfaf", url: "https://nomstead.com/the-new-beginning/68e5ae1a81116d685ef16958", count: 1 },
       { label: "marben", url: "https://nomstead.com/marben", count: 10 },
       { label: "black-hole", url: "https://nomstead.com/black-hole/688b8ac0824d90422c6fe80c", count: 2 },
       { label: "bread-oven", url: "https://nomstead.com/bread-oven", count: 4 },
@@ -111,6 +114,8 @@ const SECTIONS: Section[] = [
     title: "Mills",
     color: "#fbbf24",
     links: [
+      { label: "mrfaf", url: "https://nomstead.com/the-new-beginning/6920216976db71b7c08c77a8", count: 1 },
+      { label: "pawel", url: "https://nomstead.com/pzone/69077c571deed8fd9ac724e2", count: 1 },
       { label: "usop-empire / 688b88b6", url: "https://nomstead.com/usop-empire/688b88b664eac5c413e9ea5a", count: 3 },
       { label: "sembawang", url: "https://nomstead.com/sembawang/691878c2a8ceee6de5c5e158", count: 2 },
       { label: "pardisland", url: "https://nomstead.com/pardisland/690ca9969247d04106b82de0", count: 1 },
