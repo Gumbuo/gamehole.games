@@ -192,10 +192,20 @@ export default function GuildEventsPage() {
         padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
         <Link href="/" style={{
-          color: "#45a29e", textDecoration: "none",
-          fontSize: "0.85rem", fontWeight: "bold", fontFamily: "Orbitron, sans-serif",
+          color: "#66fcf1",
+          textDecoration: "none",
+          fontSize: "0.8rem",
+          fontWeight: "bold",
+          fontFamily: "Orbitron, sans-serif",
+          border: "2px solid #66fcf1",
+          borderRadius: "6px",
+          padding: "6px 14px",
+          background: "rgba(102,252,241,0.08)",
+          boxShadow: "0 0 10px rgba(102,252,241,0.4)",
+          letterSpacing: "1px",
+          transition: "all 0.2s",
         }}>
-          &larr; MOTHERSHIP
+          &#8592; MOTHERSHIP
         </Link>
         <span style={{ fontSize: "0.7rem", color: "#c5c6c7", letterSpacing: "2px", textTransform: "uppercase" }}>
           Guild Activity
