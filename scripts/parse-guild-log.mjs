@@ -1,7 +1,22 @@
 import { readFileSync, writeFileSync } from 'fs';
 
-const LOG_PATH = process.argv[2] || 'guild-log-2026-05-22.txt';
-const raw = readFileSync(LOG_PATH, 'utf-8');
+// Usage: node parse-guild-log.mjs <main-log> [--contributions <contributions-log>]
+// --contributions flag replaces any contributions in main-log with a separate file
+const mainPath = process.argv[2] || 'guild-log-2026-05-22.txt';
+const contribFlagIdx = process.argv.indexOf('--contributions');
+const contribPath = contribFlagIdx !== -1 ? process.argv[contribFlagIdx + 1] : null;
+
+// Read main log, strip contribution lines if a separate contributions file is provided
+let mainRaw = readFileSync(mainPath, 'utf-8');
+if (contribPath) {
+  mainRaw = mainRaw.split('\n').filter(l => !l.includes('contributed')).join('\n');
+}
+
+// Combine: main (contributions stripped) + contributions file
+const raw = contribPath
+  ? mainRaw.trimEnd() + '\n' + readFileSync(contribPath, 'utf-8')
+  : mainRaw;
+
 const lines = raw.split('\n');
 
 // Strip leading line number and trailing timestamp like "about 24 hours ago"
