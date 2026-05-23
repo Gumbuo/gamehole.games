@@ -205,7 +205,7 @@ export default function GuildEventsPage() {
           letterSpacing: "1px",
           transition: "all 0.2s",
         }}>
-          &#8592; MOTHERSHIP
+          &#8592; HOME PAGE
         </Link>
         <span style={{ fontSize: "0.7rem", color: "#c5c6c7", letterSpacing: "2px", textTransform: "uppercase" }}>
           Guild Activity
