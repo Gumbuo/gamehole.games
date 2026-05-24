@@ -349,6 +349,26 @@ export default function HomePage() {
               Guild Events
               <style>{`@keyframes guildPulse { 0%, 100% { box-shadow: 0 0 20px rgba(180, 77, 255, 0.5), 0 0 40px rgba(180, 77, 255, 0.2); } 50% { box-shadow: 0 0 30px rgba(180, 77, 255, 0.8), 0 0 60px rgba(180, 77, 255, 0.4); } }`}</style>
             </a>
+            <a
+              href="https://gamehole.ink"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                padding: '12px 28px',
+                background: 'linear-gradient(135deg, #00d4ff, #00ff99)',
+                border: '2px solid #00d4ff',
+                borderRadius: '8px',
+                color: '#000',
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '14px',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                fontWeight: 'bold',
+                letterSpacing: '1px',
+              }}
+            >
+              Host Games
+            </a>
           </div>
         </div>
       </nav>
