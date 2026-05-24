@@ -101,7 +101,6 @@ for (const rawLine of lines) {
   }
 }
 
-// Sort players by total activity score (rough contribution measure)
 function activityScore(p) {
   const harvestTotal = Object.values(p.harvested).reduce((a, b) => a + b, 0);
   const plantTotal   = Object.values(p.planted).reduce((a, b) => a + b, 0);
@@ -111,7 +110,24 @@ function activityScore(p) {
   return harvestTotal + plantTotal + p.trees + mineTotal + fishTotal + questTotal;
 }
 
-const sorted = Object.entries(players).sort((a, b) => activityScore(b[1]) - activityScore(a[1]));
+// Count how many of the 6 categories a player is active in
+function categoryCount(p) {
+  return [
+    Object.keys(p.harvested).length > 0,
+    Object.keys(p.planted).length > 0,
+    p.trees > 0,
+    Object.keys(p.mined).length > 0,
+    Object.keys(p.fished).length > 0,
+    Object.keys(p.quests).length > 0,
+  ].filter(Boolean).length;
+}
+
+// Primary sort: breadth (categories active), secondary: total activity
+const sorted = Object.entries(players).sort((a, b) => {
+  const catDiff = categoryCount(b[1]) - categoryCount(a[1]);
+  if (catDiff !== 0) return catDiff;
+  return activityScore(b[1]) - activityScore(a[1]);
+});
 
 // ── HTML generation ────────────────────────────────────────────────────────────
 

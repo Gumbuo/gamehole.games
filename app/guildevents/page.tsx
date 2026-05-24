@@ -97,6 +97,9 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
 
   const medal = rank < 3 ? MEDALS[rank] + " " : "";
 
+  const catCount = [totalHarv, totalPlant, player.trees, totalMine, totalFish, totalQuest]
+    .filter(v => v > 0).length;
+
   return (
     <div style={{
       background: "rgba(0,0,0,0.45)",
@@ -107,15 +110,23 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
     }}>
       {/* Header */}
       <div style={{
-        display: "flex", alignItems: "baseline", gap: "10px",
+        display: "flex", alignItems: "center", gap: "10px",
         borderBottom: "1px solid #45a29e22", paddingBottom: "10px", marginBottom: "12px",
       }}>
         <span style={{ fontSize: "0.65rem", color: "#45a29e", minWidth: "22px" }}>
           #{rank + 1}
         </span>
-        <h3 style={{ margin: 0, fontSize: "1rem", color: "#66fcf1", letterSpacing: "1px" }}>
+        <h3 style={{ margin: 0, fontSize: "1rem", color: "#66fcf1", letterSpacing: "1px", flex: 1 }}>
           {medal}{player.name}
         </h3>
+        <span style={{
+          fontSize: "0.62rem", letterSpacing: "1px",
+          color: catCount === 6 ? "#ffd700" : "#45a29e",
+          border: `1px solid ${catCount === 6 ? "#ffd700" : "#45a29e"}`,
+          borderRadius: "4px", padding: "2px 7px", whiteSpace: "nowrap",
+        }}>
+          {catCount}/6 categories
+        </span>
       </div>
 
       {/* Summary badges */}
