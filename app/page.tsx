@@ -389,6 +389,24 @@ export default function HomePage() {
             >
               Host Games
             </a>
+            <a
+              href="/catacombs"
+              style={{
+                padding: '12px 28px',
+                background: 'linear-gradient(135deg, #ff0040, #8e2de2)',
+                border: '2px solid #ff0040',
+                borderRadius: '8px',
+                color: '#fff',
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '14px',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                fontWeight: 'bold',
+                letterSpacing: '1px',
+              }}
+            >
+              Play Alien AF
+            </a>
           </div>
         </div>
       </nav>
