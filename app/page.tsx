@@ -370,7 +370,7 @@ export default function HomePage() {
               Gumbuo
             </a>
             <a
-              href="https://gamehole-platform.vercel.app"
+              href="https://univershole.xyz"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -387,7 +387,7 @@ export default function HomePage() {
                 letterSpacing: '1px',
               }}
             >
-              Host Games
+              Pixel Shop
             </a>
             <a
               href="/catacombs"
