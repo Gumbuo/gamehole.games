@@ -367,6 +367,26 @@ export default function HomePage() {
                 letterSpacing: '1px',
               }}
             >
+              Gumbuo
+            </a>
+            <a
+              href="https://gamehole-platform.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                padding: '12px 28px',
+                background: 'linear-gradient(135deg, #ff6b00, #ff9500)',
+                border: '2px solid #ff6b00',
+                borderRadius: '8px',
+                color: '#000',
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '14px',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                fontWeight: 'bold',
+                letterSpacing: '1px',
+              }}
+            >
               Host Games
             </a>
           </div>
