@@ -27,13 +27,7 @@ function sorted(map: Record<string, number>): [string, number][] {
 const MEDALS = ["🥇", "🥈", "🥉"];
 
 const SECTIONS = [
-  { id: "overall",       label: "Overall",       emoji: "🏆" },
-  { id: "harvesting",    label: "Harvesting",    emoji: "🌾" },
-  { id: "planting",      label: "Planting",      emoji: "🌱" },
-  { id: "wood",          label: "Wood",          emoji: "🪓" },
-  { id: "mining",        label: "Mining",        emoji: "⛏️" },
-  { id: "fishing",       label: "Fishing",       emoji: "🎣" },
-  { id: "contributions", label: "Contributions", emoji: "📋" },
+  { id: "leaderboards",  label: "Leaderboards",  emoji: "🏆" },
   { id: "details",       label: "Full Details",  emoji: "📊" },
 ];
 
@@ -323,61 +317,56 @@ export default function GuildEventsPage() {
           </div>
         </div>
 
-        {/* ── Overall ── */}
-        <Section id="overall" emoji="🏆" title="Overall — Ranked by Activity Breadth">
-          <LeaderboardTable
-            rows={active.map(p => ({ name: p.name, value: p.score }))}
-            unit=" pts"
-          />
-        </Section>
+        {/* ── Leaderboard grid ── */}
+        <div id="leaderboards" style={{ scrollMarginTop: "110px", marginBottom: "48px" }}>
+          <h2 style={{
+            fontSize: "0.9rem", letterSpacing: "3px", textTransform: "uppercase",
+            color: "#45a29e", marginBottom: "20px", borderBottom: "1px solid rgba(69,162,158,0.3)", paddingBottom: "10px",
+          }}>
+            🏆 Leaderboards
+          </h2>
 
-        {/* ── Harvesting ── */}
-        <Section id="harvesting" emoji="🌾" title="Harvesting Leaderboard">
-          <LeaderboardTable
-            rows={harvestRanks.map(p => ({ name: p.name, value: sum(p.harvested) }))}
-            unit=" items"
-          />
-        </Section>
+          {/* Overall — full width */}
+          <div style={{
+            background: "rgba(0,0,0,0.4)", border: "1px solid #45a29e",
+            borderRadius: "10px", padding: "16px 20px", marginBottom: "16px",
+          }}>
+            <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#ffd700", marginBottom: "12px", fontWeight: "bold" }}>
+              🏆 Overall — Activity Breadth + Score
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "2px" }}>
+              {active.map((p, i) => (
+                <div key={p.name} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "5px 8px", background: i % 2 === 0 ? "rgba(0,0,0,0.2)" : "transparent", borderRadius: "4px" }}>
+                  <span style={{ fontSize: "0.7rem", color: "#45a29e", minWidth: "28px", fontWeight: "bold" }}>{i < 3 ? MEDALS[i] : `#${i+1}`}</span>
+                  <span style={{ fontSize: "0.75rem", color: "#c5c6c7", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
+                  <span style={{ fontSize: "0.75rem", color: "#66fcf1", fontWeight: "bold", whiteSpace: "nowrap" }}>{fmt(p.score)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        {/* ── Planting ── */}
-        <Section id="planting" emoji="🌱" title="Planting Leaderboard">
-          <LeaderboardTable
-            rows={plantRanks.map(p => ({ name: p.name, value: sum(p.planted) }))}
-            unit=" seeds"
-          />
-        </Section>
-
-        {/* ── Wood ── */}
-        <Section id="wood" emoji="🪓" title="Wood Chopping Leaderboard">
-          <LeaderboardTable
-            rows={woodRanks.map(p => ({ name: p.name, value: p.trees }))}
-            unit=" wood"
-          />
-        </Section>
-
-        {/* ── Mining ── */}
-        <Section id="mining" emoji="⛏️" title="Mining Leaderboard">
-          <LeaderboardTable
-            rows={mineRanks.map(p => ({ name: p.name, value: sum(p.mined) }))}
-            unit=" minerals"
-          />
-        </Section>
-
-        {/* ── Fishing ── */}
-        <Section id="fishing" emoji="🎣" title="Fishing Leaderboard">
-          <LeaderboardTable
-            rows={fishRanks.map(p => ({ name: p.name, value: sum(p.fished) }))}
-            unit=" fish"
-          />
-        </Section>
-
-        {/* ── Contributions ── */}
-        <Section id="contributions" emoji="📋" title="Guild Contributions Leaderboard">
-          <LeaderboardTable
-            rows={questRanks.map(p => ({ name: p.name, value: sum(p.quests) }))}
-            unit=" items"
-          />
-        </Section>
+          {/* Category leaderboards — 3-col grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
+            {[
+              { emoji: "🌾", title: "Harvesting",    rows: harvestRanks.map(p => ({ name: p.name, value: sum(p.harvested) })),  unit: " items"    },
+              { emoji: "🌱", title: "Planting",      rows: plantRanks.map(p => ({ name: p.name, value: sum(p.planted) })),      unit: " seeds"    },
+              { emoji: "🪓", title: "Wood Chopping", rows: woodRanks.map(p => ({ name: p.name, value: p.trees })),              unit: " wood"     },
+              { emoji: "⛏️", title: "Mining",        rows: mineRanks.map(p => ({ name: p.name, value: sum(p.mined) })),         unit: " minerals" },
+              { emoji: "🎣", title: "Fishing",       rows: fishRanks.map(p => ({ name: p.name, value: sum(p.fished) })),        unit: " fish"     },
+              { emoji: "📋", title: "Contributions", rows: questRanks.map(p => ({ name: p.name, value: sum(p.quests) })),       unit: " items"    },
+            ].map(({ emoji, title, rows, unit }) => (
+              <div key={title} style={{
+                background: "rgba(0,0,0,0.4)", border: "1px solid rgba(69,162,158,0.5)",
+                borderRadius: "10px", padding: "16px 20px",
+              }}>
+                <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#45a29e", marginBottom: "12px", fontWeight: "bold" }}>
+                  {emoji} {title}
+                </div>
+                <LeaderboardTable rows={rows} unit={unit} />
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* ── Full Details ── */}
         <Section id="details" emoji="📊" title="Full Member Details">
