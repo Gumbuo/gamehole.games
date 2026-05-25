@@ -2,7 +2,6 @@
 import Link from "next/link";
 import activityData from "./activity-data.json";
 
-// ── Types ──────────────────────────────────────────────────────────────────────
 type Player = {
   name: string;
   score: number;
@@ -15,20 +14,85 @@ type Player = {
   unplanted: Record<string, number>;
 };
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
-function sorted(map: Record<string, number>): [string, number][] {
-  return Object.entries(map).sort((a, b) => b[1] - a[1]);
-}
 function sum(map: Record<string, number>) {
   return Object.values(map).reduce((a, b) => a + b, 0);
 }
 function fmt(n: number) {
   return n.toLocaleString();
 }
+function sorted(map: Record<string, number>): [string, number][] {
+  return Object.entries(map).sort((a, b) => b[1] - a[1]);
+}
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 
-// ── Mini table ─────────────────────────────────────────────────────────────────
+const SECTIONS = [
+  { id: "overall",       label: "Overall",       emoji: "🏆" },
+  { id: "harvesting",    label: "Harvesting",    emoji: "🌾" },
+  { id: "planting",      label: "Planting",      emoji: "🌱" },
+  { id: "wood",          label: "Wood",          emoji: "🪓" },
+  { id: "mining",        label: "Mining",        emoji: "⛏️" },
+  { id: "fishing",       label: "Fishing",       emoji: "🎣" },
+  { id: "contributions", label: "Contributions", emoji: "📋" },
+  { id: "details",       label: "Full Details",  emoji: "📊" },
+];
+
+// ── Compact leaderboard table ──────────────────────────────────────────────────
+function LeaderboardTable({
+  rows,
+  unit = "",
+}: {
+  rows: { name: string; value: number }[];
+  unit?: string;
+}) {
+  const top = rows.filter((r) => r.value > 0);
+  if (top.length === 0)
+    return <p style={{ color: "#45a29e66", fontSize: "0.75rem" }}>No data yet</p>;
+
+  return (
+    <table style={{ borderCollapse: "collapse", width: "100%", maxWidth: "560px" }}>
+      <tbody>
+        {top.map((row, i) => (
+          <tr
+            key={row.name}
+            style={{
+              borderBottom: "1px solid rgba(69,162,158,0.1)",
+              background: i % 2 === 0 ? "rgba(0,0,0,0.2)" : "transparent",
+            }}
+          >
+            <td style={{ padding: "7px 10px", width: "36px", color: "#45a29e", fontSize: "0.75rem", fontWeight: "bold" }}>
+              {i < 3 ? MEDALS[i] : `#${i + 1}`}
+            </td>
+            <td style={{ padding: "7px 10px", color: "#c5c6c7", fontSize: "0.85rem", fontFamily: "Orbitron, sans-serif" }}>
+              {row.name}
+            </td>
+            <td style={{ padding: "7px 10px", textAlign: "right", color: "#66fcf1", fontWeight: "bold", fontSize: "0.85rem", whiteSpace: "nowrap" }}>
+              {fmt(row.value)}{unit}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+// ── Section wrapper ────────────────────────────────────────────────────────────
+function Section({ id, emoji, title, children }: { id: string; emoji: string; title: string; children: React.ReactNode }) {
+  return (
+    <div id={id} style={{ marginBottom: "48px", scrollMarginTop: "110px" }}>
+      <h2 style={{
+        fontSize: "0.9rem", letterSpacing: "3px", textTransform: "uppercase",
+        color: "#45a29e", marginBottom: "18px", display: "flex", alignItems: "center", gap: "8px",
+        borderBottom: "1px solid rgba(69,162,158,0.3)", paddingBottom: "10px",
+      }}>
+        {emoji} {title}
+      </h2>
+      {children}
+    </div>
+  );
+}
+
+// ── Mini table for player card ─────────────────────────────────────────────────
 function MiniTable({ rows, unit = "" }: { rows: [string, number][]; unit?: string }) {
   return (
     <table style={{ borderCollapse: "collapse", fontSize: "0.72rem", width: "100%" }}>
@@ -46,7 +110,6 @@ function MiniTable({ rows, unit = "" }: { rows: [string, number][]; unit?: strin
   );
 }
 
-// ── Section block inside a player card ────────────────────────────────────────
 function CardSection({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) {
   return (
     <div style={{ minWidth: "140px" }}>
@@ -61,7 +124,6 @@ function CardSection({ emoji, title, children }: { emoji: string; title: string;
   );
 }
 
-// ── Badge ──────────────────────────────────────────────────────────────────────
 function Badge({ label, value, color }: { label: string; value: string; color: string }) {
   return (
     <span style={{
@@ -81,12 +143,11 @@ function Badge({ label, value, color }: { label: string; value: string; color: s
   );
 }
 
-// ── Player card ────────────────────────────────────────────────────────────────
 function PlayerCard({ player, rank }: { player: Player; rank: number }) {
-  const harv = sorted(player.harvested);
+  const harv  = sorted(player.harvested);
   const plant = sorted(player.planted);
-  const mine = sorted(player.mined);
-  const fish = sorted(player.fished);
+  const mine  = sorted(player.mined);
+  const fish  = sorted(player.fished);
   const quest = sorted(player.quests);
 
   const totalHarv  = sum(player.harvested);
@@ -96,9 +157,7 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
   const totalQuest = sum(player.quests);
 
   const medal = rank < 3 ? MEDALS[rank] + " " : "";
-
-  const catCount = [totalHarv, totalPlant, player.trees, totalMine, totalFish, totalQuest]
-    .filter(v => v > 0).length;
+  const catCount = [totalHarv, totalPlant, player.trees, totalMine, totalFish, totalQuest].filter(v => v > 0).length;
 
   return (
     <div style={{
@@ -108,14 +167,11 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
       padding: "18px 20px",
       marginBottom: "16px",
     }}>
-      {/* Header */}
       <div style={{
         display: "flex", alignItems: "center", gap: "10px",
         borderBottom: "1px solid #45a29e22", paddingBottom: "10px", marginBottom: "12px",
       }}>
-        <span style={{ fontSize: "0.65rem", color: "#45a29e", minWidth: "22px" }}>
-          #{rank + 1}
-        </span>
+        <span style={{ fontSize: "0.65rem", color: "#45a29e", minWidth: "22px" }}>#{rank + 1}</span>
         <h3 style={{ margin: 0, fontSize: "1rem", color: "#66fcf1", letterSpacing: "1px", flex: 1 }}>
           {medal}{player.name}
         </h3>
@@ -129,7 +185,6 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
         </span>
       </div>
 
-      {/* Summary badges */}
       <div style={{ marginBottom: "14px" }}>
         {totalHarv  ? <Badge label="Harvested" value={fmt(totalHarv) + " items"}    color="#00ff41" /> : null}
         {totalPlant ? <Badge label="Planted"   value={fmt(totalPlant) + " seeds"}   color="#00d9ff" /> : null}
@@ -139,38 +194,13 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
         {totalQuest ? <Badge label="Quest"     value={fmt(totalQuest) + " items"}   color="#ffd700" /> : null}
       </div>
 
-      {/* Detail sections */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px 30px" }}>
-        {harv.length > 0 && (
-          <CardSection emoji="🌾" title="Harvested">
-            <MiniTable rows={harv} />
-          </CardSection>
-        )}
-        {plant.length > 0 && (
-          <CardSection emoji="🌱" title="Planted">
-            <MiniTable rows={plant} unit=" seeds" />
-          </CardSection>
-        )}
-        {player.trees > 0 && (
-          <CardSection emoji="🪓" title="Tree Chopping">
-            <MiniTable rows={[["Wood collected", player.trees]]} />
-          </CardSection>
-        )}
-        {mine.length > 0 && (
-          <CardSection emoji="⛏️" title="Mining">
-            <MiniTable rows={mine} />
-          </CardSection>
-        )}
-        {fish.length > 0 && (
-          <CardSection emoji="🎣" title="Fishing">
-            <MiniTable rows={fish} />
-          </CardSection>
-        )}
-        {quest.length > 0 && (
-          <CardSection emoji="📋" title="Daily Quest">
-            <MiniTable rows={quest} />
-          </CardSection>
-        )}
+        {harv.length > 0  && <CardSection emoji="🌾" title="Harvested"><MiniTable rows={harv} /></CardSection>}
+        {plant.length > 0 && <CardSection emoji="🌱" title="Planted"><MiniTable rows={plant} unit=" seeds" /></CardSection>}
+        {player.trees > 0 && <CardSection emoji="🪓" title="Tree Chopping"><MiniTable rows={[["Wood collected", player.trees]]} /></CardSection>}
+        {mine.length > 0  && <CardSection emoji="⛏️" title="Mining"><MiniTable rows={mine} /></CardSection>}
+        {fish.length > 0  && <CardSection emoji="🎣" title="Fishing"><MiniTable rows={fish} /></CardSection>}
+        {quest.length > 0 && <CardSection emoji="📋" title="Daily Quest"><MiniTable rows={quest} /></CardSection>}
       </div>
     </div>
   );
@@ -191,6 +221,15 @@ export default function GuildEventsPage() {
     day: "numeric", month: "long", year: "numeric",
   });
 
+  const active = players.filter(p => p.score > 0);
+
+  const harvestRanks     = [...active].sort((a, b) => sum(b.harvested) - sum(a.harvested));
+  const plantRanks       = [...active].sort((a, b) => sum(b.planted)   - sum(a.planted));
+  const woodRanks        = [...active].sort((a, b) => b.trees          - a.trees);
+  const mineRanks        = [...active].sort((a, b) => sum(b.mined)     - sum(a.mined));
+  const fishRanks        = [...active].sort((a, b) => sum(b.fished)    - sum(a.fished));
+  const questRanks       = [...active].sort((a, b) => sum(b.quests)    - sum(a.quests));
+
   return (
     <div style={{
       width: "100%", minHeight: "100vh", backgroundColor: "#0b0c10",
@@ -201,20 +240,13 @@ export default function GuildEventsPage() {
       <div style={{
         background: "rgba(0,0,0,0.8)", borderBottom: "2px solid #45a29e",
         padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        position: "sticky", top: 0, zIndex: 50,
       }}>
         <Link href="/" style={{
-          color: "#66fcf1",
-          textDecoration: "none",
-          fontSize: "0.8rem",
-          fontWeight: "bold",
-          fontFamily: "Orbitron, sans-serif",
-          border: "2px solid #66fcf1",
-          borderRadius: "6px",
-          padding: "6px 14px",
-          background: "rgba(102,252,241,0.08)",
-          boxShadow: "0 0 10px rgba(102,252,241,0.4)",
-          letterSpacing: "1px",
-          transition: "all 0.2s",
+          color: "#66fcf1", textDecoration: "none", fontSize: "0.8rem", fontWeight: "bold",
+          fontFamily: "Orbitron, sans-serif", border: "2px solid #66fcf1", borderRadius: "6px",
+          padding: "6px 14px", background: "rgba(102,252,241,0.08)",
+          boxShadow: "0 0 10px rgba(102,252,241,0.4)", letterSpacing: "1px",
         }}>
           &#8592; HOME PAGE
         </Link>
@@ -223,43 +255,61 @@ export default function GuildEventsPage() {
         </span>
       </div>
 
+      {/* Section nav */}
+      <div style={{
+        background: "rgba(0,0,0,0.7)", borderBottom: "1px solid rgba(69,162,158,0.3)",
+        padding: "0 20px", display: "flex", alignItems: "center", gap: "4px",
+        overflowX: "auto", position: "sticky", top: "53px", zIndex: 49,
+        scrollbarWidth: "none",
+      }}>
+        {SECTIONS.map(s => (
+          <a
+            key={s.id}
+            href={`#${s.id}`}
+            style={{
+              padding: "10px 14px", color: "#45a29e", textDecoration: "none",
+              fontSize: "0.65rem", letterSpacing: "1px", textTransform: "uppercase",
+              whiteSpace: "nowrap", borderBottom: "2px solid transparent",
+              transition: "color 0.2s, border-color 0.2s",
+            }}
+            onMouseEnter={e => { (e.target as HTMLElement).style.color = "#66fcf1"; (e.target as HTMLElement).style.borderBottomColor = "#66fcf1"; }}
+            onMouseLeave={e => { (e.target as HTMLElement).style.color = "#45a29e"; (e.target as HTMLElement).style.borderBottomColor = "transparent"; }}
+          >
+            {s.emoji} {s.label}
+          </a>
+        ))}
+      </div>
+
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "30px 16px" }}>
 
         {/* Title */}
         <h1 style={{
-          fontSize: "1.6rem", textAlign: "center",
-          textShadow: "0 0 15px #66fcf1", letterSpacing: "3px",
-          textTransform: "uppercase", marginBottom: "6px",
+          fontSize: "1.6rem", textAlign: "center", textShadow: "0 0 15px #66fcf1",
+          letterSpacing: "3px", textTransform: "uppercase", marginBottom: "6px",
         }}>
           Guild Activity Report
         </h1>
-        <p style={{
-          textAlign: "center", color: "#ffd700", fontSize: "0.75rem",
-          letterSpacing: "2px", marginBottom: "30px",
-        }}>
+        <p style={{ textAlign: "center", color: "#ffd700", fontSize: "0.75rem", letterSpacing: "2px", marginBottom: "30px" }}>
           {displayDate} · NomStead
         </p>
 
-        {/* Summary box */}
+        {/* Guild totals */}
         <div style={{
           background: "rgba(0,0,0,0.5)", border: "2px solid #45a29e",
-          borderRadius: "12px", padding: "20px 24px", marginBottom: "36px",
+          borderRadius: "12px", padding: "20px 24px", marginBottom: "48px",
         }}>
-          <h2 style={{
-            margin: "0 0 16px 0", fontSize: "0.8rem", letterSpacing: "2px",
-            textTransform: "uppercase", color: "#45a29e",
-          }}>
+          <h2 style={{ margin: "0 0 16px 0", fontSize: "0.8rem", letterSpacing: "2px", textTransform: "uppercase", color: "#45a29e" }}>
             Guild Totals
           </h2>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "14px 28px" }}>
             {[
-              { emoji: "👥", label: "Active Members",       value: players.length },
-              { emoji: "🌾", label: "Items Harvested",      value: totals.totalHarvested },
-              { emoji: "🌱", label: "Seeds Planted",        value: totals.totalPlanted },
-              { emoji: "🪓", label: "Wood Chopped",         value: totals.totalWood },
-              { emoji: "⛏️", label: "Minerals Mined",       value: totals.totalMined },
-              { emoji: "🎣", label: "Fish Caught",          value: totals.totalFish },
-              { emoji: "📋", label: "Quest Contributions",  value: totals.totalQuest },
+              { emoji: "👥", label: "Active Members",      value: active.length },
+              { emoji: "🌾", label: "Items Harvested",     value: totals.totalHarvested },
+              { emoji: "🌱", label: "Seeds Planted",       value: totals.totalPlanted },
+              { emoji: "🪓", label: "Wood Chopped",        value: totals.totalWood },
+              { emoji: "⛏️", label: "Minerals Mined",      value: totals.totalMined },
+              { emoji: "🎣", label: "Fish Caught",         value: totals.totalFish },
+              { emoji: "📋", label: "Quest Contributions", value: totals.totalQuest },
             ].map(({ emoji, label, value }) => (
               <div key={label} style={{ minWidth: "140px" }}>
                 <div style={{ fontSize: "0.6rem", color: "#c5c6c7", letterSpacing: "1px", textTransform: "uppercase" }}>
@@ -273,22 +323,70 @@ export default function GuildEventsPage() {
           </div>
         </div>
 
-        {/* Player list */}
-        <h2 style={{
-          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
-          color: "#45a29e", marginBottom: "18px",
-        }}>
-          Member Contributions — Ranked by Activity
-        </h2>
+        {/* ── Overall ── */}
+        <Section id="overall" emoji="🏆" title="Overall — Ranked by Activity Breadth">
+          <LeaderboardTable
+            rows={active.map(p => ({ name: p.name, value: p.score }))}
+            unit=" pts"
+          />
+        </Section>
 
-        {players.map((player, i) => (
-          <PlayerCard key={player.name} player={player} rank={i} />
-        ))}
+        {/* ── Harvesting ── */}
+        <Section id="harvesting" emoji="🌾" title="Harvesting Leaderboard">
+          <LeaderboardTable
+            rows={harvestRanks.map(p => ({ name: p.name, value: sum(p.harvested) }))}
+            unit=" items"
+          />
+        </Section>
 
-        <p style={{
-          textAlign: "center", color: "#45a29e66",
-          fontSize: "0.6rem", letterSpacing: "1px", marginTop: "30px",
-        }}>
+        {/* ── Planting ── */}
+        <Section id="planting" emoji="🌱" title="Planting Leaderboard">
+          <LeaderboardTable
+            rows={plantRanks.map(p => ({ name: p.name, value: sum(p.planted) }))}
+            unit=" seeds"
+          />
+        </Section>
+
+        {/* ── Wood ── */}
+        <Section id="wood" emoji="🪓" title="Wood Chopping Leaderboard">
+          <LeaderboardTable
+            rows={woodRanks.map(p => ({ name: p.name, value: p.trees }))}
+            unit=" wood"
+          />
+        </Section>
+
+        {/* ── Mining ── */}
+        <Section id="mining" emoji="⛏️" title="Mining Leaderboard">
+          <LeaderboardTable
+            rows={mineRanks.map(p => ({ name: p.name, value: sum(p.mined) }))}
+            unit=" minerals"
+          />
+        </Section>
+
+        {/* ── Fishing ── */}
+        <Section id="fishing" emoji="🎣" title="Fishing Leaderboard">
+          <LeaderboardTable
+            rows={fishRanks.map(p => ({ name: p.name, value: sum(p.fished) }))}
+            unit=" fish"
+          />
+        </Section>
+
+        {/* ── Contributions ── */}
+        <Section id="contributions" emoji="📋" title="Guild Contributions Leaderboard">
+          <LeaderboardTable
+            rows={questRanks.map(p => ({ name: p.name, value: sum(p.quests) }))}
+            unit=" items"
+          />
+        </Section>
+
+        {/* ── Full Details ── */}
+        <Section id="details" emoji="📊" title="Full Member Details">
+          {active.map((player, i) => (
+            <PlayerCard key={player.name} player={player} rank={i} />
+          ))}
+        </Section>
+
+        <p style={{ textAlign: "center", color: "#45a29e66", fontSize: "0.6rem", letterSpacing: "1px", marginTop: "30px" }}>
           Generated from guild log · {date}
         </p>
       </div>
