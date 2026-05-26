@@ -9,7 +9,8 @@ export default function AlienCatacombsPage() {
 
   return (
     <div style={{
-      minHeight: "100vh",
+      height: "100vh",
+      overflow: "hidden",
       background: "#0a0a0f",
       fontFamily: "Orbitron, monospace",
       display: "flex",
@@ -44,7 +45,7 @@ export default function AlienCatacombsPage() {
       </div>
 
       {/* Game iframe */}
-      <div style={{ flex: 1, position: "relative", minHeight: 500 }}>
+      <div style={{ flex: 1, position: "relative", minHeight: 0 }}>
         {!gameLoaded && (
           <div style={{
             position: "absolute", inset: 0, display: "flex",
@@ -61,6 +62,8 @@ export default function AlienCatacombsPage() {
           ref={iframeRef}
           src="/games/foxstead/index.html"
           style={{
+            position: "absolute",
+            inset: 0,
             width: "100%",
             height: "100%",
             border: "none",
