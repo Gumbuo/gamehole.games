@@ -303,29 +303,6 @@ export default function GuildEventsPage() {
             {s.emoji} {s.label}
           </a>
         ))}
-        {/* Player search */}
-        <form onSubmit={handleSearch} style={{ marginLeft: "auto", display: "flex", gap: "4px", padding: "6px 0", flexShrink: 0 }}>
-          <input
-            type="text"
-            placeholder="Search player..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            style={{
-              background: "rgba(0,0,0,0.6)", border: "1px solid #45a29e",
-              borderRadius: "6px", color: "#66fcf1", fontSize: "0.7rem",
-              padding: "4px 10px", fontFamily: "Orbitron, sans-serif",
-              outline: "none", width: "140px",
-            }}
-          />
-          <button type="submit" style={{
-            background: "#45a29e", border: "none", borderRadius: "6px",
-            color: "#000", fontSize: "0.65rem", fontWeight: "bold",
-            padding: "4px 10px", cursor: "pointer", fontFamily: "Orbitron, sans-serif",
-            letterSpacing: "1px",
-          }}>
-            GO
-          </button>
-        </form>
       </div>
 
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "30px 16px" }}>
@@ -337,9 +314,33 @@ export default function GuildEventsPage() {
         }}>
           Guild Activity Report
         </h1>
-        <p style={{ textAlign: "center", color: "#ffd700", fontSize: "0.75rem", letterSpacing: "2px", marginBottom: "30px" }}>
+        <p style={{ textAlign: "center", color: "#ffd700", fontSize: "0.75rem", letterSpacing: "2px", marginBottom: "24px" }}>
           {displayDate} · NomStead
         </p>
+
+        {/* Player search */}
+        <form onSubmit={handleSearch} style={{ display: "flex", justifyContent: "center", gap: "8px", marginBottom: "36px" }}>
+          <input
+            type="text"
+            placeholder="Search player name..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            style={{
+              background: "rgba(0,0,0,0.6)", border: "2px solid #45a29e",
+              borderRadius: "8px", color: "#66fcf1", fontSize: "1rem",
+              padding: "12px 20px", fontFamily: "Orbitron, sans-serif",
+              outline: "none", width: "320px", letterSpacing: "1px",
+            }}
+          />
+          <button type="submit" style={{
+            background: "#45a29e", border: "none", borderRadius: "8px",
+            color: "#000", fontSize: "0.9rem", fontWeight: "bold",
+            padding: "12px 28px", cursor: "pointer", fontFamily: "Orbitron, sans-serif",
+            letterSpacing: "2px", boxShadow: "0 0 12px rgba(69,162,158,0.5)",
+          }}>
+            GO
+          </button>
+        </form>
 
         {/* Guild totals */}
         <div style={{
