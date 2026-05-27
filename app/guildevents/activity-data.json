@@ -1,65 +1,66 @@
 {
   "date": "2026-05-22",
   "totals": {
-    "totalHarvested": 134457,
-    "totalPlanted": 64524,
-    "totalWood": 4010,
-    "totalMined": 1521,
-    "totalFish": 7894,
+    "totalHarvested": 159925,
+    "totalPlanted": 78617,
+    "totalWood": 4499,
+    "totalMined": 1743,
+    "totalFish": 9850,
     "totalQuest": 44855
   },
   "players": [
     {
       "name": "Fate",
-      "score": 34512,
+      "score": 41760,
       "planted": {
-        "Cotton": 2924,
-        "grapes": 952,
-        "Blue flower": 1065,
-        "Red flower": 939,
-        "Yellow flower": 3199,
-        "Potato": 359,
-        "Cucumber": 409,
+        "Cotton": 3088,
+        "grapes": 1550,
+        "Blue flower": 1101,
+        "Red flower": 1644,
+        "Yellow flower": 4013,
+        "Potato": 395,
+        "Cucumber": 411,
         "Tomato": 235,
-        "Fern": 332,
+        "Fern": 360,
         "pumpkin": 304,
         "wheat": 32,
-        "Carrot": 166
+        "Carrot": 240
       },
       "harvested": {
-        "Red flower": 2362,
-        "grapes": 2051,
-        "Tomato": 819,
+        "Red flower": 2368,
+        "grapes": 2406,
+        "Tomato": 1412,
         "Cucumber": 1655,
-        "Yellow flower": 3283,
+        "Yellow flower": 4062,
         "Potato": 2071,
-        "Blue flower": 2782,
-        "pumpkin": 1199,
-        "Cotton": 3047,
-        "Wheat": 392,
-        "Fern": 937,
-        "Carrot": 573
+        "Blue flower": 2880,
+        "pumpkin": 1393,
+        "Cotton": 5245,
+        "Wheat": 488,
+        "Fern": 943,
+        "Carrot": 787
       },
-      "trees": 289,
+      "trees": 376,
       "treeTiles": {},
       "mined": {
-        "Stone": 20,
-        "Iron": 12,
-        "Clay": 12,
-        "Silver": 1
+        "Stone": 36,
+        "Iron": 26,
+        "Clay": 15,
+        "Silver": 3
       },
       "fished": {
-        "Blue bluegill": 152,
-        "Orange bluegill": 156,
-        "Yellow bluegill": 158,
-        "Tadpole": 46,
-        "Crucian carp": 72,
+        "Blue bluegill": 196,
+        "Orange bluegill": 178,
+        "Yellow bluegill": 194,
+        "Tadpole": 56,
+        "Crucian carp": 86,
         "Bullfrog": 2,
         "Albino catfish": 2,
-        "Black crappie": 10,
+        "Black crappie": 12,
         "Yellow chubfish": 2,
         "Red chubfish": 4,
-        "Grey chubfish": 2
+        "Grey chubfish": 2,
+        "Catfish": 2
       },
       "quests": {
         "Orange bluegill": 102,
@@ -74,38 +75,38 @@
     },
     {
       "name": "daizue",
-      "score": 33106,
+      "score": 40376,
       "planted": {
-        "Yellow flower": 1599,
+        "Yellow flower": 3248,
         "Tomato": 1444,
-        "Cotton": 20,
+        "Cotton": 972,
         "Blue flower": 607,
         "Cucumber": 729,
         "Fern": 1205,
-        "Carrot": 601,
+        "Carrot": 718,
         "Potato": 1392,
         "pumpkin": 555
       },
       "harvested": {
-        "Cotton": 1379,
-        "Tomato": 1770,
-        "Blue flower": 1277,
-        "Potato": 1565,
-        "Yellow flower": 2210,
-        "Fern": 860,
-        "Red flower": 1680,
-        "grapes": 914,
+        "Cotton": 2573,
+        "Tomato": 1830,
+        "Blue flower": 1381,
+        "Potato": 1568,
+        "Yellow flower": 3264,
+        "Fern": 911,
+        "Red flower": 2016,
+        "grapes": 2039,
         "Wheat": 131,
-        "Cucumber": 531,
-        "Carrot": 1256,
-        "pumpkin": 1643
+        "Cucumber": 695,
+        "Carrot": 1522,
+        "pumpkin": 1767
       },
-      "trees": 426,
+      "trees": 470,
       "treeTiles": {},
       "mined": {
-        "Stone": 122,
-        "Clay": 25,
-        "Iron": 28,
+        "Stone": 141,
+        "Clay": 30,
+        "Iron": 31,
         "Silver": 15
       },
       "fished": {
@@ -128,25 +129,84 @@
       "unplanted": {}
     },
     {
+      "name": "lormo321",
+      "score": 23804,
+      "planted": {
+        "Red flower": 269,
+        "Blue flower": 748,
+        "Yellow flower": 700,
+        "Tomato": 233,
+        "Potato": 1093,
+        "Cotton": 1467,
+        "pumpkin": 1711,
+        "grapes": 2404
+      },
+      "harvested": {
+        "Blue flower": 1760,
+        "Cotton": 4793,
+        "Tomato": 326,
+        "Fern": 567,
+        "grapes": 1804,
+        "Yellow flower": 1794,
+        "pumpkin": 1115,
+        "Red flower": 676,
+        "Cucumber": 55,
+        "Potato": 1115,
+        "Wheat": 81,
+        "Carrot": 156
+      },
+      "trees": 169,
+      "treeTiles": {},
+      "mined": {
+        "Iron": 13,
+        "Stone": 51,
+        "Clay": 25,
+        "Pure gold ore": 1,
+        "Silver": 5
+      },
+      "fished": {
+        "Crucian carp": 20,
+        "Orange bluegill": 76,
+        "Blue bluegill": 64,
+        "Yellow bluegill": 76,
+        "Tadpole": 18,
+        "Albino catfish": 2,
+        "Black crappie": 2,
+        "Red chubfish": 2
+      },
+      "quests": {
+        "Silver ingot": 8,
+        "Orange bluegill": 14,
+        "Cucumber": 272,
+        "Clay brick": 29,
+        "Pumpkin bread": 10,
+        "Cotton thread orange": 4,
+        "Wood plank": 50,
+        "Wood table": 1,
+        "Veggie salad": 25
+      },
+      "unplanted": {}
+    },
+    {
       "name": "Mrfaf",
-      "score": 21995,
+      "score": 22206,
       "planted": {
         "grapes": 706,
-        "Cotton": 274,
+        "Cotton": 310,
         "pumpkin": 452,
         "Blue flower": 89,
         "Tomato": 275,
-        "wheat": 126,
+        "wheat": 169,
         "Cucumber": 751,
         "Red flower": 149,
-        "Yellow flower": 208,
-        "Potato": 1052,
+        "Yellow flower": 240,
+        "Potato": 1088,
         "Fern": 662,
         "Carrot": 125
       },
       "harvested": {
         "pumpkin": 442,
-        "Yellow flower": 2005,
+        "Yellow flower": 2054,
         "Wheat": 407,
         "Fern": 814,
         "Cotton": 1480,
@@ -158,12 +218,12 @@
         "Blue flower": 901,
         "grapes": 1695
       },
-      "trees": 179,
+      "trees": 183,
       "treeTiles": {},
       "mined": {
-        "Iron": 11,
-        "Stone": 50,
-        "Clay": 16
+        "Iron": 14,
+        "Stone": 55,
+        "Clay": 19
       },
       "fished": {
         "Blue bluegill": 2
@@ -191,93 +251,36 @@
       }
     },
     {
-      "name": "lormo321",
-      "score": 21022,
-      "planted": {
-        "Red flower": 269,
-        "Blue flower": 748,
-        "Yellow flower": 700,
-        "Tomato": 233,
-        "Potato": 949,
-        "Cotton": 1467,
-        "pumpkin": 1681,
-        "grapes": 1611
-      },
-      "harvested": {
-        "Blue flower": 1649,
-        "Cotton": 4463,
-        "Tomato": 326,
-        "Fern": 567,
-        "grapes": 806,
-        "Yellow flower": 1734,
-        "pumpkin": 1011,
-        "Red flower": 676,
-        "Cucumber": 46,
-        "Potato": 1052,
-        "Wheat": 31,
-        "Carrot": 156
-      },
-      "trees": 162,
-      "treeTiles": {},
-      "mined": {
-        "Iron": 13,
-        "Stone": 44,
-        "Clay": 23,
-        "Pure gold ore": 1,
-        "Silver": 5
-      },
-      "fished": {
-        "Crucian carp": 14,
-        "Orange bluegill": 44,
-        "Blue bluegill": 50,
-        "Yellow bluegill": 54,
-        "Tadpole": 18,
-        "Albino catfish": 2,
-        "Black crappie": 2,
-        "Red chubfish": 2
-      },
-      "quests": {
-        "Silver ingot": 8,
-        "Orange bluegill": 14,
-        "Cucumber": 272,
-        "Clay brick": 29,
-        "Pumpkin bread": 10,
-        "Cotton thread orange": 4,
-        "Wood plank": 50,
-        "Wood table": 1,
-        "Veggie salad": 25
-      },
-      "unplanted": {}
-    },
-    {
       "name": "Fawm",
-      "score": 18476,
+      "score": 20983,
       "planted": {
-        "Cotton": 1085,
+        "Cotton": 1567,
         "Tomato": 415,
         "Blue flower": 451,
         "Fern": 114,
         "Cucumber": 93,
         "pumpkin": 277,
-        "Yellow flower": 978,
+        "Yellow flower": 1483,
         "Red flower": 685,
         "wheat": 46,
-        "Potato": 388
+        "Potato": 388,
+        "Carrot": 4
       },
       "harvested": {
         "Potato": 332,
-        "Red flower": 1414,
-        "Cotton": 1975,
-        "Yellow flower": 1496,
-        "grapes": 320,
-        "Blue flower": 786,
+        "Red flower": 2031,
+        "Cotton": 2023,
+        "Yellow flower": 1848,
+        "grapes": 585,
+        "Blue flower": 879,
         "Tomato": 210,
-        "pumpkin": 516,
+        "pumpkin": 599,
         "Cucumber": 329,
         "Fern": 183,
-        "Wheat": 249
+        "Wheat": 281,
+        "Carrot": 3
       },
-      "trees": 257,
+      "trees": 280,
       "treeTiles": {},
       "mined": {
         "Iron": 22,
@@ -305,16 +308,129 @@
       "unplanted": {}
     },
     {
+      "name": "Cmokyc",
+      "score": 16127,
+      "planted": {
+        "Red flower": 1358,
+        "Cotton": 726,
+        "Yellow flower": 338,
+        "Carrot": 212,
+        "grapes": 972,
+        "Blue flower": 418
+      },
+      "harvested": {
+        "grapes": 126,
+        "Cotton": 1799,
+        "Blue flower": 451,
+        "Tomato": 321,
+        "Red flower": 932,
+        "Wheat": 108,
+        "Yellow flower": 1823,
+        "Potato": 40,
+        "Carrot": 536,
+        "Fern": 134,
+        "pumpkin": 154
+      },
+      "trees": 259,
+      "treeTiles": {},
+      "mined": {
+        "Stone": 69,
+        "Iron": 19,
+        "Silver": 3,
+        "Clay": 10
+      },
+      "fished": {
+        "Yellow bluegill": 1116,
+        "Blue bluegill": 1090,
+        "Orange bluegill": 1168,
+        "Crucian carp": 346,
+        "Tadpole": 234,
+        "Lotus carp": 2,
+        "Black crappie": 86,
+        "Albino catfish": 12,
+        "Catfish": 24,
+        "Grey chubfish": 16,
+        "Red chubfish": 14,
+        "Bullfrog": 22,
+        "Yellow chubfish": 20
+      },
+      "quests": {
+        "Blue bluegill": 51,
+        "Cotton thread green": 11,
+        "Pumpkin bread": 10,
+        "Cucumber": 250,
+        "Wood plank": 578,
+        "Cotton thread orange": 242,
+        "Silver ingot": 2,
+        "Veggie salad": 25
+      },
+      "unplanted": {}
+    },
+    {
+      "name": "KA-BACKYARD",
+      "score": 15193,
+      "planted": {
+        "Carrot": 64,
+        "Red flower": 947,
+        "Yellow flower": 791,
+        "Cotton": 1210,
+        "Blue flower": 1004,
+        "Cucumber": 146,
+        "Tomato": 180,
+        "Rose": 1
+      },
+      "harvested": {
+        "grapes": 1990,
+        "Blue flower": 1683,
+        "Wheat": 52,
+        "pumpkin": 409,
+        "Tomato": 2,
+        "Yellow flower": 656,
+        "Cotton": 880,
+        "Potato": 826,
+        "Fern": 321,
+        "Carrot": 51,
+        "Red flower": 263,
+        "Cucumber": 112
+      },
+      "trees": 155,
+      "treeTiles": {},
+      "mined": {
+        "Stone": 31,
+        "Silver": 2,
+        "Iron": 10
+      },
+      "fished": {
+        "Orange bluegill": 844,
+        "Blue bluegill": 908,
+        "Crucian carp": 370,
+        "Yellow bluegill": 868,
+        "Tadpole": 244,
+        "Catfish": 10,
+        "Black crappie": 58,
+        "Albino catfish": 10,
+        "Bullfrog": 18,
+        "Red chubfish": 8,
+        "Yellow chubfish": 10,
+        "Grey chubfish": 14
+      },
+      "quests": {
+        "Cotton thread orange": 20,
+        "Veggie salad": 25
+      },
+      "unplanted": {}
+    },
+    {
       "name": "KngAlex",
-      "score": 14263,
+      "score": 14759,
       "planted": {
         "Yellow flower": 997,
         "Fern": 248,
         "Potato": 70,
-        "Cotton": 243,
-        "Blue flower": 466,
+        "Cotton": 267,
+        "Blue flower": 499,
         "Cucumber": 130,
-        "grapes": 257,
+        "grapes": 258,
         "Carrot": 127,
         "Tomato": 32,
         "Red flower": 3,
@@ -325,35 +441,35 @@
         "Fern": 781,
         "Blue flower": 1112,
         "Yellow flower": 1321,
-        "Cotton": 971,
+        "Cotton": 1008,
         "pumpkin": 358,
         "Cucumber": 1068,
         "Potato": 801,
         "Red flower": 371,
-        "Carrot": 691,
-        "grapes": 539
+        "Carrot": 692,
+        "grapes": 692
       },
-      "trees": 653,
+      "trees": 729,
       "treeTiles": {},
       "mined": {
-        "Iron": 33,
-        "Stone": 129,
+        "Iron": 37,
+        "Stone": 134,
         "Pure gold ore": 6,
-        "Clay": 50,
-        "Amethyst": 8,
-        "Silver": 8
+        "Clay": 61,
+        "Amethyst": 10,
+        "Silver": 13
       },
       "fished": {
-        "Yellow bluegill": 150,
-        "Crucian carp": 50,
-        "Blue bluegill": 140,
-        "Orange bluegill": 104,
+        "Yellow bluegill": 194,
+        "Crucian carp": 60,
+        "Blue bluegill": 170,
+        "Orange bluegill": 150,
         "Yellow chubfish": 6,
-        "Tadpole": 28,
+        "Tadpole": 36,
         "Red chubfish": 6,
         "Albino catfish": 2,
         "Grey chubfish": 2,
-        "Black crappie": 8,
+        "Black crappie": 14,
         "Catfish": 4
       },
       "quests": {
@@ -373,6 +489,70 @@
       "unplanted": {
         "Tomato": 1,
         "Red flower": 1
+      }
+    },
+    {
+      "name": "NJBULLY1",
+      "score": 13890,
+      "planted": {
+        "grapes": 769,
+        "Yellow flower": 51,
+        "Potato": 839,
+        "Blue flower": 112,
+        "Cucumber": 78,
+        "Carrot": 186,
+        "Tomato": 52,
+        "wheat": 79,
+        "Fern": 191,
+        "Cotton": 876
+      },
+      "harvested": {
+        "Tomato": 427,
+        "Potato": 2180,
+        "Red flower": 223,
+        "grapes": 872,
+        "Cotton": 2167,
+        "Cucumber": 646,
+        "Carrot": 670,
+        "Fern": 702,
+        "Wheat": 106,
+        "Blue flower": 463,
+        "Yellow flower": 1199,
+        "pumpkin": 331
+      },
+      "trees": 426,
+      "treeTiles": {},
+      "mined": {
+        "Clay": 30,
+        "Stone": 87,
+        "Iron": 19,
+        "Silver": 6,
+        "Amethyst": 1,
+        "Ruby": 2
+      },
+      "fished": {
+        "Orange bluegill": 12,
+        "Blue bluegill": 12,
+        "Crucian carp": 4,
+        "Yellow bluegill": 8,
+        "Catfish": 2
+      },
+      "quests": {
+        "Silver ingot": 1,
+        "Cotton thread green": 20,
+        "Blue bluegill": 4,
+        "Cucumber": 1,
+        "Cotton thread orange": 10,
+        "Veggie salad": 25,
+        "Wood table": 1
+      },
+      "unplanted": {
+        "grapes": 6,
+        "Potato": 8,
+        "Wheat": 12,
+        "Blue flower": 1,
+        "Tomato": 2,
+        "Cotton": 8
       }
     },
     {
@@ -439,177 +619,6 @@
       "unplanted": {
         "Wheat": 28
       }
-    },
-    {
-      "name": "NJBULLY1",
-      "score": 12864,
-      "planted": {
-        "grapes": 700,
-        "Yellow flower": 51,
-        "Potato": 839,
-        "Blue flower": 112,
-        "Cucumber": 78,
-        "Carrot": 186,
-        "Tomato": 52,
-        "wheat": 79,
-        "Fern": 191,
-        "Cotton": 805
-      },
-      "harvested": {
-        "Tomato": 427,
-        "Potato": 2180,
-        "Red flower": 223,
-        "grapes": 641,
-        "Cotton": 1921,
-        "Cucumber": 646,
-        "Carrot": 670,
-        "Fern": 698,
-        "Wheat": 106,
-        "Blue flower": 305,
-        "Yellow flower": 1043,
-        "pumpkin": 323
-      },
-      "trees": 366,
-      "treeTiles": {},
-      "mined": {
-        "Clay": 27,
-        "Stone": 76,
-        "Iron": 14,
-        "Silver": 5
-      },
-      "fished": {
-        "Orange bluegill": 12,
-        "Blue bluegill": 12,
-        "Crucian carp": 4,
-        "Yellow bluegill": 8,
-        "Catfish": 2
-      },
-      "quests": {
-        "Silver ingot": 1,
-        "Cotton thread green": 20,
-        "Blue bluegill": 4,
-        "Cucumber": 1,
-        "Cotton thread orange": 10,
-        "Veggie salad": 25,
-        "Wood table": 1
-      },
-      "unplanted": {
-        "grapes": 6,
-        "Potato": 8,
-        "Wheat": 12,
-        "Blue flower": 1,
-        "Tomato": 2,
-        "Cotton": 8
-      }
-    },
-    {
-      "name": "Cmokyc",
-      "score": 10599,
-      "planted": {
-        "Red flower": 1309,
-        "Cotton": 617,
-        "Yellow flower": 338,
-        "Carrot": 48
-      },
-      "harvested": {
-        "grapes": 73,
-        "Cotton": 434,
-        "Blue flower": 451,
-        "Tomato": 244,
-        "Red flower": 932,
-        "Wheat": 108,
-        "Yellow flower": 1105,
-        "Potato": 40,
-        "Carrot": 1,
-        "Fern": 89,
-        "pumpkin": 84
-      },
-      "trees": 219,
-      "treeTiles": {},
-      "mined": {
-        "Stone": 57,
-        "Iron": 19,
-        "Silver": 3,
-        "Clay": 5
-      },
-      "fished": {
-        "Yellow bluegill": 848,
-        "Blue bluegill": 846,
-        "Orange bluegill": 948,
-        "Crucian carp": 266,
-        "Tadpole": 194,
-        "Lotus carp": 2,
-        "Black crappie": 66,
-        "Albino catfish": 10,
-        "Catfish": 20,
-        "Grey chubfish": 12,
-        "Red chubfish": 10,
-        "Bullfrog": 16,
-        "Yellow chubfish": 16
-      },
-      "quests": {
-        "Blue bluegill": 51,
-        "Cotton thread green": 11,
-        "Pumpkin bread": 10,
-        "Cucumber": 250,
-        "Wood plank": 578,
-        "Cotton thread orange": 242,
-        "Silver ingot": 2,
-        "Veggie salad": 25
-      },
-      "unplanted": {}
-    },
-    {
-      "name": "KA-BACKYARD",
-      "score": 8586,
-      "planted": {
-        "Carrot": 64,
-        "Red flower": 428,
-        "Yellow flower": 584,
-        "Cotton": 651,
-        "Blue flower": 284,
-        "Cucumber": 2,
-        "Tomato": 180
-      },
-      "harvested": {
-        "grapes": 828,
-        "Blue flower": 418,
-        "Wheat": 52,
-        "pumpkin": 409,
-        "Tomato": 2,
-        "Yellow flower": 373,
-        "Cotton": 434,
-        "Potato": 507,
-        "Fern": 292,
-        "Carrot": 51,
-        "Red flower": 162
-      },
-      "trees": 128,
-      "treeTiles": {},
-      "mined": {
-        "Stone": 12,
-        "Silver": 2,
-        "Iron": 4
-      },
-      "fished": {
-        "Orange bluegill": 660,
-        "Blue bluegill": 738,
-        "Crucian carp": 276,
-        "Yellow bluegill": 706,
-        "Tadpole": 188,
-        "Catfish": 6,
-        "Black crappie": 54,
-        "Albino catfish": 6,
-        "Bullfrog": 14,
-        "Red chubfish": 8,
-        "Yellow chubfish": 6,
-        "Grey chubfish": 12
-      },
-      "quests": {
-        "Cotton thread orange": 20,
-        "Veggie salad": 25
-      },
-      "unplanted": {}
     },
     {
       "name": "Zocram",
@@ -697,14 +706,14 @@
     },
     {
       "name": "sdsergio",
-      "score": 405,
+      "score": 407,
       "planted": {
         "Red flower": 2
       },
       "harvested": {
         "Potato": 3
       },
-      "trees": 40,
+      "trees": 42,
       "treeTiles": {},
       "mined": {
         "Stone": 6,
@@ -731,8 +740,61 @@
       "unplanted": {}
     },
     {
+      "name": "Alstar",
+      "score": 15453,
+      "planted": {
+        "Potato": 776,
+        "Fern": 276,
+        "pumpkin": 199,
+        "Yellow flower": 413,
+        "Cotton": 1710,
+        "Tomato": 457,
+        "Red flower": 570,
+        "grapes": 187,
+        "Cucumber": 18,
+        "Blue flower": 685
+      },
+      "harvested": {
+        "Yellow flower": 1372,
+        "Red flower": 955,
+        "Cotton": 2521,
+        "Blue flower": 833,
+        "Tomato": 192,
+        "Potato": 419,
+        "Wheat": 22,
+        "Carrot": 2,
+        "pumpkin": 769,
+        "grapes": 1197,
+        "Cucumber": 54,
+        "Fern": 798
+      },
+      "trees": 7,
+      "treeTiles": {},
+      "mined": {},
+      "fished": {
+        "Blue bluegill": 2,
+        "Yellow bluegill": 2
+      },
+      "quests": {
+        "Cucumber": 647,
+        "Orange bluegill": 102,
+        "Blue bluegill": 50,
+        "Cotton thread green": 11,
+        "Clay brick": 50,
+        "Pumpkin bread": 10,
+        "Cotton thread orange": 20,
+        "Wood plank": 100,
+        "Wood table": 1,
+        "Veggie salad": 25,
+        "Carrot cake": 1
+      },
+      "unplanted": {
+        "pumpkin": 1
+      }
+    },
+    {
       "name": "𓆩RHR𓆪ꪾ",
-      "score": 14613,
+      "score": 14625,
       "planted": {
         "Tomato": 149,
         "Red flower": 234,
@@ -759,11 +821,11 @@
         "Blue flower": 2286,
         "Wheat": 8
       },
-      "trees": 245,
+      "trees": 252,
       "treeTiles": {},
       "mined": {
-        "Stone": 39,
-        "Clay": 16,
+        "Stone": 42,
+        "Clay": 18,
         "Iron": 5,
         "Pure gold ore": 2
       },
@@ -826,11 +888,11 @@
     },
     {
       "name": "Zymeth",
-      "score": 3945,
+      "score": 3956,
       "planted": {
         "Cotton": 167,
         "wheat": 295,
-        "grapes": 171,
+        "grapes": 172,
         "Tomato": 96,
         "Blue flower": 77,
         "Yellow flower": 266,
@@ -851,7 +913,7 @@
         "pumpkin": 83,
         "Cucumber": 2
       },
-      "trees": 133,
+      "trees": 143,
       "treeTiles": {},
       "mined": {
         "Stone": 31,
@@ -870,7 +932,7 @@
     },
     {
       "name": "Kin8",
-      "score": 2418,
+      "score": 2424,
       "planted": {
         "grapes": 72,
         "pumpkin": 72,
@@ -888,11 +950,11 @@
         "Fern": 39,
         "Blue flower": 164
       },
-      "trees": 73,
+      "trees": 78,
       "treeTiles": {},
       "mined": {
         "Stone": 11,
-        "Iron": 2,
+        "Iron": 3,
         "Pure gold ore": 2,
         "Clay": 4
       },
@@ -911,23 +973,24 @@
     },
     {
       "name": "Amit",
-      "score": 2062,
+      "score": 2267,
       "planted": {
         "wheat": 15,
         "grapes": 1,
         "Yellow flower": 67,
-        "Cotton": 77,
-        "Tomato": 22
+        "Cotton": 97,
+        "Tomato": 22,
+        "Fern": 40
       },
       "harvested": {
-        "grapes": 409,
+        "grapes": 455,
         "Potato": 130,
         "Cotton": 99,
         "Tomato": 201,
-        "Yellow flower": 47,
+        "Yellow flower": 49,
         "Wheat": 85,
         "pumpkin": 84,
-        "Blue flower": 46,
+        "Blue flower": 143,
         "Cucumber": 3,
         "Fern": 53
       },
@@ -951,12 +1014,47 @@
       "unplanted": {}
     },
     {
+      "name": "BzrB",
+      "score": 1808,
+      "planted": {
+        "Yellow flower": 162,
+        "Blue flower": 64,
+        "Potato": 25,
+        "Fern": 17,
+        "wheat": 36,
+        "Red flower": 23
+      },
+      "harvested": {
+        "Fern": 96,
+        "Potato": 32,
+        "Yellow flower": 199,
+        "Cotton": 6,
+        "Red flower": 1
+      },
+      "trees": 7,
+      "treeTiles": {},
+      "mined": {},
+      "fished": {
+        "Blue bluegill": 6
+      },
+      "quests": {
+        "Orange bluegill": 51,
+        "Cucumber": 905,
+        "Iron ingot": 8,
+        "Cotton thread green": 10,
+        "Blue bluegill": 100,
+        "Clay brick": 50,
+        "Pumpkin bread": 10
+      },
+      "unplanted": {}
+    },
+    {
       "name": "Alorid 🇹🇳",
-      "score": 1700,
+      "score": 1719,
       "planted": {},
       "harvested": {
         "Yellow flower": 136,
-        "Cotton": 130,
+        "Cotton": 140,
         "grapes": 143,
         "Potato": 209,
         "pumpkin": 54,
@@ -965,13 +1063,13 @@
         "Wheat": 57,
         "Blue flower": 11
       },
-      "trees": 209,
+      "trees": 215,
       "treeTiles": {},
       "mined": {
         "Clay": 14,
-        "Stone": 46,
+        "Stone": 48,
         "Silver": 2,
-        "Iron": 9,
+        "Iron": 10,
         "Pure gold ore": 1
       },
       "fished": {
@@ -996,58 +1094,26 @@
       "unplanted": {}
     },
     {
-      "name": "BzrB",
-      "score": 1592,
-      "planted": {
-        "Yellow flower": 110,
-        "Blue flower": 39,
-        "Potato": 25,
-        "Fern": 17,
-        "wheat": 36
-      },
-      "harvested": {
-        "Fern": 96,
-        "Potato": 32,
-        "Yellow flower": 85,
-        "Cotton": 6,
-        "Red flower": 1
-      },
-      "trees": 5,
-      "treeTiles": {},
-      "mined": {},
-      "fished": {
-        "Blue bluegill": 6
-      },
-      "quests": {
-        "Orange bluegill": 51,
-        "Cucumber": 905,
-        "Iron ingot": 8,
-        "Cotton thread green": 10,
-        "Blue bluegill": 100,
-        "Clay brick": 50,
-        "Pumpkin bread": 10
-      },
-      "unplanted": {}
-    },
-    {
       "name": "Gnorts",
-      "score": 997,
+      "score": 1562,
       "planted": {
         "Blue flower": 51,
-        "Red flower": 96,
+        "Red flower": 123,
         "Cotton": 65,
         "Yellow flower": 78,
-        "pumpkin": 2
+        "pumpkin": 90,
+        "Fern": 171
       },
       "harvested": {
-        "Blue flower": 43,
-        "Yellow flower": 386,
-        "Fern": 1
+        "Blue flower": 88,
+        "Yellow flower": 533,
+        "Fern": 1,
+        "Red flower": 76
       },
-      "trees": 19,
+      "trees": 27,
       "treeTiles": {},
       "mined": {
-        "Stone": 13,
+        "Stone": 16,
         "Iron": 2,
         "Clay": 2
       },
@@ -1068,7 +1134,7 @@
     },
     {
       "name": "Jamie",
-      "score": 714,
+      "score": 716,
       "planted": {
         "Carrot": 1,
         "Yellow flower": 19
@@ -1077,7 +1143,7 @@
         "grapes": 1,
         "Yellow flower": 32
       },
-      "trees": 11,
+      "trees": 13,
       "treeTiles": {},
       "mined": {
         "Stone": 2,
@@ -1097,8 +1163,43 @@
       "unplanted": {}
     },
     {
+      "name": "Cryptodonkz",
+      "score": 637,
+      "planted": {
+        "Blue flower": 32
+      },
+      "harvested": {
+        "Yellow flower": 138,
+        "grapes": 230,
+        "Red flower": 43,
+        "Tomato": 38,
+        "Cotton": 8
+      },
+      "trees": 30,
+      "treeTiles": {},
+      "mined": {
+        "Iron": 9,
+        "Clay": 5,
+        "Silver": 2
+      },
+      "fished": {},
+      "quests": {
+        "Orange bluegill": 11,
+        "Cucumber": 51,
+        "Blue bluegill": 9,
+        "Cotton thread green": 1,
+        "Silver ingot": 1,
+        "Wood plank": 1,
+        "Cotton thread orange": 1,
+        "Carrot cake": 1,
+        "Wood table": 1,
+        "Veggie salad": 25
+      },
+      "unplanted": {}
+    },
+    {
       "name": "NoName",
-      "score": 324,
+      "score": 334,
       "planted": {},
       "harvested": {
         "grapes": 1,
@@ -1110,8 +1211,9 @@
         "Clay": 1
       },
       "fished": {
-        "Orange bluegill": 2,
-        "Yellow bluegill": 2
+        "Orange bluegill": 6,
+        "Yellow bluegill": 4,
+        "Blue bluegill": 4
       },
       "quests": {
         "Orange bluegill": 3,
@@ -1121,12 +1223,12 @@
     },
     {
       "name": "wewew73",
-      "score": 214,
+      "score": 242,
       "planted": {},
       "harvested": {
         "grapes": 4,
         "pumpkin. about 24 hours agoMauro11 harvested Blue flower in the tile of Mrfaf and received 1 Blue flower": 2,
-        "Yellow flower": 6,
+        "Yellow flower": 16,
         "Blue flower": 5,
         "pumpkin": 4,
         "Cotton": 5,
@@ -1134,75 +1236,24 @@
         "Potato": 7,
         "Tomato": 2
       },
-      "trees": 30,
+      "trees": 42,
       "treeTiles": {},
       "mined": {
-        "Stone": 10,
+        "Stone": 11,
         "Iron": 4,
-        "Clay": 3,
+        "Clay": 4,
         "Pure gold ore": 1
       },
       "fished": {
         "Yellow bluegill": 14,
         "Tadpole": 6,
         "Crucian carp": 2,
-        "Blue bluegill": 12,
-        "Orange bluegill": 14
+        "Blue bluegill": 14,
+        "Orange bluegill": 16
       },
       "quests": {
         "Orange bluegill": 5,
         "Cucumber": 70
-      },
-      "unplanted": {}
-    },
-    {
-      "name": "Alstar",
-      "score": 8895,
-      "planted": {
-        "Potato": 776,
-        "Fern": 240,
-        "pumpkin": 177,
-        "Yellow flower": 198,
-        "Cotton": 488,
-        "Tomato": 94,
-        "Red flower": 426,
-        "grapes": 162,
-        "Cucumber": 18,
-        "Blue flower": 454
-      },
-      "harvested": {
-        "Yellow flower": 995,
-        "Red flower": 561,
-        "Cotton": 417,
-        "Blue flower": 434,
-        "Tomato": 177,
-        "Potato": 419,
-        "Wheat": 22,
-        "Carrot": 2,
-        "pumpkin": 347,
-        "grapes": 868,
-        "Cucumber": 54,
-        "Fern": 545
-      },
-      "trees": 0,
-      "treeTiles": {},
-      "mined": {},
-      "fished": {
-        "Blue bluegill": 2,
-        "Yellow bluegill": 2
-      },
-      "quests": {
-        "Cucumber": 647,
-        "Orange bluegill": 102,
-        "Blue bluegill": 50,
-        "Cotton thread green": 11,
-        "Clay brick": 50,
-        "Pumpkin bread": 10,
-        "Cotton thread orange": 20,
-        "Wood plank": 100,
-        "Wood table": 1,
-        "Veggie salad": 25,
-        "Carrot cake": 1
       },
       "unplanted": {}
     },
@@ -1250,15 +1301,15 @@
     },
     {
       "name": "Jonatan",
-      "score": 1366,
+      "score": 1553,
       "planted": {
         "Cotton": 217,
         "Yellow flower": 74,
         "Red flower": 114,
         "pumpkin": 3,
-        "wheat": 2,
-        "Blue flower": 2,
-        "Potato": 5,
+        "wheat": 3,
+        "Blue flower": 5,
+        "Potato": 17,
         "Fern": 39,
         "Cucumber": 1,
         "Carrot": 1,
@@ -1266,15 +1317,15 @@
         "Tomato": 2
       },
       "harvested": {
-        "Cotton": 285,
+        "Cotton": 380,
         "Potato": 52,
-        "Yellow flower": 131,
+        "Yellow flower": 195,
         "Red flower": 301,
-        "Fern": 55,
+        "Fern": 60,
         "Blue flower": 27,
         "grapes": 6
       },
-      "trees": 6,
+      "trees": 13,
       "treeTiles": {},
       "mined": {},
       "fished": {},
@@ -1283,7 +1334,7 @@
         "Veggie salad": 25
       },
       "unplanted": {
-        "Wheat": 2,
+        "Wheat": 3,
         "pumpkin": 1
       }
     },
@@ -1354,17 +1405,17 @@
     },
     {
       "name": "Dravyn",
-      "score": 402,
+      "score": 421,
       "planted": {},
       "harvested": {
         "Red flower": 6
       },
-      "trees": 65,
+      "trees": 74,
       "treeTiles": {},
       "mined": {
         "Silver": 5,
-        "Stone": 13,
-        "Clay": 1
+        "Stone": 21,
+        "Clay": 3
       },
       "fished": {},
       "quests": {
@@ -1376,18 +1427,19 @@
     },
     {
       "name": "Tescey",
-      "score": 776,
+      "score": 930,
       "planted": {},
       "harvested": {
         "Blue flower": 15,
-        "Cotton": 182,
+        "Cotton": 234,
         "Tomato": 40,
         "pumpkin": 48,
         "Red flower": 46,
-        "grapes": 90,
+        "grapes": 183,
         "Potato": 23,
         "Fern": 22,
-        "Yellow flower": 10
+        "Yellow flower": 10,
+        "Carrot": 1
       },
       "trees": 0,
       "treeTiles": {},
@@ -1396,10 +1448,10 @@
         "Orange bluegill": 24,
         "Crucian carp": 10,
         "Yellow chubfish": 2,
-        "Blue bluegill": 30,
-        "Yellow bluegill": 32,
+        "Blue bluegill": 32,
+        "Yellow bluegill": 36,
         "Tadpole": 10,
-        "Black crappie": 4
+        "Black crappie": 6
       },
       "quests": {
         "Cucumber": 116,
@@ -1477,14 +1529,15 @@
     },
     {
       "name": "Strix",
-      "score": 273,
+      "score": 295,
       "planted": {},
       "harvested": {},
-      "trees": 73,
+      "trees": 87,
       "treeTiles": {},
       "mined": {
-        "Stone": 16,
-        "Silver": 2
+        "Stone": 21,
+        "Silver": 2,
+        "Iron": 3
       },
       "fished": {},
       "quests": {
@@ -1529,7 +1582,7 @@
     },
     {
       "name": "SHIZ",
-      "score": 789,
+      "score": 791,
       "planted": {},
       "harvested": {},
       "trees": 0,
@@ -1539,7 +1592,7 @@
         "Blue bluegill": 14,
         "Tadpole": 2,
         "Crucian carp": 2,
-        "Orange bluegill": 2,
+        "Orange bluegill": 4,
         "Yellow bluegill": 2
       },
       "quests": {
@@ -1675,29 +1728,6 @@
       "quests": {
         "Cucumber": 255,
         "Cotton thread orange": 10
-      },
-      "unplanted": {}
-    },
-    {
-      "name": "Cryptodonkz",
-      "score": 102,
-      "planted": {},
-      "harvested": {},
-      "trees": 0,
-      "treeTiles": {},
-      "mined": {},
-      "fished": {},
-      "quests": {
-        "Orange bluegill": 11,
-        "Cucumber": 51,
-        "Blue bluegill": 9,
-        "Cotton thread green": 1,
-        "Silver ingot": 1,
-        "Wood plank": 1,
-        "Cotton thread orange": 1,
-        "Carrot cake": 1,
-        "Wood table": 1,
-        "Veggie salad": 25
       },
       "unplanted": {}
     },
