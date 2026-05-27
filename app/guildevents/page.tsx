@@ -29,7 +29,7 @@ const MEDALS = ["🥇", "🥈", "🥉"];
 const SECTIONS = [
   { id: "leaderboards",  label: "Leaderboards",  emoji: "🏆" },
   { id: "details",       label: "Full Details",  emoji: "📊" },
-  { id: "inactive",      label: "Inactive",      emoji: "💤" },
+  { id: "roster",        label: "Roster",        emoji: "👥" },
 ];
 
 const INACTIVE_MEMBERS = [
@@ -385,27 +385,37 @@ export default function GuildEventsPage() {
           ))}
         </Section>
 
-        {/* ── Inactive Members ── */}
-        <div id="inactive" style={{ scrollMarginTop: "110px", marginBottom: "48px" }}>
+        {/* ── Full Roster ── */}
+        <div id="roster" style={{ scrollMarginTop: "110px", marginBottom: "48px" }}>
           <h2 style={{
             fontSize: "0.9rem", letterSpacing: "3px", textTransform: "uppercase",
-            color: "#f87171", marginBottom: "20px", borderBottom: "1px solid rgba(248,113,113,0.3)", paddingBottom: "10px",
+            color: "#45a29e", marginBottom: "20px", borderBottom: "1px solid rgba(69,162,158,0.3)", paddingBottom: "10px",
           }}>
-            💤 Inactive Members
+            👥 Member Roster
           </h2>
-          <p style={{ fontSize: "0.7rem", color: "#c5c6c7", marginBottom: "16px", letterSpacing: "1px" }}>
-            No activity recorded in guild logs for the following members.
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "10px" }}>
-            {INACTIVE_MEMBERS.map(name => (
-              <div key={name} style={{
-                background: "rgba(248,113,113,0.06)",
-                border: "1px solid rgba(248,113,113,0.35)",
-                borderRadius: "8px", padding: "12px 16px",
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "8px" }}>
+            {/* Active members sorted by score */}
+            {active.map(p => (
+              <div key={p.name} style={{
+                background: "rgba(0,0,0,0.35)",
+                border: "1px solid rgba(69,162,158,0.4)",
+                borderRadius: "8px", padding: "10px 14px",
                 display: "flex", alignItems: "center", justifyContent: "space-between",
               }}>
-                <span style={{ fontSize: "0.85rem", color: "#c5c6c7", fontFamily: "Orbitron, sans-serif" }}>{name}</span>
-                <span style={{ fontSize: "0.6rem", color: "#f87171", letterSpacing: "1px", textTransform: "uppercase" }}>inactive</span>
+                <span style={{ fontSize: "0.82rem", color: "#c5c6c7", fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
+                <span style={{ fontSize: "0.7rem", color: "#66fcf1", fontWeight: "bold", whiteSpace: "nowrap", marginLeft: "8px" }}>{fmt(p.score)}</span>
+              </div>
+            ))}
+            {/* Inactive members */}
+            {INACTIVE_MEMBERS.map(name => (
+              <div key={name} style={{
+                background: "rgba(248,113,113,0.04)",
+                border: "1px solid rgba(248,113,113,0.3)",
+                borderRadius: "8px", padding: "10px 14px",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+              }}>
+                <span style={{ fontSize: "0.82rem", color: "#888", fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</span>
+                <span style={{ fontSize: "0.6rem", color: "#f87171", letterSpacing: "1px", textTransform: "uppercase", whiteSpace: "nowrap", marginLeft: "8px" }}>💤 inactive</span>
               </div>
             ))}
           </div>
