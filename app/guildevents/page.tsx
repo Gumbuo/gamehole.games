@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import activityData from "./activity-data.json";
 
 type Player = {
@@ -25,6 +26,13 @@ function sorted(map: Record<string, number>): [string, number][] {
 }
 
 const MEDALS = ["🥇", "🥈", "🥉"];
+
+const playerSlug = (name: string) => 'player-' + name.replace(/[^a-zA-Z0-9]/g, '-');
+
+const isWoodStoneOnly = (p: Player) =>
+  sum(p.harvested) === 0 && sum(p.planted) === 0 &&
+  sum(p.fished) === 0 && sum(p.quests) === 0 &&
+  (p.trees > 0 || sum(p.mined) > 0);
 
 const SECTIONS = [
   { id: "leaderboards",  label: "Leaderboards",  emoji: "🏆" },
@@ -147,7 +155,7 @@ function Badge({ label, value, color }: { label: string; value: string; color: s
   );
 }
 
-function PlayerCard({ player, rank }: { player: Player; rank: number }) {
+function PlayerCard({ player, rank }: { player: Player; rank: number; }) {
   const harv  = sorted(player.harvested);
   const plant = sorted(player.planted);
   const mine  = sorted(player.mined);
@@ -164,12 +172,13 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
   const catCount = [totalHarv, totalPlant, player.trees, totalMine, totalFish, totalQuest].filter(v => v > 0).length;
 
   return (
-    <div style={{
+    <div id={playerSlug(player.name)} style={{
       background: "rgba(0,0,0,0.45)",
       border: "1px solid #45a29e",
       borderRadius: "12px",
       padding: "18px 20px",
       marginBottom: "16px",
+      scrollMarginTop: "120px",
     }}>
       <div style={{
         display: "flex", alignItems: "center", gap: "10px",
@@ -219,6 +228,18 @@ export default function GuildEventsPage() {
       totalMined: number; totalFish: number; totalQuest: number;
     };
     players: Player[];
+  };
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return;
+    const match = active.find(p => p.name.toLowerCase().includes(q));
+    if (match) {
+      document.getElementById(playerSlug(match.name))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const displayDate = new Date(date + "T00:00:00").toLocaleDateString("en-GB", {
@@ -282,6 +303,29 @@ export default function GuildEventsPage() {
             {s.emoji} {s.label}
           </a>
         ))}
+        {/* Player search */}
+        <form onSubmit={handleSearch} style={{ marginLeft: "auto", display: "flex", gap: "4px", padding: "6px 0", flexShrink: 0 }}>
+          <input
+            type="text"
+            placeholder="Search player..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            style={{
+              background: "rgba(0,0,0,0.6)", border: "1px solid #45a29e",
+              borderRadius: "6px", color: "#66fcf1", fontSize: "0.7rem",
+              padding: "4px 10px", fontFamily: "Orbitron, sans-serif",
+              outline: "none", width: "140px",
+            }}
+          />
+          <button type="submit" style={{
+            background: "#45a29e", border: "none", borderRadius: "6px",
+            color: "#000", fontSize: "0.65rem", fontWeight: "bold",
+            padding: "4px 10px", cursor: "pointer", fontFamily: "Orbitron, sans-serif",
+            letterSpacing: "1px",
+          }}>
+            GO
+          </button>
+        </form>
       </div>
 
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "30px 16px" }}>
@@ -398,12 +442,17 @@ export default function GuildEventsPage() {
             {active.map(p => (
               <div key={p.name} style={{
                 background: "rgba(0,0,0,0.35)",
-                border: "1px solid rgba(69,162,158,0.4)",
+                border: `1px solid ${isWoodStoneOnly(p) ? "rgba(250,204,21,0.4)" : "rgba(69,162,158,0.4)"}`,
                 borderRadius: "8px", padding: "10px 14px",
-                display: "flex", alignItems: "center", justifyContent: "space-between",
+                display: "flex", alignItems: "center", gap: "6px",
               }}>
-                <span style={{ fontSize: "0.82rem", color: "#c5c6c7", fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
-                <span style={{ fontSize: "0.7rem", color: "#66fcf1", fontWeight: "bold", whiteSpace: "nowrap", marginLeft: "8px" }}>{fmt(p.score)}</span>
+                <span style={{ fontSize: "0.82rem", color: "#c5c6c7", fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{p.name}</span>
+                {isWoodStoneOnly(p) && (
+                  <span style={{ fontSize: "0.55rem", color: "#facc15", border: "1px solid #facc15", borderRadius: "4px", padding: "1px 5px", whiteSpace: "nowrap", letterSpacing: "0.5px" }}>
+                    🪓⛏️ WOOD/STONE
+                  </span>
+                )}
+                <span style={{ fontSize: "0.7rem", color: "#66fcf1", fontWeight: "bold", whiteSpace: "nowrap" }}>{fmt(p.score)}</span>
               </div>
             ))}
             {/* Inactive members */}
