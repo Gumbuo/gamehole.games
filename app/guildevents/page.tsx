@@ -452,7 +452,11 @@ export default function GuildEventsPage() {
                 borderRadius: "8px", padding: "10px 14px",
                 display: "flex", alignItems: "center", gap: "6px",
               }}>
-                <span style={{ fontSize: "0.82rem", color: "#c5c6c7", fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{p.name}</span>
+                <a
+                  href={`#${playerSlug(p.name)}`}
+                  onClick={e => { e.preventDefault(); document.getElementById(playerSlug(p.name))?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
+                  style={{ fontSize: "0.82rem", color: "#66fcf1", fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, textDecoration: "none", cursor: "pointer" }}
+                >{p.name}</a>
                 {isWoodStoneOnly(p) && (
                   <span style={{ fontSize: "0.55rem", color: "#facc15", border: "1px solid #facc15", borderRadius: "4px", padding: "1px 5px", whiteSpace: "nowrap", letterSpacing: "0.5px" }}>
                     🪓⛏️ WOOD/STONE
