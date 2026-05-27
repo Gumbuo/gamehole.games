@@ -34,6 +34,11 @@ const isWoodStoneOnly = (p: Player) =>
   sum(p.fished) === 0 && sum(p.quests) === 0 &&
   (p.trees > 0 || sum(p.mined) > 0);
 
+const isWoodStoneQuestOnly = (p: Player) =>
+  sum(p.harvested) === 0 && sum(p.planted) === 0 &&
+  sum(p.fished) === 0 && sum(p.quests) > 0 &&
+  (p.trees > 0 || sum(p.mined) > 0);
+
 const SECTIONS = [
   { id: "leaderboards",  label: "Leaderboards",  emoji: "🏆" },
   { id: "details",       label: "Full Details",  emoji: "📊" },
@@ -443,7 +448,7 @@ export default function GuildEventsPage() {
             {active.map(p => (
               <div key={p.name} style={{
                 background: "rgba(0,0,0,0.35)",
-                border: `1px solid ${isWoodStoneOnly(p) ? "rgba(250,204,21,0.4)" : "rgba(69,162,158,0.4)"}`,
+                border: `1px solid ${isWoodStoneOnly(p) ? "rgba(250,204,21,0.4)" : isWoodStoneQuestOnly(p) ? "rgba(251,146,60,0.4)" : "rgba(69,162,158,0.4)"}`,
                 borderRadius: "8px", padding: "10px 14px",
                 display: "flex", alignItems: "center", gap: "6px",
               }}>
@@ -451,6 +456,11 @@ export default function GuildEventsPage() {
                 {isWoodStoneOnly(p) && (
                   <span style={{ fontSize: "0.55rem", color: "#facc15", border: "1px solid #facc15", borderRadius: "4px", padding: "1px 5px", whiteSpace: "nowrap", letterSpacing: "0.5px" }}>
                     🪓⛏️ WOOD/STONE
+                  </span>
+                )}
+                {isWoodStoneQuestOnly(p) && (
+                  <span style={{ fontSize: "0.55rem", color: "#fb923c", border: "1px solid #fb923c", borderRadius: "4px", padding: "1px 5px", whiteSpace: "nowrap", letterSpacing: "0.5px" }}>
+                    🪓⛏️📋 WOOD/STONE/QUEST
                   </span>
                 )}
                 <span style={{ fontSize: "0.7rem", color: "#66fcf1", fontWeight: "bold", whiteSpace: "nowrap" }}>{fmt(p.score)}</span>
