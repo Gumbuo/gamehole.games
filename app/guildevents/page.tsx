@@ -29,6 +29,16 @@ const MEDALS = ["🥇", "🥈", "🥉"];
 const SECTIONS = [
   { id: "leaderboards",  label: "Leaderboards",  emoji: "🏆" },
   { id: "details",       label: "Full Details",  emoji: "📊" },
+  { id: "inactive",      label: "Inactive",      emoji: "💤" },
+];
+
+const INACTIVE_MEMBERS = [
+  "Nandaimut22",
+  "Jasonx",
+  "Hampronk",
+  "Jhossep007",
+  "Mudassar",
+  "Seva",
 ];
 
 // ── Compact leaderboard table ──────────────────────────────────────────────────
@@ -374,6 +384,32 @@ export default function GuildEventsPage() {
             <PlayerCard key={player.name} player={player} rank={i} />
           ))}
         </Section>
+
+        {/* ── Inactive Members ── */}
+        <div id="inactive" style={{ scrollMarginTop: "110px", marginBottom: "48px" }}>
+          <h2 style={{
+            fontSize: "0.9rem", letterSpacing: "3px", textTransform: "uppercase",
+            color: "#f87171", marginBottom: "20px", borderBottom: "1px solid rgba(248,113,113,0.3)", paddingBottom: "10px",
+          }}>
+            💤 Inactive Members
+          </h2>
+          <p style={{ fontSize: "0.7rem", color: "#c5c6c7", marginBottom: "16px", letterSpacing: "1px" }}>
+            No activity recorded in guild logs for the following members.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "10px" }}>
+            {INACTIVE_MEMBERS.map(name => (
+              <div key={name} style={{
+                background: "rgba(248,113,113,0.06)",
+                border: "1px solid rgba(248,113,113,0.35)",
+                borderRadius: "8px", padding: "12px 16px",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+              }}>
+                <span style={{ fontSize: "0.85rem", color: "#c5c6c7", fontFamily: "Orbitron, sans-serif" }}>{name}</span>
+                <span style={{ fontSize: "0.6rem", color: "#f87171", letterSpacing: "1px", textTransform: "uppercase" }}>inactive</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <p style={{ textAlign: "center", color: "#45a29e66", fontSize: "0.6rem", letterSpacing: "1px", marginTop: "30px" }}>
           Generated from guild log · {date}
