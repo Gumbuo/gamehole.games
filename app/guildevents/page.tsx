@@ -379,12 +379,20 @@ export default function GuildEventsPage() {
 
         {/* ── Full Roster ── */}
         <div id="roster" style={{ scrollMarginTop: "110px", marginBottom: "48px" }}>
-          <h2 style={{
-            fontSize: "0.9rem", letterSpacing: "3px", textTransform: "uppercase",
-            color: "#45a29e", marginBottom: "20px", borderBottom: "1px solid rgba(69,162,158,0.3)", paddingBottom: "10px",
-          }}>
-            👥 Member Roster
-          </h2>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: "12px", borderBottom: "1px solid rgba(69,162,158,0.3)", paddingBottom: "14px", marginBottom: "20px" }}>
+            <div>
+              <h2 style={{ fontSize: "0.9rem", letterSpacing: "3px", textTransform: "uppercase", color: "#45a29e", margin: "0 0 4px 0" }}>
+                👥 Member Roster
+              </h2>
+              <span style={{ fontSize: "0.65rem", color: "#c5c6c7", letterSpacing: "1px" }}>click a name to see their stats</span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px", fontSize: "0.62rem", letterSpacing: "0.5px" }}>
+              <span style={{ color: "#66fcf1" }}>● Active</span>
+              <span style={{ color: "#facc15" }}>● Wood / Stone only</span>
+              <span style={{ color: "#fb923c" }}>● Wood / Stone / Quest only</span>
+              <span style={{ color: "#f87171" }}>● Inactive</span>
+            </div>
+          </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "8px" }}>
             {active.map(p => (
               <div key={p.name} style={{
@@ -396,19 +404,14 @@ export default function GuildEventsPage() {
                 <a
                   href={`#${playerSlug(p.name)}`}
                   onClick={e => { e.preventDefault(); document.getElementById(playerSlug(p.name))?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                  style={{ fontSize: "0.82rem", color: "#66fcf1", fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, textDecoration: "none", cursor: "pointer" }}
+                  style={{
+                    fontSize: "0.82rem",
+                    color: isWoodStoneOnly(p) ? "#facc15" : isWoodStoneQuestOnly(p) ? "#fb923c" : "#66fcf1",
+                    fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis",
+                    whiteSpace: "nowrap", flex: 1, textDecoration: "none", cursor: "pointer",
+                  }}
                 >{p.name}</a>
-                {isWoodStoneOnly(p) && (
-                  <span style={{ fontSize: "0.55rem", color: "#facc15", border: "1px solid #facc15", borderRadius: "4px", padding: "1px 5px", whiteSpace: "nowrap", letterSpacing: "0.5px" }}>
-                    🪓⛏️ WOOD/STONE
-                  </span>
-                )}
-                {isWoodStoneQuestOnly(p) && (
-                  <span style={{ fontSize: "0.55rem", color: "#fb923c", border: "1px solid #fb923c", borderRadius: "4px", padding: "1px 5px", whiteSpace: "nowrap", letterSpacing: "0.5px" }}>
-                    🪓⛏️📋 WOOD/STONE/QUEST
-                  </span>
-                )}
-                <span style={{ fontSize: "0.7rem", color: "#66fcf1", fontWeight: "bold", whiteSpace: "nowrap" }}>{fmt(p.score)}</span>
+                <span style={{ fontSize: "0.7rem", color: "#c5c6c7", fontWeight: "bold", whiteSpace: "nowrap" }}>{fmt(p.score)}</span>
               </div>
             ))}
             {INACTIVE_MEMBERS.map(name => (
