@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
 import activityData from "./activity-data.json";
 
+// ── Types ──────────────────────────────────────────────────────────────────────
 type Player = {
   name: string;
   score: number;
@@ -15,101 +15,28 @@ type Player = {
   unplanted: Record<string, number>;
 };
 
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function sorted(map: Record<string, number>): [string, number][] {
+  return Object.entries(map).sort((a, b) => b[1] - a[1]);
+}
 function sum(map: Record<string, number>) {
   return Object.values(map).reduce((a, b) => a + b, 0);
 }
 function fmt(n: number) {
   return n.toLocaleString();
 }
-function sorted(map: Record<string, number>): [string, number][] {
-  return Object.entries(map).sort((a, b) => b[1] - a[1]);
-}
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 
-const playerSlug = (name: string) => 'player-' + name.replace(/[^a-zA-Z0-9]/g, '-');
+// Players exempt from the harvest-without-planting violation flag
+const VIOLATION_EXEMPT = ["Dravyn"];
 
-const isWoodStoneOnly = (p: Player) =>
-  sum(p.harvested) === 0 && sum(p.planted) === 0 &&
-  sum(p.fished) === 0 && sum(p.quests) === 0 &&
-  (p.trees > 0 || sum(p.mined) > 0);
-
-const isWoodStoneQuestOnly = (p: Player) =>
-  sum(p.harvested) === 0 && sum(p.planted) === 0 &&
-  sum(p.fished) === 0 && sum(p.quests) > 0 &&
-  (p.trees > 0 || sum(p.mined) > 0);
-
-const SECTIONS = [
-  { id: "roster",        label: "Roster",        emoji: "👥" },
-  { id: "leaderboards",  label: "Leaderboards",  emoji: "🏆" },
-  { id: "details",       label: "Full Details",  emoji: "📊" },
-];
-
-const INACTIVE_MEMBERS = [
-  "Nandaimut22",
-  "Jasonx",
-  "Hampronk",
-  "Jhossep007",
-  "Mudassar",
-  "Seva",
-];
-
-// ── Compact leaderboard table ──────────────────────────────────────────────────
-function LeaderboardTable({
-  rows,
-  unit = "",
-}: {
-  rows: { name: string; value: number }[];
-  unit?: string;
-}) {
-  const top = rows.filter((r) => r.value > 0);
-  if (top.length === 0)
-    return <p style={{ color: "#45a29e66", fontSize: "0.75rem" }}>No data yet</p>;
-
-  return (
-    <table style={{ borderCollapse: "collapse", width: "100%", maxWidth: "560px" }}>
-      <tbody>
-        {top.map((row, i) => (
-          <tr
-            key={row.name}
-            style={{
-              borderBottom: "1px solid rgba(69,162,158,0.1)",
-              background: i % 2 === 0 ? "rgba(0,0,0,0.2)" : "transparent",
-            }}
-          >
-            <td style={{ padding: "7px 10px", width: "36px", color: "#45a29e", fontSize: "0.75rem", fontWeight: "bold" }}>
-              {i < 3 ? MEDALS[i] : `#${i + 1}`}
-            </td>
-            <td style={{ padding: "7px 10px", color: "#c5c6c7", fontSize: "0.85rem", fontFamily: "Orbitron, sans-serif" }}>
-              {row.name}
-            </td>
-            <td style={{ padding: "7px 10px", textAlign: "right", color: "#66fcf1", fontWeight: "bold", fontSize: "0.85rem", whiteSpace: "nowrap" }}>
-              {fmt(row.value)}{unit}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
+function isHarvestViolator(player: Player): boolean {
+  if (VIOLATION_EXEMPT.includes(player.name)) return false;
+  return sum(player.harvested) > 0 && sum(player.planted) === 0;
 }
 
-// ── Section wrapper ────────────────────────────────────────────────────────────
-function Section({ id, emoji, title, children }: { id: string; emoji: string; title: string; children: React.ReactNode }) {
-  return (
-    <div id={id} style={{ marginBottom: "48px", scrollMarginTop: "110px" }}>
-      <h2 style={{
-        fontSize: "0.9rem", letterSpacing: "3px", textTransform: "uppercase",
-        color: "#45a29e", marginBottom: "18px", display: "flex", alignItems: "center", gap: "8px",
-        borderBottom: "1px solid rgba(69,162,158,0.3)", paddingBottom: "10px",
-      }}>
-        {emoji} {title}
-      </h2>
-      {children}
-    </div>
-  );
-}
-
-// ── Mini table for player card ─────────────────────────────────────────────────
+// ── Mini table ─────────────────────────────────────────────────────────────────
 function MiniTable({ rows, unit = "" }: { rows: [string, number][]; unit?: string }) {
   return (
     <table style={{ borderCollapse: "collapse", fontSize: "0.72rem", width: "100%" }}>
@@ -127,6 +54,7 @@ function MiniTable({ rows, unit = "" }: { rows: [string, number][]; unit?: strin
   );
 }
 
+// ── Section block inside a player card ────────────────────────────────────────
 function CardSection({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) {
   return (
     <div style={{ minWidth: "140px" }}>
@@ -141,6 +69,7 @@ function CardSection({ emoji, title, children }: { emoji: string; title: string;
   );
 }
 
+// ── Badge ──────────────────────────────────────────────────────────────────────
 function Badge({ label, value, color }: { label: string; value: string; color: string }) {
   return (
     <span style={{
@@ -160,11 +89,13 @@ function Badge({ label, value, color }: { label: string; value: string; color: s
   );
 }
 
-function PlayerCard({ player, rank }: { player: Player; rank: number; }) {
-  const harv  = sorted(player.harvested);
+// ── Player card ────────────────────────────────────────────────────────────────
+function PlayerCard({ player, rank }: { player: Player; rank: number }) {
+  const violation = isHarvestViolator(player);
+  const harv = sorted(player.harvested);
   const plant = sorted(player.planted);
-  const mine  = sorted(player.mined);
-  const fish  = sorted(player.fished);
+  const mine = sorted(player.mined);
+  const fish = sorted(player.fished);
   const quest = sorted(player.quests);
 
   const totalHarv  = sum(player.harvested);
@@ -174,35 +105,38 @@ function PlayerCard({ player, rank }: { player: Player; rank: number; }) {
   const totalQuest = sum(player.quests);
 
   const medal = rank < 3 ? MEDALS[rank] + " " : "";
-  const catCount = [totalHarv, totalPlant, player.trees, totalMine, totalFish, totalQuest].filter(v => v > 0).length;
 
   return (
-    <div id={playerSlug(player.name)} style={{
-      background: "rgba(0,0,0,0.45)",
-      border: "1px solid #45a29e",
+    <div style={{
+      background: violation ? "rgba(60,0,0,0.55)" : "rgba(0,0,0,0.45)",
+      border: `1px solid ${violation ? "#ff2d2d" : "#45a29e"}`,
       borderRadius: "12px",
       padding: "18px 20px",
       marginBottom: "16px",
-      scrollMarginTop: "120px",
     }}>
+      {/* Header */}
       <div style={{
-        display: "flex", alignItems: "center", gap: "10px",
-        borderBottom: "1px solid #45a29e22", paddingBottom: "10px", marginBottom: "12px",
+        display: "flex", alignItems: "baseline", gap: "10px",
+        borderBottom: `1px solid ${violation ? "#ff2d2d44" : "#45a29e22"}`, paddingBottom: "10px", marginBottom: "12px",
       }}>
-        <span style={{ fontSize: "0.65rem", color: "#45a29e", minWidth: "22px" }}>#{rank + 1}</span>
-        <h3 style={{ margin: 0, fontSize: "1rem", color: "#66fcf1", letterSpacing: "1px", flex: 1 }}>
+        <span style={{ fontSize: "0.65rem", color: violation ? "#ff2d2d" : "#45a29e", minWidth: "22px" }}>
+          #{rank + 1}
+        </span>
+        <h3 style={{ margin: 0, fontSize: "1rem", color: violation ? "#ff6b6b" : "#66fcf1", letterSpacing: "1px" }}>
           {medal}{player.name}
         </h3>
-        <span style={{
-          fontSize: "0.62rem", letterSpacing: "1px",
-          color: catCount === 6 ? "#ffd700" : "#45a29e",
-          border: `1px solid ${catCount === 6 ? "#ffd700" : "#45a29e"}`,
-          borderRadius: "4px", padding: "2px 7px", whiteSpace: "nowrap",
-        }}>
-          {catCount}/6 categories
-        </span>
+        {violation && (
+          <span style={{
+            marginLeft: "auto", fontSize: "0.6rem", letterSpacing: "1px",
+            color: "#ff2d2d", border: "1px solid #ff2d2d", borderRadius: "4px",
+            padding: "2px 7px", textTransform: "uppercase", whiteSpace: "nowrap",
+          }}>
+            ⚠ Harvesting — Not Planting
+          </span>
+        )}
       </div>
 
+      {/* Summary badges */}
       <div style={{ marginBottom: "14px" }}>
         {totalHarv  ? <Badge label="Harvested" value={fmt(totalHarv) + " items"}    color="#00ff41" /> : null}
         {totalPlant ? <Badge label="Planted"   value={fmt(totalPlant) + " seeds"}   color="#00d9ff" /> : null}
@@ -212,13 +146,38 @@ function PlayerCard({ player, rank }: { player: Player; rank: number; }) {
         {totalQuest ? <Badge label="Quest"     value={fmt(totalQuest) + " items"}   color="#ffd700" /> : null}
       </div>
 
+      {/* Detail sections */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px 30px" }}>
-        {harv.length > 0  && <CardSection emoji="🌾" title="Harvested"><MiniTable rows={harv} /></CardSection>}
-        {plant.length > 0 && <CardSection emoji="🌱" title="Planted"><MiniTable rows={plant} unit=" seeds" /></CardSection>}
-        {player.trees > 0 && <CardSection emoji="🪓" title="Tree Chopping"><MiniTable rows={[["Wood collected", player.trees]]} /></CardSection>}
-        {mine.length > 0  && <CardSection emoji="⛏️" title="Mining"><MiniTable rows={mine} /></CardSection>}
-        {fish.length > 0  && <CardSection emoji="🎣" title="Fishing"><MiniTable rows={fish} /></CardSection>}
-        {quest.length > 0 && <CardSection emoji="📋" title="Daily Quest"><MiniTable rows={quest} /></CardSection>}
+        {harv.length > 0 && (
+          <CardSection emoji="🌾" title="Harvested">
+            <MiniTable rows={harv} />
+          </CardSection>
+        )}
+        {plant.length > 0 && (
+          <CardSection emoji="🌱" title="Planted">
+            <MiniTable rows={plant} unit=" seeds" />
+          </CardSection>
+        )}
+        {player.trees > 0 && (
+          <CardSection emoji="🪓" title="Tree Chopping">
+            <MiniTable rows={[["Wood collected", player.trees]]} />
+          </CardSection>
+        )}
+        {mine.length > 0 && (
+          <CardSection emoji="⛏️" title="Mining">
+            <MiniTable rows={mine} />
+          </CardSection>
+        )}
+        {fish.length > 0 && (
+          <CardSection emoji="🎣" title="Fishing">
+            <MiniTable rows={fish} />
+          </CardSection>
+        )}
+        {quest.length > 0 && (
+          <CardSection emoji="📋" title="Daily Quest">
+            <MiniTable rows={quest} />
+          </CardSection>
+        )}
       </div>
     </div>
   );
@@ -235,30 +194,9 @@ export default function GuildEventsPage() {
     players: Player[];
   };
 
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return;
-    const match = active.find(p => p.name.toLowerCase().includes(q));
-    if (match) {
-      document.getElementById(playerSlug(match.name))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   const displayDate = new Date(date + "T00:00:00").toLocaleDateString("en-GB", {
     day: "numeric", month: "long", year: "numeric",
   });
-
-  const active = players.filter(p => p.score > 0);
-
-  const harvestRanks     = [...active].sort((a, b) => sum(b.harvested) - sum(a.harvested));
-  const plantRanks       = [...active].sort((a, b) => sum(b.planted)   - sum(a.planted));
-  const woodRanks        = [...active].sort((a, b) => b.trees          - a.trees);
-  const mineRanks        = [...active].sort((a, b) => sum(b.mined)     - sum(a.mined));
-  const fishRanks        = [...active].sort((a, b) => sum(b.fished)    - sum(a.fished));
-  const questRanks       = [...active].sort((a, b) => sum(b.quests)    - sum(a.quests));
 
   return (
     <div style={{
@@ -270,100 +208,55 @@ export default function GuildEventsPage() {
       <div style={{
         background: "rgba(0,0,0,0.8)", borderBottom: "2px solid #45a29e",
         padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between",
-        position: "sticky", top: 0, zIndex: 50,
       }}>
         <Link href="/" style={{
-          color: "#66fcf1", textDecoration: "none", fontSize: "0.8rem", fontWeight: "bold",
-          fontFamily: "Orbitron, sans-serif", border: "2px solid #66fcf1", borderRadius: "6px",
-          padding: "6px 14px", background: "rgba(102,252,241,0.08)",
-          boxShadow: "0 0 10px rgba(102,252,241,0.4)", letterSpacing: "1px",
+          color: "#45a29e", textDecoration: "none",
+          fontSize: "0.85rem", fontWeight: "bold", fontFamily: "Orbitron, sans-serif",
         }}>
-          &#8592; HOME PAGE
+          &larr; MOTHERSHIP
         </Link>
         <span style={{ fontSize: "0.7rem", color: "#c5c6c7", letterSpacing: "2px", textTransform: "uppercase" }}>
           Guild Activity
         </span>
       </div>
 
-      {/* Section nav */}
-      <div style={{
-        background: "rgba(0,0,0,0.7)", borderBottom: "1px solid rgba(69,162,158,0.3)",
-        padding: "0 20px", display: "flex", alignItems: "center", gap: "4px",
-        overflowX: "auto", position: "sticky", top: "53px", zIndex: 49,
-        scrollbarWidth: "none",
-      }}>
-        {SECTIONS.map(s => (
-          <a
-            key={s.id}
-            href={`#${s.id}`}
-            style={{
-              padding: "10px 14px", color: "#45a29e", textDecoration: "none",
-              fontSize: "0.65rem", letterSpacing: "1px", textTransform: "uppercase",
-              whiteSpace: "nowrap", borderBottom: "2px solid transparent",
-              transition: "color 0.2s, border-color 0.2s",
-            }}
-            onMouseEnter={e => { (e.target as HTMLElement).style.color = "#66fcf1"; (e.target as HTMLElement).style.borderBottomColor = "#66fcf1"; }}
-            onMouseLeave={e => { (e.target as HTMLElement).style.color = "#45a29e"; (e.target as HTMLElement).style.borderBottomColor = "transparent"; }}
-          >
-            {s.emoji} {s.label}
-          </a>
-        ))}
-      </div>
-
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "30px 16px" }}>
 
         {/* Title */}
         <h1 style={{
-          fontSize: "1.6rem", textAlign: "center", textShadow: "0 0 15px #66fcf1",
-          letterSpacing: "3px", textTransform: "uppercase", marginBottom: "6px",
+          fontSize: "1.6rem", textAlign: "center",
+          textShadow: "0 0 15px #66fcf1", letterSpacing: "3px",
+          textTransform: "uppercase", marginBottom: "6px",
         }}>
           Guild Activity Report
         </h1>
-        <p style={{ textAlign: "center", color: "#ffd700", fontSize: "0.75rem", letterSpacing: "2px", marginBottom: "24px" }}>
+        <p style={{
+          textAlign: "center", color: "#ffd700", fontSize: "0.75rem",
+          letterSpacing: "2px", marginBottom: "30px",
+        }}>
           {displayDate} · NomStead
         </p>
 
-        {/* Player search */}
-        <form onSubmit={handleSearch} style={{ display: "flex", justifyContent: "center", gap: "8px", marginBottom: "36px" }}>
-          <input
-            type="text"
-            placeholder="Search player name..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            style={{
-              background: "rgba(0,0,0,0.6)", border: "2px solid #45a29e",
-              borderRadius: "8px", color: "#66fcf1", fontSize: "1rem",
-              padding: "12px 20px", fontFamily: "Orbitron, sans-serif",
-              outline: "none", width: "320px", letterSpacing: "1px",
-            }}
-          />
-          <button type="submit" style={{
-            background: "#45a29e", border: "none", borderRadius: "8px",
-            color: "#000", fontSize: "0.9rem", fontWeight: "bold",
-            padding: "12px 28px", cursor: "pointer", fontFamily: "Orbitron, sans-serif",
-            letterSpacing: "2px", boxShadow: "0 0 12px rgba(69,162,158,0.5)",
-          }}>
-            GO
-          </button>
-        </form>
-
-        {/* Guild totals */}
+        {/* Summary box */}
         <div style={{
           background: "rgba(0,0,0,0.5)", border: "2px solid #45a29e",
-          borderRadius: "12px", padding: "20px 24px", marginBottom: "48px",
+          borderRadius: "12px", padding: "20px 24px", marginBottom: "36px",
         }}>
-          <h2 style={{ margin: "0 0 16px 0", fontSize: "0.8rem", letterSpacing: "2px", textTransform: "uppercase", color: "#45a29e" }}>
+          <h2 style={{
+            margin: "0 0 16px 0", fontSize: "0.8rem", letterSpacing: "2px",
+            textTransform: "uppercase", color: "#45a29e",
+          }}>
             Guild Totals
           </h2>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "14px 28px" }}>
             {[
-              { emoji: "👥", label: "Active Members",      value: active.length },
-              { emoji: "🌾", label: "Items Harvested",     value: totals.totalHarvested },
-              { emoji: "🌱", label: "Seeds Planted",       value: totals.totalPlanted },
-              { emoji: "🪓", label: "Wood Chopped",        value: totals.totalWood },
-              { emoji: "⛏️", label: "Minerals Mined",      value: totals.totalMined },
-              { emoji: "🎣", label: "Fish Caught",         value: totals.totalFish },
-              { emoji: "📋", label: "Quest Contributions", value: totals.totalQuest },
+              { emoji: "👥", label: "Active Members",       value: players.length },
+              { emoji: "🌾", label: "Items Harvested",      value: totals.totalHarvested },
+              { emoji: "🌱", label: "Seeds Planted",        value: totals.totalPlanted },
+              { emoji: "🪓", label: "Wood Chopped",         value: totals.totalWood },
+              { emoji: "⛏️", label: "Minerals Mined",       value: totals.totalMined },
+              { emoji: "🎣", label: "Fish Caught",          value: totals.totalFish },
+              { emoji: "📋", label: "Quest Contributions",  value: totals.totalQuest },
             ].map(({ emoji, label, value }) => (
               <div key={label} style={{ minWidth: "140px" }}>
                 <div style={{ fontSize: "0.6rem", color: "#c5c6c7", letterSpacing: "1px", textTransform: "uppercase" }}>
@@ -377,116 +270,22 @@ export default function GuildEventsPage() {
           </div>
         </div>
 
-        {/* ── Full Roster ── */}
-        <div id="roster" style={{ scrollMarginTop: "110px", marginBottom: "48px" }}>
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: "12px", borderBottom: "1px solid rgba(69,162,158,0.3)", paddingBottom: "14px", marginBottom: "20px" }}>
-            <div>
-              <h2 style={{ fontSize: "0.9rem", letterSpacing: "3px", textTransform: "uppercase", color: "#45a29e", margin: "0 0 4px 0" }}>
-                👥 Member Roster
-              </h2>
-              <span style={{ fontSize: "0.65rem", color: "#c5c6c7", letterSpacing: "1px" }}>click a name to see their stats</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px", fontSize: "0.62rem", letterSpacing: "0.5px" }}>
-              <span style={{ color: "#66fcf1" }}>● Active</span>
-              <span style={{ color: "#facc15" }}>● Wood / Stone only</span>
-              <span style={{ color: "#fb923c" }}>● Wood / Stone / Quest only</span>
-              <span style={{ color: "#f87171" }}>● Inactive</span>
-            </div>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "8px" }}>
-            {active.map(p => (
-              <div key={p.name} style={{
-                background: "rgba(0,0,0,0.35)",
-                border: `1px solid ${isWoodStoneOnly(p) ? "rgba(250,204,21,0.4)" : isWoodStoneQuestOnly(p) ? "rgba(251,146,60,0.4)" : "rgba(69,162,158,0.4)"}`,
-                borderRadius: "8px", padding: "10px 14px",
-                display: "flex", alignItems: "center", gap: "6px",
-              }}>
-                <a
-                  href={`#${playerSlug(p.name)}`}
-                  onClick={e => { e.preventDefault(); document.getElementById(playerSlug(p.name))?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                  style={{
-                    fontSize: "0.82rem",
-                    color: isWoodStoneOnly(p) ? "#facc15" : isWoodStoneQuestOnly(p) ? "#fb923c" : "#66fcf1",
-                    fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis",
-                    whiteSpace: "nowrap", flex: 1, textDecoration: "none", cursor: "pointer",
-                  }}
-                >{p.name}</a>
-                <span style={{ fontSize: "0.7rem", color: "#c5c6c7", fontWeight: "bold", whiteSpace: "nowrap" }}>{fmt(p.score)}</span>
-              </div>
-            ))}
-            {INACTIVE_MEMBERS.map(name => (
-              <div key={name} style={{
-                background: "rgba(248,113,113,0.04)",
-                border: "1px solid rgba(248,113,113,0.3)",
-                borderRadius: "8px", padding: "10px 14px",
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-              }}>
-                <span style={{ fontSize: "0.82rem", color: "#888", fontFamily: "Orbitron, sans-serif", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</span>
-                <span style={{ fontSize: "0.6rem", color: "#f87171", letterSpacing: "1px", textTransform: "uppercase", whiteSpace: "nowrap", marginLeft: "8px" }}>💤 inactive</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Player list */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#45a29e", marginBottom: "18px",
+        }}>
+          Member Contributions — Ranked by Activity
+        </h2>
 
-        {/* ── Leaderboard grid ── */}
-        <div id="leaderboards" style={{ scrollMarginTop: "110px", marginBottom: "48px" }}>
-          <h2 style={{
-            fontSize: "0.9rem", letterSpacing: "3px", textTransform: "uppercase",
-            color: "#45a29e", marginBottom: "20px", borderBottom: "1px solid rgba(69,162,158,0.3)", paddingBottom: "10px",
-          }}>
-            🏆 Leaderboards
-          </h2>
+        {players.map((player, i) => (
+          <PlayerCard key={player.name} player={player} rank={i} />
+        ))}
 
-          {/* Overall — full width */}
-          <div style={{
-            background: "rgba(0,0,0,0.4)", border: "1px solid #45a29e",
-            borderRadius: "10px", padding: "16px 20px", marginBottom: "16px",
-          }}>
-            <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#ffd700", marginBottom: "12px", fontWeight: "bold" }}>
-              🏆 Overall — Activity Breadth + Score
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "2px" }}>
-              {active.map((p, i) => (
-                <div key={p.name} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "5px 8px", background: i % 2 === 0 ? "rgba(0,0,0,0.2)" : "transparent", borderRadius: "4px" }}>
-                  <span style={{ fontSize: "0.7rem", color: "#45a29e", minWidth: "28px", fontWeight: "bold" }}>{i < 3 ? MEDALS[i] : `#${i+1}`}</span>
-                  <span style={{ fontSize: "0.75rem", color: "#c5c6c7", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
-                  <span style={{ fontSize: "0.75rem", color: "#66fcf1", fontWeight: "bold", whiteSpace: "nowrap" }}>{fmt(p.score)}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Category leaderboards — 3-col grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
-            {[
-              { emoji: "🌾", title: "Harvesting",    rows: harvestRanks.map(p => ({ name: p.name, value: sum(p.harvested) })),  unit: " items"    },
-              { emoji: "🌱", title: "Planting",      rows: plantRanks.map(p => ({ name: p.name, value: sum(p.planted) })),      unit: " seeds"    },
-              { emoji: "🪓", title: "Wood Chopping", rows: woodRanks.map(p => ({ name: p.name, value: p.trees })),              unit: " wood"     },
-              { emoji: "⛏️", title: "Mining",        rows: mineRanks.map(p => ({ name: p.name, value: sum(p.mined) })),         unit: " minerals" },
-              { emoji: "🎣", title: "Fishing",       rows: fishRanks.map(p => ({ name: p.name, value: sum(p.fished) })),        unit: " fish"     },
-              { emoji: "📋", title: "Contributions", rows: questRanks.map(p => ({ name: p.name, value: sum(p.quests) })),       unit: " items"    },
-            ].map(({ emoji, title, rows, unit }) => (
-              <div key={title} style={{
-                background: "rgba(0,0,0,0.4)", border: "1px solid rgba(69,162,158,0.5)",
-                borderRadius: "10px", padding: "16px 20px",
-              }}>
-                <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#45a29e", marginBottom: "12px", fontWeight: "bold" }}>
-                  {emoji} {title}
-                </div>
-                <LeaderboardTable rows={rows} unit={unit} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Full Details ── */}
-        <Section id="details" emoji="📊" title="Full Member Details">
-          {active.map((player, i) => (
-            <PlayerCard key={player.name} player={player} rank={i} />
-          ))}
-        </Section>
-
-        <p style={{ textAlign: "center", color: "#45a29e66", fontSize: "0.6rem", letterSpacing: "1px", marginTop: "30px" }}>
+        <p style={{
+          textAlign: "center", color: "#45a29e66",
+          fontSize: "0.6rem", letterSpacing: "1px", marginTop: "30px",
+        }}>
           Generated from guild log · {date}
         </p>
       </div>
