@@ -398,44 +398,74 @@ export default function GuildEventsPage() {
         {/* Mining Leaderboard */}
         <h2 style={{
           fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
-          color: "#45a29e", marginBottom: "18px",
+          color: "#45a29e", marginBottom: "12px",
         }}>
           ⛏️ Mining — Most to Least
         </h2>
+
+        {/* Gold Pickaxe reward explanation */}
+        <div style={{
+          background: "rgba(180,77,255,0.08)", border: "1px solid #b44dff",
+          borderRadius: "8px", padding: "12px 16px", marginBottom: "18px",
+          fontSize: "0.72rem", color: "#c5c6c7", lineHeight: "1.7",
+        }}>
+          <span style={{ color: "#ffd700", fontWeight: "bold" }}>⛏️ Gold Pickaxe Reward</span>
+          {"  ·  "}Reach <strong style={{ color: "#ffd700" }}>150 swings</strong> and FoxHole or Mrfaf will give you a Gold Pickaxe.
+        </div>
+
         <div style={{
           background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
           borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
         }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
             <tbody>
-              {[...players].filter(p => sum(p.mined) > 0).sort((a, b) => sum(b.mined) - sum(a.mined)).map((p, i) => (
-                <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
-                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
-                  <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
-                  <td style={{ padding: "6px 8px", fontSize: "0.65rem" }}>
-                    {sorted(p.mined).map(([k, v], idx) => {
-                      const color = k === "Pure gold ore" ? "#ffd700"
-                                  : k === "Ruby"          ? "#e0115f"
-                                  : k === "Silver"        ? "#c0c0c0"
-                                  : k === "Iron"          ? "#9e9e9e"
-                                  : "#c5c6c7";
-                      const bold = k === "Pure gold ore" || k === "Ruby" || k === "Silver";
-                      return (
-                        <span key={k}>
-                          {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
-                          <span style={{ color, fontWeight: bold ? "bold" : "normal" }}>
-                            {k === "Ruby" && <span style={{ fontSize: "0.7rem" }}>♦ </span>}{k}: {v}
-                          </span>
+              {[...players].filter(p => sum(p.mined) > 0).sort((a, b) => sum(b.mined) - sum(a.mined)).map((p, i) => {
+                const earned = p.mineSwings >= 150;
+                return (
+                  <tr key={p.name} style={{
+                    borderBottom: "1px solid #45a29e22",
+                    background: earned ? "rgba(180,77,255,0.06)" : "transparent",
+                  }}>
+                    <td style={{ padding: "6px 8px", color: earned ? "#ffd700" : "#45a29e", width: "32px" }}>#{i + 1}</td>
+                    <td style={{ padding: "6px 8px", color: earned ? "#ffd700" : "#66fcf1", fontWeight: earned ? "bold" : "normal" }}>
+                      {i < 3 ? MEDALS[i] + " " : ""}{p.name}
+                      {earned && (
+                        <span style={{
+                          marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
+                          background: "rgba(180,77,255,0.2)", border: "1px solid #b44dff",
+                          color: "#ffd700", borderRadius: "4px", padding: "1px 6px",
+                        }}>
+                          ⛏️ GOLD PICKAXE EARNED
                         </span>
-                      );
-                    })}
-                  </td>
-                  <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
-                    {fmt((p as Player & { mineSwings: number }).mineSwings)} swings
-                  </td>
-                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#b44dff", fontWeight: "bold" }}>{fmt(sum(p.mined))} minerals</td>
-                </tr>
-              ))}
+                      )}
+                    </td>
+                    <td style={{ padding: "6px 8px", fontSize: "0.65rem" }}>
+                      {sorted(p.mined).map(([k, v], idx) => {
+                        const color = k === "Pure gold ore" ? "#ffd700"
+                                    : k === "Ruby"          ? "#e0115f"
+                                    : k === "Silver"        ? "#c0c0c0"
+                                    : k === "Iron"          ? "#9e9e9e"
+                                    : "#c5c6c7";
+                        const bold = k === "Pure gold ore" || k === "Ruby" || k === "Silver";
+                        return (
+                          <span key={k}>
+                            {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
+                            <span style={{ color, fontWeight: bold ? "bold" : "normal" }}>
+                              {k === "Ruby" && <span style={{ fontSize: "0.7rem" }}>♦ </span>}{k}: {v}
+                            </span>
+                          </span>
+                        );
+                      })}
+                    </td>
+                    <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                      {earned ? `${fmt(p.mineSwings)} swings` : `${fmt(p.mineSwings)} / 150`}
+                    </td>
+                    <td style={{ padding: "6px 8px", textAlign: "right", color: earned ? "#ffd700" : "#b44dff", fontWeight: "bold" }}>
+                      {fmt(sum(p.mined))} minerals
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
