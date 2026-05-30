@@ -17,6 +17,7 @@ type Player = {
   mineSwings: number;
   fishCasts: number;
   questContributions: number;
+  goldEarned: number;
   joinDate: string | null;
   guildStatus: "accepted" | "kicked" | null;
 };
@@ -250,7 +251,7 @@ export default function GuildEventsPage() {
     date: string;
     totals: {
       totalHarvested: number; totalPlanted: number; totalWood: number;
-      totalMined: number; totalFish: number; totalQuest: number;
+      totalMined: number; totalFish: number; totalQuest: number; totalGold: number;
     };
     players: Player[];
   };
@@ -318,13 +319,14 @@ export default function GuildEventsPage() {
               { emoji: "⛏️", label: "Minerals Mined",       value: totals.totalMined },
               { emoji: "🎣", label: "Fish Caught",          value: totals.totalFish },
               { emoji: "📋", label: "Quest Contributions",  value: totals.totalQuest },
+              { emoji: "💰", label: "Gold Earned",          value: totals.totalGold },
             ].map(({ emoji, label, value }) => (
               <div key={label} style={{ minWidth: "140px" }}>
                 <div style={{ fontSize: "0.6rem", color: "#c5c6c7", letterSpacing: "1px", textTransform: "uppercase" }}>
                   {emoji} {label}
                 </div>
-                <div style={{ fontSize: "1.3rem", fontWeight: "bold", color: "#66fcf1", marginTop: "2px" }}>
-                  {fmt(value)}
+                <div style={{ fontSize: "1.3rem", fontWeight: "bold", color: label === "Gold Earned" ? "#ffd700" : "#66fcf1", marginTop: "2px" }}>
+                  {label === "Gold Earned" ? (value as number).toFixed(2) : fmt(value)}
                 </div>
               </div>
             ))}
@@ -544,6 +546,34 @@ export default function GuildEventsPage() {
                   </td>
                   <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold" }}>
                     {fmt(sum(p.quests))} items
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Gold Earnings Leaderboard */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#ffd700", marginBottom: "18px", marginTop: "40px",
+        }}>
+          💰 Gold Earned — Member Share
+        </h2>
+        <div style={{
+          background: "rgba(0,0,0,0.45)", border: "1px solid #ffd70055",
+          borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
+        }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
+            <tbody>
+              {[...players].filter(p => (p.goldEarned || 0) > 0).sort((a, b) => (b.goldEarned || 0) - (a.goldEarned || 0)).map((p, i) => (
+                <tr key={p.name} style={{ borderBottom: "1px solid #ffd70022" }}>
+                  <td style={{ padding: "6px 8px", color: "#ffd70088", width: "32px" }}>#{i + 1}</td>
+                  <td style={{ padding: "6px 8px", color: i < 3 ? "#ffd700" : "#66fcf1", fontWeight: i < 3 ? "bold" : "normal" }}>
+                    {i < 3 ? MEDALS[i] + " " : ""}{p.name}
+                  </td>
+                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold" }}>
+                    {(p.goldEarned || 0).toFixed(2)} gold
                   </td>
                 </tr>
               ))}

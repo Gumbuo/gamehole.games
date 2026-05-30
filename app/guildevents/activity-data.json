@@ -6,7 +6,8 @@
     "totalWood": 4686,
     "totalMined": 2029,
     "totalFish": 15526,
-    "totalQuest": 108102
+    "totalQuest": 108102,
+    "totalGold": 12762.6664
   },
   "players": [
     {
@@ -86,7 +87,8 @@
       "treeChops": 350,
       "mineSwings": 170,
       "fishCasts": 2,
-      "questContributions": 116
+      "questContributions": 116,
+      "goldEarned": 1101.1083
     },
     {
       "name": "Mrfaf",
@@ -176,7 +178,8 @@
       "treeChops": 42,
       "mineSwings": 27,
       "fishCasts": 41,
-      "questContributions": 120
+      "questContributions": 120,
+      "goldEarned": 3271.2223
     },
     {
       "name": "Fawm",
@@ -252,7 +255,8 @@
       "treeChops": 70,
       "mineSwings": 36,
       "fishCasts": 15,
-      "questContributions": 86
+      "questContributions": 86,
+      "goldEarned": 454.5439
     },
     {
       "name": "lormo321",
@@ -334,7 +338,8 @@
       "treeChops": 204,
       "mineSwings": 81,
       "fishCasts": 384,
-      "questContributions": 97
+      "questContributions": 97,
+      "goldEarned": 89.1931
     },
     {
       "name": "Fate",
@@ -416,7 +421,8 @@
       "treeChops": 149,
       "mineSwings": 40,
       "fishCasts": 429,
-      "questContributions": 57
+      "questContributions": 57,
+      "goldEarned": 1228.5454
     },
     {
       "name": "KA-BACKYARD",
@@ -480,7 +486,8 @@
       "treeChops": 144,
       "mineSwings": 58,
       "fishCasts": 3081,
-      "questContributions": 17
+      "questContributions": 17,
+      "goldEarned": 38.9732
     },
     {
       "name": "KngAlex",
@@ -569,7 +576,8 @@
       "treeChops": 197,
       "mineSwings": 88,
       "fishCasts": 266,
-      "questContributions": 92
+      "questContributions": 92,
+      "goldEarned": 311.0558
     },
     {
       "name": "Alstar",
@@ -641,7 +649,8 @@
       "treeChops": 25,
       "mineSwings": 7,
       "fishCasts": 0,
-      "questContributions": 65
+      "questContributions": 65,
+      "goldEarned": 217.2956
     },
     {
       "name": "FoxHole",
@@ -727,7 +736,8 @@
       "treeChops": 33,
       "mineSwings": 41,
       "fishCasts": 374,
-      "questContributions": 262
+      "questContributions": 262,
+      "goldEarned": 743.5665
     },
     {
       "name": "𓆩RHR𓆪ꪾ",
@@ -790,7 +800,8 @@
       "treeChops": 114,
       "mineSwings": 34,
       "fishCasts": 19,
-      "questContributions": 80
+      "questContributions": 80,
+      "goldEarned": 865.043
     },
     {
       "name": "Cmokyc",
@@ -860,7 +871,8 @@
       "treeChops": 75,
       "mineSwings": 28,
       "fishCasts": 1859,
-      "questContributions": 36
+      "questContributions": 36,
+      "goldEarned": 263.8642
     },
     {
       "name": "NJBULLY1",
@@ -946,7 +958,8 @@
       "treeChops": 397,
       "mineSwings": 104,
       "fishCasts": 393,
-      "questContributions": 227
+      "questContributions": 227,
+      "goldEarned": 90.1755
     },
     {
       "name": "Cryptodonkz",
@@ -1022,7 +1035,8 @@
       "treeChops": 214,
       "mineSwings": 86,
       "fishCasts": 496,
-      "questContributions": 113
+      "questContributions": 113,
+      "goldEarned": 50.8213
     },
     {
       "name": "Jamie",
@@ -1094,7 +1108,8 @@
       "treeChops": 18,
       "mineSwings": 4,
       "fishCasts": 62,
-      "questContributions": 27
+      "questContributions": 27,
+      "goldEarned": 100.3194
     },
     {
       "name": "Zymeth",
@@ -1153,7 +1168,8 @@
       "treeChops": 35,
       "mineSwings": 17,
       "fishCasts": 0,
-      "questContributions": 95
+      "questContributions": 95,
+      "goldEarned": 94.0299
     },
     {
       "name": "Nickoloy",
@@ -1201,7 +1217,8 @@
       "treeChops": 4,
       "mineSwings": 5,
       "fishCasts": 0,
-      "questContributions": 22
+      "questContributions": 22,
+      "goldEarned": 99.4339
     },
     {
       "name": "Anikka",
@@ -1228,7 +1245,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 19
+      "questContributions": 19,
+      "goldEarned": 365.4343
     },
     {
       "name": "jeeyan",
@@ -1278,7 +1296,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 52
+      "questContributions": 52,
+      "goldEarned": 236.5361
     },
     {
       "name": "BzrB",
@@ -1336,7 +1355,8 @@
       "treeChops": 34,
       "mineSwings": 1,
       "fishCasts": 0,
-      "questContributions": 48
+      "questContributions": 48,
+      "goldEarned": 160.3253
     },
     {
       "name": "Zocram",
@@ -1384,7 +1404,8 @@
       "treeChops": 8,
       "mineSwings": 0,
       "fishCasts": 19,
-      "questContributions": 16
+      "questContributions": 16,
+      "goldEarned": 68.3881
     },
     {
       "name": "Amit",
@@ -1442,7 +1463,8 @@
       "treeChops": 0,
       "mineSwings": 4,
       "fishCasts": 0,
-      "questContributions": 48
+      "questContributions": 48,
+      "goldEarned": 138.9657
     },
     {
       "name": "JMK",
@@ -1477,7 +1499,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 38
+      "questContributions": 38,
+      "goldEarned": 158.0209
     },
     {
       "name": "StarTiger244",
@@ -1506,7 +1529,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 53
+      "questContributions": 53,
+      "goldEarned": 68.9108
     },
     {
       "name": "Tampvan",
@@ -1542,7 +1566,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 36
+      "questContributions": 36,
+      "goldEarned": 148.0685
     },
     {
       "name": "SilverAngel75",
@@ -1570,7 +1595,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 50
+      "questContributions": 50,
+      "goldEarned": 63.4356
     },
     {
       "name": "Pardzy",
@@ -1627,7 +1653,8 @@
       "treeChops": 5,
       "mineSwings": 2,
       "fishCasts": 89,
-      "questContributions": 65
+      "questContributions": 65,
+      "goldEarned": 114.9088
     },
     {
       "name": "CosmicRunner445",
@@ -1656,7 +1683,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 55
+      "questContributions": 55,
+      "goldEarned": 64.2752
     },
     {
       "name": "Kin8",
@@ -1706,7 +1734,8 @@
       "treeChops": 33,
       "mineSwings": 12,
       "fishCasts": 0,
-      "questContributions": 45
+      "questContributions": 45,
+      "goldEarned": 470.1823
     },
     {
       "name": "SHIZ",
@@ -1746,7 +1775,8 @@
       "treeChops": 2,
       "mineSwings": 1,
       "fishCasts": 20,
-      "questContributions": 72
+      "questContributions": 72,
+      "goldEarned": 56.8102
     },
     {
       "name": "Noobfarmer",
@@ -1776,7 +1806,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 46
+      "questContributions": 46,
+      "goldEarned": 163.2402
     },
     {
       "name": "Alorid 🇹🇳",
@@ -1836,7 +1867,8 @@
       "treeChops": 117,
       "mineSwings": 49,
       "fishCasts": 15,
-      "questContributions": 70
+      "questContributions": 70,
+      "goldEarned": 129.0733
     },
     {
       "name": "Gnchkn",
@@ -1874,7 +1906,8 @@
       "treeChops": 36,
       "mineSwings": 7,
       "fishCasts": 0,
-      "questContributions": 0
+      "questContributions": 0,
+      "goldEarned": 0
     },
     {
       "name": "Dravyn",
@@ -1911,7 +1944,8 @@
       "treeChops": 34,
       "mineSwings": 31,
       "fishCasts": 0,
-      "questContributions": 29
+      "questContributions": 29,
+      "goldEarned": 121.0617
     },
     {
       "name": "anyaP",
@@ -1946,7 +1980,8 @@
       "treeChops": 6,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 12
+      "questContributions": 12,
+      "goldEarned": 12.4032
     },
     {
       "name": "Kirk",
@@ -1982,7 +2017,8 @@
       "treeChops": 15,
       "mineSwings": 7,
       "fishCasts": 0,
-      "questContributions": 18
+      "questContributions": 18,
+      "goldEarned": 55.9959
     },
     {
       "name": "Jonatan",
@@ -2023,7 +2059,8 @@
       "treeChops": 14,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 43
+      "questContributions": 43,
+      "goldEarned": 67.1758
     },
     {
       "name": "MauMau",
@@ -2055,7 +2092,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 15
+      "questContributions": 15,
+      "goldEarned": 394.1629
     },
     {
       "name": "wassario",
@@ -2083,7 +2121,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 15
+      "questContributions": 15,
+      "goldEarned": 45.9077
     },
     {
       "name": "Gnorts",
@@ -2141,7 +2180,8 @@
       "treeChops": 25,
       "mineSwings": 7,
       "fishCasts": 20,
-      "questContributions": 33
+      "questContributions": 33,
+      "goldEarned": 164.8053
     },
     {
       "name": "Tescey",
@@ -2188,7 +2228,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 47,
-      "questContributions": 35
+      "questContributions": 35,
+      "goldEarned": 33.2864
     },
     {
       "name": "sdsergio",
@@ -2237,7 +2278,8 @@
       "treeChops": 11,
       "mineSwings": 3,
       "fishCasts": 15,
-      "questContributions": 74
+      "questContributions": 74,
+      "goldEarned": 75.0623
     },
     {
       "name": "Zoe",
@@ -2270,7 +2312,8 @@
       "treeChops": 12,
       "mineSwings": 5,
       "fishCasts": 0,
-      "questContributions": 6
+      "questContributions": 6,
+      "goldEarned": 18.7152
     },
     {
       "name": "Gutopia",
@@ -2293,7 +2336,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 0
+      "questContributions": 0,
+      "goldEarned": 36.9454
     },
     {
       "name": "SleepyDude2007",
@@ -2316,7 +2360,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 18
+      "questContributions": 18,
+      "goldEarned": 13.1548
     },
     {
       "name": "Acernero",
@@ -2354,7 +2399,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 64,
-      "questContributions": 10
+      "questContributions": 10,
+      "goldEarned": 44.8824
     },
     {
       "name": "RyanScott28",
@@ -2377,7 +2423,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 14
+      "questContributions": 14,
+      "goldEarned": 9.2564
     },
     {
       "name": "N1ck473",
@@ -2400,7 +2447,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 11
+      "questContributions": 11,
+      "goldEarned": 16.4152
     },
     {
       "name": "Strix",
@@ -2440,7 +2488,8 @@
       "treeChops": 36,
       "mineSwings": 12,
       "fishCasts": 0,
-      "questContributions": 31
+      "questContributions": 31,
+      "goldEarned": 88.1394
     },
     {
       "name": "EvanLewis33",
@@ -2464,7 +2513,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 21
+      "questContributions": 21,
+      "goldEarned": 16.3464
     },
     {
       "name": "NoName",
@@ -2501,7 +2551,8 @@
       "treeChops": 8,
       "mineSwings": 0,
       "fishCasts": 29,
-      "questContributions": 10
+      "questContributions": 10,
+      "goldEarned": 24.1415
     },
     {
       "name": "theRealMatt",
@@ -2527,7 +2578,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 25
+      "questContributions": 25,
+      "goldEarned": 21.7773
     },
     {
       "name": "Mauro11",
@@ -2560,7 +2612,8 @@
       "treeChops": 3,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 11
+      "questContributions": 11,
+      "goldEarned": 7.6041
     },
     {
       "name": "nick.martin",
@@ -2583,7 +2636,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 9
+      "questContributions": 9,
+      "goldEarned": 7.4336
     },
     {
       "name": "wewew73",
@@ -2626,7 +2680,8 @@
       "treeChops": 60,
       "mineSwings": 18,
       "fishCasts": 24,
-      "questContributions": 11
+      "questContributions": 11,
+      "goldEarned": 3.2825
     },
     {
       "name": "5l33pyG4mer",
@@ -2650,7 +2705,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 15
+      "questContributions": 15,
+      "goldEarned": 8.0377
     },
     {
       "name": "GoldenDragonfly",
@@ -2677,7 +2733,8 @@
       "treeChops": 0,
       "mineSwings": 0,
       "fishCasts": 0,
-      "questContributions": 15
+      "questContributions": 15,
+      "goldEarned": 50.9067
     }
   ]
 }
