@@ -23,6 +23,18 @@ type Player = {
   guildStatus: "accepted" | "kicked" | null;
 };
 
+// ── Fishing Event Goals ────────────────────────────────────────────────────────
+const FISHING_EVENT: { fish: string; target: number; color: string }[] = [
+  { fish: "Yellow Bluegill",  target: 250, color: "#f9c74f" },
+  { fish: "Blue Bluegill",    target: 250, color: "#4fc3f7" },
+  { fish: "Orange Bluegill",  target: 250, color: "#ff8c42" },
+  { fish: "Crucian Carp",     target: 30,  color: "#80cfa9" },
+  { fish: "Black Crappie",    target: 25,  color: "#90a4ae" },
+  { fish: "Red Chubfish",     target: 25,  color: "#ef5350" },
+  { fish: "Yellow Chubfish",  target: 25,  color: "#ffd54f" },
+  { fish: "Grey Chubfish",    target: 25,  color: "#b0bec5" },
+];
+
 // ── Helpers ────────────────────────────────────────────────────────────────────
 function sorted(map: Record<string, number>): [string, number][] {
   return Object.entries(map).sort((a, b) => b[1] - a[1]);
@@ -333,6 +345,57 @@ export default function GuildEventsPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Fishing Event */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#ffd700", marginBottom: "6px", marginTop: "10px",
+        }}>
+          🎣 Fishing Event — Personal Goals
+        </h2>
+        <p style={{ fontSize: "0.7rem", color: "#c5c6c7", marginBottom: "18px", letterSpacing: "1px" }}>
+          Each member must catch the following amounts to complete the event and earn their reward.
+        </p>
+        <div style={{
+          background: "rgba(0,0,0,0.5)", border: "1px solid #ffd70055",
+          borderRadius: "12px", padding: "20px 24px", marginBottom: "40px",
+        }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "16px" }}>
+            {FISHING_EVENT.map(({ fish, target, color }) => {
+              const activeFishers = players.filter(p => Object.keys(p.fished).length > 0);
+              const currentAvg = activeFishers.length > 0
+                ? activeFishers.reduce((acc, p) => {
+                    const fishKey = Object.keys(p.fished).find(k => k.toLowerCase() === fish.toLowerCase());
+                    return acc + (fishKey ? p.fished[fishKey] : 0);
+                  }, 0) / activeFishers.length
+                : 0;
+              const pct = Math.min(100, Math.round((currentAvg / target) * 100));
+              return (
+                <div key={fish} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                    <span style={{ color, fontWeight: "bold", fontSize: "0.78rem" }}>{fish}</span>
+                    <span style={{ color: "#ffd700", fontSize: "0.72rem", fontWeight: "bold" }}>
+                      Target: {fmt(target)}
+                    </span>
+                  </div>
+                  <div style={{
+                    height: "8px", background: "#ffffff11", borderRadius: "4px", overflow: "hidden",
+                  }}>
+                    <div style={{
+                      height: "100%", width: `${pct}%`,
+                      background: `linear-gradient(90deg, ${color}88, ${color})`,
+                      borderRadius: "4px", transition: "width 0.3s",
+                    }} />
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.62rem", color: "#c5c6c7" }}>
+                    <span>Current avg / player: <strong style={{ color }}>{currentAvg.toFixed(1)}</strong></span>
+                    <span style={{ color: pct >= 100 ? "#4ade80" : "#c5c6c7" }}>{pct}%</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
