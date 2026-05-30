@@ -15,6 +15,7 @@ type Player = {
   unplanted: Record<string, number>;
   treeChops: number;
   mineSwings: number;
+  fishCasts: number;
   joinDate: string | null;
   guildStatus: "accepted" | "kicked" | null;
 };
@@ -482,6 +483,38 @@ export default function GuildEventsPage() {
                     {fmt((p as Player & { mineSwings: number }).mineSwings)} swings
                   </td>
                   <td style={{ padding: "6px 8px", textAlign: "right", color: "#b44dff", fontWeight: "bold" }}>{fmt(sum(p.mined))} minerals</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Fishing Leaderboard */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#45a29e", marginBottom: "18px", marginTop: "40px",
+        }}>
+          🎣 Fishing — Most to Least
+        </h2>
+        <div style={{
+          background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
+          borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
+        }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
+            <tbody>
+              {[...players].filter(p => p.fishCasts > 0).sort((a, b) => b.fishCasts - a.fishCasts).map((p, i) => (
+                <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
+                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
+                  <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
+                  <td style={{ padding: "6px 8px", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                    {sorted(p.fished).map(([k, v]) => `${k}: ${v}`).join(" · ")}
+                  </td>
+                  <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                    {fmt(p.fishCasts)} casts
+                  </td>
+                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#00838f", fontWeight: "bold" }}>
+                    {fmt(sum(p.fished))} fish
+                  </td>
                 </tr>
               ))}
             </tbody>
