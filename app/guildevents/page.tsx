@@ -448,10 +448,16 @@ export default function GuildEventsPage() {
               $2 reward
             </div>
           </div>
-          <div style={{ fontSize: "0.75rem", color: "#c5c6c7", lineHeight: "1.8" }}>
-            <strong style={{ color: "#ffd700" }}>Guild Goal</strong> — Complete every daily quest, every day of the event.
+          <div style={{ fontSize: "0.75rem", color: "#c5c6c7", lineHeight: "1.9" }}>
+            <strong style={{ color: "#ffd700" }}>Guild Goal</strong> — As a guild, complete every daily quest for the full duration of the event.
             <br />
-            Members are encouraged to spend gold to buy items if needed to keep quests topped off.
+            Hand in what you can. If short, spend your gold to buy items — every contribution counts.
+            <br />
+            <strong style={{ color: "#66fcf1" }}>Counts:</strong> Wood · Stone · Iron · Eggs · Cakes
+            {"  "}
+            <strong style={{ color: "#888" }}>Excluded:</strong> <span style={{ color: "#888" }}>Gold &amp; Silver ingots — keep those for tools.</span>
+            <br />
+            <span style={{ color: "#4ade80" }}>If the guild succeeds, everyone who participated earns $2.</span>
           </div>
           <div style={{ marginTop: "12px", height: "8px", background: "#ffffff11", borderRadius: "4px" }} />
           <div style={{ fontSize: "0.62rem", color: "#c5c6c7", marginTop: "6px" }}>Not started</div>
