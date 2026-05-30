@@ -498,13 +498,18 @@ export default function GuildEventsPage() {
             <tbody>
               {[...players].filter(p => sum(p.quests) > 0).sort((a, b) => sum(b.quests) - sum(a.quests)).map((p, i) => (
                 <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
-                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
-                  <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
-                  <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
-                    {fmt(p.questContributions)} contributions
+                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px", verticalAlign: "top" }}>#{i + 1}</td>
+                  <td style={{ padding: "6px 8px", color: "#66fcf1", verticalAlign: "top", whiteSpace: "nowrap" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
+                  <td style={{ padding: "6px 8px", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                    {sorted(p.quests).map(([k, v], idx) => (
+                      <span key={k}>
+                        {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
+                        <span style={{ color: "#c5c6c7" }}>{k}: {v}</span>
+                      </span>
+                    ))}
                   </td>
-                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold" }}>
-                    {fmt(sum(p.quests))} items
+                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold", verticalAlign: "top", whiteSpace: "nowrap" }}>
+                    {fmt(p.questContributions)} · {fmt(sum(p.quests))} items
                   </td>
                 </tr>
               ))}
