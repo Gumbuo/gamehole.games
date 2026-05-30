@@ -18,7 +18,7 @@
     };
 
     const isActionLine = function(text) {
-      return /harvested|planted|cut a tree|mined|fished|contributed|unplanted|accepted|kicked|gold as member share/.test(text);
+      return /harvested|planted|cut a tree|mined|fished|contributed|unplanted|accepted|kicked|gold as member share|transferred \d+ gold to the guild|gold was added to the guild vault/.test(text);
     };
 
     var panel = document.createElement('div');
