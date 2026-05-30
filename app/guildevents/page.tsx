@@ -363,39 +363,18 @@ export default function GuildEventsPage() {
           borderRadius: "12px", padding: "20px 24px", marginBottom: "40px",
         }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "16px" }}>
-            {FISHING_EVENT.map(({ fish, target, color }) => {
-              const activeFishers = players.filter(p => Object.keys(p.fished).length > 0);
-              const currentAvg = activeFishers.length > 0
-                ? activeFishers.reduce((acc, p) => {
-                    const fishKey = Object.keys(p.fished).find(k => k.toLowerCase() === fish.toLowerCase());
-                    return acc + (fishKey ? p.fished[fishKey] : 0);
-                  }, 0) / activeFishers.length
-                : 0;
-              const pct = Math.min(100, Math.round((currentAvg / target) * 100));
-              return (
-                <div key={fish} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                    <span style={{ color, fontWeight: "bold", fontSize: "0.78rem" }}>{fish}</span>
-                    <span style={{ color: "#ffd700", fontSize: "0.72rem", fontWeight: "bold" }}>
-                      Target: {fmt(target)}
-                    </span>
-                  </div>
-                  <div style={{
-                    height: "8px", background: "#ffffff11", borderRadius: "4px", overflow: "hidden",
-                  }}>
-                    <div style={{
-                      height: "100%", width: `${pct}%`,
-                      background: `linear-gradient(90deg, ${color}88, ${color})`,
-                      borderRadius: "4px", transition: "width 0.3s",
-                    }} />
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.62rem", color: "#c5c6c7" }}>
-                    <span>Current avg / player: <strong style={{ color }}>{currentAvg.toFixed(1)}</strong></span>
-                    <span style={{ color: pct >= 100 ? "#4ade80" : "#c5c6c7" }}>{pct}%</span>
-                  </div>
+            {FISHING_EVENT.map(({ fish, target, color }) => (
+              <div key={fish} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                  <span style={{ color, fontWeight: "bold", fontSize: "0.78rem" }}>{fish}</span>
+                  <span style={{ color: "#ffd700", fontSize: "0.72rem", fontWeight: "bold" }}>
+                    Target: {fmt(target)}
+                  </span>
                 </div>
-              );
-            })}
+                <div style={{ height: "8px", background: "#ffffff11", borderRadius: "4px" }} />
+                <div style={{ fontSize: "0.62rem", color: "#c5c6c7" }}>Not started</div>
+              </div>
+            ))}
           </div>
         </div>
 
