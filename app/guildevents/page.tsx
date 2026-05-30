@@ -24,7 +24,8 @@ type Player = {
 };
 
 // ── Event Goals ────────────────────────────────────────────────────────────────
-const WOOD_EVENT_TARGET = 400;
+const WOOD_EVENT_TARGET = 650;
+const MINE_EVENT_TARGET = 400;
 
 const FISHING_EVENT: { fish: string; target: number; color: string }[] = [
   { fish: "Yellow Bluegill",  target: 250, color: "#f9c74f" },
@@ -379,6 +380,27 @@ export default function GuildEventsPage() {
             </div>
             <div style={{ height: "8px", background: "#ffffff11", borderRadius: "4px" }} />
             <div style={{ fontSize: "0.62rem", color: "#c5c6c7" }}>Not started</div>
+          </div>
+        </div>
+
+        {/* Mining goal */}
+        <div style={{
+          background: "rgba(0,0,0,0.5)", border: "1px solid #b44dff55",
+          borderRadius: "12px", padding: "18px 24px", marginBottom: "16px",
+        }}>
+          <div style={{
+            fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase",
+            color: "#b44dff", fontWeight: "bold", marginBottom: "14px",
+          }}>
+            ⛏️ Mining
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+              <span style={{ color: "#b44dff", fontWeight: "bold", fontSize: "0.78rem" }}>Rocks Mined</span>
+              <span style={{ color: "#ffd700", fontSize: "0.72rem", fontWeight: "bold" }}>Target: {fmt(MINE_EVENT_TARGET)}</span>
+            </div>
+            <div style={{ height: "8px", background: "#ffffff11", borderRadius: "4px" }} />
+            <div style={{ fontSize: "0.62rem", color: "#c5c6c7" }}>Not started — all mineral drops will be recorded</div>
           </div>
         </div>
 
