@@ -14,6 +14,7 @@ type Player = {
   quests: Record<string, number>;
   unplanted: Record<string, number>;
   treeChops: number;
+  mineSwings: number;
   joinDate: string | null;
   guildStatus: "accepted" | "kicked" | null;
 };
@@ -476,6 +477,9 @@ export default function GuildEventsPage() {
                   <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
                   <td style={{ padding: "6px 8px", color: "#c5c6c7", fontSize: "0.65rem" }}>
                     {sorted(p.mined).map(([k, v]) => `${k}: ${v}`).join(" · ")}
+                  </td>
+                  <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                    {fmt((p as Player & { mineSwings: number }).mineSwings)} swings
                   </td>
                   <td style={{ padding: "6px 8px", textAlign: "right", color: "#b44dff", fontWeight: "bold" }}>{fmt(sum(p.mined))} minerals</td>
                 </tr>

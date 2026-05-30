@@ -4,14 +4,14 @@
     "totalHarvested": 93778,
     "totalPlanted": 42959,
     "totalWood": 4686,
-    "totalMined": 338,
+    "totalMined": 2029,
     "totalFish": 2174,
     "totalQuest": 15249
   },
   "players": [
     {
       "name": "daizue",
-      "score": 22381,
+      "score": 22678,
       "planted": {
         "Yellow flower": 1000,
         "Tomato": 1333,
@@ -40,10 +40,11 @@
       "trees": 605,
       "treeTiles": {},
       "mined": {
-        "Stone": 35,
-        "Clay": 6,
-        "Iron": 4,
-        "Silver": 1
+        "Clay": 59,
+        "Iron": 40,
+        "Stone": 222,
+        "Silver": 21,
+        "Pure gold ore": 1
       },
       "fished": {},
       "quests": {
@@ -55,11 +56,12 @@
       "unplanted": {},
       "joinDate": "2026-05-12",
       "guildStatus": "accepted",
-      "treeChops": 350
+      "treeChops": 350,
+      "mineSwings": 170
     },
     {
       "name": "Mrfaf",
-      "score": 21427,
+      "score": 21484,
       "planted": {
         "grapes": 1123,
         "Cotton": 206,
@@ -91,8 +93,11 @@
       "trees": 104,
       "treeTiles": {},
       "mined": {
-        "Iron": 2,
-        "Stone": 12
+        "Stone": 47,
+        "Emerald": 3,
+        "Clay": 14,
+        "Silver": 2,
+        "Iron": 5
       },
       "fished": {
         "Orange bluegill": 2,
@@ -112,11 +117,12 @@
       },
       "joinDate": "2026-03-31",
       "guildStatus": "accepted",
-      "treeChops": 42
+      "treeChops": 42,
+      "mineSwings": 27
     },
     {
       "name": "lormo321",
-      "score": 17140,
+      "score": 17300,
       "planted": {
         "Red flower": 198,
         "Blue flower": 220,
@@ -146,8 +152,11 @@
       "trees": 309,
       "treeTiles": {},
       "mined": {
-        "Stone": 2,
-        "Clay": 3
+        "Stone": 97,
+        "Iron": 27,
+        "Clay": 32,
+        "Silver": 8,
+        "Pure gold ore": 1
       },
       "fished": {},
       "quests": {
@@ -156,11 +165,12 @@
       "unplanted": {},
       "joinDate": "2026-05-22",
       "guildStatus": "accepted",
-      "treeChops": 204
+      "treeChops": 204,
+      "mineSwings": 81
     },
     {
       "name": "Fawm",
-      "score": 13086,
+      "score": 13145,
       "planted": {
         "Cotton": 1231,
         "Tomato": 415,
@@ -189,9 +199,10 @@
       "trees": 169,
       "treeTiles": {},
       "mined": {
-        "Iron": 3,
-        "Stone": 9,
-        "Clay": 5
+        "Clay": 20,
+        "Stone": 34,
+        "Iron": 21,
+        "Pure gold ore": 1
       },
       "fished": {
         "Crucian carp": 2,
@@ -207,11 +218,12 @@
       "unplanted": {},
       "joinDate": "2026-05-12",
       "guildStatus": "accepted",
-      "treeChops": 70
+      "treeChops": 70,
+      "mineSwings": 36
     },
     {
       "name": "Fate",
-      "score": 12406,
+      "score": 12495,
       "planted": {
         "Cotton": 713,
         "grapes": 471,
@@ -241,9 +253,11 @@
       "trees": 376,
       "treeTiles": {},
       "mined": {
-        "Stone": 5,
-        "Iron": 4,
-        "Clay": 1
+        "Clay": 20,
+        "Iron": 25,
+        "Stone": 45,
+        "Silver": 6,
+        "Pure gold ore": 3
       },
       "fished": {
         "Yellow bluegill": 32,
@@ -261,11 +275,12 @@
       "unplanted": {},
       "joinDate": "2026-03-31",
       "guildStatus": "accepted",
-      "treeChops": 149
+      "treeChops": 149,
+      "mineSwings": 40
     },
     {
       "name": "Alstar",
-      "score": 10833,
+      "score": 10845,
       "planted": {
         "Potato": 128,
         "Fern": 96,
@@ -293,7 +308,11 @@
       },
       "trees": 25,
       "treeTiles": {},
-      "mined": {},
+      "mined": {
+        "Stone": 7,
+        "Clay": 2,
+        "Iron": 3
+      },
       "fished": {},
       "quests": {
         "Blue bluegill": 100,
@@ -305,11 +324,12 @@
       "unplanted": {},
       "joinDate": "2026-05-16",
       "guildStatus": "accepted",
-      "treeChops": 25
+      "treeChops": 25,
+      "mineSwings": 7
     },
     {
       "name": "KngAlex",
-      "score": 10038,
+      "score": 10198,
       "planted": {
         "Yellow flower": 346,
         "Fern": 315,
@@ -338,11 +358,11 @@
       "trees": 483,
       "treeTiles": {},
       "mined": {
-        "Iron": 14,
-        "Stone": 33,
-        "Pure gold ore": 3,
-        "Clay": 8,
-        "Amethyst": 3
+        "Silver": 16,
+        "Stone": 106,
+        "Iron": 40,
+        "Clay": 55,
+        "Amethyst": 4
       },
       "fished": {
         "Yellow bluegill": 10,
@@ -364,11 +384,12 @@
       },
       "joinDate": "2026-05-17",
       "guildStatus": "accepted",
-      "treeChops": 197
+      "treeChops": 197,
+      "mineSwings": 88
     },
     {
       "name": "KA-BACKYARD",
-      "score": 7092,
+      "score": 7222,
       "planted": {
         "Carrot": 64,
         "Cotton": 610,
@@ -390,8 +411,12 @@
       "trees": 361,
       "treeTiles": {},
       "mined": {
-        "Silver": 2,
-        "Stone": 8
+        "Amethyst": 3,
+        "Clay": 18,
+        "Iron": 23,
+        "Stone": 87,
+        "Silver": 6,
+        "Pure gold ore": 3
       },
       "fished": {
         "Blue bluegill": 106,
@@ -409,11 +434,12 @@
       "unplanted": {},
       "joinDate": "2026-05-21",
       "guildStatus": "accepted",
-      "treeChops": 144
+      "treeChops": 144,
+      "mineSwings": 58
     },
     {
       "name": "NJBULLY1",
-      "score": 4053,
+      "score": 4271,
       "planted": {
         "grapes": 37,
         "Yellow flower": 102,
@@ -443,9 +469,13 @@
       "trees": 628,
       "treeTiles": {},
       "mined": {
-        "Clay": 1,
-        "Iron": 4,
-        "Stone": 3
+        "Clay": 41,
+        "Iron": 35,
+        "Stone": 126,
+        "Silver": 13,
+        "Amethyst": 6,
+        "Ruby": 2,
+        "Pure gold ore": 3
       },
       "fished": {},
       "quests": {
@@ -460,11 +490,12 @@
       },
       "joinDate": "2026-05-17",
       "guildStatus": "accepted",
-      "treeChops": 397
+      "treeChops": 397,
+      "mineSwings": 104
     },
     {
       "name": "FoxHole",
-      "score": 3998,
+      "score": 4093,
       "planted": {
         "Blue flower": 182,
         "pumpkin": 469,
@@ -488,7 +519,11 @@
       "trees": 78,
       "treeTiles": {},
       "mined": {
-        "Stone": 8
+        "Stone": 66,
+        "Clay": 9,
+        "Pure gold ore": 2,
+        "Iron": 14,
+        "Silver": 12
       },
       "fished": {
         "Orange bluegill": 50,
@@ -510,11 +545,12 @@
       },
       "joinDate": "2026-05-16",
       "guildStatus": "accepted",
-      "treeChops": 33
+      "treeChops": 33,
+      "mineSwings": 41
     },
     {
       "name": "Cryptodonkz",
-      "score": 3774,
+      "score": 3864,
       "planted": {
         "Yellow flower": 275,
         "Carrot": 32,
@@ -538,10 +574,10 @@
       "trees": 271,
       "treeTiles": {},
       "mined": {
-        "Stone": 15,
-        "Clay": 6,
-        "Iron": 4,
-        "Silver": 1
+        "Stone": 60,
+        "Clay": 21,
+        "Iron": 29,
+        "Silver": 6
       },
       "fished": {
         "Catfish": 2,
@@ -560,11 +596,12 @@
       },
       "joinDate": "2026-05-20",
       "guildStatus": "accepted",
-      "treeChops": 214
+      "treeChops": 214,
+      "mineSwings": 86
     },
     {
       "name": "Cmokyc",
-      "score": 3562,
+      "score": 3615,
       "planted": {
         "Red flower": 929,
         "Cotton": 9
@@ -582,7 +619,10 @@
       "trees": 179,
       "treeTiles": {},
       "mined": {
-        "Stone": 17
+        "Iron": 16,
+        "Stone": 36,
+        "Clay": 15,
+        "Silver": 3
       },
       "fished": {
         "Tadpole": 46,
@@ -606,11 +646,12 @@
       "unplanted": {},
       "joinDate": "2026-05-18",
       "guildStatus": "accepted",
-      "treeChops": 75
+      "treeChops": 75,
+      "mineSwings": 28
     },
     {
       "name": "Zymeth",
-      "score": 3367,
+      "score": 3403,
       "planted": {
         "Cotton": 299,
         "wheat": 302,
@@ -637,7 +678,11 @@
       "trees": 91,
       "treeTiles": {},
       "mined": {
-        "Stone": 3
+        "Stone": 18,
+        "Iron": 8,
+        "Pure gold ore": 3,
+        "Silver": 5,
+        "Clay": 5
       },
       "fished": {},
       "quests": {
@@ -647,11 +692,12 @@
       "unplanted": {},
       "joinDate": "2026-05-09",
       "guildStatus": "accepted",
-      "treeChops": 35
+      "treeChops": 35,
+      "mineSwings": 17
     },
     {
       "name": "Jamie",
-      "score": 3305,
+      "score": 3310,
       "planted": {
         "Carrot": 1,
         "Red flower": 163,
@@ -677,17 +723,21 @@
       },
       "trees": 20,
       "treeTiles": {},
-      "mined": {},
+      "mined": {
+        "Stone": 4,
+        "Clay": 1
+      },
       "fished": {},
       "quests": {},
       "unplanted": {},
       "joinDate": "2026-05-16",
       "guildStatus": "accepted",
-      "treeChops": 18
+      "treeChops": 18,
+      "mineSwings": 4
     },
     {
       "name": "Nickoloy",
-      "score": 2281,
+      "score": 2256,
       "planted": {
         "Fern": 96,
         "Cucumber": 32,
@@ -705,9 +755,9 @@
       "trees": 9,
       "treeTiles": {},
       "mined": {
-        "Stone": 16,
-        "Clay": 6,
-        "Iron": 14
+        "Iron": 3,
+        "Clay": 4,
+        "Stone": 4
       },
       "fished": {},
       "quests": {
@@ -719,7 +769,8 @@
       "unplanted": {},
       "joinDate": "2026-05-17",
       "guildStatus": "accepted",
-      "treeChops": 4
+      "treeChops": 4,
+      "mineSwings": 5
     },
     {
       "name": "jeeyan",
@@ -757,7 +808,8 @@
       "unplanted": {},
       "joinDate": "2026-04-30",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "Pardzy",
@@ -777,8 +829,7 @@
       "trees": 5,
       "treeTiles": {},
       "mined": {
-        "Clay": 1,
-        "Stone": 1
+        "Stone": 2
       },
       "fished": {
         "Blue bluegill": 56,
@@ -798,11 +849,12 @@
       "unplanted": {},
       "joinDate": "2026-05-10",
       "guildStatus": "accepted",
-      "treeChops": 5
+      "treeChops": 5,
+      "mineSwings": 2
     },
     {
       "name": "Gnchkn",
-      "score": 1472,
+      "score": 1479,
       "planted": {
         "pumpkin": 51,
         "grapes": 38,
@@ -823,17 +875,22 @@
       },
       "trees": 36,
       "treeTiles": {},
-      "mined": {},
+      "mined": {
+        "Iron": 1,
+        "Stone": 2,
+        "Clay": 4
+      },
       "fished": {},
       "quests": {},
       "unplanted": {},
       "joinDate": "2026-03-31",
       "guildStatus": "accepted",
-      "treeChops": 36
+      "treeChops": 36,
+      "mineSwings": 7
     },
     {
       "name": "Amit",
-      "score": 1355,
+      "score": 1361,
       "planted": {
         "wheat": 76,
         "grapes": 1,
@@ -854,7 +911,8 @@
       "trees": 0,
       "treeTiles": {},
       "mined": {
-        "Stone": 1
+        "Stone": 5,
+        "Iron": 2
       },
       "fished": {},
       "quests": {
@@ -867,7 +925,8 @@
       "unplanted": {},
       "joinDate": "2026-05-13",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 4
     },
     {
       "name": "anyaP",
@@ -892,11 +951,12 @@
       "unplanted": {},
       "joinDate": "2026-05-28",
       "guildStatus": "accepted",
-      "treeChops": 6
+      "treeChops": 6,
+      "mineSwings": 0
     },
     {
       "name": "𓆩RHR𓆪ꪾ",
-      "score": 1127,
+      "score": 1203,
       "planted": {
         "Tomato": 83,
         "Red flower": 84
@@ -910,9 +970,9 @@
       "trees": 284,
       "treeTiles": {},
       "mined": {
-        "Stone": 2,
-        "Clay": 5,
-        "Iron": 3
+        "Stone": 68,
+        "Clay": 10,
+        "Iron": 8
       },
       "fished": {},
       "quests": {
@@ -924,7 +984,8 @@
       "unplanted": {},
       "joinDate": "2026-03-31",
       "guildStatus": "accepted",
-      "treeChops": 114
+      "treeChops": 114,
+      "mineSwings": 34
     },
     {
       "name": "BzrB",
@@ -962,11 +1023,12 @@
       "unplanted": {},
       "joinDate": "2026-05-16",
       "guildStatus": "accepted",
-      "treeChops": 34
+      "treeChops": 34,
+      "mineSwings": 1
     },
     {
       "name": "Zocram",
-      "score": 942,
+      "score": 941,
       "planted": {
         "pumpkin": 22,
         "Cotton": 58,
@@ -983,9 +1045,7 @@
       },
       "trees": 20,
       "treeTiles": {},
-      "mined": {
-        "Silver": 1
-      },
+      "mined": {},
       "fished": {},
       "quests": {
         "Blue bluegill": 71,
@@ -994,7 +1054,8 @@
       "unplanted": {},
       "joinDate": "2026-05-16",
       "guildStatus": "accepted",
-      "treeChops": 8
+      "treeChops": 8,
+      "mineSwings": 0
     },
     {
       "name": "Anikka",
@@ -1011,11 +1072,12 @@
       "unplanted": {},
       "joinDate": "2026-05-18",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "Zoe",
-      "score": 746,
+      "score": 758,
       "planted": {
         "Potato": 179
       },
@@ -1025,7 +1087,11 @@
       },
       "trees": 29,
       "treeTiles": {},
-      "mined": {},
+      "mined": {
+        "Stone": 7,
+        "Iron": 3,
+        "Clay": 2
+      },
       "fished": {},
       "quests": {
         "Yellow bluegill": 21,
@@ -1034,7 +1100,8 @@
       "unplanted": {},
       "joinDate": "2026-05-27",
       "guildStatus": "accepted",
-      "treeChops": 12
+      "treeChops": 12,
+      "mineSwings": 5
     },
     {
       "name": "JMK",
@@ -1054,7 +1121,42 @@
       "unplanted": {},
       "joinDate": "2026-05-17",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
+    },
+    {
+      "name": "Alorid 🇹🇳",
+      "score": 613,
+      "planted": {},
+      "harvested": {
+        "Yellow flower": 38,
+        "Cotton": 74,
+        "grapes": 112,
+        "Potato": 11,
+        "pumpkin": 54,
+        "Tomato": 30,
+        "Red flower": 52,
+        "Wheat": 25
+      },
+      "trees": 146,
+      "treeTiles": {},
+      "mined": {
+        "Silver": 2,
+        "Clay": 17,
+        "Stone": 35,
+        "Iron": 8,
+        "Pure gold ore": 1
+      },
+      "fished": {},
+      "quests": {
+        "Cotton thread green": 7,
+        "Blue bluegill": 1
+      },
+      "unplanted": {},
+      "joinDate": "2026-03-31",
+      "guildStatus": "accepted",
+      "treeChops": 117,
+      "mineSwings": 49
     },
     {
       "name": "Tescey",
@@ -1086,37 +1188,8 @@
       "unplanted": {},
       "joinDate": "2026-05-07",
       "guildStatus": "accepted",
-      "treeChops": 0
-    },
-    {
-      "name": "Alorid 🇹🇳",
-      "score": 564,
-      "planted": {},
-      "harvested": {
-        "Yellow flower": 38,
-        "Cotton": 74,
-        "grapes": 112,
-        "Potato": 11,
-        "pumpkin": 54,
-        "Tomato": 30,
-        "Red flower": 52,
-        "Wheat": 25
-      },
-      "trees": 146,
-      "treeTiles": {},
-      "mined": {
-        "Clay": 3,
-        "Stone": 11
-      },
-      "fished": {},
-      "quests": {
-        "Cotton thread green": 7,
-        "Blue bluegill": 1
-      },
-      "unplanted": {},
-      "joinDate": "2026-03-31",
-      "guildStatus": "accepted",
-      "treeChops": 117
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "Gutopia",
@@ -1136,7 +1209,8 @@
       "unplanted": {},
       "joinDate": "2026-04-30",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "Tampvan",
@@ -1156,7 +1230,8 @@
       "unplanted": {},
       "joinDate": "2026-05-17",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "SleepyDude2007",
@@ -1173,7 +1248,33 @@
       "unplanted": {},
       "joinDate": "2026-05-23",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
+    },
+    {
+      "name": "Kirk",
+      "score": 378,
+      "planted": {},
+      "harvested": {},
+      "trees": 20,
+      "treeTiles": {},
+      "mined": {
+        "Stone": 3,
+        "Iron": 1,
+        "Clay": 2,
+        "Silver": 1
+      },
+      "fished": {},
+      "quests": {
+        "Blue bluegill": 51,
+        "Yellow bluegill": 50,
+        "Cotton": 250
+      },
+      "unplanted": {},
+      "joinDate": "2026-05-16",
+      "guildStatus": "accepted",
+      "treeChops": 15,
+      "mineSwings": 7
     },
     {
       "name": "N1ck473",
@@ -1190,33 +1291,12 @@
       "unplanted": {},
       "joinDate": "2026-05-23",
       "guildStatus": "accepted",
-      "treeChops": 0
-    },
-    {
-      "name": "Kirk",
-      "score": 373,
-      "planted": {},
-      "harvested": {},
-      "trees": 20,
-      "treeTiles": {},
-      "mined": {
-        "Silver": 1,
-        "Iron": 1
-      },
-      "fished": {},
-      "quests": {
-        "Blue bluegill": 51,
-        "Yellow bluegill": 50,
-        "Cotton": 250
-      },
-      "unplanted": {},
-      "joinDate": "2026-05-16",
-      "guildStatus": "accepted",
-      "treeChops": 15
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "Gnorts",
-      "score": 367,
+      "score": 375,
       "planted": {
         "Blue flower": 29,
         "Red flower": 21,
@@ -1230,7 +1310,10 @@
       },
       "trees": 34,
       "treeTiles": {},
-      "mined": {},
+      "mined": {
+        "Stone": 7,
+        "Clay": 1
+      },
       "fished": {},
       "quests": {
         "Cotton thread green": 10,
@@ -1239,7 +1322,8 @@
       "unplanted": {},
       "joinDate": null,
       "guildStatus": null,
-      "treeChops": 25
+      "treeChops": 25,
+      "mineSwings": 7
     },
     {
       "name": "Jonatan",
@@ -1265,7 +1349,8 @@
       "unplanted": {},
       "joinDate": "2026-04-30",
       "guildStatus": "accepted",
-      "treeChops": 14
+      "treeChops": 14,
+      "mineSwings": 0
     },
     {
       "name": "Acernero",
@@ -1291,7 +1376,8 @@
       "unplanted": {},
       "joinDate": "2026-05-22",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "RyanScott28",
@@ -1308,7 +1394,8 @@
       "unplanted": {},
       "joinDate": "2026-05-27",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "SHIZ",
@@ -1334,7 +1421,8 @@
       "unplanted": {},
       "joinDate": "2026-04-30",
       "guildStatus": "accepted",
-      "treeChops": 2
+      "treeChops": 2,
+      "mineSwings": 1
     },
     {
       "name": "nick.martin",
@@ -1351,7 +1439,8 @@
       "unplanted": {},
       "joinDate": "2026-05-27",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "Noobfarmer",
@@ -1370,17 +1459,19 @@
       "unplanted": {},
       "joinDate": "2026-03-31",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "sdsergio",
-      "score": 236,
+      "score": 238,
       "planted": {},
       "harvested": {},
       "trees": 15,
       "treeTiles": {},
       "mined": {
-        "Stone": 3
+        "Stone": 2,
+        "Iron": 3
       },
       "fished": {
         "Blue bluegill": 24,
@@ -1401,17 +1492,21 @@
       "unplanted": {},
       "joinDate": "2026-05-17",
       "guildStatus": "accepted",
-      "treeChops": 11
+      "treeChops": 11,
+      "mineSwings": 3
     },
     {
       "name": "Strix",
-      "score": 202,
+      "score": 227,
       "planted": {},
       "harvested": {},
       "trees": 92,
       "treeTiles": {},
       "mined": {
-        "Stone": 5
+        "Stone": 16,
+        "Iron": 5,
+        "Clay": 7,
+        "Sapphire": 2
       },
       "fished": {},
       "quests": {
@@ -1424,7 +1519,35 @@
       "unplanted": {},
       "joinDate": "2026-03-31",
       "guildStatus": "accepted",
-      "treeChops": 36
+      "treeChops": 36,
+      "mineSwings": 12
+    },
+    {
+      "name": "Dravyn",
+      "score": 226,
+      "planted": {},
+      "harvested": {
+        "Red flower": 6,
+        "Tomato": 2
+      },
+      "trees": 86,
+      "treeTiles": {},
+      "mined": {
+        "Stone": 46,
+        "Iron": 12,
+        "Clay": 11,
+        "Silver": 1
+      },
+      "fished": {},
+      "quests": {
+        "Cotton thread green": 11,
+        "Blue bluegill": 51
+      },
+      "unplanted": {},
+      "joinDate": "2026-05-13",
+      "guildStatus": "accepted",
+      "treeChops": 34,
+      "mineSwings": 31
     },
     {
       "name": "theRealMatt",
@@ -1441,7 +1564,8 @@
       "unplanted": {},
       "joinDate": "2026-05-23",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "StarTiger244",
@@ -1458,33 +1582,8 @@
       "unplanted": {},
       "joinDate": "2026-05-15",
       "guildStatus": "accepted",
-      "treeChops": 0
-    },
-    {
-      "name": "Dravyn",
-      "score": 187,
-      "planted": {},
-      "harvested": {
-        "Red flower": 6,
-        "Tomato": 2
-      },
-      "trees": 86,
-      "treeTiles": {},
-      "mined": {
-        "Silver": 2,
-        "Stone": 16,
-        "Iron": 10,
-        "Clay": 3
-      },
-      "fished": {},
-      "quests": {
-        "Cotton thread green": 11,
-        "Blue bluegill": 51
-      },
-      "unplanted": {},
-      "joinDate": "2026-05-13",
-      "guildStatus": "accepted",
-      "treeChops": 34
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "EvanLewis33",
@@ -1501,7 +1600,8 @@
       "unplanted": {},
       "joinDate": "2026-05-23",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "SilverAngel75",
@@ -1518,7 +1618,43 @@
       "unplanted": {},
       "joinDate": "2026-05-15",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
+    },
+    {
+      "name": "wewew73",
+      "score": 166,
+      "planted": {},
+      "harvested": {
+        "grapes": 9,
+        "pumpkin. about 24 hours agoMauro11 harvested Blue flower in the tile of Mrfaf and received 1 Blue flower": 2,
+        "Yellow flower": 5,
+        "Red flower": 2,
+        "Cotton": 1,
+        "Fern": 1
+      },
+      "trees": 78,
+      "treeTiles": {},
+      "mined": {
+        "Stone": 12,
+        "Clay": 4,
+        "Iron": 4,
+        "Pure gold ore": 1
+      },
+      "fished": {
+        "Yellow bluegill": 2,
+        "Blue bluegill": 2,
+        "Orange bluegill": 8
+      },
+      "quests": {
+        "Yellow bluegill": 10,
+        "Cotton": 25
+      },
+      "unplanted": {},
+      "joinDate": "2026-05-14",
+      "guildStatus": "accepted",
+      "treeChops": 60,
+      "mineSwings": 18
     },
     {
       "name": "5l33pyG4mer",
@@ -1535,7 +1671,8 @@
       "unplanted": {},
       "joinDate": "2026-05-23",
       "guildStatus": "kicked",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "GoldenDragonfly",
@@ -1553,38 +1690,8 @@
       "unplanted": {},
       "joinDate": "2026-05-16",
       "guildStatus": "accepted",
-      "treeChops": 0
-    },
-    {
-      "name": "wewew73",
-      "score": 150,
-      "planted": {},
-      "harvested": {
-        "grapes": 9,
-        "pumpkin. about 24 hours agoMauro11 harvested Blue flower in the tile of Mrfaf and received 1 Blue flower": 2,
-        "Yellow flower": 5,
-        "Red flower": 2,
-        "Cotton": 1,
-        "Fern": 1
-      },
-      "trees": 78,
-      "treeTiles": {},
-      "mined": {
-        "Stone": 5
-      },
-      "fished": {
-        "Yellow bluegill": 2,
-        "Blue bluegill": 2,
-        "Orange bluegill": 8
-      },
-      "quests": {
-        "Yellow bluegill": 10,
-        "Cotton": 25
-      },
-      "unplanted": {},
-      "joinDate": "2026-05-14",
-      "guildStatus": "accepted",
-      "treeChops": 60
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "CosmicRunner445",
@@ -1602,7 +1709,8 @@
       "unplanted": {},
       "joinDate": "2026-05-13",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "Mauro11",
@@ -1626,11 +1734,12 @@
       "unplanted": {},
       "joinDate": "2026-05-17",
       "guildStatus": "accepted",
-      "treeChops": 3
+      "treeChops": 3,
+      "mineSwings": 0
     },
     {
       "name": "Kin8",
-      "score": 119,
+      "score": 130,
       "planted": {
         "grapes": 26
       },
@@ -1640,7 +1749,10 @@
       "trees": 42,
       "treeTiles": {},
       "mined": {
-        "Clay": 1
+        "Stone": 7,
+        "Silver": 1,
+        "Clay": 3,
+        "Iron": 1
       },
       "fished": {},
       "quests": {
@@ -1649,7 +1761,8 @@
       "unplanted": {},
       "joinDate": "2026-04-30",
       "guildStatus": "accepted",
-      "treeChops": 33
+      "treeChops": 33,
+      "mineSwings": 12
     },
     {
       "name": "MauMau",
@@ -1667,7 +1780,8 @@
       "unplanted": {},
       "joinDate": "2026-03-31",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "wassario",
@@ -1684,7 +1798,8 @@
       "unplanted": {},
       "joinDate": "2026-04-30",
       "guildStatus": "accepted",
-      "treeChops": 0
+      "treeChops": 0,
+      "mineSwings": 0
     },
     {
       "name": "NoName",
@@ -1702,7 +1817,8 @@
       "unplanted": {},
       "joinDate": "2026-05-16",
       "guildStatus": "accepted",
-      "treeChops": 8
+      "treeChops": 8,
+      "mineSwings": 0
     }
   ]
 }
