@@ -10,18 +10,17 @@ jobs:
     steps:
       - name: Send Discord notification
         run: |
-          curl -s -X POST "https://discord.com/api/webhooks/1510310727607648316/2crVFjKLkpZkhzvAxnOKmX5PHyuWtNoj0xC1_TCzCBOQ5g_jtJGxHWzEx6toSOzLLjIY" \
+          curl -X POST "https://discord.com/api/webhooks/1510310727607648316/2crVFjKLkpZkhzvAxnOKmX5PHyuWtNoj0xC1_TCzCBOQ5g_jtJGxHWzEx6toSOzLLjIY" \
             -H "Content-Type: application/json" \
-            -d "{
-              \"embeds\": [{
-                \"title\": \"🚀 Gamehole.games Deployed\",
-                \"description\": \"A new update has been pushed to [gamehole.games](https://gamehole.games)\",
-                \"color\": 4498948,
-                \"fields\": [
-                  { \"name\": \"Branch\", \"value\": \"\`${{ github.ref_name }}\`\", \"inline\": true },
-                  { \"name\": \"Pushed by\", \"value\": \"\`${{ github.actor }}\`\", \"inline\": true },
-                  { \"name\": \"Commit\", \"value\": \"\`${{ github.event.head_commit.message }}\`\" }
+            -d '{
+              "embeds": [{
+                "title": "🚀 Gamehole.games Updated",
+                "description": "A new update has been pushed to [gamehole.games](https://gamehole.games)",
+                "color": 4498948,
+                "fields": [
+                  { "name": "Pushed by", "value": "${{ github.actor }}", "inline": true },
+                  { "name": "Commit", "value": "${{ github.event.head_commit.message }}", "inline": true }
                 ],
-                \"footer\": { \"text\": \"gamehole.games\" }
+                "footer": { "text": "gamehole.games" }
               }]
-            }"
+            }'
