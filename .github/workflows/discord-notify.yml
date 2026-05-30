@@ -9,7 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send Discord notification
+        env:
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          ACTOR: ${{ github.actor }}
         run: |
+          MSG=$(echo "$COMMIT_MSG" | head -1)
           curl -X POST "https://discord.com/api/webhooks/1510310727607648316/2crVFjKLkpZkhzvAxnOKmX5PHyuWtNoj0xC1_TCzCBOQ5g_jtJGxHWzEx6toSOzLLjIY" \
             -H "Content-Type: application/json" \
-            -d "{\"embeds\": [{\"title\": \"🚀 Gamehole.games Updated\", \"description\": \"A new update is live at [gamehole.games](https://gamehole.games)\", \"color\": 4498948, \"fields\": [{\"name\": \"Pushed by\", \"value\": \"${{ github.actor }}\", \"inline\": true}, {\"name\": \"Update\", \"value\": \"${{ github.event.head_commit.message }}\", \"inline\": true}], \"footer\": {\"text\": \"gamehole.games\"}}]}"
+            -d "{\"embeds\": [{\"title\": \"🚀 Gamehole.games Updated\", \"description\": \"A new update is live at [gamehole.games](https://gamehole.games)\", \"color\": 4498948, \"fields\": [{\"name\": \"Pushed by\", \"value\": \"$ACTOR\", \"inline\": true}, {\"name\": \"Update\", \"value\": \"$MSG\", \"inline\": true}], \"footer\": {\"text\": \"gamehole.games\"}}]}"
