@@ -282,6 +282,57 @@ export default function GuildEventsPage() {
           <PlayerCard key={player.name} player={player} rank={i} />
         ))}
 
+        {/* Wood Leaderboard */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#45a29e", marginBottom: "18px", marginTop: "40px",
+        }}>
+          🪓 Wood Cutting — Most to Least
+        </h2>
+        <div style={{
+          background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
+          borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
+        }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
+            <tbody>
+              {[...players].filter(p => p.trees > 0).sort((a, b) => b.trees - a.trees).map((p, i) => (
+                <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
+                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
+                  <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
+                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#c68642", fontWeight: "bold" }}>{fmt(p.trees)} wood</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mining Leaderboard */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#45a29e", marginBottom: "18px",
+        }}>
+          ⛏️ Mining — Most to Least
+        </h2>
+        <div style={{
+          background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
+          borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
+        }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
+            <tbody>
+              {[...players].filter(p => sum(p.mined) > 0).sort((a, b) => sum(b.mined) - sum(a.mined)).map((p, i) => (
+                <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
+                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
+                  <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
+                  <td style={{ padding: "6px 8px", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                    {sorted(p.mined).map(([k, v]) => `${k}: ${v}`).join(" · ")}
+                  </td>
+                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#b44dff", fontWeight: "bold" }}>{fmt(sum(p.mined))} minerals</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         <p style={{
           textAlign: "center", color: "#45a29e66",
           fontSize: "0.6rem", letterSpacing: "1px", marginTop: "30px",
