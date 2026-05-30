@@ -470,8 +470,15 @@ export default function GuildEventsPage() {
                 <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
                   <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
                   <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
-                  <td style={{ padding: "6px 8px", color: "#c5c6c7", fontSize: "0.65rem" }}>
-                    {sorted(p.mined).map(([k, v]) => `${k}: ${v}`).join(" · ")}
+                  <td style={{ padding: "6px 8px", fontSize: "0.65rem" }}>
+                    {sorted(p.mined).map(([k, v], idx) => (
+                      <span key={k}>
+                        {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
+                        <span style={{ color: k === "Pure gold ore" ? "#ffd700" : "#c5c6c7", fontWeight: k === "Pure gold ore" ? "bold" : "normal" }}>
+                          {k}: {v}
+                        </span>
+                      </span>
+                    ))}
                   </td>
                   <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
                     {fmt((p as Player & { mineSwings: number }).mineSwings)} swings
