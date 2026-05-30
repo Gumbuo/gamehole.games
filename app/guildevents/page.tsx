@@ -23,12 +23,14 @@ type Player = {
   guildStatus: "accepted" | "kicked" | null;
 };
 
-// ── Fishing Event Goals ────────────────────────────────────────────────────────
+// ── Event Goals ────────────────────────────────────────────────────────────────
+const WOOD_EVENT_TARGET = 400;
+
 const FISHING_EVENT: { fish: string; target: number; color: string }[] = [
   { fish: "Yellow Bluegill",  target: 250, color: "#f9c74f" },
   { fish: "Blue Bluegill",    target: 250, color: "#4fc3f7" },
   { fish: "Orange Bluegill",  target: 250, color: "#ff8c42" },
-  { fish: "Crucian Carp",     target: 30,  color: "#80cfa9" },
+  { fish: "Crucian Carp",     target: 35,  color: "#80cfa9" },
   { fish: "Black Crappie",    target: 25,  color: "#90a4ae" },
   { fish: "Red Chubfish",     target: 25,  color: "#ef5350" },
   { fish: "Yellow Chubfish",  target: 25,  color: "#ffd54f" },
@@ -348,20 +350,49 @@ export default function GuildEventsPage() {
           </div>
         </div>
 
-        {/* Fishing Event */}
+        {/* Event Goals */}
         <h2 style={{
           fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
           color: "#ffd700", marginBottom: "6px", marginTop: "10px",
         }}>
-          🎣 Fishing Event — Personal Goals
+          🏆 Guild Event — Personal Goals
         </h2>
         <p style={{ fontSize: "0.7rem", color: "#c5c6c7", marginBottom: "18px", letterSpacing: "1px" }}>
-          Each member must catch the following amounts to complete the event and earn their reward.
+          Each member must hit all targets to complete the event and earn their reward.
         </p>
+
+        {/* Wood goal */}
+        <div style={{
+          background: "rgba(0,0,0,0.5)", border: "1px solid #c6864255",
+          borderRadius: "12px", padding: "18px 24px", marginBottom: "16px",
+        }}>
+          <div style={{
+            fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase",
+            color: "#c68642", fontWeight: "bold", marginBottom: "14px",
+          }}>
+            🪓 Wood Cutting
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+              <span style={{ color: "#c68642", fontWeight: "bold", fontSize: "0.78rem" }}>Tree Chops</span>
+              <span style={{ color: "#ffd700", fontSize: "0.72rem", fontWeight: "bold" }}>Target: {fmt(WOOD_EVENT_TARGET)}</span>
+            </div>
+            <div style={{ height: "8px", background: "#ffffff11", borderRadius: "4px" }} />
+            <div style={{ fontSize: "0.62rem", color: "#c5c6c7" }}>Not started</div>
+          </div>
+        </div>
+
+        {/* Fishing goals */}
         <div style={{
           background: "rgba(0,0,0,0.5)", border: "1px solid #ffd70055",
-          borderRadius: "12px", padding: "20px 24px", marginBottom: "40px",
+          borderRadius: "12px", padding: "18px 24px", marginBottom: "40px",
         }}>
+          <div style={{
+            fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase",
+            color: "#00838f", fontWeight: "bold", marginBottom: "14px",
+          }}>
+            🎣 Fishing
+          </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "16px" }}>
             {FISHING_EVENT.map(({ fish, target, color }) => (
               <div key={fish} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
