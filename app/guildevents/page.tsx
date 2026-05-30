@@ -520,11 +520,14 @@ export default function GuildEventsPage() {
         }}>
           📋 Guild Contributions — Most to Least
         </h2>
-        <div style={{ marginBottom: "36px" }}>
-          {[...players].filter(p => sum(p.quests) > 0).sort((a, b) => sum(b.quests) - sum(a.quests)).map((p, i) => (
+        <div style={{
+          background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
+          borderRadius: "12px", overflow: "hidden", marginBottom: "36px",
+        }}>
+          {[...players].filter(p => sum(p.quests) > 0).sort((a, b) => sum(b.quests) - sum(a.quests)).map((p, i, arr) => (
             <div key={p.name} style={{
-              background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e33",
-              borderRadius: "10px", padding: "14px 18px", marginBottom: "10px",
+              padding: "14px 18px",
+              borderBottom: i < arr.length - 1 ? "1px solid #45a29e22" : "none",
             }}>
               {/* Player header */}
               <div style={{
@@ -626,18 +629,6 @@ export default function GuildEventsPage() {
             </tbody>
           </table>
         </div>
-
-        {/* Player list */}
-        <h2 style={{
-          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
-          color: "#45a29e", marginBottom: "18px", marginTop: "40px",
-        }}>
-          Member Contributions — Ranked by Activity
-        </h2>
-
-        {players.map((player, i) => (
-          <PlayerCard key={player.name} player={player} rank={i} />
-        ))}
 
         <p style={{
           textAlign: "center", color: "#45a29e66",
