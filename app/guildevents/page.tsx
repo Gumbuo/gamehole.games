@@ -13,6 +13,7 @@ type Player = {
   fished: Record<string, number>;
   quests: Record<string, number>;
   unplanted: Record<string, number>;
+  treeChops: number;
   joinDate: string | null;
   guildStatus: "accepted" | "kicked" | null;
 };
@@ -443,8 +444,11 @@ export default function GuildEventsPage() {
                         </span>
                       )}
                     </td>
+                    <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                      {fmt(p.treeChops)} chops
+                    </td>
                     <td style={{ padding: "6px 8px", textAlign: "right", color: earned ? "#ffd700" : "#c68642", fontWeight: "bold" }}>
-                      {earned ? fmt(p.trees) : `${fmt(p.trees)} / 150`}
+                      {earned ? `${fmt(p.trees)} wood` : `${fmt(p.trees)} / 150`}
                     </td>
                   </tr>
                 );
