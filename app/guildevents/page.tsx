@@ -285,23 +285,55 @@ export default function GuildEventsPage() {
         {/* Wood Leaderboard */}
         <h2 style={{
           fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
-          color: "#45a29e", marginBottom: "18px", marginTop: "40px",
+          color: "#45a29e", marginBottom: "12px", marginTop: "40px",
         }}>
           🪓 Wood Cutting — Most to Least
         </h2>
+
+        {/* Gold Axe reward explanation */}
+        <div style={{
+          background: "rgba(198,134,66,0.1)", border: "1px solid #c68642",
+          borderRadius: "8px", padding: "12px 16px", marginBottom: "18px",
+          fontSize: "0.72rem", color: "#c5c6c7", lineHeight: "1.7",
+        }}>
+          <span style={{ color: "#ffd700", fontWeight: "bold" }}>🪓 Gold Axe Reward</span>
+          {"  ·  "}Collect <strong style={{ color: "#ffd700" }}>150 wood</strong> and FoxHole or Mrfaf will give you a Gold Axe.
+          <br />
+          A Gold Axe yields <strong style={{ color: "#c68642" }}>3 wood per chop</strong> and lasts <strong style={{ color: "#c68642" }}>~60 chops</strong> (180 wood total) before it breaks — reaching 150 means you{`'`}ve earned a replacement before your current one runs out.
+        </div>
+
         <div style={{
           background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
           borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
         }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
             <tbody>
-              {[...players].filter(p => p.trees > 0).sort((a, b) => b.trees - a.trees).map((p, i) => (
-                <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
-                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
-                  <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
-                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#c68642", fontWeight: "bold" }}>{fmt(p.trees)} wood</td>
-                </tr>
-              ))}
+              {[...players].filter(p => p.trees > 0).sort((a, b) => b.trees - a.trees).map((p, i) => {
+                const earned = p.trees >= 150;
+                return (
+                  <tr key={p.name} style={{
+                    borderBottom: "1px solid #45a29e22",
+                    background: earned ? "rgba(198,134,66,0.08)" : "transparent",
+                  }}>
+                    <td style={{ padding: "6px 8px", color: earned ? "#ffd700" : "#45a29e", width: "32px" }}>#{i + 1}</td>
+                    <td style={{ padding: "6px 8px", color: earned ? "#ffd700" : "#66fcf1", fontWeight: earned ? "bold" : "normal" }}>
+                      {i < 3 ? MEDALS[i] + " " : ""}{p.name}
+                      {earned && (
+                        <span style={{
+                          marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
+                          background: "rgba(198,134,66,0.2)", border: "1px solid #c68642",
+                          color: "#ffd700", borderRadius: "4px", padding: "1px 6px",
+                        }}>
+                          🪓 GOLD AXE EARNED
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ padding: "6px 8px", textAlign: "right", color: earned ? "#ffd700" : "#c68642", fontWeight: "bold" }}>
+                      {earned ? fmt(p.trees) : `${fmt(p.trees)} / 150`}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
