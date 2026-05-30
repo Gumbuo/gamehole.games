@@ -449,8 +449,19 @@ export default function GuildEventsPage() {
                 <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
                   <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
                   <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
-                  <td style={{ padding: "6px 8px", color: "#c5c6c7", fontSize: "0.65rem" }}>
-                    {sorted(p.fished).map(([k, v]) => `${k}: ${v}`).join(" · ")}
+                  <td style={{ padding: "6px 8px", fontSize: "0.65rem" }}>
+                    {sorted(p.fished).map(([k, v], idx) => {
+                      const color = k.toLowerCase().includes("chub") ? "#4fc3f7"
+                                  : k.toLowerCase().includes("golden koi") || k.toLowerCase().includes("lotus carp") ? "#ffd700"
+                                  : "#c5c6c7";
+                      const bold = color !== "#c5c6c7";
+                      return (
+                        <span key={k}>
+                          {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
+                          <span style={{ color, fontWeight: bold ? "bold" : "normal" }}>{k}: {v}</span>
+                        </span>
+                      );
+                    })}
                   </td>
                   <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
                     {fmt(p.fishCasts)} casts
