@@ -16,6 +16,7 @@ type Player = {
   treeChops: number;
   mineSwings: number;
   fishCasts: number;
+  questContributions: number;
   joinDate: string | null;
   guildStatus: "accepted" | "kicked" | null;
 };
@@ -514,6 +515,35 @@ export default function GuildEventsPage() {
                   </td>
                   <td style={{ padding: "6px 8px", textAlign: "right", color: "#00838f", fontWeight: "bold" }}>
                     {fmt(sum(p.fished))} fish
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Guild Contributions Leaderboard */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#45a29e", marginBottom: "18px", marginTop: "40px",
+        }}>
+          📋 Guild Contributions — Most to Least
+        </h2>
+        <div style={{
+          background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
+          borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
+        }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
+            <tbody>
+              {[...players].filter(p => sum(p.quests) > 0).sort((a, b) => sum(b.quests) - sum(a.quests)).map((p, i) => (
+                <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
+                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
+                  <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
+                  <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                    {fmt(p.questContributions)} contributions
+                  </td>
+                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold" }}>
+                    {fmt(sum(p.quests))} items
                   </td>
                 </tr>
               ))}
