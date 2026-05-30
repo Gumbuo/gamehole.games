@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Send Discord notification
         run: |
-          curl -s -X POST "https://discord.com/api/webhooks/1508547162466680932/9hwUDjI8odBYtEkkhLpTzNiajVREJshTwaMqipj5bYdsdH0cMqynMyguHcdzIKhA5Glu" \
+          curl -s -X POST "https://discord.com/api/webhooks/1510310727607648316/2crVFjKLkpZkhzvAxnOKmX5PHyuWtNoj0xC1_TCzCBOQ5g_jtJGxHWzEx6toSOzLLjIY" \
             -H "Content-Type: application/json" \
             -d "{
               \"embeds\": [{
