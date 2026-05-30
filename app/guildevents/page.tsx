@@ -13,6 +13,8 @@ type Player = {
   fished: Record<string, number>;
   quests: Record<string, number>;
   unplanted: Record<string, number>;
+  joinDate: string | null;
+  guildStatus: "accepted" | "kicked" | null;
 };
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -27,6 +29,13 @@ function fmt(n: number) {
 }
 
 const MEDALS = ["🥇", "🥈", "🥉"];
+
+function daysInGuild(joinDate: string | null): number | null {
+  if (!joinDate) return null;
+  const join = new Date(joinDate + "T00:00:00");
+  const now = new Date();
+  return Math.floor((now.getTime() - join.getTime()) / (1000 * 60 * 60 * 24));
+}
 
 // Players exempt from the harvest-without-planting violation flag
 const VIOLATION_EXEMPT = ["Dravyn"];
@@ -92,6 +101,8 @@ function Badge({ label, value, color }: { label: string; value: string; color: s
 // ── Player card ────────────────────────────────────────────────────────────────
 function PlayerCard({ player, rank }: { player: Player; rank: number }) {
   const violation = isHarvestViolator(player);
+  const days = daysInGuild(player.joinDate);
+  const kicked = player.guildStatus === "kicked";
   const harv = sorted(player.harvested);
   const plant = sorted(player.planted);
   const mine = sorted(player.mined);
@@ -125,15 +136,27 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
         <h3 style={{ margin: 0, fontSize: "1rem", color: violation ? "#ff6b6b" : "#66fcf1", letterSpacing: "1px" }}>
           {medal}{player.name}
         </h3>
-        {violation && (
-          <span style={{
-            marginLeft: "auto", fontSize: "0.6rem", letterSpacing: "1px",
-            color: "#ff2d2d", border: "1px solid #ff2d2d", borderRadius: "4px",
-            padding: "2px 7px", textTransform: "uppercase", whiteSpace: "nowrap",
-          }}>
-            ⚠ Harvesting — Not Planting
-          </span>
-        )}
+        <div style={{ marginLeft: "auto", display: "flex", gap: "6px", alignItems: "center" }}>
+          {days !== null && (
+            <span style={{
+              fontSize: "0.6rem", letterSpacing: "1px",
+              color: kicked ? "#888" : "#ffd700",
+              border: `1px solid ${kicked ? "#555" : "#ffd70066"}`,
+              borderRadius: "4px", padding: "2px 7px", whiteSpace: "nowrap",
+            }}>
+              {kicked ? `⚠ KICKED — Day ${days}` : `Day ${days}`}
+            </span>
+          )}
+          {violation && (
+            <span style={{
+              fontSize: "0.6rem", letterSpacing: "1px",
+              color: "#ff2d2d", border: "1px solid #ff2d2d", borderRadius: "4px",
+              padding: "2px 7px", textTransform: "uppercase", whiteSpace: "nowrap",
+            }}>
+              ⚠ Harvesting — Not Planting
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Summary badges */}
