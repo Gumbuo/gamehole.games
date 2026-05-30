@@ -37,6 +37,30 @@ function daysInGuild(joinDate: string | null): number | null {
   return Math.floor((now.getTime() - join.getTime()) / (1000 * 60 * 60 * 24));
 }
 
+// ── Specialty detection ────────────────────────────────────────────────────────
+type Specialty = { key: string; label: string; emoji: string; color: string };
+
+const SPECIALTIES: Specialty[] = [
+  { key: "farming",      label: "Farmer",       emoji: "🌾", color: "#2e7d32" },
+  { key: "fishing",      label: "Fisher",        emoji: "🎣", color: "#00838f" },
+  { key: "woodcutting",  label: "Woodcutter",    emoji: "🪓", color: "#c68642" },
+  { key: "mining",       label: "Miner",         emoji: "⛏️", color: "#b44dff" },
+  { key: "quests",       label: "Quest Runner",  emoji: "📋", color: "#ffd700" },
+];
+
+function getSpecialty(player: Player): Specialty | null {
+  const scores: Record<string, number> = {
+    farming:     sum(player.harvested) + sum(player.planted),
+    fishing:     sum(player.fished),
+    woodcutting: player.trees,
+    mining:      sum(player.mined),
+    quests:      sum(player.quests),
+  };
+  const best = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
+  if (!best || best[1] === 0) return null;
+  return SPECIALTIES.find(s => s.key === best[0]) || null;
+}
+
 // Players exempt from the harvest-without-planting violation flag
 const VIOLATION_EXEMPT = ["Dravyn"];
 
@@ -103,6 +127,7 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
   const violation = isHarvestViolator(player);
   const days = daysInGuild(player.joinDate);
   const kicked = player.guildStatus === "kicked";
+  const specialty = getSpecialty(player);
   const harv = sorted(player.harvested);
   const plant = sorted(player.planted);
   const mine = sorted(player.mined);
@@ -136,6 +161,15 @@ function PlayerCard({ player, rank }: { player: Player; rank: number }) {
         <h3 style={{ margin: 0, fontSize: "1rem", color: violation ? "#ff6b6b" : "#66fcf1", letterSpacing: "1px" }}>
           {medal}{player.name}
         </h3>
+        {specialty && (
+          <span style={{
+            fontSize: "0.6rem", letterSpacing: "1px", whiteSpace: "nowrap",
+            background: specialty.color + "22", border: `1px solid ${specialty.color}`,
+            color: specialty.color, borderRadius: "4px", padding: "2px 7px",
+          }}>
+            {specialty.emoji} {specialty.label.toUpperCase()}
+          </span>
+        )}
         <div style={{ marginLeft: "auto", display: "flex", gap: "6px", alignItems: "center" }}>
           {days !== null && (
             <span style={{
@@ -291,6 +325,64 @@ export default function GuildEventsPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Reward Guide */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#45a29e", marginBottom: "18px",
+        }}>
+          🎁 Reward Guide — Members by Specialty
+        </h2>
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(175px, 1fr))",
+          gap: "14px", marginBottom: "40px",
+        }}>
+          {SPECIALTIES.map(spec => {
+            const members = players
+              .filter(p => p.guildStatus !== "kicked")
+              .filter(p => getSpecialty(p)?.key === spec.key)
+              .sort((a, b) => {
+                const scoreFor = (p: Player) => ({
+                  farming: sum(p.harvested) + sum(p.planted),
+                  fishing: sum(p.fished),
+                  woodcutting: p.trees,
+                  mining: sum(p.mined),
+                  quests: sum(p.quests),
+                })[spec.key] ?? 0;
+                return scoreFor(b) - scoreFor(a);
+              });
+            if (members.length === 0) return null;
+            return (
+              <div key={spec.key} style={{
+                background: "rgba(0,0,0,0.45)", border: `1px solid ${spec.color}44`,
+                borderRadius: "10px", padding: "14px 16px",
+              }}>
+                <div style={{
+                  fontSize: "0.7rem", letterSpacing: "1px", textTransform: "uppercase",
+                  color: spec.color, fontWeight: "bold", marginBottom: "10px",
+                }}>
+                  {spec.emoji} {spec.label}s
+                </div>
+                {members.map((p, i) => (
+                  <div key={p.name} style={{
+                    display: "flex", justifyContent: "space-between",
+                    fontSize: "0.72rem", padding: "3px 0",
+                    borderBottom: i < members.length - 1 ? "1px solid #ffffff11" : "none",
+                  }}>
+                    <span style={{ color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</span>
+                    <span style={{ color: spec.color, fontWeight: "bold" }}>
+                      {spec.key === "farming"     ? fmt(sum(p.harvested) + sum(p.planted)) :
+                       spec.key === "fishing"     ? fmt(sum(p.fished)) :
+                       spec.key === "woodcutting" ? fmt(p.trees) :
+                       spec.key === "mining"      ? fmt(sum(p.mined)) :
+                                                    fmt(sum(p.quests))}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
         </div>
 
         {/* Player list */}
