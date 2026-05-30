@@ -394,18 +394,6 @@ export default function GuildEventsPage() {
           })}
         </div>
 
-        {/* Player list */}
-        <h2 style={{
-          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
-          color: "#45a29e", marginBottom: "18px",
-        }}>
-          Member Contributions — Ranked by Activity
-        </h2>
-
-        {players.map((player, i) => (
-          <PlayerCard key={player.name} player={player} rank={i} />
-        ))}
-
         {/* Wood Leaderboard */}
         <h2 style={{
           fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
@@ -620,6 +608,18 @@ export default function GuildEventsPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Player list */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#45a29e", marginBottom: "18px", marginTop: "40px",
+        }}>
+          Member Contributions — Ranked by Activity
+        </h2>
+
+        {players.map((player, i) => (
+          <PlayerCard key={player.name} player={player} rank={i} />
+        ))}
 
         <p style={{
           textAlign: "center", color: "#45a29e66",
