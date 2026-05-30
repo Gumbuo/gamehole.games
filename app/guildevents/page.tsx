@@ -520,31 +520,46 @@ export default function GuildEventsPage() {
         }}>
           📋 Guild Contributions — Most to Least
         </h2>
-        <div style={{
-          background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
-          borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
-        }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
-            <tbody>
-              {[...players].filter(p => sum(p.quests) > 0).sort((a, b) => sum(b.quests) - sum(a.quests)).map((p, i) => (
-                <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
-                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px", verticalAlign: "top" }}>#{i + 1}</td>
-                  <td style={{ padding: "6px 8px", color: "#66fcf1", verticalAlign: "top", whiteSpace: "nowrap" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
-                  <td style={{ padding: "6px 8px", color: "#c5c6c7", fontSize: "0.65rem" }}>
-                    {sorted(p.quests).map(([k, v], idx) => (
-                      <span key={k}>
-                        {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
-                        <span style={{ color: "#c5c6c7" }}>{k}: {v}</span>
-                      </span>
-                    ))}
-                  </td>
-                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold", verticalAlign: "top", whiteSpace: "nowrap" }}>
-                    {fmt(p.questContributions)} · {fmt(sum(p.quests))} items
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div style={{ marginBottom: "36px" }}>
+          {[...players].filter(p => sum(p.quests) > 0).sort((a, b) => sum(b.quests) - sum(a.quests)).map((p, i) => (
+            <div key={p.name} style={{
+              background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e33",
+              borderRadius: "10px", padding: "14px 18px", marginBottom: "10px",
+            }}>
+              {/* Player header */}
+              <div style={{
+                display: "flex", alignItems: "baseline", justifyContent: "space-between",
+                marginBottom: "10px", borderBottom: "1px solid #45a29e22", paddingBottom: "8px",
+              }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
+                  <span style={{ fontSize: "0.65rem", color: "#45a29e", minWidth: "22px" }}>#{i + 1}</span>
+                  <span style={{ fontSize: "0.9rem", color: "#66fcf1", fontWeight: "bold" }}>
+                    {i < 3 ? MEDALS[i] + " " : ""}{p.name}
+                  </span>
+                </div>
+                <span style={{ fontSize: "0.65rem", color: "#ffd700", whiteSpace: "nowrap" }}>
+                  {fmt(p.questContributions)} contributions · <strong>{fmt(sum(p.quests))} items</strong>
+                </span>
+              </div>
+              {/* Items grid */}
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gap: "2px 16px",
+              }}>
+                {sorted(p.quests).map(([k, v]) => (
+                  <div key={k} style={{
+                    display: "flex", justifyContent: "space-between",
+                    fontSize: "0.68rem", padding: "2px 0",
+                    borderBottom: "1px solid #ffffff08",
+                  }}>
+                    <span style={{ color: "#c5c6c7" }}>{k}</span>
+                    <span style={{ color: "#66fcf1", fontWeight: "bold", marginLeft: "8px" }}>{fmt(v)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Gold Earnings Leaderboard */}
