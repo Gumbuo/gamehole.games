@@ -7,7 +7,9 @@
     "totalMined": 2029,
     "totalFish": 15526,
     "totalQuest": 108102,
-    "totalGold": 12762.6664
+    "totalGold": 12762.6664,
+    "totalVaultDonated": 13131,
+    "totalReinvested": 1178.4547
   },
   "players": [
     {
@@ -88,7 +90,8 @@
       "mineSwings": 170,
       "fishCasts": 2,
       "questContributions": 116,
-      "goldEarned": 1101.1083
+      "goldEarned": 1101.1083,
+      "vaultDonated": 6
     },
     {
       "name": "Mrfaf",
@@ -179,7 +182,8 @@
       "mineSwings": 27,
       "fishCasts": 41,
       "questContributions": 120,
-      "goldEarned": 3271.2223
+      "goldEarned": 3271.2223,
+      "vaultDonated": 4075
     },
     {
       "name": "Fawm",
@@ -256,7 +260,8 @@
       "mineSwings": 36,
       "fishCasts": 15,
       "questContributions": 86,
-      "goldEarned": 454.5439
+      "goldEarned": 454.5439,
+      "vaultDonated": 5
     },
     {
       "name": "lormo321",
@@ -339,7 +344,8 @@
       "mineSwings": 81,
       "fishCasts": 384,
       "questContributions": 97,
-      "goldEarned": 89.1931
+      "goldEarned": 89.1931,
+      "vaultDonated": 0
     },
     {
       "name": "Fate",
@@ -422,7 +428,8 @@
       "mineSwings": 40,
       "fishCasts": 429,
       "questContributions": 57,
-      "goldEarned": 1228.5454
+      "goldEarned": 1228.5454,
+      "vaultDonated": 647
     },
     {
       "name": "KA-BACKYARD",
@@ -487,7 +494,8 @@
       "mineSwings": 58,
       "fishCasts": 3081,
       "questContributions": 17,
-      "goldEarned": 38.9732
+      "goldEarned": 38.9732,
+      "vaultDonated": 0
     },
     {
       "name": "KngAlex",
@@ -577,7 +585,8 @@
       "mineSwings": 88,
       "fishCasts": 266,
       "questContributions": 92,
-      "goldEarned": 311.0558
+      "goldEarned": 311.0558,
+      "vaultDonated": 0
     },
     {
       "name": "Alstar",
@@ -650,7 +659,8 @@
       "mineSwings": 7,
       "fishCasts": 0,
       "questContributions": 65,
-      "goldEarned": 217.2956
+      "goldEarned": 217.2956,
+      "vaultDonated": 19
     },
     {
       "name": "FoxHole",
@@ -737,7 +747,8 @@
       "mineSwings": 41,
       "fishCasts": 374,
       "questContributions": 262,
-      "goldEarned": 743.5665
+      "goldEarned": 743.5665,
+      "vaultDonated": 8090
     },
     {
       "name": "𓆩RHR𓆪ꪾ",
@@ -801,7 +812,8 @@
       "mineSwings": 34,
       "fishCasts": 19,
       "questContributions": 80,
-      "goldEarned": 865.043
+      "goldEarned": 865.043,
+      "vaultDonated": 40
     },
     {
       "name": "Cmokyc",
@@ -872,7 +884,8 @@
       "mineSwings": 28,
       "fishCasts": 1859,
       "questContributions": 36,
-      "goldEarned": 263.8642
+      "goldEarned": 263.8642,
+      "vaultDonated": 0
     },
     {
       "name": "NJBULLY1",
@@ -959,7 +972,8 @@
       "mineSwings": 104,
       "fishCasts": 393,
       "questContributions": 227,
-      "goldEarned": 90.1755
+      "goldEarned": 90.1755,
+      "vaultDonated": 0
     },
     {
       "name": "Cryptodonkz",
@@ -1036,7 +1050,8 @@
       "mineSwings": 86,
       "fishCasts": 496,
       "questContributions": 113,
-      "goldEarned": 50.8213
+      "goldEarned": 50.8213,
+      "vaultDonated": 0
     },
     {
       "name": "Jamie",
@@ -1109,7 +1124,8 @@
       "mineSwings": 4,
       "fishCasts": 62,
       "questContributions": 27,
-      "goldEarned": 100.3194
+      "goldEarned": 100.3194,
+      "vaultDonated": 0
     },
     {
       "name": "Zymeth",
@@ -1169,7 +1185,8 @@
       "mineSwings": 17,
       "fishCasts": 0,
       "questContributions": 95,
-      "goldEarned": 94.0299
+      "goldEarned": 94.0299,
+      "vaultDonated": 0
     },
     {
       "name": "Nickoloy",
@@ -1218,7 +1235,8 @@
       "mineSwings": 5,
       "fishCasts": 0,
       "questContributions": 22,
-      "goldEarned": 99.4339
+      "goldEarned": 99.4339,
+      "vaultDonated": 0
     },
     {
       "name": "Anikka",
@@ -1246,7 +1264,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 19,
-      "goldEarned": 365.4343
+      "goldEarned": 365.4343,
+      "vaultDonated": 0
     },
     {
       "name": "jeeyan",
@@ -1297,7 +1316,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 52,
-      "goldEarned": 236.5361
+      "goldEarned": 236.5361,
+      "vaultDonated": 16
     },
     {
       "name": "BzrB",
@@ -1356,7 +1376,8 @@
       "mineSwings": 1,
       "fishCasts": 0,
       "questContributions": 48,
-      "goldEarned": 160.3253
+      "goldEarned": 160.3253,
+      "vaultDonated": 0
     },
     {
       "name": "Zocram",
@@ -1405,7 +1426,8 @@
       "mineSwings": 0,
       "fishCasts": 19,
       "questContributions": 16,
-      "goldEarned": 68.3881
+      "goldEarned": 68.3881,
+      "vaultDonated": 0
     },
     {
       "name": "Amit",
@@ -1464,7 +1486,8 @@
       "mineSwings": 4,
       "fishCasts": 0,
       "questContributions": 48,
-      "goldEarned": 138.9657
+      "goldEarned": 138.9657,
+      "vaultDonated": 0
     },
     {
       "name": "JMK",
@@ -1500,7 +1523,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 38,
-      "goldEarned": 158.0209
+      "goldEarned": 158.0209,
+      "vaultDonated": 0
     },
     {
       "name": "StarTiger244",
@@ -1530,7 +1554,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 53,
-      "goldEarned": 68.9108
+      "goldEarned": 68.9108,
+      "vaultDonated": 0
     },
     {
       "name": "Tampvan",
@@ -1567,7 +1592,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 36,
-      "goldEarned": 148.0685
+      "goldEarned": 148.0685,
+      "vaultDonated": 0
     },
     {
       "name": "SilverAngel75",
@@ -1596,7 +1622,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 50,
-      "goldEarned": 63.4356
+      "goldEarned": 63.4356,
+      "vaultDonated": 0
     },
     {
       "name": "Pardzy",
@@ -1654,7 +1681,8 @@
       "mineSwings": 2,
       "fishCasts": 89,
       "questContributions": 65,
-      "goldEarned": 114.9088
+      "goldEarned": 114.9088,
+      "vaultDonated": 0
     },
     {
       "name": "CosmicRunner445",
@@ -1684,7 +1712,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 55,
-      "goldEarned": 64.2752
+      "goldEarned": 64.2752,
+      "vaultDonated": 0
     },
     {
       "name": "Kin8",
@@ -1735,7 +1764,8 @@
       "mineSwings": 12,
       "fishCasts": 0,
       "questContributions": 45,
-      "goldEarned": 470.1823
+      "goldEarned": 470.1823,
+      "vaultDonated": 0
     },
     {
       "name": "SHIZ",
@@ -1776,7 +1806,8 @@
       "mineSwings": 1,
       "fishCasts": 20,
       "questContributions": 72,
-      "goldEarned": 56.8102
+      "goldEarned": 56.8102,
+      "vaultDonated": 0
     },
     {
       "name": "Noobfarmer",
@@ -1807,7 +1838,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 46,
-      "goldEarned": 163.2402
+      "goldEarned": 163.2402,
+      "vaultDonated": 0
     },
     {
       "name": "Alorid 🇹🇳",
@@ -1868,7 +1900,8 @@
       "mineSwings": 49,
       "fishCasts": 15,
       "questContributions": 70,
-      "goldEarned": 129.0733
+      "goldEarned": 129.0733,
+      "vaultDonated": 0
     },
     {
       "name": "Gnchkn",
@@ -1907,7 +1940,8 @@
       "mineSwings": 7,
       "fishCasts": 0,
       "questContributions": 0,
-      "goldEarned": 0
+      "goldEarned": 0,
+      "vaultDonated": 2
     },
     {
       "name": "Dravyn",
@@ -1945,7 +1979,8 @@
       "mineSwings": 31,
       "fishCasts": 0,
       "questContributions": 29,
-      "goldEarned": 121.0617
+      "goldEarned": 121.0617,
+      "vaultDonated": 0
     },
     {
       "name": "anyaP",
@@ -1981,7 +2016,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 12,
-      "goldEarned": 12.4032
+      "goldEarned": 12.4032,
+      "vaultDonated": 0
     },
     {
       "name": "Kirk",
@@ -2018,7 +2054,8 @@
       "mineSwings": 7,
       "fishCasts": 0,
       "questContributions": 18,
-      "goldEarned": 55.9959
+      "goldEarned": 55.9959,
+      "vaultDonated": 0
     },
     {
       "name": "Jonatan",
@@ -2060,7 +2097,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 43,
-      "goldEarned": 67.1758
+      "goldEarned": 67.1758,
+      "vaultDonated": 0
     },
     {
       "name": "MauMau",
@@ -2093,7 +2131,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 15,
-      "goldEarned": 394.1629
+      "goldEarned": 394.1629,
+      "vaultDonated": 83
     },
     {
       "name": "wassario",
@@ -2122,7 +2161,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 15,
-      "goldEarned": 45.9077
+      "goldEarned": 45.9077,
+      "vaultDonated": 0
     },
     {
       "name": "Gnorts",
@@ -2181,7 +2221,8 @@
       "mineSwings": 7,
       "fishCasts": 20,
       "questContributions": 33,
-      "goldEarned": 164.8053
+      "goldEarned": 164.8053,
+      "vaultDonated": 86
     },
     {
       "name": "Tescey",
@@ -2229,7 +2270,8 @@
       "mineSwings": 0,
       "fishCasts": 47,
       "questContributions": 35,
-      "goldEarned": 33.2864
+      "goldEarned": 33.2864,
+      "vaultDonated": 1
     },
     {
       "name": "sdsergio",
@@ -2279,7 +2321,8 @@
       "mineSwings": 3,
       "fishCasts": 15,
       "questContributions": 74,
-      "goldEarned": 75.0623
+      "goldEarned": 75.0623,
+      "vaultDonated": 0
     },
     {
       "name": "Zoe",
@@ -2313,7 +2356,8 @@
       "mineSwings": 5,
       "fishCasts": 0,
       "questContributions": 6,
-      "goldEarned": 18.7152
+      "goldEarned": 18.7152,
+      "vaultDonated": 0
     },
     {
       "name": "Gutopia",
@@ -2337,7 +2381,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 0,
-      "goldEarned": 36.9454
+      "goldEarned": 36.9454,
+      "vaultDonated": 20
     },
     {
       "name": "SleepyDude2007",
@@ -2361,7 +2406,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 18,
-      "goldEarned": 13.1548
+      "goldEarned": 13.1548,
+      "vaultDonated": 0
     },
     {
       "name": "Acernero",
@@ -2400,7 +2446,8 @@
       "mineSwings": 0,
       "fishCasts": 64,
       "questContributions": 10,
-      "goldEarned": 44.8824
+      "goldEarned": 44.8824,
+      "vaultDonated": 0
     },
     {
       "name": "RyanScott28",
@@ -2424,7 +2471,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 14,
-      "goldEarned": 9.2564
+      "goldEarned": 9.2564,
+      "vaultDonated": 0
     },
     {
       "name": "N1ck473",
@@ -2448,7 +2496,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 11,
-      "goldEarned": 16.4152
+      "goldEarned": 16.4152,
+      "vaultDonated": 0
     },
     {
       "name": "Strix",
@@ -2489,7 +2538,8 @@
       "mineSwings": 12,
       "fishCasts": 0,
       "questContributions": 31,
-      "goldEarned": 88.1394
+      "goldEarned": 88.1394,
+      "vaultDonated": 28
     },
     {
       "name": "EvanLewis33",
@@ -2514,7 +2564,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 21,
-      "goldEarned": 16.3464
+      "goldEarned": 16.3464,
+      "vaultDonated": 0
     },
     {
       "name": "NoName",
@@ -2552,7 +2603,8 @@
       "mineSwings": 0,
       "fishCasts": 29,
       "questContributions": 10,
-      "goldEarned": 24.1415
+      "goldEarned": 24.1415,
+      "vaultDonated": 0
     },
     {
       "name": "theRealMatt",
@@ -2579,7 +2631,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 25,
-      "goldEarned": 21.7773
+      "goldEarned": 21.7773,
+      "vaultDonated": 0
     },
     {
       "name": "Mauro11",
@@ -2613,7 +2666,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 11,
-      "goldEarned": 7.6041
+      "goldEarned": 7.6041,
+      "vaultDonated": 0
     },
     {
       "name": "nick.martin",
@@ -2637,7 +2691,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 9,
-      "goldEarned": 7.4336
+      "goldEarned": 7.4336,
+      "vaultDonated": 0
     },
     {
       "name": "wewew73",
@@ -2681,7 +2736,8 @@
       "mineSwings": 18,
       "fishCasts": 24,
       "questContributions": 11,
-      "goldEarned": 3.2825
+      "goldEarned": 3.2825,
+      "vaultDonated": 13
     },
     {
       "name": "5l33pyG4mer",
@@ -2706,7 +2762,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 15,
-      "goldEarned": 8.0377
+      "goldEarned": 8.0377,
+      "vaultDonated": 0
     },
     {
       "name": "GoldenDragonfly",
@@ -2734,7 +2791,8 @@
       "mineSwings": 0,
       "fishCasts": 0,
       "questContributions": 15,
-      "goldEarned": 50.9067
+      "goldEarned": 50.9067,
+      "vaultDonated": 0
     }
   ]
 }

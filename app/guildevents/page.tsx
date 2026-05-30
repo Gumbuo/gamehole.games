@@ -18,6 +18,7 @@ type Player = {
   fishCasts: number;
   questContributions: number;
   goldEarned: number;
+  vaultDonated: number;
   joinDate: string | null;
   guildStatus: "accepted" | "kicked" | null;
 };
@@ -252,6 +253,7 @@ export default function GuildEventsPage() {
     totals: {
       totalHarvested: number; totalPlanted: number; totalWood: number;
       totalMined: number; totalFish: number; totalQuest: number; totalGold: number;
+      totalVaultDonated: number; totalReinvested: number;
     };
     players: Player[];
   };
@@ -320,6 +322,7 @@ export default function GuildEventsPage() {
               { emoji: "🎣", label: "Fish Caught",          value: totals.totalFish },
               { emoji: "📋", label: "Quest Contributions",  value: totals.totalQuest },
               { emoji: "💰", label: "Gold Earned",          value: totals.totalGold },
+              { emoji: "🏦", label: "Vault Donated",        value: totals.totalVaultDonated },
             ].map(({ emoji, label, value }) => (
               <div key={label} style={{ minWidth: "140px" }}>
                 <div style={{ fontSize: "0.6rem", color: "#c5c6c7", letterSpacing: "1px", textTransform: "uppercase" }}>
@@ -574,6 +577,43 @@ export default function GuildEventsPage() {
                   </td>
                   <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold" }}>
                     {(p.goldEarned || 0).toFixed(2)} gold
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Vault Donations Leaderboard */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#ffd700", marginBottom: "12px", marginTop: "40px",
+        }}>
+          🏦 Guild Vault — Player Donations
+        </h2>
+        <div style={{
+          background: "rgba(255,215,0,0.04)", border: "1px solid #ffd70033",
+          borderRadius: "8px", padding: "10px 16px", marginBottom: "18px",
+          fontSize: "0.72rem", color: "#c5c6c7", lineHeight: "1.7",
+        }}>
+          <span style={{ color: "#ffd700", fontWeight: "bold" }}>🏦 Guild Vault</span>
+          {"  ·  "}Total donated by players: <strong style={{ color: "#ffd700" }}>{fmt(totals.totalVaultDonated)} gold</strong>
+          {"  ·  "}Auto-reinvested from rewards: <strong style={{ color: "#c68642" }}>{totals.totalReinvested.toFixed(2)} gold</strong>
+        </div>
+        <div style={{
+          background: "rgba(0,0,0,0.45)", border: "1px solid #ffd70055",
+          borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
+        }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
+            <tbody>
+              {[...players].filter(p => (p.vaultDonated || 0) > 0).sort((a, b) => (b.vaultDonated || 0) - (a.vaultDonated || 0)).map((p, i) => (
+                <tr key={p.name} style={{ borderBottom: "1px solid #ffd70022" }}>
+                  <td style={{ padding: "6px 8px", color: "#ffd70088", width: "32px" }}>#{i + 1}</td>
+                  <td style={{ padding: "6px 8px", color: i < 3 ? "#ffd700" : "#66fcf1", fontWeight: i < 3 ? "bold" : "normal" }}>
+                    {i < 3 ? MEDALS[i] + " " : ""}{p.name}
+                  </td>
+                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold" }}>
+                    {fmt(p.vaultDonated || 0)} gold
                   </td>
                 </tr>
               ))}
