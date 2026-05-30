@@ -356,10 +356,10 @@ export default function GuildEventsPage() {
           fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
           color: "#ffd700", marginBottom: "6px", marginTop: "10px",
         }}>
-          🏆 Guild Event — Personal Goals
+          🏆 Guild Event — Goals &amp; Rewards
         </h2>
         <p style={{ fontSize: "0.7rem", color: "#c5c6c7", marginBottom: "18px", letterSpacing: "1px" }}>
-          Each member must hit all targets to complete the event and earn their reward.
+          Complete all four goals to earn up to <strong style={{ color: "#ffd700" }}>$10 USD</strong> in rewards. Up to 40 members eligible.
         </p>
 
         {/* Wood goal */}
@@ -367,11 +367,13 @@ export default function GuildEventsPage() {
           background: "rgba(0,0,0,0.5)", border: "1px solid #c6864255",
           borderRadius: "12px", padding: "18px 24px", marginBottom: "16px",
         }}>
-          <div style={{
-            fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase",
-            color: "#c68642", fontWeight: "bold", marginBottom: "14px",
-          }}>
-            🪓 Wood Cutting
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+            <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#c68642", fontWeight: "bold" }}>
+              🪓 Wood Cutting
+            </div>
+            <div style={{ fontSize: "0.72rem", color: "#4ade80", fontWeight: "bold", border: "1px solid #4ade8055", borderRadius: "4px", padding: "2px 10px" }}>
+              $2 reward
+            </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -388,11 +390,13 @@ export default function GuildEventsPage() {
           background: "rgba(0,0,0,0.5)", border: "1px solid #b44dff55",
           borderRadius: "12px", padding: "18px 24px", marginBottom: "16px",
         }}>
-          <div style={{
-            fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase",
-            color: "#b44dff", fontWeight: "bold", marginBottom: "14px",
-          }}>
-            ⛏️ Mining
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+            <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#b44dff", fontWeight: "bold" }}>
+              ⛏️ Mining
+            </div>
+            <div style={{ fontSize: "0.72rem", color: "#4ade80", fontWeight: "bold", border: "1px solid #4ade8055", borderRadius: "4px", padding: "2px 10px" }}>
+              $2 reward
+            </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -400,34 +404,75 @@ export default function GuildEventsPage() {
               <span style={{ color: "#ffd700", fontSize: "0.72rem", fontWeight: "bold" }}>Target: {fmt(MINE_EVENT_TARGET)}</span>
             </div>
             <div style={{ height: "8px", background: "#ffffff11", borderRadius: "4px" }} />
-            <div style={{ fontSize: "0.62rem", color: "#c5c6c7" }}>Not started — all mineral drops will be recorded</div>
+            <div style={{ fontSize: "0.62rem", color: "#c5c6c7" }}>Not started — all mineral drops recorded</div>
           </div>
         </div>
 
         {/* Fishing goals */}
         <div style={{
-          background: "rgba(0,0,0,0.5)", border: "1px solid #ffd70055",
-          borderRadius: "12px", padding: "18px 24px", marginBottom: "40px",
+          background: "rgba(0,0,0,0.5)", border: "1px solid #00838f55",
+          borderRadius: "12px", padding: "18px 24px", marginBottom: "16px",
         }}>
-          <div style={{
-            fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase",
-            color: "#00838f", fontWeight: "bold", marginBottom: "14px",
-          }}>
-            🎣 Fishing
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+            <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#00838f", fontWeight: "bold" }}>
+              🎣 Fishing
+            </div>
+            <div style={{ fontSize: "0.72rem", color: "#4ade80", fontWeight: "bold", border: "1px solid #4ade8055", borderRadius: "4px", padding: "2px 10px" }}>
+              $3 reward
+            </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "16px" }}>
             {FISHING_EVENT.map(({ fish, target, color }) => (
               <div key={fish} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                   <span style={{ color, fontWeight: "bold", fontSize: "0.78rem" }}>{fish}</span>
-                  <span style={{ color: "#ffd700", fontSize: "0.72rem", fontWeight: "bold" }}>
-                    Target: {fmt(target)}
-                  </span>
+                  <span style={{ color: "#ffd700", fontSize: "0.72rem", fontWeight: "bold" }}>Target: {fmt(target)}</span>
                 </div>
                 <div style={{ height: "8px", background: "#ffffff11", borderRadius: "4px" }} />
                 <div style={{ fontSize: "0.62rem", color: "#c5c6c7" }}>Not started</div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Guild Contributions goal */}
+        <div style={{
+          background: "rgba(0,0,0,0.5)", border: "1px solid #ffd70055",
+          borderRadius: "12px", padding: "18px 24px", marginBottom: "40px",
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+            <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#ffd700", fontWeight: "bold" }}>
+              📋 Guild Contributions
+            </div>
+            <div style={{ fontSize: "0.72rem", color: "#4ade80", fontWeight: "bold", border: "1px solid #4ade8055", borderRadius: "4px", padding: "2px 10px" }}>
+              $2 reward
+            </div>
+          </div>
+          <div style={{ fontSize: "0.75rem", color: "#c5c6c7", lineHeight: "1.8" }}>
+            <strong style={{ color: "#ffd700" }}>Guild Goal</strong> — Complete every daily quest, every day of the event.
+            <br />
+            Members are encouraged to spend gold to buy items if needed to keep quests topped off.
+          </div>
+          <div style={{ marginTop: "12px", height: "8px", background: "#ffffff11", borderRadius: "4px" }} />
+          <div style={{ fontSize: "0.62rem", color: "#c5c6c7", marginTop: "6px" }}>Not started</div>
+        </div>
+
+        {/* Completion bonus */}
+        <div style={{
+          background: "rgba(74,222,128,0.06)", border: "1px solid #4ade8088",
+          borderRadius: "12px", padding: "16px 24px", marginBottom: "40px",
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+        }}>
+          <div>
+            <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#4ade80", fontWeight: "bold", marginBottom: "4px" }}>
+              ⭐ Complete All Four — Bonus
+            </div>
+            <div style={{ fontSize: "0.72rem", color: "#c5c6c7" }}>
+              Finish wood, mining, fishing <em>and</em> guild contributions to claim the bonus.
+            </div>
+          </div>
+          <div style={{ fontSize: "1.1rem", color: "#4ade80", fontWeight: "bold", border: "1px solid #4ade8055", borderRadius: "4px", padding: "4px 14px", whiteSpace: "nowrap" }}>
+            +$1 bonus
           </div>
         </div>
 
