@@ -336,64 +336,6 @@ export default function GuildEventsPage() {
           </div>
         </div>
 
-        {/* Reward Guide */}
-        <h2 style={{
-          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
-          color: "#45a29e", marginBottom: "18px",
-        }}>
-          🎁 Reward Guide — Members by Specialty
-        </h2>
-        <div style={{
-          display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(175px, 1fr))",
-          gap: "14px", marginBottom: "40px",
-        }}>
-          {SPECIALTIES.map(spec => {
-            const members = players
-              .filter(p => p.guildStatus !== "kicked")
-              .filter(p => getSpecialty(p)?.key === spec.key)
-              .sort((a, b) => {
-                const scoreFor = (p: Player) => ({
-                  farming: sum(p.harvested) + sum(p.planted),
-                  fishing: sum(p.fished),
-                  woodcutting: p.trees,
-                  mining: sum(p.mined),
-                  quests: sum(p.quests),
-                })[spec.key] ?? 0;
-                return scoreFor(b) - scoreFor(a);
-              });
-            if (members.length === 0) return null;
-            return (
-              <div key={spec.key} style={{
-                background: "rgba(0,0,0,0.45)", border: `1px solid ${spec.color}44`,
-                borderRadius: "10px", padding: "14px 16px",
-              }}>
-                <div style={{
-                  fontSize: "0.7rem", letterSpacing: "1px", textTransform: "uppercase",
-                  color: spec.color, fontWeight: "bold", marginBottom: "10px",
-                }}>
-                  {spec.emoji} {spec.label}s
-                </div>
-                {members.map((p, i) => (
-                  <div key={p.name} style={{
-                    display: "flex", justifyContent: "space-between",
-                    fontSize: "0.72rem", padding: "3px 0",
-                    borderBottom: i < members.length - 1 ? "1px solid #ffffff11" : "none",
-                  }}>
-                    <span style={{ color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</span>
-                    <span style={{ color: spec.color, fontWeight: "bold" }}>
-                      {spec.key === "farming"     ? fmt(sum(p.harvested) + sum(p.planted)) :
-                       spec.key === "fishing"     ? fmt(sum(p.fished)) :
-                       spec.key === "woodcutting" ? fmt(p.trees) :
-                       spec.key === "mining"      ? fmt(sum(p.mined)) :
-                                                    fmt(sum(p.quests))}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            );
-          })}
-        </div>
-
         {/* Wood Leaderboard */}
         <h2 style={{
           fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
