@@ -413,14 +413,22 @@ export default function GuildEventsPage() {
                   <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
                   <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
                   <td style={{ padding: "6px 8px", fontSize: "0.65rem" }}>
-                    {sorted(p.mined).map(([k, v], idx) => (
-                      <span key={k}>
-                        {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
-                        <span style={{ color: k === "Pure gold ore" ? "#ffd700" : "#c5c6c7", fontWeight: k === "Pure gold ore" ? "bold" : "normal" }}>
-                          {k}: {v}
+                    {sorted(p.mined).map(([k, v], idx) => {
+                      const color = k === "Pure gold ore" ? "#ffd700"
+                                  : k === "Ruby"          ? "#e0115f"
+                                  : k === "Silver"        ? "#c0c0c0"
+                                  : k === "Iron"          ? "#9e9e9e"
+                                  : "#c5c6c7";
+                      const bold = k === "Pure gold ore" || k === "Ruby" || k === "Silver";
+                      return (
+                        <span key={k}>
+                          {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
+                          <span style={{ color, fontWeight: bold ? "bold" : "normal" }}>
+                            {k === "Ruby" && <span style={{ fontSize: "0.7rem" }}>♦ </span>}{k}: {v}
+                          </span>
                         </span>
-                      </span>
-                    ))}
+                      );
+                    })}
                   </td>
                   <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
                     {fmt((p as Player & { mineSwings: number }).mineSwings)} swings
@@ -451,7 +459,7 @@ export default function GuildEventsPage() {
                   <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
                   <td style={{ padding: "6px 8px", fontSize: "0.65rem" }}>
                     {sorted(p.fished).map(([k, v], idx) => {
-                      const color = k.toLowerCase().includes("chub") ? "#4fc3f7"
+                      const color = k.toLowerCase().includes("chub") || k.toLowerCase().includes("black crappie") ? "#4fc3f7"
                                   : k.toLowerCase().includes("golden koi") || k.toLowerCase().includes("lotus carp") ? "#ffd700"
                                   : "#c5c6c7";
                       const bold = color !== "#c5c6c7";
