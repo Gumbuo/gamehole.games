@@ -371,7 +371,7 @@ export default function GuildEventsPage() {
           🏆 Guild Event — Goals &amp; Rewards
         </h2>
         <p style={{ fontSize: "0.7rem", color: "#c5c6c7", marginBottom: "18px", letterSpacing: "1px" }}>
-          Complete all four goals to earn up to <strong style={{ color: "#ffd700" }}>$10 USD</strong> in rewards. Up to 40 members eligible.
+          Complete all three goals to earn up to <strong style={{ color: "#ffd700" }}>$10 USD</strong> in rewards. Up to 40 members eligible.
         </p>
 
         {/* Wood goal */}
@@ -447,73 +447,6 @@ export default function GuildEventsPage() {
           </div>
         </div>
 
-        {/* Guild Contributions goal */}
-        <div style={{
-          background: "rgba(74,222,128,0.06)", border: "2px solid #4ade80",
-          borderRadius: "12px", padding: "18px 24px", marginBottom: "40px",
-          boxShadow: "0 0 18px #4ade8033",
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#4ade80", fontWeight: "bold" }}>
-                📋 Guild Contributions
-              </div>
-              <span style={{
-                fontSize: "0.6rem", letterSpacing: "1px", textTransform: "uppercase",
-                background: "#4ade8022", border: "1px solid #4ade80", color: "#4ade80",
-                borderRadius: "4px", padding: "2px 8px", fontWeight: "bold",
-              }}>🟢 ACTIVE</span>
-            </div>
-            <div style={{ fontSize: "0.72rem", color: "#4ade80", fontWeight: "bold", border: "1px solid #4ade8055", borderRadius: "4px", padding: "2px 10px" }}>
-              $2 reward
-            </div>
-          </div>
-          <div style={{ fontSize: "0.75rem", color: "#c5c6c7", lineHeight: "1.9" }}>
-            <strong style={{ color: "#ffd700" }}>Guild Goal</strong> — As a guild, complete every daily quest for the full duration of the event.
-            <br />
-            Hand in whatever you have. If the guild is running short, use your gold to buy <span style={{ color: "#66fcf1" }}>Wood · Stone · Iron · Eggs · Cakes</span> from the market and hand those in to keep quests topped off.
-            <br />
-            <span style={{ color: "#4ade80" }}>If the guild completes every daily quest during the event, everyone who participated earns $2.</span>
-          </div>
-          <div style={{ marginTop: "12px" }}>
-            {(eventData.questDays as { date: string; completed: boolean; quests: { item: string; target: number; actual: number }[] }[]).map((day) => {
-              const label = new Date(day.date + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-              return (
-                <div key={day.date} style={{
-                  background: day.completed ? "rgba(74,222,128,0.08)" : "rgba(255,45,45,0.08)",
-                  border: `1px solid ${day.completed ? "#4ade8044" : "#ff2d2d44"}`,
-                  borderRadius: "8px", padding: "10px 14px", marginBottom: "8px",
-                }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                    <span style={{ fontSize: "0.72rem", fontWeight: "bold", color: day.completed ? "#4ade80" : "#ff6b6b" }}>
-                      {day.completed ? "✅" : "❌"} {label}
-                    </span>
-                    <span style={{ fontSize: "0.62rem", color: day.completed ? "#4ade80" : "#ff6b6b" }}>
-                      {day.completed ? "ALL QUESTS COMPLETE" : "INCOMPLETE"}
-                    </span>
-                  </div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                    {day.quests.map((q) => {
-                      const pct = Math.min(100, Math.round((q.actual / q.target) * 100));
-                      return (
-                        <div key={q.item} style={{ minWidth: "160px", flex: 1 }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.62rem", color: "#c5c6c7", marginBottom: "3px" }}>
-                            <span>{q.item}</span>
-                            <span style={{ color: pct >= 100 ? "#4ade80" : "#ffd700" }}>{q.actual.toLocaleString()}/{q.target.toLocaleString()}</span>
-                          </div>
-                          <div style={{ height: "5px", background: "#ffffff11", borderRadius: "3px", overflow: "hidden" }}>
-                            <div style={{ height: "100%", width: `${pct}%`, background: pct >= 100 ? "#4ade80" : "#ffd700", borderRadius: "3px" }} />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
         {/* Completion bonus */}
         <div style={{
           background: "rgba(74,222,128,0.06)", border: "1px solid #4ade8088",
@@ -522,10 +455,10 @@ export default function GuildEventsPage() {
         }}>
           <div>
             <div style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", color: "#4ade80", fontWeight: "bold", marginBottom: "4px" }}>
-              ⭐ Complete All Four — Bonus
+              ⭐ Complete All Three — Bonus
             </div>
             <div style={{ fontSize: "0.72rem", color: "#c5c6c7" }}>
-              Finish wood, mining, fishing <em>and</em> guild contributions to claim the bonus.
+              Finish wood, mining <em>and</em> fishing to claim the bonus.
             </div>
           </div>
           <div style={{ fontSize: "1.1rem", color: "#4ade80", fontWeight: "bold", border: "1px solid #4ade8055", borderRadius: "4px", padding: "4px 14px", whiteSpace: "nowrap" }}>
