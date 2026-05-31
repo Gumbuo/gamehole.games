@@ -2,6 +2,7 @@
 import Link from "next/link";
 import activityData from "./activity-data.json";
 import eventData from "./event-data.json";
+import memberRoster from "./member-roster.json";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 type Player = {
@@ -946,6 +947,92 @@ export default function GuildEventsPage() {
               })}
             </tbody>
           </table>
+        </div>
+
+        {/* Guild Roster */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#45a29e", marginBottom: "6px", marginTop: "60px",
+        }}>
+          👥 Guild Roster — Activity Check
+        </h2>
+        <p style={{ fontSize: "0.7rem", color: "#c5c6c7", marginBottom: "18px", letterSpacing: "1px" }}>
+          Cross-referenced against the 15-day activity log.{" "}
+          <span style={{ color: "#ff6b6b" }}>Red = no activity recorded</span> — candidates for removal to make room for active players.
+        </p>
+        <div style={{
+          background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
+          borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
+        }}>
+          {(() => {
+            const activityNames = new Set(
+              (activityData as unknown as { players: { name: string }[] }).players.map(p => p.name.toLowerCase())
+            );
+            const activityMap = Object.fromEntries(
+              (activityData as unknown as { players: Player[] }).players.map(p => [p.name.toLowerCase(), p])
+            );
+            const roster = (memberRoster as { name: string; level: number; xp: number }[])
+              .slice()
+              .sort((a, b) => b.xp - a.xp);
+            return (
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.78rem" }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid #45a29e44" }}>
+                    <th style={{ padding: "6px 8px", textAlign: "left", color: "#45a29e", fontSize: "0.62rem", letterSpacing: "1px", fontWeight: "normal" }}>#</th>
+                    <th style={{ padding: "6px 8px", textAlign: "left", color: "#45a29e", fontSize: "0.62rem", letterSpacing: "1px", fontWeight: "normal" }}>PLAYER</th>
+                    <th style={{ padding: "6px 8px", textAlign: "center", color: "#45a29e", fontSize: "0.62rem", letterSpacing: "1px", fontWeight: "normal" }}>LV</th>
+                    <th style={{ padding: "6px 8px", textAlign: "right", color: "#45a29e", fontSize: "0.62rem", letterSpacing: "1px", fontWeight: "normal" }}>XP</th>
+                    <th style={{ padding: "6px 8px", textAlign: "right", color: "#45a29e", fontSize: "0.62rem", letterSpacing: "1px", fontWeight: "normal" }}>ACTIVITY</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {roster.map((m, i) => {
+                    const key = m.name.toLowerCase();
+                    const active = activityNames.has(key);
+                    const ap = activityMap[key] as Player | undefined;
+                    const totalActivity = ap
+                      ? ap.treeChops + ap.mineSwings + ap.fishCasts + ap.questContributions
+                      : 0;
+                    return (
+                      <tr key={m.name} style={{
+                        borderBottom: "1px solid #45a29e15",
+                        background: active ? "transparent" : "rgba(60,0,0,0.35)",
+                      }}>
+                        <td style={{ padding: "5px 8px", color: "#45a29e88", fontSize: "0.62rem" }}>{i + 1}</td>
+                        <td style={{ padding: "5px 8px", color: active ? "#66fcf1" : "#ff6b6b", fontWeight: active ? "normal" : "bold" }}>
+                          {m.name}
+                          {!active && (
+                            <span style={{
+                              marginLeft: "10px", fontSize: "0.58rem", letterSpacing: "1px",
+                              background: "rgba(255,45,45,0.15)", border: "1px solid #ff2d2d",
+                              color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
+                            }}>
+                              NO ACTIVITY
+                            </span>
+                          )}
+                        </td>
+                        <td style={{ padding: "5px 8px", textAlign: "center", color: m.level < 10 ? "#ffd700" : "#c5c6c7", fontSize: "0.7rem" }}>
+                          {m.level < 10 && "⚠ "}LV {m.level}
+                        </td>
+                        <td style={{ padding: "5px 8px", textAlign: "right", color: "#c5c6c7", fontSize: "0.7rem" }}>
+                          {m.xp > 0 ? m.xp.toLocaleString() : "—"}
+                        </td>
+                        <td style={{ padding: "5px 8px", textAlign: "right", fontSize: "0.68rem" }}>
+                          {active ? (
+                            <span style={{ color: totalActivity > 0 ? "#4ade80" : "#ffd700" }}>
+                              {totalActivity > 0 ? `${totalActivity.toLocaleString()} actions` : "joined — no actions"}
+                            </span>
+                          ) : (
+                            <span style={{ color: "#ff2d2d" }}>—</span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            );
+          })()}
         </div>
 
         <p style={{
