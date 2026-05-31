@@ -6,8 +6,8 @@
     "totalWood": 4686,
     "totalMined": 2029,
     "totalFish": 15526,
-    "totalQuest": 108102,
-    "totalGold": 12762.6664,
+    "totalQuest": 107799,
+    "totalGold": 12754.6287,
     "totalVaultDonated": 13131,
     "totalReinvested": 1178.4547
   },
@@ -2738,32 +2738,6 @@
       "questContributions": 11,
       "goldEarned": 3.2825,
       "vaultDonated": 13
-    },
-    {
-      "name": "5l33pyG4mer",
-      "score": 303,
-      "planted": {},
-      "harvested": {},
-      "trees": 0,
-      "treeTiles": {},
-      "mined": {},
-      "fished": {},
-      "quests": {
-        "Wrapped potato": 25,
-        "Cotton": 250,
-        "Cotton thread green": 1,
-        "Veggie salad": 25,
-        "Wood plank": 2
-      },
-      "unplanted": {},
-      "joinDate": "2026-05-23",
-      "guildStatus": "kicked",
-      "treeChops": 0,
-      "mineSwings": 0,
-      "fishCasts": 0,
-      "questContributions": 15,
-      "goldEarned": 8.0377,
-      "vaultDonated": 0
     },
     {
       "name": "GoldenDragonfly",
