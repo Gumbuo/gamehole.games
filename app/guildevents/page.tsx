@@ -28,6 +28,12 @@ type Player = {
 const WOOD_EVENT_TARGET = 650;
 const MINE_EVENT_TARGET = 400;
 
+// Gold rod recipients — update manually when a rod is handed out
+// value = number of rods received so far
+const GOLD_ROD_RECIPIENTS: Record<string, number> = {
+  "KA-BACKYARD": 1,
+};
+
 const FISHING_EVENT: { fish: string; target: number; color: string }[] = [
   { fish: "Yellow Bluegill",  target: 250, color: "#f9c74f" },
   { fish: "Blue Bluegill",    target: 250, color: "#4fc3f7" },
@@ -683,10 +689,20 @@ export default function GuildEventsPage() {
         {/* Fishing Leaderboard */}
         <h2 style={{
           fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
-          color: "#45a29e", marginBottom: "18px", marginTop: "40px",
+          color: "#45a29e", marginBottom: "12px", marginTop: "40px",
         }}>
           🎣 Fishing — Most to Least
         </h2>
+
+        {/* Gold Rod reward explanation */}
+        <div style={{
+          background: "rgba(0,131,143,0.08)", border: "1px solid #00838f",
+          borderRadius: "8px", padding: "12px 16px", marginBottom: "18px",
+          fontSize: "0.72rem", color: "#c5c6c7", lineHeight: "1.7",
+        }}>
+          <span style={{ color: "#ffd700", fontWeight: "bold" }}>🎣 Gold Rod Reward</span>
+          {"  ·  "}Reach <strong style={{ color: "#ffd700" }}>150 casts</strong> and FoxHole or Mrfaf will give you a Gold Rod.
+        </div>
         <div style={{
           background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
           borderRadius: "12px", padding: "18px 20px", marginBottom: "36px",
@@ -695,13 +711,15 @@ export default function GuildEventsPage() {
             <tbody>
               {[...players].filter(p => p.fishCasts > 0).sort((a, b) => b.fishCasts - a.fishCasts).map((p, i) => {
                 const inactive = isInactive(p);
+                const rodsReceived = GOLD_ROD_RECIPIENTS[p.name] || 0;
+                const rodEarned = p.fishCasts >= 150;
                 return (
                   <tr key={p.name} style={{
                     borderBottom: "1px solid #45a29e22",
-                    background: inactive ? "rgba(60,0,0,0.45)" : "transparent",
+                    background: inactive ? "rgba(60,0,0,0.45)" : rodEarned ? "rgba(0,131,143,0.06)" : "transparent",
                   }}>
-                    <td style={{ padding: "6px 8px", color: inactive ? "#ff2d2d" : "#45a29e", width: "32px" }}>#{i + 1}</td>
-                    <td style={{ padding: "6px 8px", color: inactive ? "#ff6b6b" : "#66fcf1", fontWeight: inactive ? "bold" : "normal" }}>
+                    <td style={{ padding: "6px 8px", color: inactive ? "#ff2d2d" : rodEarned ? "#ffd700" : "#45a29e", width: "32px" }}>#{i + 1}</td>
+                    <td style={{ padding: "6px 8px", color: inactive ? "#ff6b6b" : rodEarned ? "#ffd700" : "#66fcf1", fontWeight: inactive || rodEarned ? "bold" : "normal" }}>
                       {i < 3 ? MEDALS[i] + " " : ""}{p.name}
                       {inactive && (
                         <span style={{
@@ -710,6 +728,24 @@ export default function GuildEventsPage() {
                           color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
                         }}>
                           INACTIVE
+                        </span>
+                      )}
+                      {!inactive && rodsReceived > 0 && (
+                        <span style={{
+                          marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
+                          background: "rgba(0,131,143,0.2)", border: "1px solid #00838f",
+                          color: "#ffd700", borderRadius: "4px", padding: "1px 6px",
+                        }}>
+                          🎣 GOLD ROD ×{rodsReceived} — Working on #{rodsReceived + 1}
+                        </span>
+                      )}
+                      {!inactive && rodsReceived === 0 && rodEarned && (
+                        <span style={{
+                          marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
+                          background: "rgba(0,131,143,0.2)", border: "1px solid #00838f",
+                          color: "#ffd700", borderRadius: "4px", padding: "1px 6px",
+                        }}>
+                          🎣 GOLD ROD EARNED
                         </span>
                       )}
                     </td>
