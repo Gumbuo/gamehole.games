@@ -722,6 +722,91 @@ export default function GuildEventsPage() {
           </table>
         </div>
 
+        {/* Farming Leaderboard */}
+        <h2 style={{
+          fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
+          color: "#45a29e", marginBottom: "18px", marginTop: "40px",
+        }}>
+          🌾 Farming — Most to Least
+        </h2>
+        <div style={{
+          background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
+          borderRadius: "12px", overflow: "hidden", marginBottom: "36px",
+        }}>
+          {[...players].filter(p => sum(p.harvested) > 0 || sum(p.planted) > 0).sort((a, b) => (sum(b.harvested) + sum(b.planted)) - (sum(a.harvested) + sum(a.planted))).map((p, i, arr) => {
+            const inactive = isInactive(p);
+            const totalHarv = sum(p.harvested);
+            const totalPlant = sum(p.planted);
+            return (
+              <div key={p.name} style={{
+                padding: "14px 18px",
+                borderBottom: i < arr.length - 1 ? "1px solid #45a29e22" : "none",
+                background: inactive ? "rgba(60,0,0,0.4)" : "transparent",
+              }}>
+                {/* Player header */}
+                <div style={{
+                  display: "flex", alignItems: "baseline", justifyContent: "space-between",
+                  marginBottom: "10px", borderBottom: `1px solid ${inactive ? "#ff2d2d22" : "#45a29e22"}`, paddingBottom: "8px",
+                }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
+                    <span style={{ fontSize: "0.65rem", color: inactive ? "#ff2d2d" : "#45a29e", minWidth: "22px" }}>#{i + 1}</span>
+                    <span style={{ fontSize: "0.9rem", color: inactive ? "#ff6b6b" : "#66fcf1", fontWeight: "bold" }}>
+                      {i < 3 ? MEDALS[i] + " " : ""}{p.name}
+                    </span>
+                    {inactive && (
+                      <span style={{
+                        fontSize: "0.6rem", letterSpacing: "1px",
+                        background: "rgba(255,45,45,0.15)", border: "1px solid #ff2d2d",
+                        color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
+                      }}>
+                        INACTIVE
+                      </span>
+                    )}
+                  </div>
+                  <span style={{ fontSize: "0.65rem", color: inactive ? "#ff6b6b88" : "#ffd700", whiteSpace: "nowrap" }}>
+                    {totalHarv > 0 && <span>{fmt(totalHarv)} harvested</span>}
+                    {totalHarv > 0 && totalPlant > 0 && <span style={{ color: "#45a29e" }}> · </span>}
+                    {totalPlant > 0 && <span>{fmt(totalPlant)} planted</span>}
+                  </span>
+                </div>
+                {/* Item grids */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "20px 30px" }}>
+                  {sorted(p.harvested).length > 0 && (
+                    <div style={{ flex: 1, minWidth: "200px" }}>
+                      <div style={{ fontSize: "0.62rem", color: "#2e7d32", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "6px", fontWeight: "bold" }}>
+                        🌾 Harvested
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "2px 16px" }}>
+                        {sorted(p.harvested).map(([k, v]) => (
+                          <div key={k} style={{ display: "flex", justifyContent: "space-between", fontSize: "0.68rem", padding: "2px 0", borderBottom: "1px solid #ffffff08" }}>
+                            <span style={{ color: "#c5c6c7" }}>{k}</span>
+                            <span style={{ color: "#66fcf1", fontWeight: "bold", marginLeft: "8px" }}>{fmt(v)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {sorted(p.planted).length > 0 && (
+                    <div style={{ flex: 1, minWidth: "200px" }}>
+                      <div style={{ fontSize: "0.62rem", color: "#00d9ff", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "6px", fontWeight: "bold" }}>
+                        🌱 Planted
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "2px 16px" }}>
+                        {sorted(p.planted).map(([k, v]) => (
+                          <div key={k} style={{ display: "flex", justifyContent: "space-between", fontSize: "0.68rem", padding: "2px 0", borderBottom: "1px solid #ffffff08" }}>
+                            <span style={{ color: "#c5c6c7" }}>{k}</span>
+                            <span style={{ color: "#00d9ff", fontWeight: "bold", marginLeft: "8px" }}>{fmt(v)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {/* Guild Contributions Leaderboard */}
         <h2 style={{
           fontSize: "0.85rem", letterSpacing: "3px", textTransform: "uppercase",
