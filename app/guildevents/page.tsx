@@ -553,7 +553,7 @@ export default function GuildEventsPage() {
           <br /><br />
           <span style={{ color: "#66fcf1", fontWeight: "bold" }}>🌲 Where to use which axe:</span>
           <br />
-          <span style={{ color: "#4ade80" }}>Public land</span> — Silver axe is fine. It only has a <em>chance</em> of giving 1 less wood per chop, so the difference is small and it saves your Gold Axe durability.
+          <span style={{ color: "#4ade80" }}>Public land</span> — Silver axe is fine. The difference compared to Gold is at most <strong style={{ color: "#4ade80" }}>8 wood per axe</strong> over its full lifespan — a small loss that saves your Gold Axe durability for guild tiles.
           <br />
           <span style={{ color: "#ffd700" }}>Guild tiles</span> — Always use your <strong>Gold Axe</strong>. Silver axe on guild land gives noticeably less wood for <em>everyone</em> who harvests that tile, hurting the whole guild. Save Silver for public trees only.
         </div>
