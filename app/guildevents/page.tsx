@@ -697,8 +697,18 @@ export default function GuildEventsPage() {
                     </td>
                     <td style={{ padding: "6px 8px", fontSize: "0.65rem" }}>
                       {sorted(p.fished).map(([k, v], idx) => {
-                        const color = k.toLowerCase().includes("chub") || k.toLowerCase().includes("black crappie") ? "#4fc3f7"
-                                    : k.toLowerCase().includes("golden koi") || k.toLowerCase().includes("lotus carp") ? "#ffd700"
+                        const kl = k.toLowerCase();
+                        const color = kl.includes("golden koi") || kl.includes("lotus carp") ? "#ffd700"
+                                    : kl.includes("yellow bluegill")                          ? "#ffd700"
+                                    : kl.includes("orange bluegill")                          ? "#ff8c42"
+                                    : kl.includes("blue bluegill")                            ? "#4fc3f7"
+                                    : kl.includes("red chub")                                 ? "#ef5350"
+                                    : kl.includes("yellow chub")                              ? "#ffd54f"
+                                    : kl.includes("grey chub")                                ? "#b0bec5"
+                                    : kl.includes("chub")                                     ? "#4fc3f7"
+                                    : kl.includes("black crappie")                            ? "#90a4ae"
+                                    : kl.includes("crucian carp")                             ? "#80cfa9"
+                                    : kl.includes("tadpole")                                  ? "#78909c"
                                     : "#c5c6c7";
                         const bold = color !== "#c5c6c7";
                         return (
