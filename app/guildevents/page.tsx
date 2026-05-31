@@ -550,6 +550,12 @@ export default function GuildEventsPage() {
           {"  ·  "}Collect <strong style={{ color: "#ffd700" }}>150 wood</strong> and FoxHole or Mrfaf will give you a Gold Axe.
           <br />
           A Gold Axe yields <strong style={{ color: "#c68642" }}>3 wood per chop</strong> and lasts <strong style={{ color: "#c68642" }}>~60 chops</strong> (180 wood total) before it breaks — reaching 150 means you{`'`}ve earned a replacement before your current one runs out.
+          <br /><br />
+          <span style={{ color: "#66fcf1", fontWeight: "bold" }}>🌲 Where to use which axe:</span>
+          <br />
+          <span style={{ color: "#4ade80" }}>Public land</span> — Silver axe is fine. It only has a <em>chance</em> of giving 1 less wood per chop, so the difference is small and it saves your Gold Axe durability.
+          <br />
+          <span style={{ color: "#ffd700" }}>Guild tiles</span> — Always use your <strong>Gold Axe</strong>. Silver axe on guild land gives noticeably less wood for <em>everyone</em> who harvests that tile, hurting the whole guild. Save Silver for public trees only.
         </div>
 
         <div style={{
@@ -617,6 +623,12 @@ export default function GuildEventsPage() {
         }}>
           <span style={{ color: "#ffd700", fontWeight: "bold" }}>⛏️ Gold Pickaxe Reward</span>
           {"  ·  "}Reach <strong style={{ color: "#ffd700" }}>150 swings</strong> and FoxHole or Mrfaf will give you a Gold Pickaxe.
+          <br /><br />
+          <span style={{ color: "#66fcf1", fontWeight: "bold" }}>⛰️ Where to use which pickaxe:</span>
+          <br />
+          <span style={{ color: "#4ade80" }}>Public mountains</span> — Silver pickaxe is fine. It only has a <em>chance</em> of giving 1 less mineral per swing, so the loss is minimal and it saves your Gold Pickaxe durability.
+          <br />
+          <span style={{ color: "#ffd700" }}>Guild tiles</span> — Always use your <strong>Gold Pickaxe</strong>. Silver pickaxe on guild mountain tiles gives noticeably less minerals for <em>everyone</em>, hurting the whole guild. Keep Silver for public rocks only.
         </div>
 
         <div style={{
