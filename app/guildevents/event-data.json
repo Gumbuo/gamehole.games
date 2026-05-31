@@ -12,11 +12,11 @@
     },
     {
       "date": "2026-05-31",
-      "completed": false,
+      "completed": true,
       "quests": [
-        { "item": "Cotton", "target": 15000, "actual": 2263 },
-        { "item": "Pillow grey", "target": 60, "actual": 8 },
-        { "item": "Stone brick", "target": 3000, "actual": 111 }
+        { "item": "Cotton", "target": 15000, "actual": 15000 },
+        { "item": "Pillow grey", "target": 60, "actual": 60 },
+        { "item": "Stone brick", "target": 3000, "actual": 3000 }
       ]
     }
   ]
