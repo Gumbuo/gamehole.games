@@ -83,6 +83,10 @@ function getSpecialty(player: Player): Specialty | null {
   return SPECIALTIES.find(s => s.key === best[0]) || null;
 }
 
+function isInactive(player: Player): boolean {
+  return player.guildStatus === "kicked";
+}
+
 // Players exempt from the harvest-without-planting violation flag
 const VIOLATION_EXEMPT = ["Dravyn"];
 
@@ -550,15 +554,25 @@ export default function GuildEventsPage() {
             <tbody>
               {[...players].filter(p => p.trees > 0).sort((a, b) => b.trees - a.trees).map((p, i) => {
                 const earned = p.trees >= 150;
+                const inactive = isInactive(p);
                 return (
                   <tr key={p.name} style={{
                     borderBottom: "1px solid #45a29e22",
-                    background: earned ? "rgba(198,134,66,0.08)" : "transparent",
+                    background: inactive ? "rgba(60,0,0,0.45)" : earned ? "rgba(198,134,66,0.08)" : "transparent",
                   }}>
-                    <td style={{ padding: "6px 8px", color: earned ? "#ffd700" : "#45a29e", width: "32px" }}>#{i + 1}</td>
-                    <td style={{ padding: "6px 8px", color: earned ? "#ffd700" : "#66fcf1", fontWeight: earned ? "bold" : "normal" }}>
+                    <td style={{ padding: "6px 8px", color: inactive ? "#ff2d2d" : earned ? "#ffd700" : "#45a29e", width: "32px" }}>#{i + 1}</td>
+                    <td style={{ padding: "6px 8px", color: inactive ? "#ff6b6b" : earned ? "#ffd700" : "#66fcf1", fontWeight: earned || inactive ? "bold" : "normal" }}>
                       {i < 3 ? MEDALS[i] + " " : ""}{p.name}
-                      {earned && (
+                      {inactive && (
+                        <span style={{
+                          marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
+                          background: "rgba(255,45,45,0.15)", border: "1px solid #ff2d2d",
+                          color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
+                        }}>
+                          INACTIVE
+                        </span>
+                      )}
+                      {earned && !inactive && (
                         <span style={{
                           marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
                           background: "rgba(198,134,66,0.2)", border: "1px solid #c68642",
@@ -568,10 +582,10 @@ export default function GuildEventsPage() {
                         </span>
                       )}
                     </td>
-                    <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                    <td style={{ padding: "6px 8px", textAlign: "center", color: inactive ? "#ff6b6b88" : "#c5c6c7", fontSize: "0.65rem" }}>
                       {fmt(p.treeChops)} chops
                     </td>
-                    <td style={{ padding: "6px 8px", textAlign: "right", color: earned ? "#ffd700" : "#c68642", fontWeight: "bold" }}>
+                    <td style={{ padding: "6px 8px", textAlign: "right", color: inactive ? "#ff6b6b" : earned ? "#ffd700" : "#c68642", fontWeight: "bold" }}>
                       {earned ? `${fmt(p.trees)} wood` : `${fmt(p.trees)} / 150`}
                     </td>
                   </tr>
@@ -607,15 +621,25 @@ export default function GuildEventsPage() {
             <tbody>
               {[...players].filter(p => sum(p.mined) > 0).sort((a, b) => sum(b.mined) - sum(a.mined)).map((p, i) => {
                 const earned = p.mineSwings >= 150;
+                const inactive = isInactive(p);
                 return (
                   <tr key={p.name} style={{
                     borderBottom: "1px solid #45a29e22",
-                    background: earned ? "rgba(180,77,255,0.06)" : "transparent",
+                    background: inactive ? "rgba(60,0,0,0.45)" : earned ? "rgba(180,77,255,0.06)" : "transparent",
                   }}>
-                    <td style={{ padding: "6px 8px", color: earned ? "#ffd700" : "#45a29e", width: "32px" }}>#{i + 1}</td>
-                    <td style={{ padding: "6px 8px", color: earned ? "#ffd700" : "#66fcf1", fontWeight: earned ? "bold" : "normal" }}>
+                    <td style={{ padding: "6px 8px", color: inactive ? "#ff2d2d" : earned ? "#ffd700" : "#45a29e", width: "32px" }}>#{i + 1}</td>
+                    <td style={{ padding: "6px 8px", color: inactive ? "#ff6b6b" : earned ? "#ffd700" : "#66fcf1", fontWeight: earned || inactive ? "bold" : "normal" }}>
                       {i < 3 ? MEDALS[i] + " " : ""}{p.name}
-                      {earned && (
+                      {inactive && (
+                        <span style={{
+                          marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
+                          background: "rgba(255,45,45,0.15)", border: "1px solid #ff2d2d",
+                          color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
+                        }}>
+                          INACTIVE
+                        </span>
+                      )}
+                      {earned && !inactive && (
                         <span style={{
                           marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
                           background: "rgba(180,77,255,0.2)", border: "1px solid #b44dff",
@@ -643,10 +667,10 @@ export default function GuildEventsPage() {
                         );
                       })}
                     </td>
-                    <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
+                    <td style={{ padding: "6px 8px", textAlign: "center", color: inactive ? "#ff6b6b88" : "#c5c6c7", fontSize: "0.65rem" }}>
                       {earned ? `${fmt(p.mineSwings)} swings` : `${fmt(p.mineSwings)} / 150`}
                     </td>
-                    <td style={{ padding: "6px 8px", textAlign: "right", color: earned ? "#ffd700" : "#b44dff", fontWeight: "bold" }}>
+                    <td style={{ padding: "6px 8px", textAlign: "right", color: inactive ? "#ff6b6b" : earned ? "#ffd700" : "#b44dff", fontWeight: "bold" }}>
                       {fmt(sum(p.mined))} minerals
                     </td>
                   </tr>
@@ -669,32 +693,49 @@ export default function GuildEventsPage() {
         }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
             <tbody>
-              {[...players].filter(p => p.fishCasts > 0).sort((a, b) => b.fishCasts - a.fishCasts).map((p, i) => (
-                <tr key={p.name} style={{ borderBottom: "1px solid #45a29e22" }}>
-                  <td style={{ padding: "6px 8px", color: "#45a29e", width: "32px" }}>#{i + 1}</td>
-                  <td style={{ padding: "6px 8px", color: "#66fcf1" }}>{i < 3 ? MEDALS[i] + " " : ""}{p.name}</td>
-                  <td style={{ padding: "6px 8px", fontSize: "0.65rem" }}>
-                    {sorted(p.fished).map(([k, v], idx) => {
-                      const color = k.toLowerCase().includes("chub") || k.toLowerCase().includes("black crappie") ? "#4fc3f7"
-                                  : k.toLowerCase().includes("golden koi") || k.toLowerCase().includes("lotus carp") ? "#ffd700"
-                                  : "#c5c6c7";
-                      const bold = color !== "#c5c6c7";
-                      return (
-                        <span key={k}>
-                          {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
-                          <span style={{ color, fontWeight: bold ? "bold" : "normal" }}>{k}: {v}</span>
+              {[...players].filter(p => p.fishCasts > 0).sort((a, b) => b.fishCasts - a.fishCasts).map((p, i) => {
+                const inactive = isInactive(p);
+                return (
+                  <tr key={p.name} style={{
+                    borderBottom: "1px solid #45a29e22",
+                    background: inactive ? "rgba(60,0,0,0.45)" : "transparent",
+                  }}>
+                    <td style={{ padding: "6px 8px", color: inactive ? "#ff2d2d" : "#45a29e", width: "32px" }}>#{i + 1}</td>
+                    <td style={{ padding: "6px 8px", color: inactive ? "#ff6b6b" : "#66fcf1", fontWeight: inactive ? "bold" : "normal" }}>
+                      {i < 3 ? MEDALS[i] + " " : ""}{p.name}
+                      {inactive && (
+                        <span style={{
+                          marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
+                          background: "rgba(255,45,45,0.15)", border: "1px solid #ff2d2d",
+                          color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
+                        }}>
+                          INACTIVE
                         </span>
-                      );
-                    })}
-                  </td>
-                  <td style={{ padding: "6px 8px", textAlign: "center", color: "#c5c6c7", fontSize: "0.65rem" }}>
-                    {fmt(p.fishCasts)} casts
-                  </td>
-                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#00838f", fontWeight: "bold" }}>
-                    {fmt(sum(p.fished))} fish
-                  </td>
-                </tr>
-              ))}
+                      )}
+                    </td>
+                    <td style={{ padding: "6px 8px", fontSize: "0.65rem" }}>
+                      {sorted(p.fished).map(([k, v], idx) => {
+                        const color = k.toLowerCase().includes("chub") || k.toLowerCase().includes("black crappie") ? "#4fc3f7"
+                                    : k.toLowerCase().includes("golden koi") || k.toLowerCase().includes("lotus carp") ? "#ffd700"
+                                    : "#c5c6c7";
+                        const bold = color !== "#c5c6c7";
+                        return (
+                          <span key={k}>
+                            {idx > 0 && <span style={{ color: "#c5c6c7" }}> · </span>}
+                            <span style={{ color, fontWeight: bold ? "bold" : "normal" }}>{k}: {v}</span>
+                          </span>
+                        );
+                      })}
+                    </td>
+                    <td style={{ padding: "6px 8px", textAlign: "center", color: inactive ? "#ff6b6b88" : "#c5c6c7", fontSize: "0.65rem" }}>
+                      {fmt(p.fishCasts)} casts
+                    </td>
+                    <td style={{ padding: "6px 8px", textAlign: "right", color: inactive ? "#ff6b6b" : "#00838f", fontWeight: "bold" }}>
+                      {fmt(sum(p.fished))} fish
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -710,23 +751,35 @@ export default function GuildEventsPage() {
           background: "rgba(0,0,0,0.45)", border: "1px solid #45a29e",
           borderRadius: "12px", overflow: "hidden", marginBottom: "36px",
         }}>
-          {[...players].filter(p => sum(p.quests) > 0).sort((a, b) => sum(b.quests) - sum(a.quests)).map((p, i, arr) => (
+          {[...players].filter(p => sum(p.quests) > 0).sort((a, b) => sum(b.quests) - sum(a.quests)).map((p, i, arr) => {
+            const inactive = isInactive(p);
+            return (
             <div key={p.name} style={{
               padding: "14px 18px",
               borderBottom: i < arr.length - 1 ? "1px solid #45a29e22" : "none",
+              background: inactive ? "rgba(60,0,0,0.4)" : "transparent",
             }}>
               {/* Player header */}
               <div style={{
                 display: "flex", alignItems: "baseline", justifyContent: "space-between",
-                marginBottom: "10px", borderBottom: "1px solid #45a29e22", paddingBottom: "8px",
+                marginBottom: "10px", borderBottom: `1px solid ${inactive ? "#ff2d2d22" : "#45a29e22"}`, paddingBottom: "8px",
               }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
-                  <span style={{ fontSize: "0.65rem", color: "#45a29e", minWidth: "22px" }}>#{i + 1}</span>
-                  <span style={{ fontSize: "0.9rem", color: "#66fcf1", fontWeight: "bold" }}>
+                  <span style={{ fontSize: "0.65rem", color: inactive ? "#ff2d2d" : "#45a29e", minWidth: "22px" }}>#{i + 1}</span>
+                  <span style={{ fontSize: "0.9rem", color: inactive ? "#ff6b6b" : "#66fcf1", fontWeight: "bold" }}>
                     {i < 3 ? MEDALS[i] + " " : ""}{p.name}
                   </span>
+                  {inactive && (
+                    <span style={{
+                      fontSize: "0.6rem", letterSpacing: "1px",
+                      background: "rgba(255,45,45,0.15)", border: "1px solid #ff2d2d",
+                      color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
+                    }}>
+                      INACTIVE
+                    </span>
+                  )}
                 </div>
-                <span style={{ fontSize: "0.65rem", color: "#ffd700", whiteSpace: "nowrap" }}>
+                <span style={{ fontSize: "0.65rem", color: inactive ? "#ff6b6b88" : "#ffd700", whiteSpace: "nowrap" }}>
                   {fmt(p.questContributions)} contributions · <strong>{fmt(sum(p.quests))} items</strong>
                 </span>
               </div>
@@ -748,7 +801,8 @@ export default function GuildEventsPage() {
                 ))}
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Gold Earnings Leaderboard */}
@@ -764,17 +818,32 @@ export default function GuildEventsPage() {
         }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
             <tbody>
-              {[...players].filter(p => (p.goldEarned || 0) > 0).sort((a, b) => (b.goldEarned || 0) - (a.goldEarned || 0)).map((p, i) => (
-                <tr key={p.name} style={{ borderBottom: "1px solid #ffd70022" }}>
-                  <td style={{ padding: "6px 8px", color: "#ffd70088", width: "32px" }}>#{i + 1}</td>
-                  <td style={{ padding: "6px 8px", color: i < 3 ? "#ffd700" : "#66fcf1", fontWeight: i < 3 ? "bold" : "normal" }}>
+              {[...players].filter(p => (p.goldEarned || 0) > 0).sort((a, b) => (b.goldEarned || 0) - (a.goldEarned || 0)).map((p, i) => {
+                const inactive = isInactive(p);
+                return (
+                <tr key={p.name} style={{
+                  borderBottom: "1px solid #ffd70022",
+                  background: inactive ? "rgba(60,0,0,0.45)" : "transparent",
+                }}>
+                  <td style={{ padding: "6px 8px", color: inactive ? "#ff2d2d" : "#ffd70088", width: "32px" }}>#{i + 1}</td>
+                  <td style={{ padding: "6px 8px", color: inactive ? "#ff6b6b" : i < 3 ? "#ffd700" : "#66fcf1", fontWeight: i < 3 || inactive ? "bold" : "normal" }}>
                     {i < 3 ? MEDALS[i] + " " : ""}{p.name}
+                    {inactive && (
+                      <span style={{
+                        marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
+                        background: "rgba(255,45,45,0.15)", border: "1px solid #ff2d2d",
+                        color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
+                      }}>
+                        INACTIVE
+                      </span>
+                    )}
                   </td>
-                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold" }}>
+                  <td style={{ padding: "6px 8px", textAlign: "right", color: inactive ? "#ff6b6b" : "#ffd700", fontWeight: "bold" }}>
                     {(p.goldEarned || 0).toFixed(2)} gold
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -801,17 +870,32 @@ export default function GuildEventsPage() {
         }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
             <tbody>
-              {[...players].filter(p => (p.vaultDonated || 0) > 0).sort((a, b) => (b.vaultDonated || 0) - (a.vaultDonated || 0)).map((p, i) => (
-                <tr key={p.name} style={{ borderBottom: "1px solid #ffd70022" }}>
-                  <td style={{ padding: "6px 8px", color: "#ffd70088", width: "32px" }}>#{i + 1}</td>
-                  <td style={{ padding: "6px 8px", color: i < 3 ? "#ffd700" : "#66fcf1", fontWeight: i < 3 ? "bold" : "normal" }}>
+              {[...players].filter(p => (p.vaultDonated || 0) > 0).sort((a, b) => (b.vaultDonated || 0) - (a.vaultDonated || 0)).map((p, i) => {
+                const inactive = isInactive(p);
+                return (
+                <tr key={p.name} style={{
+                  borderBottom: "1px solid #ffd70022",
+                  background: inactive ? "rgba(60,0,0,0.45)" : "transparent",
+                }}>
+                  <td style={{ padding: "6px 8px", color: inactive ? "#ff2d2d" : "#ffd70088", width: "32px" }}>#{i + 1}</td>
+                  <td style={{ padding: "6px 8px", color: inactive ? "#ff6b6b" : i < 3 ? "#ffd700" : "#66fcf1", fontWeight: i < 3 || inactive ? "bold" : "normal" }}>
                     {i < 3 ? MEDALS[i] + " " : ""}{p.name}
+                    {inactive && (
+                      <span style={{
+                        marginLeft: "10px", fontSize: "0.6rem", letterSpacing: "1px",
+                        background: "rgba(255,45,45,0.15)", border: "1px solid #ff2d2d",
+                        color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
+                      }}>
+                        INACTIVE
+                      </span>
+                    )}
                   </td>
-                  <td style={{ padding: "6px 8px", textAlign: "right", color: "#ffd700", fontWeight: "bold" }}>
+                  <td style={{ padding: "6px 8px", textAlign: "right", color: inactive ? "#ff6b6b" : "#ffd700", fontWeight: "bold" }}>
                     {fmt(p.vaultDonated || 0)} gold
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
