@@ -705,10 +705,11 @@ export default function GuildEventsPage() {
                                     : kl.includes("crucian carp")                             ? "#8d6e63"
                                     : kl.includes("red chub")                                 ? "#ef5350"
                                     : kl.includes("yellow chub")                              ? "#ffd54f"
-                                    : kl.includes("grey chub")                                ? "#b0bec5"
+                                    : kl.includes("grey chub")                                ? "#4fc3f7"
                                     : kl.includes("chub")                                     ? "#4fc3f7"
                                     : kl.includes("black crappie")                            ? "#90a4ae"
                                     : kl.includes("tadpole")                                  ? "#78909c"
+                                    : kl.includes("bullfrog")                                 ? "#4ade80"
                                     : "#c5c6c7";
                         const bold = color !== "#c5c6c7";
                         return (
