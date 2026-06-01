@@ -1024,26 +1024,27 @@ export default function GuildEventsPage() {
                       : 0;
                     return (
                       <tr key={m.name} style={{
-                        borderBottom: "1px solid #45a29e15",
-                        background: active ? "transparent" : "rgba(60,0,0,0.35)",
+                        borderBottom: active ? "1px solid #45a29e15" : "1px solid #ff2d2d33",
+                        background: active ? "transparent" : "rgba(120,0,0,0.55)",
                       }}>
-                        <td style={{ padding: "5px 8px", color: "#45a29e88", fontSize: "0.62rem" }}>{i + 1}</td>
-                        <td style={{ padding: "5px 8px", color: active ? "#66fcf1" : "#ff6b6b", fontWeight: active ? "normal" : "bold" }}>
+                        <td style={{ padding: "5px 8px", color: active ? "#45a29e88" : "#ff2d2d", fontSize: "0.62rem" }}>{i + 1}</td>
+                        <td style={{ padding: "5px 8px", color: active ? "#66fcf1" : "#ff4444", fontWeight: active ? "normal" : "bold" }}>
                           {m.name}
                           {!active && (
                             <span style={{
                               marginLeft: "10px", fontSize: "0.58rem", letterSpacing: "1px",
-                              background: "rgba(255,45,45,0.15)", border: "1px solid #ff2d2d",
-                              color: "#ff6b6b", borderRadius: "4px", padding: "1px 6px",
+                              background: "rgba(255,45,45,0.3)", border: "1px solid #ff2d2d",
+                              color: "#ff2d2d", borderRadius: "4px", padding: "1px 6px",
+                              fontWeight: "bold",
                             }}>
                               NO ACTIVITY
                             </span>
                           )}
                         </td>
-                        <td style={{ padding: "5px 8px", textAlign: "center", color: m.level < 10 ? "#ffd700" : "#c5c6c7", fontSize: "0.7rem" }}>
+                        <td style={{ padding: "5px 8px", textAlign: "center", color: active ? (m.level < 10 ? "#ffd700" : "#c5c6c7") : "#ff6b6b", fontSize: "0.7rem" }}>
                           {m.level < 10 && "⚠ "}LV {m.level}
                         </td>
-                        <td style={{ padding: "5px 8px", textAlign: "right", color: "#c5c6c7", fontSize: "0.7rem" }}>
+                        <td style={{ padding: "5px 8px", textAlign: "right", color: active ? "#c5c6c7" : "#ff6b6b", fontSize: "0.7rem" }}>
                           {m.xp > 0 ? m.xp.toLocaleString() : "—"}
                         </td>
                         <td style={{ padding: "5px 8px", textAlign: "right", fontSize: "0.68rem" }}>
