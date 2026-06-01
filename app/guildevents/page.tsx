@@ -1002,7 +1002,14 @@ export default function GuildEventsPage() {
             );
             const roster = (memberRoster as { name: string; level: number; xp: number }[])
               .slice()
-              .sort((a, b) => b.xp - a.xp);
+              .sort((a, b) => {
+                const aActive = (activityMap[a.name.toLowerCase()] as Player | undefined);
+                const bActive = (activityMap[b.name.toLowerCase()] as Player | undefined);
+                const aActions = aActive ? aActive.treeChops + aActive.mineSwings + aActive.fishCasts + aActive.questContributions : 0;
+                const bActions = bActive ? bActive.treeChops + bActive.mineSwings + bActive.fishCasts + bActive.questContributions : 0;
+                if ((aActions > 0) !== (bActions > 0)) return aActions > 0 ? -1 : 1;
+                return b.xp - a.xp;
+              });
             return (
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.78rem" }}>
                 <thead>
