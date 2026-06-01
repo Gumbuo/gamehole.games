@@ -1017,11 +1017,12 @@ export default function GuildEventsPage() {
                 <tbody>
                   {roster.map((m, i) => {
                     const key = m.name.toLowerCase();
-                    const active = activityNames.has(key);
+                    const inData = activityNames.has(key);
                     const ap = activityMap[key] as Player | undefined;
                     const totalActivity = ap
                       ? ap.treeChops + ap.mineSwings + ap.fishCasts + ap.questContributions
                       : 0;
+                    const active = inData && totalActivity > 0;
                     return (
                       <tr key={m.name} style={{
                         borderBottom: active ? "1px solid #45a29e15" : "1px solid #ff2d2d33",
@@ -1049,11 +1050,9 @@ export default function GuildEventsPage() {
                         </td>
                         <td style={{ padding: "5px 8px", textAlign: "right", fontSize: "0.68rem" }}>
                           {active ? (
-                            <span style={{ color: totalActivity > 0 ? "#4ade80" : "#ffd700" }}>
-                              {totalActivity > 0 ? `${totalActivity.toLocaleString()} actions` : "joined — no actions"}
-                            </span>
+                            <span style={{ color: "#4ade80" }}>{totalActivity.toLocaleString()} actions</span>
                           ) : (
-                            <span style={{ color: "#ff2d2d" }}>—</span>
+                            <span style={{ color: "#ff2d2d", fontWeight: "bold" }}>NO ACTIONS</span>
                           )}
                         </td>
                       </tr>
