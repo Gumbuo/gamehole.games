@@ -2,9 +2,8 @@
  * merge-daily-log.mjs
  * Usage: node scripts/merge-daily-log.mjs <log-file> [--dry-run]
  *
- * Parses wood/mining/fishing/contributions from a cumulative guild log file
+ * Parses wood/mining/fishing/contributions/farming from a cumulative guild log file
  * and ADDS the new totals onto existing player records in activity-data.json.
- * Farming (planted/harvested) is intentionally left untouched.
  */
 
 import { readFileSync, writeFileSync } from 'fs';
@@ -24,15 +23,17 @@ function cleanLine(line) {
   return line.replace(/^\d+\t/, '').replace(/\s+about \d+ hours? ago\s*$/, '').trim();
 }
 
-const CUT_TREE = /^(.+?) cut a tree in the tile of (.+?) and received (\d+) wood\.$/;
-const MINED    = /^(.+?) mined a rock in the tile of (.+?) and received (\d+) (.+?)\.$/;
-const FISHED   = /^(.+?) fished in the tile of (.+?) and received (\d+) (.+?)\.$/;
-const QUEST    = /^(.+?) contributed (\d+) (.+?) to the daily quest\.$/;
+const CUT_TREE  = /^(.+?) cut a tree in the tile of (.+?) and received (\d+) wood\.$/;
+const MINED     = /^(.+?) mined a rock in the tile of (.+?) and received (\d+) (.+?)\.$/;
+const FISHED    = /^(.+?) fished in the tile of (.+?) and received (\d+) (.+?)\.$/;
+const QUEST     = /^(.+?) contributed (\d+) (.+?) to the daily quest\.$/;
+const PLANTED   = /^(.+?) planted (.+?) (?:seeds?|spores?) in the tile of (.+?)\.$/;
+const HARVESTED = /^(.+?) harvested (.+?) in the tile of (.+?) and received (\d+) (.+?)\.$/;
 
 // Deltas keyed by player name (exact case from log)
 const deltas = {};
 function getDelta(name) {
-  if (!deltas[name]) deltas[name] = { trees: 0, treeChops: 0, mined: {}, mineSwings: 0, fished: {}, fishCasts: 0, quests: {}, questContributions: 0 };
+  if (!deltas[name]) deltas[name] = { trees: 0, treeChops: 0, mined: {}, mineSwings: 0, fished: {}, fishCasts: 0, quests: {}, questContributions: 0, planted: {}, harvested: {} };
   return deltas[name];
 }
 
@@ -64,6 +65,16 @@ for (const rawLine of raw.split('\n')) {
     const d = getDelta(player);
     d.quests[item] = (d.quests[item] || 0) + parseInt(qty, 10);
     d.questContributions += 1;
+
+  } else if ((m = PLANTED.exec(line))) {
+    const [, player, seed] = m;
+    const d = getDelta(player);
+    d.planted[seed] = (d.planted[seed] || 0) + 1;
+
+  } else if ((m = HARVESTED.exec(line))) {
+    const [, player, , , qty, item] = m;
+    const d = getDelta(player);
+    d.harvested[item] = (d.harvested[item] || 0) + parseInt(qty, 10);
   }
 }
 
@@ -118,6 +129,12 @@ for (const [logName, d] of Object.entries(deltas)) {
   for (const [item, qty] of Object.entries(d.quests)) {
     player.quests[item] = (player.quests[item] || 0) + qty;
   }
+  for (const [seed, count] of Object.entries(d.planted)) {
+    player.planted[seed] = (player.planted[seed] || 0) + count;
+  }
+  for (const [item, qty] of Object.entries(d.harvested)) {
+    player.harvested[item] = (player.harvested[item] || 0) + qty;
+  }
 }
 
 // Recalculate score for each player (farming fields unchanged, gold unchanged)
@@ -144,6 +161,8 @@ const uniqueInLog = Object.keys(deltas).length;
 console.log(`\nLog players with activity: ${uniqueInLog}`);
 console.log(`New players added: ${newPlayers}`);
 console.log(`\nNew totals:`);
+console.log(`  Harvested:     ${existing.totals.totalHarvested.toLocaleString()}`);
+console.log(`  Planted:       ${existing.totals.totalPlanted.toLocaleString()}`);
 console.log(`  Wood:          ${existing.totals.totalWood.toLocaleString()}`);
 console.log(`  Mined:         ${existing.totals.totalMined.toLocaleString()}`);
 console.log(`  Fish:          ${existing.totals.totalFish.toLocaleString()}`);
