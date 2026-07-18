@@ -646,14 +646,31 @@ export default function HomePage() {
                 );
               })}
 
-              {/* FoxStead — coming soon card */}
-              <div style={{
-                background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
-                border: '2px solid rgba(255, 180, 50, 0.3)',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                cursor: 'default',
-              }}>
+              {/* FoxStead — MVP live, links out to univershole.ink */}
+              <a
+                href="https://univershole.ink"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
+                  border: '2px solid rgba(255, 180, 50, 0.3)',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#ffb432';
+                  e.currentTarget.style.boxShadow = '0 0 25px rgba(255, 180, 50, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-3px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255, 180, 50, 0.3)';
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
                 <img
                   src="/foxstead-banner.png"
                   alt="FoxStead"
@@ -681,7 +698,7 @@ export default function HomePage() {
                       flexShrink: 0,
                       marginLeft: '8px',
                     }}>
-                      IN DEV
+                      MVP
                     </span>
                   </div>
                   <p style={{
@@ -693,19 +710,25 @@ export default function HomePage() {
                   }}>
                     A chill farming and combat RPG — build your homestead, fight off alien invaders, and explore a living world.
                   </p>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    color: '#ffb432',
-                    fontFamily: 'Share Tech Mono, monospace',
-                    fontSize: '12px',
-                  }}>
-                    <span>🛠️</span>
-                    <span>Under Development — MVP Expected July 2026</span>
+                  <div
+                    style={{
+                      display: 'inline-block',
+                      padding: '8px 22px',
+                      background: 'linear-gradient(135deg, rgba(255,180,50,0.15), rgba(255,180,50,0.05))',
+                      border: '1px solid #ffb432',
+                      borderRadius: '6px',
+                      color: '#ffb432',
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      letterSpacing: '1px',
+                      boxShadow: '0 0 12px rgba(255,180,50,0.25)',
+                    }}
+                  >
+                    ▶ PLAY NOW
                   </div>
                 </div>
-              </div>
+              </a>
 
             </div>
 
