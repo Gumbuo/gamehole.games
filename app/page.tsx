@@ -31,8 +31,6 @@ interface FeaturedGame {
   secondaryColor?: string;
   guideUrl?: string;
   guideLabel?: string;
-  eventUrl?: string;
-  eventLabel?: string;
   toolUrl?: string;
   toolLabel?: string;
   tool2Url?: string;
@@ -79,8 +77,6 @@ const featuredGames: FeaturedGame[] = [
     secondaryColor: "#0a1a10",
     guideUrl: "/nomstead",
     guideLabel: "NFT Guide",
-    eventUrl: "/guildevents",
-    eventLabel: "GUILD EVENT ACTIVE",
     toolUrl: "/nomstead/calculator",
     toolLabel: "Farm Calculator",
     tool2Url: "/nomstead/farms",
@@ -328,27 +324,6 @@ export default function HomePage() {
                 {section}
               </button>
             ))}
-            <a
-              href="/guildevents"
-              style={{
-                padding: '12px 28px',
-                background: 'linear-gradient(135deg, #b44dff, #8e2de2)',
-                border: '2px solid #b44dff',
-                borderRadius: '8px',
-                color: '#fff',
-                fontFamily: 'Orbitron, sans-serif',
-                fontSize: '14px',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                fontWeight: 'bold',
-                boxShadow: '0 0 20px rgba(180, 77, 255, 0.5), 0 0 40px rgba(180, 77, 255, 0.2)',
-                letterSpacing: '1px',
-                animation: 'guildPulse 2s ease-in-out infinite',
-              }}
-            >
-              Guild Events
-              <style>{`@keyframes guildPulse { 0%, 100% { box-shadow: 0 0 20px rgba(180, 77, 255, 0.5), 0 0 40px rgba(180, 77, 255, 0.2); } 50% { box-shadow: 0 0 30px rgba(180, 77, 255, 0.8), 0 0 60px rgba(180, 77, 255, 0.4); } }`}</style>
-            </a>
             <a
               href="https://gamehole.ink"
               target="_blank"
@@ -732,34 +707,8 @@ export default function HomePage() {
 
             </div>
 
-            {/* Guild Banners — side by side */}
+            {/* Guild Banners */}
             <div style={{ display: 'flex', gap: '16px', marginTop: '30px', flexWrap: 'wrap' }}>
-              <a
-                href="/guildevents"
-                style={{
-                  display: 'block',
-                  flex: '1 1 240px',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  border: '2px solid #b44dff60',
-                  boxShadow: '0 0 20px rgba(180, 77, 255, 0.25)',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 35px rgba(180, 77, 255, 0.55)';
-                  e.currentTarget.style.borderColor = '#b44dff';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(180, 77, 255, 0.25)';
-                  e.currentTarget.style.borderColor = '#b44dff60';
-                }}
-              >
-                <img
-                  src="/foxhole-banner.png"
-                  alt="Foxhole Productions"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                />
-              </a>
               <a
                 href="https://www.spidergang.xyz"
                 target="_blank"
@@ -892,33 +841,6 @@ export default function HomePage() {
                       }}>
                         Coming Soon
                       </div>
-                    )}
-                    {game.eventUrl && (
-                      <a
-                        href={game.eventUrl}
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                          position: 'absolute',
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          padding: '10px 14px',
-                          background: 'linear-gradient(135deg, rgba(180, 77, 255, 0.95), rgba(142, 45, 226, 0.95))',
-                          color: '#fff',
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                          textDecoration: 'none',
-                          textTransform: 'uppercase',
-                          letterSpacing: '2px',
-                          zIndex: 10,
-                          animation: 'eventPulse 2s ease-in-out infinite',
-                        }}
-                      >
-                        {game.eventLabel ?? 'EVENT ACTIVE'}
-                        <style>{`@keyframes eventPulse { 0%, 100% { box-shadow: 0 0 15px rgba(180, 77, 255, 0.6); } 50% { box-shadow: 0 0 30px rgba(180, 77, 255, 0.9), 0 0 50px rgba(180, 77, 255, 0.4); } }`}</style>
-                      </a>
                     )}
                   </div>
 
@@ -1408,52 +1330,6 @@ export default function HomePage() {
                 ))}
               </div>
             )}
-          </section>
-
-          {/* Guild Events Banner */}
-          <section style={{ marginBottom: '80px', textAlign: 'center' }}>
-            <h2 style={{
-              fontFamily: 'Orbitron, sans-serif',
-              fontSize: '28px',
-              fontWeight: 'bold',
-              background: 'linear-gradient(135deg, #b44dff, #8e2de2)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              marginBottom: '20px',
-              textTransform: 'uppercase',
-            }}>
-              ⚔️ Guild Events
-            </h2>
-            <p style={{
-              fontFamily: 'Share Tech Mono, monospace',
-              color: '#aaa',
-              fontSize: '15px',
-              maxWidth: '500px',
-              margin: '0 auto 30px',
-              lineHeight: '1.7',
-            }}>
-              Join the SpiderGang community — weekly guild events, exclusive guides, and organized play across multiple games.
-            </p>
-            <a
-              href="/guildevents"
-              style={{
-                display: 'inline-block',
-                padding: '16px 48px',
-                background: 'linear-gradient(135deg, #b44dff, #8e2de2)',
-                border: '2px solid #b44dff',
-                borderRadius: '10px',
-                color: '#fff',
-                fontFamily: 'Orbitron, sans-serif',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                textDecoration: 'none',
-                textTransform: 'uppercase',
-                letterSpacing: '2px',
-                boxShadow: '0 0 30px rgba(180, 77, 255, 0.5)',
-              }}
-            >
-              View Guild Events →
-            </a>
           </section>
 
           {/* About Section */}
