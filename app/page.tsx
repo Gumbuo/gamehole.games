@@ -172,8 +172,7 @@ const featuredGames: FeaturedGame[] = [
 // Community Games
 const communityGames = {
   catacombs: { title: "ALIEN AF", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/alien-af-banner.png", description: "Shoot-em-up action — survive alien waves across multiple zones. World map, volcano world, catacombs. Grenades, guns, melee — Alien AF.", youtubeTrailer: "Fs-Hik2Lizo", youtubeStart: 6 },
-  currencyofwar: { title: "Currency of War", badge: "COMING SOON", image: "/currency-of-war-banner.png", comingSoon: true },
-  invasion: { title: "Alien Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY", image: "/alien-invasion-banner.png" },
+  currencyofwar: { title: "Currency of War", badge: "COMING SOON", image: "/currency-of-war-banner.png", comingSoon: true, youtubeTrailer: "sBXsJJoiriw", youtubeStart: 14 },
 };
 
 export default function HomePage() {
@@ -520,13 +519,19 @@ export default function HomePage() {
                 const hasImage = 'image' in game && game.image;
                 const description = 'description' in game ? game.description : null;
                 const isComingSoon = 'comingSoon' in game && game.comingSoon;
+                const cardFrame = key === 'catacombs'
+                  ? { src: 'url(/card-frame-alien.png) 45 90 / 28px stretch', width: '28px' }
+                  : key === 'currencyofwar'
+                  ? { src: 'url(/card-frame-mech.png) 40 40 / 24px stretch', width: '24px' }
+                  : null;
                 return (
                 <div
                   key={key}
                   onClick={() => { if (!isComingSoon) playGame(key); }}
                   style={{
                     background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
-                    border: isComingSoon ? '2px solid #ff6b0040' : '2px solid #00ff9940',
+                    border: `${cardFrame ? cardFrame.width : '2px'} solid ${isComingSoon ? '#ff6b0040' : '#00ff9940'}`,
+                    borderImage: cardFrame ? cardFrame.src : undefined,
                     borderRadius: '12px',
                     overflow: 'hidden',
                     cursor: isComingSoon ? 'default' : 'pointer',
@@ -628,14 +633,12 @@ export default function HomePage() {
               })}
 
               {/* FoxStead — MVP live, links out to univershole.ink */}
-              <a
-                href="https://univershole.ink"
-                target="_blank"
-                rel="noopener noreferrer"
+              <div
+                onClick={() => window.open('https://univershole.ink', '_blank', 'noopener,noreferrer')}
                 style={{
-                  display: 'block',
                   background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
-                  border: '2px solid rgba(255, 180, 50, 0.3)',
+                  border: '28px solid rgba(255, 180, 50, 0.3)',
+                  borderImage: 'url(/card-frame-farm.png) 55 90 / 28px stretch',
                   borderRadius: '12px',
                   overflow: 'hidden',
                   cursor: 'pointer',
@@ -657,6 +660,19 @@ export default function HomePage() {
                   alt="FoxStead"
                   style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block', opacity: 0.85 }}
                 />
+                <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src="https://www.youtube.com/embed/qqFbayHgKZI"
+                    title="FoxStead Trailer"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{ border: 'none' }}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </div>
                 <div style={{ padding: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '10px' }}>
                     <h3 style={{
@@ -709,7 +725,7 @@ export default function HomePage() {
                     ▶ PLAY NOW
                   </div>
                 </div>
-              </a>
+              </div>
 
             </div>
 
