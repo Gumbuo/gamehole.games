@@ -172,7 +172,7 @@ const featuredGames: FeaturedGame[] = [
 // Community Games
 const communityGames = {
   catacombs: { title: "ALIEN AF", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/alien-af-banner.png", description: "Shoot-em-up action — survive alien waves across multiple zones. World map, volcano world, catacombs. Grenades, guns, melee — Alien AF.", youtubeTrailer: "Fs-Hik2Lizo", youtubeStart: 6 },
-  dungeon: { title: "Dungeon Crawler", src: "/gumbuo-dungeon-crawler.html", badge: "COMMUNITY", image: "/dungeon-crawler-banner.png" },
+  currencyofwar: { title: "Currency of War", badge: "COMING SOON", image: "/currency-of-war-banner.png", comingSoon: true },
   invasion: { title: "Alien Invasion", src: "/gumbuo-invasion.html", badge: "COMMUNITY", image: "/alien-invasion-banner.png" },
 };
 
@@ -281,26 +281,29 @@ export default function HomePage() {
 
             {/* Community Games Tabs */}
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center', borderLeft: '1px solid rgba(0, 212, 255, 0.3)', paddingLeft: '20px' }}>
-              {Object.entries(communityGames).map(([key, game]) => (
+              {Object.entries(communityGames).map(([key, game]) => {
+                const isComingSoon = 'comingSoon' in game && game.comingSoon;
+                return (
                 <button
                   key={key}
-                  onClick={() => playGame(key)}
+                  onClick={() => { if (!isComingSoon) playGame(key); }}
                   style={{
                     padding: '6px 12px',
                     background: selectedGame === key && activeSection === "play" ? 'rgba(0, 255, 153, 0.2)' : 'rgba(0, 0, 0, 0.3)',
                     border: selectedGame === key && activeSection === "play" ? '1px solid #00ff99' : '1px solid rgba(0, 212, 255, 0.3)',
                     borderRadius: '4px',
-                    color: selectedGame === key && activeSection === "play" ? '#00ff99' : '#00d4ff',
+                    color: isComingSoon ? '#666' : (selectedGame === key && activeSection === "play" ? '#00ff99' : '#00d4ff'),
                     fontFamily: 'Orbitron, sans-serif',
                     fontSize: '10px',
                     textTransform: 'uppercase',
-                    cursor: 'pointer',
+                    cursor: isComingSoon ? 'default' : 'pointer',
                     whiteSpace: 'nowrap',
                   }}
                 >
                   {game.title}
                 </button>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -516,24 +519,27 @@ export default function HomePage() {
               {Object.entries(communityGames).map(([key, game]) => {
                 const hasImage = 'image' in game && game.image;
                 const description = 'description' in game ? game.description : null;
+                const isComingSoon = 'comingSoon' in game && game.comingSoon;
                 return (
                 <div
                   key={key}
-                  onClick={() => playGame(key)}
+                  onClick={() => { if (!isComingSoon) playGame(key); }}
                   style={{
                     background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
-                    border: '2px solid #00ff9940',
+                    border: isComingSoon ? '2px solid #ff6b0040' : '2px solid #00ff9940',
                     borderRadius: '12px',
                     overflow: 'hidden',
-                    cursor: 'pointer',
+                    cursor: isComingSoon ? 'default' : 'pointer',
                     transition: 'all 0.3s ease',
                   }}
                   onMouseEnter={(e) => {
+                    if (isComingSoon) return;
                     e.currentTarget.style.borderColor = '#00ff99';
                     e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 255, 153, 0.3)';
                     e.currentTarget.style.transform = 'translateY(-3px)';
                   }}
                   onMouseLeave={(e) => {
+                    if (isComingSoon) return;
                     e.currentTarget.style.borderColor = '#00ff9940';
                     e.currentTarget.style.boxShadow = 'none';
                     e.currentTarget.style.transform = 'translateY(0)';
@@ -572,10 +578,10 @@ export default function HomePage() {
                       </h3>
                       <span style={{
                         padding: '3px 8px',
-                        background: game.badge === 'NEW' ? 'rgba(255, 107, 0, 0.2)' : game.badge === 'ALPHA' ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 255, 153, 0.2)',
-                        border: `1px solid ${game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99'}`,
+                        background: game.badge === 'NEW' ? 'rgba(255, 107, 0, 0.2)' : game.badge === 'ALPHA' ? 'rgba(0, 212, 255, 0.2)' : game.badge === 'COMING SOON' ? 'rgba(255, 107, 0, 0.2)' : 'rgba(0, 255, 153, 0.2)',
+                        border: `1px solid ${game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : game.badge === 'COMING SOON' ? '#ff6b00' : '#00ff99'}`,
                         borderRadius: '4px',
-                        color: game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : '#00ff99',
+                        color: game.badge === 'NEW' ? '#ff6b00' : game.badge === 'ALPHA' ? '#00d4ff' : game.badge === 'COMING SOON' ? '#ff6b00' : '#00ff99',
                         fontFamily: 'Orbitron, sans-serif',
                         fontSize: '9px',
                         fontWeight: 'bold',
@@ -602,19 +608,19 @@ export default function HomePage() {
                       style={{
                         display: 'inline-block',
                         padding: '8px 22px',
-                        background: 'linear-gradient(135deg, rgba(0,255,153,0.15), rgba(0,255,153,0.05))',
-                        border: '1px solid #00ff99',
+                        background: isComingSoon ? 'linear-gradient(135deg, rgba(255,107,0,0.15), rgba(255,107,0,0.05))' : 'linear-gradient(135deg, rgba(0,255,153,0.15), rgba(0,255,153,0.05))',
+                        border: isComingSoon ? '1px solid #ff6b00' : '1px solid #00ff99',
                         borderRadius: '6px',
-                        color: '#00ff99',
+                        color: isComingSoon ? '#ff6b00' : '#00ff99',
                         fontFamily: 'Orbitron, sans-serif',
                         fontSize: '12px',
                         fontWeight: 'bold',
                         letterSpacing: '1px',
-                        boxShadow: '0 0 12px rgba(0,255,153,0.25)',
-                        cursor: 'pointer',
+                        boxShadow: isComingSoon ? '0 0 12px rgba(255,107,0,0.25)' : '0 0 12px rgba(0,255,153,0.25)',
+                        cursor: isComingSoon ? 'default' : 'pointer',
                       }}
                     >
-                      ▶ PLAY NOW
+                      {isComingSoon ? '⏳ COMING SOON' : '▶ PLAY NOW'}
                     </div>
                   </div>
                 </div>
