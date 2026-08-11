@@ -658,7 +658,7 @@ export default function HomePage() {
                 <img
                   src="/foxstead-banner.png"
                   alt="FoxStead"
-                  style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block', opacity: 0.85 }}
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
                 <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
                   <iframe
