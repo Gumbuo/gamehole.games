@@ -1,173 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Leaderboard from "./components/Leaderboard";
 import Credits from "./components/Credits";
 import MusicPlayer from "./components/MusicPlayer";
 import { useGameScoreTracking } from "./hooks/useGameScoreTracking";
-
-// Featured Crypto Games
-
-// Free-to-Play Games from API
-interface FreeGame {
-  id: number;
-  title: string;
-  thumbnail: string;
-  short_description: string;
-  game_url: string;
-  genre: string;
-  platform: string;
-}
-
-interface FeaturedGame {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  playUrl?: string;
-  youtubeTrailer?: string;
-  comingSoon?: boolean;
-  tags: string[];
-  color: string;
-  secondaryColor?: string;
-  guideUrl?: string;
-  guideLabel?: string;
-  toolUrl?: string;
-  toolLabel?: string;
-  tool2Url?: string;
-  tool2Label?: string;
-  tool3Url?: string;
-  tool3Label?: string;
-  tool4Url?: string;
-  tool4Label?: string;
-}
-
-const featuredGames: FeaturedGame[] = [
-  {
-    id: "offthegrid",
-    title: "Off The Grid",
-    description: "AAA battle royale with deep narrative and player-driven economy. Free-to-play cyberpunk action on Avalanche.",
-    image: "/featured/off-the-grid.png",
-    playUrl: "https://offthegrid.com/",
-    youtubeTrailer: "pvvVIPH2OxU",
-    tags: ["Battle Royale", "AAA", "Avalanche", "$GUN"],
-    color: "#00ffcc",
-    secondaryColor: "#0a1a1a",
-  },
-  {
-    id: "spidertanks",
-    title: "Spider Tanks: Cores of Chaos",
-    description: "PvP brawler where you battle in arenas with customizable tanks. Revived by GAMEDIA on Immutable. Note: IMX questing indefinitely removed due to bot abuse.",
-    image: "/featured/spider-tanks.png",
-    playUrl: "https://play.immutable.com/games/spider-tanks-cores-of-chaos/",
-    youtubeTrailer: "5Tyqhqp3GYI",
-    tags: ["PvP", "Brawler", "Immutable"],
-    color: "#ff6b00",
-    guideUrl: "https://www.spidergang.xyz",
-    guideLabel: "Spider Gang",
-  },
-  {
-    id: "nomstead",
-    title: "NomStead",
-    description: "Casual sandbox MMORPG where every player helps shape the world. Farm, craft, trade, and build your civilization on Immutable zkEVM — casually, on your phone, in your spare time.",
-    image: "/featured/nomstead.png",
-    playUrl: "https://play.immutable.com/games/nomstead/",
-    youtubeTrailer: "sdQtdwdVduY",
-    tags: ["Sandbox MMO", "Cozy", "Immutable"],
-    color: "#4ade80",
-    secondaryColor: "#0a1a10",
-    guideUrl: "/nomstead",
-    guideLabel: "NFT Guide",
-    toolUrl: "/nomstead/calculator",
-    toolLabel: "Farm Calculator",
-    tool2Url: "/nomstead/farms",
-    tool2Label: "Farm Navigator",
-    tool3Url: "/logfilter",
-    tool3Label: "Log Filter",
-    tool4Url: "https://docs.nomstead.com",
-    tool4Label: "NomStead Docs",
-  },
-  {
-    id: "playa3ull",
-    title: "Playa3ull Games",
-    description: "Gaming ecosystem with multiple titles including Nexus, Starvin Martian, Dogs of War, and more. Play, compete, and earn!",
-    image: "/featured/playa3ull-logo.webp",
-    playUrl: "https://playa3ull.games/",
-    youtubeTrailer: "mRvqWh8qxts",
-    tags: ["Ecosystem", "Multi-Game", "3ULL Token"],
-    color: "#00ff66",
-  },
-  {
-    id: "infinityrising",
-    title: "Infinity Rising",
-    description: "Open-world multiplayer RPG (formerly Cornucopias) on Cardano & Base. Race, build, craft, and earn $RISE. Multiple NFT collections including Land Zones and vehicles.",
-    image: "/featured/infinity-rising.png",
-    playUrl: "https://infinityrising.io/",
-    youtubeTrailer: "yZECO2nDyu8",
-    tags: ["RPG", "Action", "Cardano", "Base", "$RISE"],
-    color: "#ff0033",
-    secondaryColor: "#1a1a1a",
-    guideUrl: "/infinityrising",
-    guideLabel: "File Nodes & Token Guide",
-  },
-  {
-    id: "captaincompany",
-    title: "Captain & Company",
-    description: "128-player naval battle MMORPG. Command ships, recruit pirates, and battle for treasure on the high seas.",
-    image: "/featured/captain-company.png",
-    playUrl: "https://capnco.gg/",
-    youtubeTrailer: "YcYKa0VbxNs",
-    tags: ["MMORPG", "Naval Combat", "Abstract", "$CNC", "$KAP"],
-    color: "#d4af37",
-    secondaryColor: "#1a0a00",
-    guideUrl: "/capnco",
-    guideLabel: "Help Guide",
-  },
-  {
-    id: "chainers",
-    title: "Chainers",
-    description: "Collect, battle, and evolve adorable Chainers in this creature-collecting RPG. Build your team and compete!",
-    image: "/featured/chainers.png",
-    playUrl: "https://chainers.io/?r=mjw0b0oz",
-    youtubeTrailer: "8uAwkPur5-Q",
-    tags: ["RPG", "Creature Collector", "Immutable", "Polygon", "BNB", "$CFB"],
-    color: "#9b59b6",
-    secondaryColor: "#1a0a2e",
-  },
-  {
-    id: "godsunchained",
-    title: "Gods Unchained",
-    description: "The original Web3 trading card game. Collect 1800+ cards, master 6 domains, and battle in skill-based PvP. True ownership of your cards!",
-    image: "/featured/gods-unchained.webp",
-    playUrl: "https://godsunchained.com/",
-    youtubeTrailer: "cDESNiMi-i4",
-    tags: ["TCG", "PvP", "Immutable", "$GODS"],
-    color: "#c9a227",
-    secondaryColor: "#1a1505",
-  },
-  {
-    id: "enginesoffury",
-    title: "Engines of Fury",
-    description: "Top-down extraction shooter in a post-apocalyptic dystopia. Infiltrate, scavenge loot, and escape before death claims you. From ex-Blizzard, Ubisoft & EA devs!",
-    image: "/featured/engines-of-fury.png",
-    playUrl: "https://www.eof.gg/",
-    youtubeTrailer: "KBXpNfQE_Ng",
-    tags: ["Extraction", "Shooter", "Immutable", "$FURY"],
-    color: "#ff4444",
-    secondaryColor: "#1a0505",
-  },
-  {
-    id: "wilderworld",
-    title: "Wilder World",
-    description: "AAA metaverse 13.5x larger than GTA 5. Race, fight, explore and build in Wiami. Partnered with NVIDIA, Samsung & Epic Games. Coming 2026!",
-    image: "/featured/wilder-world.png",
-    youtubeTrailer: "7G8SwYp6gPo",
-    comingSoon: true,
-    tags: ["Metaverse", "AAA", "Coming Soon", "$WILD"],
-    color: "#ed9f51",
-    secondaryColor: "#1a0f05",
-  },
-];
-
 
 // Community Games
 const communityGames = {
@@ -182,50 +18,7 @@ export default function HomePage() {
   const [submitForm, setSubmitForm] = useState({ title: '', url: '', description: '', contact: '' });
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success'>('idle');
 
-  // Free games from API
-  const [freeGames, setFreeGames] = useState<FreeGame[]>([]);
-  const [loadingFreeGames, setLoadingFreeGames] = useState(true);
-
-  // Live game stats from Immutable APIs
-  const [gameStats, setGameStats] = useState<Record<string, {
-    totalCards?: number; totalPlayers?: number; nftCount?: number;
-    activeListings?: number; floorPrice?: string; floorCurrency?: string;
-    marketplaceUrl?: string;
-  }>>({});
-
-
   useGameScoreTracking();
-
-  // Fetch free games from API
-  useEffect(() => {
-    const fetchFreeGames = async () => {
-      try {
-        const response = await fetch('/api/games?platform=browser&limit=100');
-        const data = await response.json();
-        if (data.success) {
-          setFreeGames(data.games);
-        }
-      } catch (error) {
-        console.error('Failed to fetch free games:', error);
-      } finally {
-        setLoadingFreeGames(false);
-      }
-    };
-    fetchFreeGames();
-  }, []);
-
-
-  // Fetch live game stats from Immutable APIs
-  useEffect(() => {
-    fetch('/api/nomstead?game=all')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.stats) {
-          setGameStats(data.stats);
-        }
-      })
-      .catch(() => {});
-  }, []);
 
   const handleSubmitGame = () => {
     // For now, just show success - in future this could save to a database
@@ -263,23 +56,8 @@ export default function HomePage() {
           alignItems: 'center',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <h1
-              onClick={() => { setActiveSection("home"); setSelectedGame(null); }}
-              style={{
-                fontFamily: 'Orbitron, sans-serif',
-                fontSize: '28px',
-                fontWeight: 'bold',
-                background: 'linear-gradient(90deg, #00d4ff, #00ff99)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                cursor: 'pointer',
-              }}
-            >
-              GAME HOLE
-            </h1>
-
             {/* Community Games Tabs */}
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', borderLeft: '1px solid rgba(0, 212, 255, 0.3)', paddingLeft: '20px' }}>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               {Object.entries(communityGames).map(([key, game]) => {
                 const isComingSoon = 'comingSoon' in game && game.comingSoon;
                 return (
@@ -327,62 +105,46 @@ export default function HomePage() {
               </button>
             ))}
             <a
-              href="https://gamehole.ink"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                padding: '12px 28px',
-                background: 'linear-gradient(135deg, #00d4ff, #00ff99)',
-                border: '2px solid #00d4ff',
-                borderRadius: '8px',
-                color: '#000',
-                fontFamily: 'Orbitron, sans-serif',
-                fontSize: '14px',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                fontWeight: 'bold',
-                letterSpacing: '1px',
-              }}
-            >
-              Gumbuo
-            </a>
-            <a
               href="https://univershole.xyz"
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                padding: '12px 28px',
-                background: 'linear-gradient(135deg, #ff6b00, #ff9500)',
-                border: '2px solid #ff6b00',
-                borderRadius: '8px',
-                color: '#000',
-                fontFamily: 'Orbitron, sans-serif',
-                fontSize: '14px',
-                textTransform: 'uppercase',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+                width: '178px',
+                height: '100px',
                 textDecoration: 'none',
-                fontWeight: 'bold',
-                letterSpacing: '1px',
               }}
             >
-              Pixel Shop
-            </a>
-            <a
-              href="/catacombs"
-              style={{
-                padding: '12px 28px',
-                background: 'linear-gradient(135deg, #ff0040, #8e2de2)',
-                border: '2px solid #ff0040',
-                borderRadius: '8px',
-                color: '#fff',
+              <img
+                src="/pixel-shop-stall.png"
+                alt=""
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  imageRendering: 'pixelated',
+                  pointerEvents: 'none',
+                }}
+              />
+              <span style={{
+                position: 'relative',
+                zIndex: 1,
+                marginTop: '30px',
+                color: '#2b1a0a',
                 fontFamily: 'Orbitron, sans-serif',
-                fontSize: '14px',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
+                fontSize: '11px',
                 fontWeight: 'bold',
-                letterSpacing: '1px',
-              }}
-            >
-              Play Alien AF
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+              }}>
+                Pixel Shop
+              </span>
             </a>
           </div>
         </div>
@@ -441,18 +203,27 @@ export default function HomePage() {
       ) : (
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '40px 20px' }}>
 
-          {/* Hero Section */}
-          <section style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h1 style={{
-              fontFamily: 'Orbitron, sans-serif',
-              fontSize: '72px',
-              fontWeight: 'bold',
-              background: 'linear-gradient(90deg, #00d4ff, #00ff99, #ff6b00)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              marginBottom: '20px',
-            }}>
-              GAME HOLE
+          {/* Hero Section — breaks out of the 1400px content column so the
+              wide logo has room to render at full size without overflowing */}
+          <section style={{
+            textAlign: 'center',
+            marginBottom: '60px',
+            marginLeft: 'calc(50% - 50vw)',
+            marginRight: 'calc(50% - 50vw)',
+            paddingLeft: '20px',
+            paddingRight: '20px',
+          }}>
+            <h1 style={{ margin: '0 0 20px', display: 'flex', justifyContent: 'center' }}>
+              <img
+                src="/logo-gamehole-games.png"
+                alt="GAMEHOLE.GAMES"
+                style={{
+                  width: '80vw',
+                  maxWidth: '1100px',
+                  height: 'auto',
+                  imageRendering: 'pixelated',
+                }}
+              />
             </h1>
             <p style={{
               fontFamily: 'Share Tech Mono, monospace',
@@ -728,631 +499,8 @@ export default function HomePage() {
               </div>
 
             </div>
-
-            {/* Guild Banners */}
-            <div style={{ display: 'flex', gap: '16px', marginTop: '30px', flexWrap: 'wrap' }}>
-              <a
-                href="https://www.spidergang.xyz"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'block',
-                  flex: '1 1 240px',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  border: '2px solid #b44dff60',
-                  boxShadow: '0 0 20px rgba(180, 77, 255, 0.25)',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 35px rgba(180, 77, 255, 0.55)';
-                  e.currentTarget.style.borderColor = '#b44dff';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(180, 77, 255, 0.25)';
-                  e.currentTarget.style.borderColor = '#b44dff60';
-                }}
-              >
-                <img
-                  src="/guild-banner.jpg"
-                  alt="SpiderGang Guild Events"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              </a>
-            </div>
           </section>
 
-          {/* Featured Games */}
-          <section style={{ marginBottom: '60px' }}>
-            <div style={{ marginBottom: '30px' }}>
-              <h2 style={{
-                fontFamily: 'Orbitron, sans-serif',
-                fontSize: '32px',
-                fontWeight: 'bold',
-                background: 'linear-gradient(135deg, #ff6b00, #ff8c00)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                textTransform: 'uppercase',
-              }}>
-                Our Favorites
-              </h2>
-            </div>
-
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-              gap: '25px',
-            }}>
-              {featuredGames.map((game) => {
-                const hasSecondary = 'secondaryColor' in game;
-                const bgStyle = hasSecondary
-                  ? `linear-gradient(135deg, ${game.secondaryColor}, #0a0a0a)`
-                  : 'linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(15, 15, 30, 0.9))';
-
-                return (
-                <div
-                  key={game.id}
-                  style={{
-                    background: bgStyle,
-                    border: `2px solid ${game.color}40`,
-                    borderRadius: '16px',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = game.color;
-                    e.currentTarget.style.boxShadow = `0 0 30px ${game.color}40`;
-                    e.currentTarget.style.transform = 'translateY(-5px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = `${game.color}40`;
-                    e.currentTarget.style.boxShadow = 'none';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  {/* Game Image or YouTube Trailer */}
-                  <div style={{
-                    height: game.youtubeTrailer ? '200px' : '180px',
-                    background: hasSecondary
-                      ? `linear-gradient(135deg, ${game.color}40, ${game.secondaryColor})`
-                      : `linear-gradient(135deg, ${game.color}30, ${game.color}10)`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderBottom: `1px solid ${game.color}40`,
-                    overflow: 'hidden',
-                    position: 'relative',
-                  }}>
-                    {game.youtubeTrailer ? (
-                      <iframe
-                        width="100%"
-                        height="100%"
-                        src={`https://www.youtube.com/embed/${game.youtubeTrailer}`}
-                        title={`${game.title} Trailer`}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        style={{ border: 'none' }}
-                      />
-                    ) : (
-                      <img
-                        src={game.image}
-                        alt={game.title}
-                        style={{
-                          maxHeight: '140px',
-                          maxWidth: '90%',
-                          objectFit: 'contain',
-                        }}
-                      />
-                    )}
-                    {game.comingSoon && (
-                      <div style={{
-                        position: 'absolute',
-                        top: '10px',
-                        right: '10px',
-                        padding: '4px 10px',
-                        background: 'rgba(0, 0, 0, 0.8)',
-                        border: `1px solid ${game.color}`,
-                        borderRadius: '4px',
-                        color: game.color,
-                        fontFamily: 'Orbitron, sans-serif',
-                        fontSize: '10px',
-                        fontWeight: 'bold',
-                        textTransform: 'uppercase',
-                        zIndex: 10,
-                      }}>
-                        Coming Soon
-                      </div>
-                    )}
-                  </div>
-
-                  <div style={{ padding: '20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                      <h3 style={{
-                        fontFamily: 'Orbitron, sans-serif',
-                        fontSize: '22px',
-                        color: game.color,
-                        margin: 0,
-                      }}>
-                        {game.title}
-                      </h3>
-                      {game.tags.includes('Immutable') && (
-                        <span style={{
-                          padding: '2px 8px',
-                          background: 'linear-gradient(135deg, #00d4ff20, #00ff9920)',
-                          border: '1px solid #00d4ff60',
-                          borderRadius: '4px',
-                          color: '#00d4ff',
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontSize: '9px',
-                          fontWeight: 'bold',
-                          letterSpacing: '1px',
-                          whiteSpace: 'nowrap',
-                        }}>
-                          IMX
-                        </span>
-                      )}
-                    </div>
-
-                    <p style={{
-                      fontFamily: 'Share Tech Mono, monospace',
-                      color: '#aaa',
-                      fontSize: '14px',
-                      lineHeight: '1.6',
-                      marginBottom: '15px',
-                    }}>
-                      {game.description}
-                    </p>
-
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
-                      {game.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          style={{
-                            padding: '4px 10px',
-                            background: `${game.color}20`,
-                            border: `1px solid ${game.color}40`,
-                            borderRadius: '12px',
-                            color: game.color,
-                            fontFamily: 'Share Tech Mono, monospace',
-                            fontSize: '11px',
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    {gameStats[game.id] && (
-                      <div style={{ marginBottom: '16px' }}>
-                        <div style={{
-                          display: 'flex',
-                          gap: '10px',
-                          flexWrap: 'wrap',
-                          marginBottom: gameStats[game.id].marketplaceUrl ? '10px' : '0',
-                        }}>
-                          {gameStats[game.id].totalCards != null && (
-                            <div style={{
-                              padding: '6px 12px',
-                              background: `${game.color}15`,
-                              border: `1px solid ${game.color}40`,
-                              borderRadius: '8px',
-                              textAlign: 'center',
-                            }}>
-                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
-                                {gameStats[game.id].totalCards!.toLocaleString()}
-                              </div>
-                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                                Cards
-                              </div>
-                            </div>
-                          )}
-                          {gameStats[game.id].totalPlayers != null && (
-                            <div style={{
-                              padding: '6px 12px',
-                              background: `${game.color}15`,
-                              border: `1px solid ${game.color}40`,
-                              borderRadius: '8px',
-                              textAlign: 'center',
-                            }}>
-                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
-                                {gameStats[game.id].totalPlayers!.toLocaleString()}
-                              </div>
-                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                                Players
-                              </div>
-                            </div>
-                          )}
-                          {gameStats[game.id].nftCount != null && (
-                            <div style={{
-                              padding: '6px 12px',
-                              background: `${game.color}15`,
-                              border: `1px solid ${game.color}40`,
-                              borderRadius: '8px',
-                              textAlign: 'center',
-                            }}>
-                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
-                                {gameStats[game.id].nftCount!.toLocaleString()}
-                              </div>
-                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                                NFTs
-                              </div>
-                            </div>
-                          )}
-                          {gameStats[game.id].activeListings != null && (
-                            <div style={{
-                              padding: '6px 12px',
-                              background: `${game.color}15`,
-                              border: `1px solid ${game.color}40`,
-                              borderRadius: '8px',
-                              textAlign: 'center',
-                            }}>
-                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
-                                {gameStats[game.id].activeListings!.toLocaleString()}
-                              </div>
-                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                                Listed
-                              </div>
-                            </div>
-                          )}
-                          {gameStats[game.id].floorPrice != null && (
-                            <div style={{
-                              padding: '6px 12px',
-                              background: `${game.color}15`,
-                              border: `1px solid ${game.color}40`,
-                              borderRadius: '8px',
-                              textAlign: 'center',
-                            }}>
-                              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', color: game.color, fontWeight: 'bold' }}>
-                                ${gameStats[game.id].floorPrice}
-                              </div>
-                              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '9px', color: '#888', textTransform: 'uppercase' }}>
-                                Floor
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        {gameStats[game.id].marketplaceUrl && (
-                          <a
-                            href={gameStats[game.id].marketplaceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              display: 'inline-block',
-                              padding: '4px 12px',
-                              background: `${game.color}10`,
-                              border: `1px solid ${game.color}30`,
-                              borderRadius: '6px',
-                              color: game.color,
-                              fontFamily: 'Share Tech Mono, monospace',
-                              fontSize: '11px',
-                              textDecoration: 'none',
-                            }}
-                          >
-                            View Collection →
-                          </a>
-                        )}
-                      </div>
-                    )}
-
-                    {game.guideUrl && (
-                      <a
-                        href={game.guideUrl}
-                        target={game.guideUrl.startsWith('/') ? undefined : '_blank'}
-                        rel={game.guideUrl.startsWith('/') ? undefined : 'noopener noreferrer'}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '10px',
-                          background: `${game.color}15`,
-                          border: `1px solid ${game.color}60`,
-                          borderRadius: '8px',
-                          color: game.color,
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontWeight: 'bold',
-                          fontSize: '12px',
-                          textAlign: 'center',
-                          textDecoration: 'none',
-                          textTransform: 'uppercase',
-                          marginBottom: '10px',
-                          boxSizing: 'border-box',
-                        }}
-                      >
-                        {game.guideLabel ?? 'Guide'} →
-                      </a>
-                    )}
-
-                    {game.toolUrl && (
-                      <a
-                        href={game.toolUrl}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '10px',
-                          background: `${game.color}15`,
-                          border: `1px solid ${game.color}60`,
-                          borderRadius: '8px',
-                          color: game.color,
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontWeight: 'bold',
-                          fontSize: '12px',
-                          textAlign: 'center',
-                          textDecoration: 'none',
-                          textTransform: 'uppercase',
-                          marginBottom: '10px',
-                          boxSizing: 'border-box',
-                        }}
-                      >
-                        {game.toolLabel ?? 'Tools'} →
-                      </a>
-                    )}
-                    {game.tool2Url && (
-                      <a
-                        href={game.tool2Url}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '10px',
-                          background: `${game.color}15`,
-                          border: `1px solid ${game.color}60`,
-                          borderRadius: '8px',
-                          color: game.color,
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontWeight: 'bold',
-                          fontSize: '12px',
-                          textAlign: 'center',
-                          textDecoration: 'none',
-                          textTransform: 'uppercase',
-                          marginBottom: '10px',
-                          boxSizing: 'border-box',
-                        }}
-                      >
-                        {game.tool2Label ?? 'Tool 2'} →
-                      </a>
-                    )}
-                    {game.tool3Url && (
-                      <a
-                        href={game.tool3Url}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '10px',
-                          background: `${game.color}15`,
-                          border: `1px solid ${game.color}60`,
-                          borderRadius: '8px',
-                          color: game.color,
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontWeight: 'bold',
-                          fontSize: '12px',
-                          textAlign: 'center',
-                          textDecoration: 'none',
-                          textTransform: 'uppercase',
-                          marginBottom: '10px',
-                          boxSizing: 'border-box',
-                        }}
-                      >
-                        {game.tool3Label ?? 'Tool 3'} →
-                      </a>
-                    )}
-                    {game.tool4Url && (
-                      <a
-                        href={game.tool4Url}
-                        target={game.tool4Url.startsWith('/') ? undefined : '_blank'}
-                        rel={game.tool4Url.startsWith('/') ? undefined : 'noopener noreferrer'}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '10px',
-                          background: `${game.color}15`,
-                          border: `1px solid ${game.color}60`,
-                          borderRadius: '8px',
-                          color: game.color,
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontWeight: 'bold',
-                          fontSize: '12px',
-                          textAlign: 'center',
-                          textDecoration: 'none',
-                          textTransform: 'uppercase',
-                          marginBottom: '10px',
-                          boxSizing: 'border-box',
-                        }}
-                      >
-                        {game.tool4Label ?? 'Tool 4'} →
-                      </a>
-                    )}
-
-                    {game.playUrl ? (
-                      <a
-                        href={game.playUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '12px',
-                          background: `linear-gradient(135deg, ${game.color}, ${game.color}cc)`,
-                          border: 'none',
-                          borderRadius: '8px',
-                          color: '#000',
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontWeight: 'bold',
-                          fontSize: '14px',
-                          textAlign: 'center',
-                          textDecoration: 'none',
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        Play Now →
-                      </a>
-                    ) : (
-                      <div
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '12px',
-                          background: `linear-gradient(135deg, ${game.color}40, ${game.color}20)`,
-                          border: `2px solid ${game.color}`,
-                          borderRadius: '8px',
-                          color: game.color,
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontWeight: 'bold',
-                          fontSize: '14px',
-                          textAlign: 'center',
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        Coming 2026
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-              })}
-            </div>
-          </section>
-
-          {/* Popular Free-to-Play Games */}
-          <section style={{ marginBottom: '60px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <h2 style={{
-                  fontFamily: 'Orbitron, sans-serif',
-                  fontSize: '28px',
-                  color: '#ff6b00',
-                }}>
-                  Free-to-Play Games
-                </h2>
-                <span style={{
-                  padding: '4px 12px',
-                  background: 'linear-gradient(135deg, #ff6b00, #ff8c00)',
-                  borderRadius: '20px',
-                  color: '#000',
-                  fontFamily: 'Orbitron, sans-serif',
-                  fontSize: '10px',
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase',
-                }}>
-                  100+ Games
-                </span>
-              </div>
-
-              <a
-                href="/discover"
-                style={{
-                  padding: '10px 20px',
-                  background: 'rgba(255, 107, 0, 0.1)',
-                  border: '2px solid #ff6b00',
-                  borderRadius: '8px',
-                  color: '#ff6b00',
-                  fontFamily: 'Orbitron, sans-serif',
-                  fontWeight: 'bold',
-                  fontSize: '12px',
-                  textDecoration: 'none',
-                  textTransform: 'uppercase',
-                }}
-              >
-                View All →
-              </a>
-            </div>
-
-            {loadingFreeGames ? (
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-                gap: '20px',
-              }}>
-                {[...Array(4)].map((_, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      background: 'rgba(26, 26, 46, 0.5)',
-                      borderRadius: '12px',
-                      height: '280px',
-                    }}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-                gap: '20px',
-              }}>
-                {freeGames.map((game) => (
-                  <a
-                    key={game.id}
-                    href={game.game_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(15, 15, 30, 0.9))',
-                      border: '2px solid rgba(255, 107, 0, 0.3)',
-                      borderRadius: '12px',
-                      overflow: 'hidden',
-                      textDecoration: 'none',
-                      transition: 'all 0.3s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = '#ff6b00';
-                      e.currentTarget.style.boxShadow = '0 0 25px rgba(255, 107, 0, 0.3)';
-                      e.currentTarget.style.transform = 'translateY(-5px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(255, 107, 0, 0.3)';
-                      e.currentTarget.style.boxShadow = 'none';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <div style={{
-                      height: '140px',
-                      background: `url(${game.thumbnail}) center/cover`,
-                      position: 'relative',
-                    }}>
-                      <div style={{
-                        position: 'absolute',
-                        top: '8px',
-                        right: '8px',
-                        padding: '3px 8px',
-                        background: 'rgba(0, 0, 0, 0.7)',
-                        borderRadius: '4px',
-                        color: '#ff6b00',
-                        fontFamily: 'Orbitron, sans-serif',
-                        fontSize: '9px',
-                        textTransform: 'uppercase',
-                      }}>
-                        {game.genre}
-                      </div>
-                    </div>
-                    <div style={{ padding: '12px' }}>
-                      <h3 style={{
-                        fontFamily: 'Orbitron, sans-serif',
-                        fontSize: '14px',
-                        color: '#ff6b00',
-                        marginBottom: '6px',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}>
-                        {game.title}
-                      </h3>
-                      <p style={{
-                        fontFamily: 'Share Tech Mono, monospace',
-                        fontSize: '11px',
-                        color: '#888',
-                        lineHeight: '1.4',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                      }}>
-                        {game.short_description}
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            )}
-          </section>
 
           {/* About Section */}
           <section style={{ marginBottom: '80px' }}>
