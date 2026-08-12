@@ -498,67 +498,61 @@ export default function HomePage() {
           </section>
 
 
-          {/* About Section */}
+          {/* PixelLab Referral */}
           <section style={{ marginBottom: '80px' }}>
             <div style={{
-              background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(0, 255, 153, 0.06))',
-              border: '1px solid rgba(0, 212, 255, 0.2)',
-              borderRadius: '20px',
+              maxWidth: '700px',
+              margin: '0 auto',
+              background: 'linear-gradient(135deg, rgba(80, 110, 150, 0.10), rgba(60, 90, 130, 0.08))',
+              border: '48px solid rgba(120, 150, 190, 0.4)',
+              borderImage: 'url(/pixellab-referral-border.png) 80 90 / 48px stretch',
               padding: '50px 40px',
               textAlign: 'center',
             }}>
               <h2 style={{
                 fontFamily: 'Orbitron, sans-serif',
                 fontSize: '26px',
-                color: '#00d4ff',
-                marginBottom: '20px',
+                color: '#8ec8ff',
+                marginBottom: '12px',
                 textTransform: 'uppercase',
               }}>
-                What is Game Hole?
+                Made with PixelLab
               </h2>
               <p style={{
                 fontFamily: 'Share Tech Mono, monospace',
                 color: '#999',
                 fontSize: '15px',
-                maxWidth: '680px',
+                maxWidth: '600px',
                 margin: '0 auto 30px',
                 lineHeight: '1.8',
               }}>
-                Game Hole is a community-built hub for free browser games. We build and host our own originals like Alien AF, curate our favorite games from across the web, and run guild events for the games we actually play. No accounts required — just drop in and play.
+                All the pixel art on this site is generated with PixelLab. Use our referral link to sign up and support Game Hole:
               </p>
-              <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                {[
-                  { label: 'Games Hosted', value: '5+' },
-                  { label: 'Free to Play', value: '100%' },
-                  { label: 'No Sign-up', value: 'Ever' },
-                ].map((stat) => (
-                  <div key={stat.label} style={{
-                    padding: '20px 30px',
-                    background: 'rgba(0, 212, 255, 0.08)',
-                    border: '1px solid rgba(0, 212, 255, 0.3)',
-                    borderRadius: '12px',
-                    minWidth: '130px',
-                  }}>
-                    <div style={{
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '28px',
-                      color: '#00ff99',
-                      fontWeight: 'bold',
-                      marginBottom: '6px',
-                    }}>
-                      {stat.value}
-                    </div>
-                    <div style={{
-                      fontFamily: 'Share Tech Mono, monospace',
-                      fontSize: '11px',
-                      color: '#666',
-                      textTransform: 'uppercase',
-                      letterSpacing: '1px',
-                    }}>
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
+              <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <a
+                  href="https://www.pixellab.ai/CZCPQP_MONTHLY_TIER_1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: 'block' }}
+                >
+                  <img
+                    src="/pixellab-referral-tier1.png"
+                    alt="PixelLab Tier 1 referral"
+                    style={{ height: '100px', width: 'auto', imageRendering: 'pixelated' }}
+                  />
+                </a>
+                <a
+                  href="https://www.pixellab.ai/CZCPQP_MONTHLY_TIER_2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: 'block' }}
+                >
+                  <img
+                    src="/pixellab-referral-tier2.png"
+                    alt="PixelLab Tier 2 referral"
+                    style={{ height: '100px', width: 'auto', imageRendering: 'pixelated' }}
+                  />
+                </a>
               </div>
             </div>
           </section>
