@@ -85,23 +85,39 @@ export default function HomePage() {
           </div>
 
           <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-            {["home", "discover", "leaderboard", "credits"].map((section) => (
+            {[
+              { key: "home", img: "/nav-button-home.png" },
+              { key: "leaderboard", img: "/nav-button-leaderboard.png" },
+              { key: "credits", img: "/nav-button-credits.png" },
+            ].map(({ key, img }) => (
               <button
-                key={section}
-                onClick={() => { if (section === "discover") { window.location.href = "/discover"; return; } setActiveSection(section as any); setSelectedGame(null); }}
+                key={key}
+                onClick={() => { setActiveSection(key as any); setSelectedGame(null); }}
                 style={{
-                  padding: '8px 16px',
-                  background: activeSection === section ? 'rgba(0, 212, 255, 0.2)' : 'transparent',
-                  border: activeSection === section ? '1px solid #00d4ff' : '1px solid transparent',
-                  borderRadius: '6px',
-                  color: '#00d4ff',
-                  fontFamily: 'Orbitron, sans-serif',
-                  fontSize: '12px',
-                  textTransform: 'uppercase',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '96px',
+                  padding: 0,
+                  background: 'none',
+                  border: 'none',
                   cursor: 'pointer',
+                  filter: activeSection === key
+                    ? 'drop-shadow(0 0 6px #00d4ff) brightness(1.15)'
+                    : 'none',
+                  opacity: activeSection === key ? 1 : 0.85,
+                  transition: 'all 0.2s ease',
                 }}
               >
-                {section}
+                <img
+                  src={img}
+                  alt={key}
+                  style={{
+                    height: '100%',
+                    width: 'auto',
+                    imageRendering: 'pixelated',
+                  }}
+                />
               </button>
             ))}
             <a
@@ -109,42 +125,22 @@ export default function HomePage() {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                position: 'relative',
                 display: 'flex',
-                alignItems: 'flex-start',
+                alignItems: 'center',
                 justifyContent: 'center',
-                width: '178px',
-                height: '100px',
+                height: '120px',
                 textDecoration: 'none',
               }}
             >
               <img
-                src="/pixel-shop-stall.png"
-                alt=""
+                src="/pixel-shop-button.png"
+                alt="Pixel Shop — build your own game"
                 style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
                   height: '100%',
-                  objectFit: 'contain',
+                  width: 'auto',
                   imageRendering: 'pixelated',
-                  pointerEvents: 'none',
                 }}
               />
-              <span style={{
-                position: 'relative',
-                zIndex: 1,
-                marginTop: '30px',
-                color: '#2b1a0a',
-                fontFamily: 'Orbitron, sans-serif',
-                fontSize: '11px',
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
-              }}>
-                Pixel Shop
-              </span>
             </a>
           </div>
         </div>
