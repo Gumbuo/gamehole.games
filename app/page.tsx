@@ -557,6 +557,50 @@ export default function HomePage() {
             </div>
           </section>
 
+          {/* About / Mascot */}
+          <section style={{ marginBottom: '80px' }}>
+            <div style={{
+              maxWidth: '700px',
+              margin: '0 auto',
+              background: 'linear-gradient(135deg, rgba(80, 110, 150, 0.10), rgba(60, 90, 130, 0.08))',
+              border: '48px solid rgba(120, 150, 190, 0.4)',
+              borderImage: 'url(/pixellab-referral-border.png) 80 90 / 48px stretch',
+              padding: '50px 40px',
+              textAlign: 'center',
+            }}>
+              <h2 style={{
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '26px',
+                color: '#8ec8ff',
+                marginBottom: '20px',
+                textTransform: 'uppercase',
+              }}>
+                Behind Game Hole
+              </h2>
+              <img
+                src="/foxhole-mascot.png"
+                alt="FoxHole Productions mascot"
+                style={{
+                  width: '100%',
+                  maxWidth: '480px',
+                  height: 'auto',
+                  imageRendering: 'pixelated',
+                  borderRadius: '8px',
+                }}
+              />
+              <p style={{
+                fontFamily: 'Share Tech Mono, monospace',
+                color: '#999',
+                fontSize: '15px',
+                maxWidth: '600px',
+                margin: '20px auto 0',
+                lineHeight: '1.8',
+              }}>
+                Game Hole is built by FoxHole Productions — a small crew grinding out pixel art, games, and chaos.
+              </p>
+            </div>
+          </section>
+
         </div>
       )}
 
