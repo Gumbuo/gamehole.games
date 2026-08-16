@@ -10,6 +10,8 @@ const BackgroundVideo = dynamic(() => import("./components/BackgroundVideo"), { 
 
 const IframeAwareGlobals = dynamic(() => import("./components/IframeAwareGlobals"), { ssr: false });
 
+const WanderingSprites = dynamic(() => import("./components/WanderingSprites"), { ssr: false });
+
 export const metadata: Metadata = {
   title: "Game Hole - Free Browser Games",
   description: "Play free browser games — Alien AF, Alien Arena, and more. Jump in and play instantly, no sign-up required.",
@@ -49,6 +51,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="min-h-screen" style={{ background: "transparent" }}>
         <BackgroundVideo />
+        <WanderingSprites />
         <Providers>
           <IframeAwareGlobals />
           <div style={{ position: "relative", zIndex: 2 }}>
