@@ -22,10 +22,9 @@ export default function Leaderboard() {
 
   const games = [
     { key: "all", title: "All Games" },
-    { key: "foxstead", title: "FoxStead" },
-    { key: "catacombs", title: "Alien Catacombs" },
-    { key: "dungeon", title: "Dungeon Crawler" },
-    { key: "invasion", title: "Gumbuo Invasion" },
+    { key: "catacombs", title: "Alien AF", header: "/leaderboard-header-alienaf.png" },
+    { key: "currencyofwar", title: "Currency of War", header: "/leaderboard-header-currencyofwar.png" },
+    { key: "foxstead", title: "FoxStead", header: "/leaderboard-header-foxstead.png" },
   ];
 
   useEffect(() => {
@@ -55,10 +54,9 @@ export default function Leaderboard() {
   // Group scores by game for "All Games" view
   const groupedScores = () => {
     const groups: { [key: string]: ScoreEntry[] } = {
-      foxstead: [],
       catacombs: [],
-      dungeon: [],
-      invasion: [],
+      currencyofwar: [],
+      foxstead: [],
     };
 
     scores.forEach((score) => {
@@ -75,18 +73,40 @@ export default function Leaderboard() {
     return game ? game.title : gameKey;
   };
 
+  const getGameHeader = (gameKey: string) => {
+    const game = games.find(g => g.key === gameKey);
+    return game && 'header' in game ? game.header : null;
+  };
+
+  const rowPanels: { [key: string]: { src: string; slice: string; width: string } } = {
+    catacombs: { src: '/leaderboard-row-alienaf.png', slice: '10 34', width: '24px' },
+    foxstead: { src: '/leaderboard-row-foxstead.png', slice: '30 110', width: '46px' },
+    currencyofwar: { src: '/leaderboard-row-currencyofwar.png', slice: '70', width: '36px' },
+  };
+  const getRowPanel = (gameKey: string) => rowPanels[gameKey] ?? null;
+
   const renderScoreRow = (entry: ScoreEntry, index: number, globalRank?: number) => {
     const rankToShow = globalRank !== undefined ? globalRank : index + 1;
-    const isCatacombs = entry.game === 'catacombs';
-    const isDungeon = entry.game === 'dungeon';
-    const isInvasion = entry.game === 'invasion';
     // Show stats for any game that has kills, highestLevel, or catacombs-specific stats
     const hasStats = entry.kills !== undefined || entry.highestLevel !== undefined || entry.crystals !== undefined || entry.healthDrops !== undefined || entry.roomsExplored !== undefined;
+    const rowPanel = getRowPanel(entry.game);
 
     return (
-      <div key={`${entry.username}-${entry.timestamp}`}>
+      <div key={`${entry.username}-${entry.timestamp}`} style={rowPanel ? { padding: '6px 4px' } : undefined}>
         <div
-          style={{
+          style={rowPanel ? {
+            display: 'grid',
+            gridTemplateColumns: selectedGame === "all" ? '80px 1fr 150px' : '80px 1fr 150px 200px',
+            gap: '20px',
+            padding: '18px 26px',
+            borderWidth: rowPanel.width,
+            borderStyle: 'solid',
+            borderColor: 'transparent',
+            borderImage: `url(${rowPanel.src}) ${rowPanel.slice} / ${rowPanel.width} stretch`,
+            fontFamily: 'Share Tech Mono, monospace',
+            fontSize: '14px',
+            color: '#00ff99',
+          } : {
             display: 'grid',
             gridTemplateColumns: selectedGame === "all" ? '80px 1fr 150px' : '80px 1fr 150px 200px',
             gap: '20px',
@@ -99,9 +119,11 @@ export default function Leaderboard() {
             transition: 'all 0.2s ease',
           }}
           onMouseEnter={(e) => {
+            if (rowPanel) return;
             e.currentTarget.style.background = 'rgba(0, 212, 255, 0.15)';
           }}
           onMouseLeave={(e) => {
+            if (rowPanel) return;
             e.currentTarget.style.background = index % 2 === 0 ? 'rgba(0, 212, 255, 0.05)' : 'transparent';
           }}
         >
@@ -222,45 +244,80 @@ export default function Leaderboard() {
           marginBottom: '40px',
           flexWrap: 'wrap',
         }}>
-          {games.map((game) => (
-            <button
-              key={game.key}
-              onClick={() => setSelectedGame(game.key)}
-              style={{
-                padding: '10px 20px',
-                background: selectedGame === game.key
-                  ? 'linear-gradient(135deg, #00d4ff, #0099cc)'
-                  : 'rgba(0, 212, 255, 0.1)',
-                color: selectedGame === game.key ? '#000' : '#00d4ff',
-                border: `2px solid ${selectedGame === game.key ? '#00d4ff' : '#00d4ff44'}`,
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontFamily: 'Orbitron, sans-serif',
-                fontWeight: 'bold',
-                fontSize: '12px',
-                textTransform: 'uppercase',
-                transition: 'all 0.3s ease',
-                boxShadow: selectedGame === game.key
-                  ? '0 0 20px rgba(0, 212, 255, 0.5)'
-                  : 'none',
-              }}
-              onMouseEnter={(e) => {
-                if (selectedGame !== game.key) {
-                  e.currentTarget.style.background = 'rgba(0, 212, 255, 0.2)';
-                  e.currentTarget.style.borderColor = '#00d4ff';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (selectedGame !== game.key) {
-                  e.currentTarget.style.background = 'rgba(0, 212, 255, 0.1)';
-                  e.currentTarget.style.borderColor = '#00d4ff44';
-                }
-              }}
-            >
-              {game.title}
-            </button>
-          ))}
+          {games.map((game) => {
+            const hasHeader = 'header' in game && !!game.header;
+            const isSelected = selectedGame === game.key;
+            return (
+              <button
+                key={game.key}
+                onClick={() => setSelectedGame(game.key)}
+                style={hasHeader ? {
+                  padding: 0,
+                  background: 'transparent',
+                  border: `2px solid ${isSelected ? '#00d4ff' : 'transparent'}`,
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  overflow: 'hidden',
+                  opacity: isSelected ? 1 : 0.7,
+                  boxShadow: isSelected ? '0 0 20px rgba(0, 212, 255, 0.5)' : 'none',
+                  transition: 'all 0.3s ease',
+                } : {
+                  padding: '10px 20px',
+                  background: isSelected
+                    ? 'linear-gradient(135deg, #00d4ff, #0099cc)'
+                    : 'rgba(0, 212, 255, 0.1)',
+                  color: isSelected ? '#000' : '#00d4ff',
+                  border: `2px solid ${isSelected ? '#00d4ff' : '#00d4ff44'}`,
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 'bold',
+                  fontSize: '12px',
+                  textTransform: 'uppercase',
+                  transition: 'all 0.3s ease',
+                  boxShadow: isSelected ? '0 0 20px rgba(0, 212, 255, 0.5)' : 'none',
+                }}
+                onMouseEnter={(e) => {
+                  if (isSelected) return;
+                  if (hasHeader) {
+                    e.currentTarget.style.opacity = '1';
+                  } else {
+                    e.currentTarget.style.background = 'rgba(0, 212, 255, 0.2)';
+                    e.currentTarget.style.borderColor = '#00d4ff';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (isSelected) return;
+                  if (hasHeader) {
+                    e.currentTarget.style.opacity = '0.7';
+                  } else {
+                    e.currentTarget.style.background = 'rgba(0, 212, 255, 0.1)';
+                    e.currentTarget.style.borderColor = '#00d4ff44';
+                  }
+                }}
+              >
+                {hasHeader ? (
+                  <img
+                    src={(game as { header: string }).header}
+                    alt={game.title}
+                    style={{ height: '36px', width: 'auto', display: 'block' }}
+                  />
+                ) : (
+                  game.title
+                )}
+              </button>
+            );
+          })}
         </div>
+
+        {/* Selected Game Header */}
+        {selectedGame !== 'all' && getGameHeader(selectedGame) && (
+          <img
+            src={getGameHeader(selectedGame) ?? ''}
+            alt={getGameTitle(selectedGame)}
+            style={{ display: 'block', maxWidth: '600px', width: '100%', height: 'auto', margin: '0 auto 20px' }}
+          />
+        )}
 
         {/* Leaderboard Table */}
         {loading ? (
@@ -274,18 +331,30 @@ export default function Leaderboard() {
             Loading scores...
           </div>
         ) : scores.length === 0 ? (
-          <div style={{
-            textAlign: 'center',
-            color: '#00ff99',
-            fontFamily: 'Share Tech Mono, monospace',
-            fontSize: '16px',
-            padding: '40px',
-            background: 'rgba(0, 212, 255, 0.1)',
-            border: '2px solid #00d4ff44',
-            borderRadius: '12px',
-          }}>
-            No scores yet. Be the first to play and set a record!
-          </div>
+          (() => {
+            const emptyPanel = selectedGame !== 'all' ? getRowPanel(selectedGame) : null;
+            return (
+              <div style={{
+                textAlign: 'center',
+                color: '#00ff99',
+                fontFamily: 'Share Tech Mono, monospace',
+                fontSize: '16px',
+                padding: '50px 20px',
+                ...(emptyPanel ? {
+                  borderWidth: emptyPanel.width,
+                  borderStyle: 'solid',
+                  borderColor: 'transparent',
+                  borderImage: `url(${emptyPanel.src}) ${emptyPanel.slice} / ${emptyPanel.width} stretch`,
+                } : {
+                  background: 'rgba(0, 212, 255, 0.1)',
+                  border: '2px solid #00d4ff44',
+                  borderRadius: '12px',
+                }),
+              }}>
+                No scores yet. Be the first to play and set a record!
+              </div>
+            );
+          })()
         ) : selectedGame === "all" ? (
           // Show games in separate sections
           <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
@@ -293,26 +362,21 @@ export default function Leaderboard() {
               if (gameScores.length === 0) return null;
 
               return (
-                <div key={gameKey} style={{
-                  background: 'linear-gradient(135deg, #1a1a2e, #0f0f1e)',
-                  border: '2px solid #00d4ff',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 0 40px rgba(0, 212, 255, 0.3)',
-                }}>
+                <div key={gameKey}>
                   {/* Game Section Title */}
+                  <img
+                    src={getGameHeader(gameKey) ?? ''}
+                    alt={getGameTitle(gameKey)}
+                    style={{ display: 'block', width: '100%', height: 'auto', marginBottom: '4px' }}
+                  />
+
                   <div style={{
-                    padding: '20px',
-                    background: 'linear-gradient(135deg, #00d4ff, #0099cc)',
-                    fontFamily: 'Orbitron, sans-serif',
-                    fontWeight: 'bold',
-                    fontSize: '24px',
-                    color: '#000',
-                    textTransform: 'uppercase',
-                    borderBottom: '2px solid #00d4ff',
+                    background: 'linear-gradient(135deg, #1a1a2e, #0f0f1e)',
+                    border: '2px solid #00d4ff',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 0 40px rgba(0, 212, 255, 0.3)',
                   }}>
-                    {getGameTitle(gameKey)}
-                  </div>
 
                   {/* Table Header */}
                   <div style={{
@@ -334,6 +398,7 @@ export default function Leaderboard() {
 
                   {/* Table Rows - Show top 10 per game */}
                   {gameScores.slice(0, 10).map((entry, index) => renderScoreRow(entry, index))}
+                  </div>
                 </div>
               );
             })}
