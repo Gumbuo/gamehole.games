@@ -22,9 +22,9 @@ export default function Leaderboard() {
 
   const games = [
     { key: "all", title: "All Games" },
-    { key: "catacombs", title: "Alien AF", header: "/leaderboard-header-alienaf.png" },
     { key: "currencyofwar", title: "Currency of War", header: "/leaderboard-header-currencyofwar.png" },
     { key: "foxstead", title: "FoxStead", header: "/leaderboard-header-foxstead.png" },
+    { key: "underworld", title: "Underworld Inc." },
   ];
 
   useEffect(() => {
@@ -54,9 +54,9 @@ export default function Leaderboard() {
   // Group scores by game for "All Games" view
   const groupedScores = () => {
     const groups: { [key: string]: ScoreEntry[] } = {
-      catacombs: [],
       currencyofwar: [],
       foxstead: [],
+      underworld: [],
     };
 
     scores.forEach((score) => {
@@ -79,7 +79,6 @@ export default function Leaderboard() {
   };
 
   const rowPanels: { [key: string]: { src: string; slice: string; width: string } } = {
-    catacombs: { src: '/leaderboard-row-alienaf.png', slice: '10 34', width: '24px' },
     foxstead: { src: '/leaderboard-row-foxstead.png', slice: '30 110', width: '46px' },
     currencyofwar: { src: '/leaderboard-row-currencyofwar.png', slice: '70', width: '36px' },
   };
