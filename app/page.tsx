@@ -597,6 +597,82 @@ export default function HomePage() {
                 </div>
               </div>
 
+              {/* Voidfall — native Next.js route, embeds the live Cloudflare Workers deployment */}
+              <div
+                onClick={() => router.push('/voidfall')}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
+                  border: '2px solid rgba(56, 193, 255, 0.4)',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#38c1ff';
+                  e.currentTarget.style.boxShadow = '0 0 25px rgba(56, 193, 255, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-3px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(56, 193, 255, 0.4)';
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <div style={{ padding: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '10px' }}>
+                    <h3 style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '18px',
+                      color: '#38c1ff',
+                      margin: 0,
+                    }}>
+                      Voidfall
+                    </h3>
+                    <span style={{
+                      padding: '3px 8px',
+                      background: 'rgba(56, 193, 255, 0.15)',
+                      border: '1px solid #38c1ff',
+                      borderRadius: '4px',
+                      color: '#38c1ff',
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '9px',
+                      fontWeight: 'bold',
+                      flexShrink: 0,
+                      marginLeft: '8px',
+                    }}>
+                      NEW
+                    </span>
+                  </div>
+                  <p style={{
+                    fontFamily: 'Share Tech Mono, monospace',
+                    fontSize: '11px',
+                    color: '#888',
+                    margin: '0 0 10px 0',
+                    lineHeight: '1.5',
+                  }}>
+                    Sci-fi card battler with a territory-conquest metagame — build decks, duel, garrison warzones across a galaxy-spanning globe.
+                  </p>
+                  <div
+                    style={{
+                      display: 'inline-block',
+                      padding: '8px 22px',
+                      background: 'linear-gradient(135deg, rgba(56,193,255,0.15), rgba(56,193,255,0.05))',
+                      border: '1px solid #38c1ff',
+                      borderRadius: '6px',
+                      color: '#38c1ff',
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      letterSpacing: '1px',
+                      boxShadow: '0 0 12px rgba(56,193,255,0.25)',
+                    }}
+                  >
+                    ▶ PLAY NOW
+                  </div>
+                </div>
+              </div>
+
             </div>
           </section>
 
