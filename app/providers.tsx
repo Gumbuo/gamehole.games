@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AlienPointsProvider } from "./context/AlienPointsEconomy";
 import { AlienPointProvider } from "./context/AlienPointContext";
 import { RightDrawerProvider } from "./context/RightDrawerContext";
+import { AuthProvider } from "./context/AuthContext";
 import { config } from "./wagmi";
 import AlienLoader from "./components/AlienLoader";
 
@@ -38,8 +39,10 @@ export function Providers({ children }: { children: ReactNode }) {
           <AlienPointsProvider>
             <AlienPointProvider>
               <RightDrawerProvider>
-                {isLoading && <AlienLoader />}
-                {children}
+                <AuthProvider>
+                  {isLoading && <AlienLoader />}
+                  {children}
+                </AuthProvider>
               </RightDrawerProvider>
             </AlienPointProvider>
           </AlienPointsProvider>

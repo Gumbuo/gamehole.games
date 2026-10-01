@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-export default function LoginModal() {
+export default function LoginModal({ onClose }: { onClose?: () => void }) {
   const { isAuthenticated, isLoading, login, register } = useAuth();
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [username, setUsername] = useState('');
@@ -56,19 +56,22 @@ export default function LoginModal() {
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      background: 'rgba(0, 0, 0, 0.95)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 10000,
-    }}>
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget && onClose) onClose(); }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'rgba(0, 0, 0, 0.95)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10000,
+      }}>
       <div style={{
+        position: 'relative',
         background: 'linear-gradient(135deg, #1a1a2e, #0f0f1e)',
         border: '2px solid #00d4ff',
         borderRadius: '12px',
@@ -77,6 +80,27 @@ export default function LoginModal() {
         width: '90%',
         boxShadow: '0 0 40px rgba(0, 212, 255, 0.5)',
       }}>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '12px',
+              background: 'none',
+              border: 'none',
+              color: '#00d4ff',
+              fontSize: '20px',
+              cursor: 'pointer',
+              lineHeight: 1,
+              padding: '4px',
+            }}
+          >
+            ✕
+          </button>
+        )}
         <h2 style={{
           fontFamily: 'Orbitron, sans-serif',
           fontSize: '32px',
