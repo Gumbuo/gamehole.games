@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 // Available music tracks
 const TRACKS = [
@@ -11,6 +12,7 @@ const TRACKS = [
 ];
 
 export default function MusicPlayer() {
+  const pathname = usePathname();
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState(TRACKS[4]); // Galactic Groove
   const [isExpanded, setIsExpanded] = useState(false);
@@ -77,9 +79,11 @@ export default function MusicPlayer() {
     return () => audio.removeEventListener('ended', handleEnded);
   }, [selectedTrack]);
 
-  // Don't render if in iframe or not mounted
+  // Don't render if in iframe, not mounted, or on Underworld — that route has
+  // its own themed music player (mafia tracks, not this generic playlist).
   if (!mounted) return null;
   if (typeof window !== "undefined" && window.self !== window.top) return null;
+  if (pathname?.startsWith("/underworld")) return null;
 
   return (
     <>

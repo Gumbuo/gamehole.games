@@ -5,6 +5,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletReadyState } from "@solana/wallet-adapter-base";
 import bs58 from "bs58";
 import TerritoryMap from "./TerritoryMap";
+import UnderworldMusicPlayer from "./MusicPlayer";
 import type { PlayerSave, OperativeCard, Rarity, TerritoryTileState, Stats, EquippedItems, BountyState, MarketListing, Faction } from "./types";
 import {
   THEME,
@@ -16,7 +17,7 @@ import {
   ROLES,
   RARITIES,
   TRAITS,
-  CHARACTER_PORTRAITS,
+  getPortrait,
   RECRUIT_COST,
   effectiveStats,
   levelForXp,
@@ -24,8 +25,10 @@ import {
   PROMOTIONS,
   meetsPromotionRequirement,
   MAX_TRAINABLE_STAT,
-  DAILY_TRAIN_LIMIT,
-  trainCost,
+  SKILL_POINTS_PER_CLAIM,
+  SKILL_POINTS_CYCLE_MS,
+  MAX_TRAIT_LEVEL,
+  traitLevel,
   TERRITORY_TILES,
   ItemKind,
   EQUIPMENT_RECIPES,
@@ -46,6 +49,11 @@ import {
 
 type Market = Record<string, Record<string, number>>;
 type Tab = "roster" | "jobs" | "rackets" | "trade" | "recruit" | "gear" | "workshop" | "store" | "territory" | "bounties" | "market";
+
+const NAV_GROUPS: { label: string; tabs: Tab[] }[] = [
+  { label: "Operations", tabs: ["roster", "jobs", "rackets", "territory", "bounties"] },
+  { label: "Business", tabs: ["trade", "recruit", "gear", "workshop", "store", "market"] },
+];
 
 const TOTAL_RARITY_WEIGHT = Object.values(RARITIES).reduce((s, r) => s + r.weight, 0);
 
@@ -503,6 +511,20 @@ export default function UnderworldPage() {
           <Stat label="Cash" value={fmtCash(save.cash)} color="#4ade80" />
           <Stat label="Rep" value={String(save.reputation)} color="#60a5fa" />
           <Stat label="Heat" value={`${save.heat}/100`} color={save.heat > 60 ? "#ff6b6b" : "#f5d76e"} />
+          <Stat label="SP" value={`${save.skillPoints}/${SKILL_POINTS_PER_CLAIM}`} color={save.skillPoints > 0 ? "#f5d76e" : "#666"} />
+          {now - save.skillPointsClaimedAt >= SKILL_POINTS_CYCLE_MS ? (
+            <button
+              disabled={busy}
+              onClick={() => callApi("claimSkillPoints").then(() => flash(`Claimed ${SKILL_POINTS_PER_CLAIM} skill points`))}
+              style={{ ...buttonStyle(busy), padding: "6px 10px", background: `${THEME.accent}33` }}
+            >
+              CLAIM SP
+            </button>
+          ) : (
+            <span style={{ fontSize: 10, color: "#666" }}>
+              Next SP in {fmtDuration(SKILL_POINTS_CYCLE_MS - (now - save.skillPointsClaimedAt))}
+            </span>
+          )}
           <span style={{ fontSize: 11, color: "#888" }}>
             {walletAddress.slice(0, 4)}…{walletAddress.slice(-4)}
           </span>
@@ -518,35 +540,51 @@ export default function UnderworldPage() {
         </div>
       )}
 
-      <nav style={{ display: "flex", gap: 6, padding: "12px 20px", flexWrap: "wrap" }}>
-        {(["roster", "jobs", "rackets", "trade", "recruit", "gear", "workshop", "store", "territory", "bounties", "market"] as Tab[]).map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              padding: "8px 16px",
-              background: tab === t ? THEME.primary : "transparent",
-              border: `1px solid ${THEME.secondary}`,
-              borderRadius: 8,
-              color: tab === t ? "#fff" : THEME.textMuted,
-              fontFamily: THEME.font,
-              fontSize: 12,
-              cursor: "pointer",
-              textTransform: "uppercase",
-            }}
-          >
-            {t}
-          </button>
-        ))}
-      </nav>
+      <div style={{ display: "flex", gap: 16, alignItems: "flex-start", padding: "16px 20px 60px", maxWidth: 1500, margin: "0 auto", flexWrap: "wrap" }}>
+        <aside style={{ width: 180, flexShrink: 0, display: "flex", flexDirection: "column", gap: 18 }}>
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label}>
+              <div style={{ fontSize: 10, color: "#888", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6, fontFamily: THEME.font }}>
+                {group.label}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                {group.tabs.map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTab(t)}
+                    style={{
+                      padding: "8px 12px",
+                      background: tab === t ? THEME.primary : "transparent",
+                      border: `1px solid ${THEME.secondary}`,
+                      borderRadius: 6,
+                      color: tab === t ? "#fff" : THEME.textMuted,
+                      fontFamily: THEME.font,
+                      fontSize: 12,
+                      cursor: "pointer",
+                      textTransform: "uppercase",
+                      textAlign: "left",
+                    }}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </aside>
 
-      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "10px 20px 60px" }}>
+        <main style={{ flex: "1 1 500px", minWidth: 0 }}>
         {tab === "roster" && (
           <RosterTab
             save={save}
             now={now}
             busy={busy}
             onCollect={(id) => callApi("collectJob", { operativeId: id })}
+            onCollectAll={() =>
+              callApi("collectAllJobs").then((d) => {
+                if (d?.collectedCount) flash(`Collected from ${d.collectedCount} operative${d.collectedCount === 1 ? "" : "s"}`);
+              })
+            }
             onOpen={(id) => setDossierOpId(id)}
           />
         )}
@@ -710,6 +748,21 @@ export default function UnderworldPage() {
           />
         )}
       </main>
+
+        <aside style={{ width: 240, flexShrink: 0 }}>
+          <TerritoryStashWidget
+            walletAddress={walletAddress}
+            tiles={territoryTiles}
+            now={now}
+            busy={busy}
+            onClaim={() =>
+              callTerritoryApi("collectAllTerritory").then((d) => {
+                if (d?.collected) flash(`Claimed ${fmtCash(d.collected)} from the stash`);
+              })
+            }
+          />
+        </aside>
+      </div>
       {dossierOpId &&
         (() => {
           const op = save.operatives.find((o) => o.id === dossierOpId);
@@ -730,6 +783,7 @@ export default function UnderworldPage() {
             />
           );
         })()}
+      <UnderworldMusicPlayer walletAddress={walletAddress} />
     </div>
   );
 }
@@ -779,7 +833,33 @@ function Stat({ label, value, color }: { label: string; value: string; color: st
   );
 }
 
-const HEX_CLIP = "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)";
+// Hybrid card template: the user's own black-and-gold PixelLab template
+// (single clean frame, no ghosting — built by them directly in PixelLab)
+// supplies the nameplate/portrait-window/stat-zone/4-equip-slot layout, but
+// the portrait renders big/full within its window rather than as a small
+// boxed thumbnail, and the whole card still gets a rarity-colored glow
+// border (box-shadow) layered around the frame so rarity color-codes for
+// free. Zones measured off the 164x232 trimmed template via seed-and-scan
+// flood-fill from a known interior point in each box out to its border.
+const CARD_TEMPLATE = "/underworld/ui/card-template-v6.png";
+const CARD_ASPECT = "164 / 232";
+const CARD_PORTRAIT_ZONE = { left: "6.1%", top: "12.5%", width: "87.2%", height: "40.1%" };
+const CARD_NAME_ZONE = { left: "11%", top: "3.5%", width: "77.4%", height: "6.5%" };
+// The 3 trait boxes are NOT evenly spaced (measured via a dense 0.5%-step
+// vertical scan down the box interior, not flexbox space-evenly, which had
+// been misaligning rows against boxes 1 and 2): box1 center ~57.7%, box2
+// ~65.3%, box3 ~71.3% of card height. left/width nudged right of the box's
+// true left edge (16.5%) to leave a little breathing room after "text a tad
+// more to the right."
+const CARD_TRAIT_ROW_CENTERS = [58.7, 65.3, 72.3];
+const CARD_TRAIT_ROW_LEFT = "18%";
+const CARD_TRAIT_ROW_WIDTH = "65%";
+const CARD_EQUIP_SLOTS_POS = [
+  { left: "7.3%", top: "76.3%", width: "17.1%", height: "11.6%" },
+  { left: "29.9%", top: "76.3%", width: "16.5%", height: "11.6%" },
+  { left: "53.0%", top: "76.3%", width: "16.5%", height: "11.6%" },
+  { left: "75.0%", top: "76.3%", width: "17.1%", height: "11.6%" },
+];
 
 const STAT_ROWS: { key: keyof Stats; label: string }[] = [
   { key: "power", label: "PWR" },
@@ -796,105 +876,142 @@ const EQUIP_SLOTS: { key: keyof EquippedItems; label: string }[] = [
   { key: "footwear", label: "FEET" },
 ];
 
-// Flat dark-card style copied from a reference game's dossier ("Syndicate"):
-// thin gold hairline border, rarity tag + corner mark, a rarity-tinted glow
-// around the hex portrait (via drop-shadow, which — unlike box-shadow —
-// follows the clip-path shape instead of the square bounding box), a solid
-// name banner, and a compact equipment-slot row. Clicking the card opens the
-// full Dossier modal (training/promotion/equip/field note).
+// Hybrid card: the user's own black-and-gold PixelLab template supplies the
+// frame/nameplate/stat-zone/4-equip-slot layout (see CARD_TEMPLATE comment
+// above), portrait renders big within its window rather than a small boxed
+// thumbnail, and a rarity-colored glow border (box-shadow) wraps the whole
+// card so rarity color-codes for free. The status/timer badge sits in the
+// portrait's own bottom-left corner (no dedicated slot for it in the
+// template); traits (icon + pip bar) live below the card since the template
+// has no slot for them either. Clicking the card opens the full Dossier.
 function OperativeCardView({ op, now, onOpen }: { op: OperativeCard; now: number; onOpen?: () => void }) {
   const rarity = RARITIES[op.rarity];
   const stats = effectiveStats(op);
   const remaining = op.jobEndsAt ? op.jobEndsAt - now : 0;
-  const portrait = CHARACTER_PORTRAITS[op.name];
+  const portrait = getPortrait(op.name, op.faction, op.portraitIndex);
+  let statusText = "● Idle";
+  let statusColor = "#4ade80";
+  if (op.status === "injured" && op.injuredUntil) {
+    statusText = `✚ Injured — ${fmtDuration(op.injuredUntil - now)}`;
+    statusColor = "#ff6b6b";
+  } else if (op.status === "on_job") {
+    statusText = remaining > 0 ? `⏱ ${fmtDuration(remaining)}` : "✓ Ready to collect";
+    statusColor = remaining > 0 ? "#f5d76e" : "#4ade80";
+  } else if (op.status === "garrisoned") {
+    statusText = "⚑ Garrisoned";
+    statusColor = THEME.accent;
+  }
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <div
         onClick={onOpen}
         style={{
-          background: "#0a0808",
-          border: `1px solid ${THEME.accent}66`,
-          padding: 10,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 6,
+          position: "relative",
+          width: "100%",
+          aspectRatio: CARD_ASPECT,
+          borderRadius: 10,
+          backgroundColor: "#0a0808",
+          backgroundImage: `url(${CARD_TEMPLATE})`,
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+          boxShadow: `0 0 0 2px ${rarity.color}, 0 0 12px 1px ${rarity.color}aa`,
           cursor: onOpen ? "pointer" : "default",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-          <span style={{ fontSize: 9, color: rarity.color, textTransform: "uppercase", fontWeight: "bold", letterSpacing: 1 }}>
-            {rarity.label}
-          </span>
-          <span style={{ fontSize: 9, color: FACTIONS[op.faction].color, textTransform: "uppercase", fontWeight: "bold", letterSpacing: 0.5 }}>
-            {FACTIONS[op.faction].label}
-          </span>
+        <div style={{ position: "absolute", left: "3%", top: "0.3%", fontSize: 7, color: rarity.color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: 0.5, textShadow: "0 1px 2px #000" }}>
+          ★ {rarity.label}
         </div>
-        <div
-          style={{
-            width: "58%",
-            aspectRatio: "1",
-            clipPath: HEX_CLIP,
-            filter: `drop-shadow(0 0 5px ${rarity.color})`,
-            background: "rgba(255,255,255,0.03)",
-          }}
-        >
-          {portrait && (
-            <img src={portrait} alt={op.name} style={{ width: "100%", height: "100%", objectFit: "cover", imageRendering: "pixelated" }} />
-          )}
+        <div style={{ position: "absolute", right: "3%", top: "0.3%", fontSize: 7, color: FACTIONS[op.faction].color, fontWeight: "bold", textTransform: "uppercase", textShadow: "0 1px 2px #000" }}>
+          {FACTIONS[op.faction].label}
         </div>
-        <div style={{ width: "100%", background: "#000", padding: "5px 4px" }}>
-          <div style={{ fontFamily: THEME.font, fontSize: 13, color: "#fff", fontWeight: "bold", textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <div style={{ position: "absolute", ...CARD_NAME_ZONE, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ fontFamily: THEME.font, fontSize: 11, color: "#f5d76e", fontWeight: "bold", textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {op.name}
-          </div>
+          </span>
         </div>
-        <div style={{ fontSize: 9, color: "#999", textTransform: "uppercase", letterSpacing: 0.5, textAlign: "center" }}>
-          {RANK_LABELS[op.rank]} · {ROLES[op.role].label}
-          {op.trait ? ` · ${TRAITS[op.trait as keyof typeof TRAITS]?.label}` : ""}
+        <div style={{ position: "absolute", ...CARD_PORTRAIT_ZONE, overflow: "hidden", borderRadius: 4 }}>
+          {portrait && (
+            <img src={portrait} alt={op.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", imageRendering: "pixelated" }} />
+          )}
+          <div style={{ position: "absolute", left: 3, bottom: 3, fontSize: 7, fontWeight: "bold", color: statusColor, textShadow: "0 1px 2px #000, 0 0 3px #000" }}>{statusText}</div>
         </div>
-        <div style={{ fontSize: 9, color: "#f0d9a8", textAlign: "center", fontFamily: THEME.bodyFont }}>
-          {STAT_ROWS.map((s) => `${s.label} ${stats[s.key]}`).join(" · ")}
-        </div>
-        <div style={{ display: "flex", gap: 4 }}>
-          {EQUIP_SLOTS.map(({ key, label }) => {
-            const itemId = op.equipped?.[key];
-            const item = itemId ? ITEMS.find((i) => i.id === itemId) : null;
-            return (
-              <div
-                key={key}
-                title={item ? item.name : `${label} slot — empty`}
-                style={{
-                  width: 22,
-                  height: 22,
-                  border: `1px solid ${THEME.accent}55`,
-                  background: "#151010",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 8,
-                  color: item ? THEME.accent : "#555",
-                }}
-              >
-                {item ? "●" : "+"}
+        {op.traits.map((t, i) => {
+          const def = TRAITS[t.id as keyof typeof TRAITS];
+          if (!def) return null;
+          return (
+            <div
+              key={t.id}
+              title={def.description}
+              style={{
+                position: "absolute",
+                left: CARD_TRAIT_ROW_LEFT,
+                width: CARD_TRAIT_ROW_WIDTH,
+                top: `${CARD_TRAIT_ROW_CENTERS[i]}%`,
+                transform: "translateY(-50%)",
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
+              }}
+            >
+              <span style={{ fontSize: 6, color: "#f5d76e", fontWeight: "bold", flex: "0 0 50px", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", textShadow: "0 1px 2px #000" }}>
+                {def.label}
+              </span>
+              <div style={{ display: "flex", gap: 1, flex: 1 }}>
+                {Array.from({ length: MAX_TRAIT_LEVEL }, (_, j) => (
+                  <div key={j} style={{ flex: 1, height: 4, background: j < t.level ? rarity.color : "rgba(255,255,255,0.15)", border: `1px solid ${rarity.color}55` }} />
+                ))}
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
+        {EQUIP_SLOTS.map(({ key, label }, i) => {
+          const itemId = op.equipped?.[key];
+          const item = itemId ? ITEMS.find((i2) => i2.id === itemId) : null;
+          const itemRarity = item ? RARITIES[item.tier] : null;
+          return (
+            <div
+              key={key}
+              title={item ? item.name : `${label} slot — empty`}
+              style={{
+                position: "absolute",
+                ...CARD_EQUIP_SLOTS_POS[i],
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 10,
+                color: item ? rarity.color : "rgba(255,255,255,0.35)",
+                background: item ? "rgba(0,0,0,0.35)" : "transparent",
+                border: item ? `1px solid ${itemRarity!.color}` : "none",
+                borderRadius: 3,
+                boxSizing: "border-box",
+              }}
+            >
+              {item ? (
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  style={{ width: "80%", height: "80%", objectFit: "contain", imageRendering: "pixelated" }}
+                />
+              ) : (
+                "+"
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+        <div style={{ fontSize: 10, color: "#999", textTransform: "uppercase", letterSpacing: 0.5, textAlign: "center" }}>
+          {RANK_LABELS[op.rank]} · {ROLES[op.role].label}
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
+          {STAT_ROWS.map((s) => (
+            <div key={s.key} style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 8, color: "#888" }}>{s.label}</div>
+              <div style={{ fontSize: 12, color: "#f0d9a8", fontWeight: "bold", fontFamily: THEME.bodyFont }}>{stats[s.key]}</div>
+            </div>
+          ))}
         </div>
       </div>
-      {op.status === "idle" && <div style={{ fontSize: 11, color: "#4ade80" }}>Idle</div>}
-      {op.status === "injured" && op.injuredUntil && (
-        <div style={{ fontSize: 11, color: "#ff6b6b" }}>
-          Injured — back in {fmtDuration(op.injuredUntil - now)}
-        </div>
-      )}
-      {op.status === "on_job" && (
-        <div style={{ fontSize: 11, color: "#f5d76e" }}>
-          {remaining > 0 ? `On a job — ${fmtDuration(remaining)}` : "Job complete — collect on the Jobs tab"}
-        </div>
-      )}
-      {op.status === "garrisoned" && (
-        <div style={{ fontSize: 11, color: THEME.accent }}>Garrisoning territory — see the Territory tab</div>
-      )}
     </div>
   );
 }
@@ -939,10 +1056,9 @@ function OperativeDossier({
   const [note, setNote] = useState(op.fieldNote || "");
   const rarity = RARITIES[op.rarity];
   const stats = effectiveStats(op);
-  const portrait = CHARACTER_PORTRAITS[op.name];
+  const portrait = getPortrait(op.name, op.faction, op.portraitIndex);
   const promo = PROMOTIONS[op.rank];
   const eligible = meetsPromotionRequirement(op);
-  const dailyLimitHit = op.trainedToday >= DAILY_TRAIN_LIMIT && now <= op.trainedResetAt;
   const tile = op.garrisonTileId ? TERRITORY_TILES.find((t) => t.id === op.garrisonTileId) : null;
 
   return (
@@ -966,34 +1082,142 @@ function OperativeDossier({
         }}
       >
         <div style={{ flex: "1 1 220px", display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-            <span style={{ fontSize: 11, color: rarity.color, textTransform: "uppercase", fontWeight: "bold", letterSpacing: 1 }}>
-              {rarity.label}
-            </span>
+          <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
             <button onClick={onClose} style={{ background: "none", border: "none", color: "#999", fontSize: 18, cursor: "pointer" }}>✕</button>
           </div>
           <div
             style={{
-              width: "70%",
-              aspectRatio: "1",
-              clipPath: HEX_CLIP,
-              filter: `drop-shadow(0 0 8px ${rarity.color})`,
-              background: "rgba(255,255,255,0.03)",
+              position: "relative",
+              width: "82%",
+              aspectRatio: CARD_ASPECT,
+              borderRadius: 12,
+              backgroundColor: "#0a0808",
+              backgroundImage: `url(${CARD_TEMPLATE})`,
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+              boxShadow: `0 0 0 2px ${rarity.color}, 0 0 16px 2px ${rarity.color}aa`,
             }}
           >
-            {portrait && (
-              <img src={portrait} alt={op.name} style={{ width: "100%", height: "100%", objectFit: "cover", imageRendering: "pixelated" }} />
-            )}
-          </div>
-          <div style={{ width: "100%", background: "#000", padding: "6px 4px" }}>
-            <div style={{ fontFamily: THEME.font, fontSize: 16, color: "#fff", fontWeight: "bold", textAlign: "center" }}>{op.name}</div>
+            <div style={{ position: "absolute", left: "3%", top: "0.3%", fontSize: 9, color: rarity.color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: 0.5, textShadow: "0 1px 2px #000" }}>
+              ★ {rarity.label}
+            </div>
+            <div style={{ position: "absolute", right: "3%", top: "0.3%", fontSize: 9, color: FACTIONS[op.faction].color, fontWeight: "bold", textTransform: "uppercase", textShadow: "0 1px 2px #000" }}>
+              {FACTIONS[op.faction].label}
+            </div>
+            <div style={{ position: "absolute", ...CARD_NAME_ZONE, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontFamily: THEME.font, fontSize: 14, color: "#f5d76e", fontWeight: "bold", textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {op.name}
+              </span>
+            </div>
+            <div style={{ position: "absolute", ...CARD_PORTRAIT_ZONE, overflow: "hidden", borderRadius: 5 }}>
+              {portrait && (
+                <img src={portrait} alt={op.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", imageRendering: "pixelated" }} />
+              )}
+            </div>
+            {op.traits.map((t, i) => {
+              const def = TRAITS[t.id as keyof typeof TRAITS];
+              if (!def) return null;
+              return (
+                <div
+                  key={t.id}
+                  title={def.description}
+                  style={{
+                    position: "absolute",
+                    left: CARD_TRAIT_ROW_LEFT,
+                    width: CARD_TRAIT_ROW_WIDTH,
+                    top: `${CARD_TRAIT_ROW_CENTERS[i]}%`,
+                    transform: "translateY(-50%)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 5,
+                  }}
+                >
+                  <span style={{ fontSize: 7, color: "#f5d76e", fontWeight: "bold", flex: "0 0 54px", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", textShadow: "0 1px 2px #000" }}>
+                    {def.label}
+                  </span>
+                  <div style={{ display: "flex", gap: 1, flex: 1 }}>
+                    {Array.from({ length: MAX_TRAIT_LEVEL }, (_, j) => (
+                      <div key={j} style={{ flex: 1, height: 4, background: j < t.level ? rarity.color : "rgba(255,255,255,0.15)", border: `1px solid ${rarity.color}55` }} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+            {EQUIP_SLOTS.map(({ key, label }, i) => {
+              const itemId = op.equipped?.[key];
+              const item = itemId ? ITEMS.find((i2) => i2.id === itemId) : null;
+              const itemRarity = item ? RARITIES[item.tier] : null;
+              return (
+                <div
+                  key={key}
+                  title={item ? item.name : `${label} slot — empty`}
+                  style={{
+                    position: "absolute",
+                    ...CARD_EQUIP_SLOTS_POS[i],
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 13,
+                    color: item ? rarity.color : "rgba(255,255,255,0.35)",
+                    background: item ? "rgba(0,0,0,0.35)" : "transparent",
+                    border: item ? `1px solid ${itemRarity!.color}` : "none",
+                    borderRadius: 3,
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {item ? (
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      style={{ width: "80%", height: "80%", objectFit: "contain", imageRendering: "pixelated" }}
+                    />
+                  ) : (
+                    "+"
+                  )}
+                </div>
+              );
+            })}
           </div>
           <div style={{ fontSize: 11, color: "#999", textTransform: "uppercase", letterSpacing: 0.5, textAlign: "center" }}>
             {RANK_LABELS[op.rank]} · {ROLES[op.role].label} · Lv{op.level}
-            {op.trait ? ` · ${TRAITS[op.trait as keyof typeof TRAITS]?.label}` : ""}
           </div>
           <div style={{ fontSize: 11, color: FACTIONS[op.faction].color, textAlign: "center" }}>{FACTIONS[op.faction].label}</div>
           {tile && <div style={{ fontSize: 11, color: THEME.accent, textAlign: "center" }}>Garrisoning: {tile.name}</div>}
+
+          {op.traits.length > 0 && (
+            <div style={{ width: "100%" }}>
+              <div style={DOSSIER_SECTION_HEADER}>Traits</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {op.traits.map((t) => {
+                  const def = TRAITS[t.id as keyof typeof TRAITS];
+                  if (!def) return null;
+                  return (
+                    <div key={t.id} title={def.description}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#ccc", marginBottom: 2 }}>
+                        <span>{def.label}</span>
+                        <span style={{ color: THEME.accent }}>
+                          {t.level}/{MAX_TRAIT_LEVEL}
+                        </span>
+                      </div>
+                      <div style={{ display: "flex", gap: 2 }}>
+                        {Array.from({ length: MAX_TRAIT_LEVEL }, (_, i) => (
+                          <div
+                            key={i}
+                            style={{
+                              flex: 1,
+                              height: 5,
+                              background: i < t.level ? THEME.accent : "#2a1a1a",
+                              border: `1px solid ${THEME.accent}55`,
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div style={{ width: "100%" }}>
             <div style={DOSSIER_SECTION_HEADER}>Equipment</div>
@@ -1044,14 +1268,13 @@ function OperativeDossier({
 
         <div style={{ flex: "2 1 380px" }}>
           <div style={DOSSIER_SECTION_HEADER}>
-            Training Ledger <span style={{ color: "#666", fontWeight: "normal", fontSize: 11 }}>({op.trainedToday}/{DAILY_TRAIN_LIMIT} today)</span>
+            Training Ledger <span style={{ color: save.skillPoints > 0 ? "#4ade80" : "#666", fontWeight: "normal", fontSize: 11 }}>({save.skillPoints} skill point{save.skillPoints === 1 ? "" : "s"} available)</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
             {STAT_ROWS.map((s) => {
               const current = op.stats[s.key];
-              const cost = trainCost(current);
               const maxed = current >= MAX_TRAINABLE_STAT;
-              const disabled = busy || maxed || dailyLimitHit || save.cash < cost || op.status !== "idle";
+              const disabled = busy || maxed || save.skillPoints < 1 || op.status !== "idle";
               return (
                 <div key={s.key} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ width: 34, fontSize: 11, color: THEME.accent }}>{s.label}</span>
@@ -1064,7 +1287,7 @@ function OperativeDossier({
                     onClick={() => onTrain(s.key)}
                     style={{ ...buttonStyle(disabled), padding: "4px 8px", fontSize: 10, whiteSpace: "nowrap" }}
                   >
-                    +1 ({fmtCash(cost)})
+                    +1 (1 SP)
                   </button>
                 </div>
               );
@@ -1072,6 +1295,9 @@ function OperativeDossier({
           </div>
           {op.status !== "idle" && (
             <div style={{ fontSize: 11, color: "#ff9f9f", marginBottom: 20 }}>Operative must be idle to train.</div>
+          )}
+          {save.skillPoints < 1 && op.status === "idle" && (
+            <div style={{ fontSize: 11, color: "#f5d76e", marginBottom: 20 }}>No skill points left — claim your daily batch from the header, or come back after your next claim.</div>
           )}
 
           <div style={DOSSIER_SECTION_HEADER}>Promotion</div>
@@ -1107,17 +1333,45 @@ function RosterTab({
   now,
   busy,
   onCollect,
+  onCollectAll,
   onOpen,
 }: {
   save: PlayerSave;
   now: number;
   busy: boolean;
   onCollect: (id: string) => void;
+  onCollectAll: () => void;
   onOpen: (id: string) => void;
 }) {
+  const readyCount = save.operatives.filter((op) => op.status === "on_job" && op.jobEndsAt && op.jobEndsAt <= now).length;
+
   return (
     <div>
       <h2 style={sectionTitle}>Your Crew</h2>
+      {readyCount > 0 && (
+        <button
+          disabled={busy}
+          onClick={onCollectAll}
+          style={{
+            display: "block",
+            width: "100%",
+            padding: "12px",
+            marginBottom: 14,
+            background: "#1a4d2e",
+            border: "1px solid #4ade80",
+            borderRadius: 4,
+            color: "#4ade80",
+            fontFamily: THEME.font,
+            fontSize: 13,
+            textTransform: "uppercase",
+            letterSpacing: 1,
+            cursor: busy ? "not-allowed" : "pointer",
+            opacity: busy ? 0.6 : 1,
+          }}
+        >
+          ✓ Collect All Rewards ({readyCount})
+        </button>
+      )}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
         {save.operatives.map((op) => (
           <div key={op.id}>
@@ -1150,9 +1404,7 @@ function estimateChance(job: (typeof JOBS)[number], crew: OperativeCard[]): numb
   const roleBonus = crew.some((op) => op.role === job.roleBonus) ? 0.1 : 0;
   const crewSynergy = job.crewSize === 2 ? 0.05 : 0;
   const traitDelta = crew.reduce((sum, op) => {
-    if (op.trait === "quick_hands") return sum + 0.1;
-    if (op.trait === "cautious") return sum - 0.1;
-    return sum;
+    return sum + traitLevel(op, "quick_hands") * 0.02 - traitLevel(op, "cautious") * 0.02;
   }, 0);
   return Math.max(0.05, Math.min(0.97, job.baseSuccessChance + bestStatBonus + roleBonus + crewSynergy + traitDelta));
 }
@@ -1643,6 +1895,55 @@ function fmtExpiry(ms: number): string {
   const mins = Math.floor((ms % 3_600_000) / 60_000);
   if (hours > 0) return `${hours}h ${mins}m`;
   return `${mins}m`;
+}
+
+// Aggregate passive-income sidebar — sums every controlled tile's accrued
+// income into one running total (same capped-at-24h formula the server's
+// collectAllTerritory uses, so what's shown here matches what claiming
+// actually pays out) instead of making the player click into each tile.
+function TerritoryStashWidget({
+  walletAddress,
+  tiles,
+  now,
+  busy,
+  onClaim,
+}: {
+  walletAddress: string | null;
+  tiles: TerritoryTileState[] | null;
+  now: number;
+  busy: boolean;
+  onClaim: () => void;
+}) {
+  const myTiles = (tiles || []).filter((t) => t.controlledBy === walletAddress);
+  const pending = myTiles.reduce((sum, t) => {
+    const def = TERRITORY_TILES.find((d) => d.id === t.id);
+    if (!def) return sum;
+    const elapsedHours = Math.min(24, (now - t.lastCollectedAt) / 3_600_000);
+    return sum + Math.round(def.baseRatePerHour * elapsedHours);
+  }, 0);
+  const hourlyRate = myTiles.reduce((sum, t) => {
+    const def = TERRITORY_TILES.find((d) => d.id === t.id);
+    return sum + (def?.baseRatePerHour || 0);
+  }, 0);
+
+  return (
+    <div style={panelStyle()}>
+      <div style={{ fontSize: 12, color: THEME.accent, textTransform: "uppercase", marginBottom: 8 }}>Territory Stash</div>
+      {myTiles.length === 0 ? (
+        <p style={{ fontSize: 11, color: "#666" }}>Claim territory to start earning passive income.</p>
+      ) : (
+        <>
+          <div style={{ fontFamily: THEME.font, fontSize: 24, color: "#4ade80" }}>{fmtCash(pending)}</div>
+          <div style={{ fontSize: 11, color: "#999", marginBottom: 12 }}>
+            {myTiles.length} tile{myTiles.length === 1 ? "" : "s"} · +{fmtCash(hourlyRate)}/hr
+          </div>
+          <button disabled={busy || pending <= 0} onClick={onClaim} style={{ ...buttonStyle(busy || pending <= 0), width: "100%" }}>
+            CLAIM STASH
+          </button>
+        </>
+      )}
+    </div>
+  );
 }
 
 // Bounty Board — place cash on a rival wallet, anyone can top up the pool,

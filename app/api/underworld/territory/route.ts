@@ -58,6 +58,37 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, tiles, now });
     }
 
+    // Aggregate "stash" claim — collects income from every tile the caller
+    // controls in one request, instead of clicking into each tile's own
+    // COLLECT INCOME action one at a time.
+    if (action === "collectAllTerritory") {
+      const save = await loadSave(userId, now);
+      sweep(save, now);
+      let totalIncome = 0;
+      let bullionGained = 0;
+      const updatedTiles: TerritoryTileState[] = [];
+      for (const def of TERRITORY_TILES) {
+        const tile = await loadTile(def.id, now);
+        if (tile.controlledBy !== userId) continue;
+        const elapsedHours = Math.min(24, (now - tile.lastCollectedAt) / 3_600_000);
+        const income = Math.round(def.baseRatePerHour * elapsedHours);
+        totalIncome += income;
+        if (Math.random() < 0.2) bullionGained += 1;
+        for (const op of save.operatives) {
+          if (tile.garrisonOperativeIds.includes(op.id)) {
+            op.milestones.garrisonMsAccrued += now - tile.lastCollectedAt;
+          }
+        }
+        tile.lastCollectedAt = now;
+        await writeTile(tile);
+        updatedTiles.push(tile);
+      }
+      save.cash += totalIncome;
+      save.bullion += bullionGained;
+      await writeSave(userId, save, now);
+      return NextResponse.json({ success: true, collected: totalIncome, bullionGained, tiles: updatedTiles, save });
+    }
+
     const { tileId } = body;
     const tileDef = TERRITORY_TILES.find((t) => t.id === tileId);
     if (!tileDef) {

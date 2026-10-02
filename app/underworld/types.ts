@@ -4,7 +4,7 @@ export type OperativeStatus = "idle" | "on_job" | "injured" | "garrisoned";
 export type Rank = "soldier" | "captain" | "lieutenant" | "underboss" | "boss";
 // Original fictional factions (not real-world organizations) covering the
 // mafia-family / street-gang / biker-club variety the user wanted.
-export type Faction = "outfit" | "serpent_row" | "iron_wolves";
+export type Faction = "outfit" | "ferrante" | "serpent_row" | "grips" | "iron_wolves" | "mongrols" | "simaloa" | "los_zetos";
 
 export interface OperativeMilestones {
   wonTerritoryAttack: boolean;
@@ -39,6 +39,11 @@ export interface CraftingBenchState {
   job: CraftingJob | null;
 }
 
+export interface OperativeTraitInstance {
+  id: string;
+  level: number;
+}
+
 export interface OperativeCard {
   id: string;
   templateId: string;
@@ -46,7 +51,8 @@ export interface OperativeCard {
   role: Role;
   faction: Faction;
   name: string;
-  trait?: string;
+  portraitIndex: number;
+  traits: OperativeTraitInstance[];
   level: number;
   xp: number;
   stats: Stats;
@@ -66,8 +72,6 @@ export interface OperativeCard {
   garrisonTileId?: string;
   rank: Rank;
   fieldNote?: string;
-  trainedToday: number;
-  trainedResetAt: number;
   milestones: OperativeMilestones;
 }
 
@@ -124,6 +128,8 @@ export interface PlayerSave {
   bullion: number;
   reputation: number;
   heat: number;
+  skillPoints: number;
+  skillPointsClaimedAt: number;
   operatives: OperativeCard[];
   items: ItemStack[];
   product: Record<string, number>;

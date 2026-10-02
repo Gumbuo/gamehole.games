@@ -14,17 +14,18 @@ import {
   computeProductPrice,
   rollRarity,
   rollRole,
-  rollTrait,
+  rollTraits,
+  traitLevel,
   rollStats,
   rollName,
+  rollPortraitIndex,
   levelForXp,
   effectiveStats,
   PROMOTIONS,
   meetsPromotionRequirement,
   MAX_TRAINABLE_STAT,
-  DAILY_TRAIN_LIMIT,
-  TRAIN_RESET_MS,
-  trainCost,
+  SKILL_POINTS_PER_CLAIM,
+  SKILL_POINTS_CYCLE_MS,
   RARITIES,
   EQUIPMENT_RECIPES,
   FORGE_TIERS,
@@ -92,22 +93,23 @@ export async function POST(request: NextRequest) {
         }
         const rarity = rollRarity();
         const role = rollRole();
-        const trait = rollTrait();
+        const traits = rollTraits(rarity);
+        const recruitFaction = rollFaction();
+        const recruitName = rollName(recruitFaction);
         const card: OperativeCard = {
           id: crypto.randomUUID(),
           templateId: `${role}_${rarity}`,
           rarity,
           role,
-          faction: rollFaction(),
-          name: rollName(),
-          trait,
+          faction: recruitFaction,
+          name: recruitName,
+          portraitIndex: rollPortraitIndex(recruitName, recruitFaction),
+          traits,
           level: 1,
           xp: 0,
           stats: rollStats(role, rarity),
           status: "idle",
           rank: "soldier",
-          trainedToday: 0,
-          trainedResetAt: 0,
           milestones: { wonTerritoryAttack: false, completedCrewJob: false, garrisonMsAccrued: 0 },
         };
         save.cash -= RECRUIT_COST;
@@ -127,22 +129,22 @@ export async function POST(request: NextRequest) {
         }
         const rarity = rollRarity(pack.rarityWeights);
         const role = rollRole();
-        const trait = rollTrait();
+        const traits = rollTraits(rarity);
+        const packName = rollName(pack.faction);
         const card: OperativeCard = {
           id: crypto.randomUUID(),
           templateId: `${role}_${rarity}`,
           rarity,
           role,
           faction: pack.faction,
-          name: rollName(),
-          trait,
+          name: packName,
+          portraitIndex: rollPortraitIndex(packName, pack.faction),
+          traits,
           level: 1,
           xp: 0,
           stats: rollStats(role, rarity),
           status: "idle",
           rank: "soldier",
-          trainedToday: 0,
-          trainedResetAt: 0,
           milestones: { wonTerritoryAttack: false, completedCrewJob: false, garrisonMsAccrued: 0 },
         };
         save.cash -= pack.cost;
@@ -179,9 +181,7 @@ export async function POST(request: NextRequest) {
         const roleBonus = members.some((op) => op.role === job.roleBonus) ? 0.1 : 0;
         const crewSynergy = job.crewSize === 2 ? 0.05 : 0;
         const traitChanceDelta = members.reduce((sum, op) => {
-          if (op.trait === "quick_hands") return sum + 0.1;
-          if (op.trait === "cautious") return sum - 0.1;
-          return sum;
+          return sum + traitLevel(op, "quick_hands") * 0.02 - traitLevel(op, "cautious") * 0.02;
         }, 0);
         const chance = clamp(
           job.baseSuccessChance + bestStatBonus + roleBonus + crewSynergy + traitChanceDelta,
@@ -195,15 +195,15 @@ export async function POST(request: NextRequest) {
           const share = isLeader ? 1 : SUPPORT_XP_SHARE;
           const heatShare = isLeader ? 1 : SUPPORT_HEAT_SHARE;
 
-          const cashMult = success && op.trait === "night_owl" ? 1.15 : 1;
-          const cashMult2 = success && op.trait === "greedy" ? 1.25 : 1;
-          const repMult = success && op.trait === "silver_tongue" ? 1.15 : 1;
-          const xpMult = op.trait === "fast_learner" ? 1.2 : 1;
+          const cashMult = success ? 1 + traitLevel(op, "night_owl") * 0.03 : 1;
+          const cashMult2 = success ? 1 + traitLevel(op, "greedy") * 0.05 : 1;
+          const repMult = success ? 1 + traitLevel(op, "silver_tongue") * 0.03 : 1;
+          const xpMult = 1 + traitLevel(op, "fast_learner") * 0.04;
           let heatMult = 1;
-          if (!success && op.trait === "loyal") heatMult *= 0.5;
-          if (op.trait === "ice_cold") heatMult *= 0.8;
-          if (op.trait === "cautious") heatMult *= 0.8;
-          if (op.trait === "greedy") heatMult *= 1.25;
+          if (!success) heatMult *= 1 - traitLevel(op, "loyal") * 0.1;
+          heatMult *= 1 - traitLevel(op, "ice_cold") * 0.04;
+          heatMult *= 1 - traitLevel(op, "cautious") * 0.04;
+          heatMult *= 1 + traitLevel(op, "greedy") * 0.05;
 
           op.status = "on_job";
           op.jobId = job.id;
@@ -250,7 +250,8 @@ export async function POST(request: NextRequest) {
         op.xp += reward.xp;
         op.level = levelForXp(op.xp);
 
-        if (reward.success || op.trait === "iron_will") {
+        const avoidsInjury = Math.random() < traitLevel(op, "iron_will") * 0.2;
+        if (reward.success || avoidsInjury) {
           op.status = "idle";
         } else {
           op.status = "injured";
@@ -266,6 +267,44 @@ export async function POST(request: NextRequest) {
 
         await writeSave(userId, save, now);
         return NextResponse.json({ success: true, save, reward, market: buildMarket(now), now });
+      }
+
+      case "collectAllJobs": {
+        let totalCash = 0;
+        let totalRep = 0;
+        let collectedCount = 0;
+        for (const op of save.operatives) {
+          if (op.status !== "on_job" || !op.pendingReward || !op.jobEndsAt || now < op.jobEndsAt) continue;
+          const job = JOBS.find((j) => j.id === op.jobId);
+          const reward = op.pendingReward;
+          save.cash += reward.cash;
+          save.reputation += reward.reputation;
+          save.heat = clamp(save.heat + reward.heatDelta, 0, 100);
+          if (reward.success && reward.cash > 0) {
+            save.scrap += Math.max(1, Math.round(reward.cash / 40));
+          }
+          totalCash += reward.cash;
+          totalRep += reward.reputation;
+          op.xp += reward.xp;
+          op.level = levelForXp(op.xp);
+          const avoidsInjury = Math.random() < traitLevel(op, "iron_will") * 0.2;
+          if (reward.success || avoidsInjury) {
+            op.status = "idle";
+          } else {
+            op.status = "injured";
+            op.injuredUntil = now + (job ? job.durationMs : 60_000);
+          }
+          if (reward.success && job && job.crewSize === 2) {
+            op.milestones.completedCrewJob = true;
+          }
+          op.jobId = undefined;
+          op.jobEndsAt = undefined;
+          op.pendingReward = undefined;
+          op.isJobLeader = undefined;
+          collectedCount++;
+        }
+        await writeSave(userId, save, now);
+        return NextResponse.json({ success: true, save, collectedCount, totalCash, totalRep, market: buildMarket(now), now });
       }
 
       case "trade": {
@@ -465,6 +504,17 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true, save, market: buildMarket(now), now });
       }
 
+      case "claimSkillPoints": {
+        if (now - save.skillPointsClaimedAt < SKILL_POINTS_CYCLE_MS) {
+          const msLeft = SKILL_POINTS_CYCLE_MS - (now - save.skillPointsClaimedAt);
+          return NextResponse.json({ success: false, error: "Already claimed — come back later", msUntilNextClaim: msLeft }, { status: 400 });
+        }
+        save.skillPoints = SKILL_POINTS_PER_CLAIM;
+        save.skillPointsClaimedAt = now;
+        await writeSave(userId, save, now);
+        return NextResponse.json({ success: true, save, market: buildMarket(now), now });
+      }
+
       case "trainStat": {
         const { operativeId, stat } = body;
         const op = save.operatives.find((o) => o.id === operativeId);
@@ -475,25 +525,16 @@ export async function POST(request: NextRequest) {
         if (op.status !== "idle") {
           return NextResponse.json({ success: false, error: "Operative must be idle to train" }, { status: 400 });
         }
-        if (now > op.trainedResetAt) {
-          op.trainedToday = 0;
-          op.trainedResetAt = now + TRAIN_RESET_MS;
-        }
-        if (op.trainedToday >= DAILY_TRAIN_LIMIT) {
-          return NextResponse.json({ success: false, error: "Daily training limit reached" }, { status: 400 });
-        }
         const key = stat as keyof Stats;
         const current = op.stats[key];
         if (current >= MAX_TRAINABLE_STAT) {
           return NextResponse.json({ success: false, error: "Stat is already maxed" }, { status: 400 });
         }
-        const cost = trainCost(current);
-        if (save.cash < cost) {
-          return NextResponse.json({ success: false, error: "Not enough cash" }, { status: 400 });
+        if (save.skillPoints < 1) {
+          return NextResponse.json({ success: false, error: "No skill points — claim your daily batch first" }, { status: 400 });
         }
-        save.cash -= cost;
+        save.skillPoints -= 1;
         op.stats[key] = current + 1;
-        op.trainedToday += 1;
         await writeSave(userId, save, now);
         return NextResponse.json({ success: true, save, market: buildMarket(now), now });
       }

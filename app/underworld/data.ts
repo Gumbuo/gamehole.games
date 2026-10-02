@@ -1,4 +1,4 @@
-import type { Rarity, Role, Stats, OperativeCard, Rank, Faction } from "./types";
+import type { Rarity, Role, Stats, OperativeCard, Rank, Faction, OperativeTraitInstance } from "./types";
 
 export const THEME = {
   bg: "#160b0b",
@@ -23,7 +23,8 @@ export const RARITIES: Record<
   legendary: { label: "Legendary", weight: 2, statMult: 2.0, color: "#f59e0b" },
 };
 
-// Original fictional factions — not real organizations. Each operative
+// Fictional factions, not real organizations or people — 4 pairs (mafia,
+// street, biker, cartel) so every "type" of crew has a rival. Each operative
 // belongs to one; it's mostly flavor (a small stat bonus, like a trait) so
 // it doesn't overshadow Role/Rarity as the main build levers.
 export const FACTIONS: Record<Faction, { label: string; description: string; color: string; statBonus: Partial<Stats> }> = {
@@ -33,17 +34,47 @@ export const FACTIONS: Record<Faction, { label: string; description: string; col
     color: "#d4af37",
     statBonus: { charm: 1 },
   },
+  ferrante: {
+    label: "The Ferrante Family",
+    description: "A rival family running the docks and the unions. Ambitious, patient, always three moves ahead.",
+    color: "#9333ea",
+    statBonus: { cunning: 1 },
+  },
   serpent_row: {
-    label: "Serpent Row",
+    label: "Floods",
     description: "Street-level crew running the block. Fast, loyal to the corner, vicious when crossed.",
     color: "#ef4444",
     statBonus: { stealth: 1 },
   },
+  grips: {
+    label: "Grips",
+    description: "Rival crew running the west side. Tight-knit, quick to retaliate, never forget a slight.",
+    color: "#3b82f6",
+    statBonus: { nerve: 1 },
+  },
   iron_wolves: {
-    label: "Iron Wolves MC",
+    label: "Hells Angles MC",
     description: "Outlaw motorcycle club. Muscle on two wheels, brotherhood over everything.",
-    color: "#60a5fa",
+    color: "#94a3b8",
     statBonus: { power: 1 },
+  },
+  mongrols: {
+    label: "Mongrols MC",
+    description: "Rival outlaw club. Rougher, meaner, and always looking for a fight.",
+    color: "#ea580c",
+    statBonus: { power: 1 },
+  },
+  simaloa: {
+    label: "Simaloa Cartel",
+    description: "Cross-border trafficking network. Ruthless efficiency, deep pockets, longer reach than anyone in town.",
+    color: "#22c55e",
+    statBonus: { cunning: 1 },
+  },
+  los_zetos: {
+    label: "Los Zetos",
+    description: "Ex-military enforcers turned cartel muscle. Disciplined, brutal, feared even by the other crews.",
+    color: "#06b6d4",
+    statBonus: { nerve: 1 },
   },
 };
 
@@ -83,73 +114,148 @@ export const ROLES: Record<
   },
 };
 
-export const NAME_POOL = [
-  "Vinny", "Sal", "Tony", "Frankie", "Nicky", "Joey", "Dutch", "Sammy",
-  "Lucky", "Mickey", "Rosa", "Gia", "Bianca", "Carmine", "Enzo",
-  "Tommy Two-Times", "Fat Paulie", "Slick Rick", "Doc", "Cutter",
-  "Angie", "Rico", "Big Al", "Lefty", "Marco", "Sonny", "Benny",
-  "Little Nicky", "Fingers", "Ziti", "Maria", "Donnie", "Jimmy Legs",
-  "Tuxedo Sam", "Cristina", "Whistler", "Knuckles", "Pauly Walnuts",
-];
-
-// PixelLab portraits — every NAME_POOL entry now has one; falls back to a
-// plain rarity-colored placeholder in the UI for any name not in here.
-export const CHARACTER_PORTRAITS: Record<string, string> = {
-  "Vinny": "/underworld/characters/vinny.png",
-  "Sal": "/underworld/characters/sal.png",
-  "Tony": "/underworld/characters/tony.png",
-  "Frankie": "/underworld/characters/frankie.png",
-  "Nicky": "/underworld/characters/nicky.png",
-  "Joey": "/underworld/characters/joey.png",
-  "Dutch": "/underworld/characters/dutch.png",
-  "Sammy": "/underworld/characters/sammy.png",
-  "Lucky": "/underworld/characters/lucky.png",
-  "Mickey": "/underworld/characters/mickey.png",
-  "Rosa": "/underworld/characters/rosa.png",
-  "Gia": "/underworld/characters/gia.png",
-  "Bianca": "/underworld/characters/bianca.png",
-  "Carmine": "/underworld/characters/carmine.png",
-  "Enzo": "/underworld/characters/enzo.png",
-  "Tommy Two-Times": "/underworld/characters/tommy_two_times.png",
-  "Fat Paulie": "/underworld/characters/fat_paulie.png",
-  "Slick Rick": "/underworld/characters/slick_rick.png",
-  "Doc": "/underworld/characters/doc.png",
-  "Cutter": "/underworld/characters/cutter.png",
-  "Angie": "/underworld/characters/angie.png",
-  "Rico": "/underworld/characters/rico.png",
-  "Big Al": "/underworld/characters/big_al.png",
-  "Lefty": "/underworld/characters/lefty.png",
-  "Marco": "/underworld/characters/marco.png",
-  "Sonny": "/underworld/characters/sonny.png",
-  "Benny": "/underworld/characters/benny.png",
-  "Little Nicky": "/underworld/characters/little_nicky.png",
-  "Fingers": "/underworld/characters/fingers.png",
-  "Ziti": "/underworld/characters/ziti.png",
-  "Maria": "/underworld/characters/maria.png",
-  "Donnie": "/underworld/characters/donnie.png",
-  "Jimmy Legs": "/underworld/characters/jimmy_legs.png",
-  "Tuxedo Sam": "/underworld/characters/tuxedo_sam.png",
-  "Cristina": "/underworld/characters/cristina.png",
-  "Whistler": "/underworld/characters/whistler.png",
-  "Knuckles": "/underworld/characters/knuckles.png",
-  "Pauly Walnuts": "/underworld/characters/pauly_walnuts.png",
+// Name pools split by faction TYPE and gender — trimmed to exactly 3 names
+// per (type, gender), one per portrait in PORTRAIT_POOL below, so every
+// name maps to its own dedicated, never-shared portrait. An earlier version
+// had many more names than portraits (e.g. 18 mafia male names against only
+// 3 portraits), so different names were mathematically guaranteed to share
+// art (pigeonhole principle) no matter how the index was picked — random or
+// hashed, collisions were inevitable once names outnumbered portraits. The
+// fix is this 1:1 sizing, not a smarter index picker.
+export const NAME_POOLS: Record<FactionType, { m: string[]; f: string[] }> = {
+  mafia: { m: ["Vinny", "Tony", "Carmine"], f: ["Rosa", "Gia", "Cristina"] },
+  street: { m: ["Dutch", "Lucky", "Cutter"], f: ["Angie", "Peaches", "Nova"] },
+  biker: { m: ["Diesel", "Preacher", "Bones"], f: ["Raven", "Widow", "Harley"] },
+  cartel: { m: ["Chuy", "Nacho", "Tigre"], f: ["Lola", "Reyna", "Chula"] },
 };
+
+// Faction-aware portrait system (v2) — the original pool used one shared
+// "1950s mafia" look for every faction, which looked wrong once the roster
+// grew to 4 faction TYPES (mafia/street/biker/cartel): a Grips or Mongrols
+// operative shouldn't render in a pinstripe suit. Portraits now key off
+// (faction type, gender) instead of name, so the same name can render
+// differently depending which faction it rolled into. Also higher native
+// resolution (160x270 vs the old 100x168) per the earlier blur complaint —
+// same `object-fit: cover` display code in page.tsx, just a sharper source.
+export type FactionType = "mafia" | "street" | "biker" | "cartel";
+
+export const FACTION_TYPE: Record<Faction, FactionType> = {
+  outfit: "mafia",
+  ferrante: "mafia",
+  serpent_row: "street",
+  grips: "street",
+  iron_wolves: "biker",
+  mongrols: "biker",
+  simaloa: "cartel",
+  los_zetos: "cartel",
+};
+
+const PORTRAIT_POOL: Record<FactionType, { m: string[]; f: string[] }> = {
+  mafia: {
+    m: ["/underworld/characters/mafia_m1.png", "/underworld/characters/mafia_m2.png", "/underworld/characters/mafia_m3.png"],
+    f: ["/underworld/characters/mafia_f1.png", "/underworld/characters/mafia_f2.png", "/underworld/characters/mafia_f3.png"],
+  },
+  street: {
+    m: ["/underworld/characters/street_m1.png", "/underworld/characters/street_m2.png", "/underworld/characters/street_m3.png"],
+    f: ["/underworld/characters/street_f1.png", "/underworld/characters/street_f2.png", "/underworld/characters/street_f3.png"],
+  },
+  biker: {
+    m: ["/underworld/characters/biker_m1.png", "/underworld/characters/biker_m2.png", "/underworld/characters/biker_m3.png"],
+    f: ["/underworld/characters/biker_f1.png", "/underworld/characters/biker_f2.png", "/underworld/characters/biker_f3.png"],
+  },
+  cartel: {
+    m: ["/underworld/characters/cartel_m1.png", "/underworld/characters/cartel_m2.png", "/underworld/characters/cartel_m3.png"],
+    f: ["/underworld/characters/cartel_f1.png", "/underworld/characters/cartel_f2.png", "/underworld/characters/cartel_f3.png"],
+  },
+};
+
+// Gender lookup must cover every female name this project has EVER used,
+// not just the current NAME_POOLS — trimming a name out of the rollable
+// pool (as happened going from 38 names down to 24) doesn't erase it from
+// existing operatives' saves. Deriving this set from NAME_POOLS alone
+// caused a real regression: "Bianca" (an original mafia name, since
+// trimmed) fell through to "m", both mis-gendering her portrait and
+// colliding her with male legacy names in the hash fallback. Kept as an
+// explicit superset — current pool names plus every retired one — rather
+// than derived, specifically so future trims can't silently break this
+// again.
+const FEMALE_NAMES = new Set([
+  ...(Object.keys(NAME_POOLS) as FactionType[]).flatMap((t) => NAME_POOLS[t].f),
+  // Retired names (cut from NAME_POOLS, but may still exist on live saves):
+  "Bianca", "Maria", "Ruckus", "Nena",
+]);
+
+function genderOf(name: string): "m" | "f" {
+  return FEMALE_NAMES.has(name) ? "f" : "m";
+}
+
+// LEGACY NAMES: names created before NAME_POOLS was trimmed down to 3-per-
+// slot (e.g. "Tommy Two-Times", "Pauly Walnuts", "Frankie" — real, still-
+// existing operatives on live saves) aren't in the current pool at all, and
+// there are more retired names than slots, so no fallback scheme can give
+// them the same hard zero-collision guarantee current names get (pigeonhole
+// principle — confirmed by user request to fold them into the current
+// system instead of chasing better and better fallbacks). This renames a
+// legacy operative to one of its (faction, gender)'s 3 current names,
+// picked deterministically from the OLD name so a given operative always
+// lands on the same replacement — not randomly reassigned every load —
+// giving it the exact same guarantee new recruits get. Explicitly first-
+// names only (matches every current pool entry already being a single
+// first name) per the user's direction: no compound/nickname suffixes like
+// "Two-Times" reappearing in a renamed result.
+export function normalizeOperativeName(name: string, faction: Faction): string {
+  const gender = genderOf(name);
+  const pool = NAME_POOLS[FACTION_TYPE[faction]][gender];
+  if (pool.includes(name)) return name;
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+  return pool[hash % pool.length];
+}
+
+// portraitIndex is a DIRECT, deterministic lookup — a name's position in its
+// NAME_POOLS[type][gender] array. Since NAME_POOLS is sized 1:1 with
+// PORTRAIT_POOL (3 names, 3 portraits, per slot), and `name` has already
+// been run through `normalizeOperativeName` by the time this is called
+// (sweep.ts does this before rolling the portrait), every name reaching
+// here is guaranteed to be found — no fallback needed. (Two operatives with
+// the SAME name still share a portrait — expected, not a bug.)
+export function rollPortraitIndex(name: string, faction: Faction): number {
+  const gender = genderOf(name);
+  const pool = NAME_POOLS[FACTION_TYPE[faction]][gender];
+  const idx = pool.indexOf(name);
+  if (idx >= 0) return idx;
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+  return hash % pool.length;
+}
+
+export function getPortrait(name: string, faction: Faction, portraitIndex: number): string {
+  const pool = PORTRAIT_POOL[FACTION_TYPE[faction]][genderOf(name)];
+  return pool[portraitIndex % pool.length];
+}
 
 export type TraitId =
   | "night_owl" | "loyal" | "silver_tongue" | "quick_hands"
   | "ice_cold" | "fast_learner" | "greedy" | "cautious" | "iron_will";
 
-export const TRAITS: Record<TraitId, { label: string; description: string }> = {
-  night_owl: { label: "Night Owl", description: "+15% cash on completed Jobs." },
-  loyal: { label: "Loyal", description: "Heat gain from failed Jobs cut in half." },
-  silver_tongue: { label: "Silver Tongue", description: "+15% Reputation from Jobs." },
-  quick_hands: { label: "Quick Hands", description: "+10% Job success chance." },
-  ice_cold: { label: "Ice Cold", description: "20% less Heat from every Job, win or lose." },
-  fast_learner: { label: "Fast Learner", description: "+20% XP from Jobs." },
-  greedy: { label: "Greedy", description: "+25% cash from Jobs — but +25% Heat too." },
-  cautious: { label: "Cautious", description: "20% less Heat from Jobs — but -10% success chance." },
-  iron_will: { label: "Iron Will", description: "Never gets Injured on a failed Job." },
+// Every operative rolls TRAITS_PER_OPERATIVE distinct traits, each at a
+// level 1-MAX_TRAIT_LEVEL — descriptions below are the PER-LEVEL magnitude,
+// so a level-5 trait matches this project's original fixed-bonus values
+// (e.g. Night Owl was a flat +15% cash; at 3%/level, level 5 = +15%).
+export const TRAITS: Record<TraitId, { label: string; description: string; icon: string }> = {
+  night_owl: { label: "Night Owl", description: "+3% cash on completed Jobs, per level.", icon: "🌙" },
+  loyal: { label: "Loyal", description: "Heat gain from failed Jobs cut 10% per level.", icon: "♥" },
+  silver_tongue: { label: "Silver Tongue", description: "+3% Reputation from Jobs, per level.", icon: "💬" },
+  quick_hands: { label: "Quick Hands", description: "+2% Job success chance, per level.", icon: "⚡" },
+  ice_cold: { label: "Ice Cold", description: "4% less Heat from every Job per level, win or lose.", icon: "❄" },
+  fast_learner: { label: "Fast Learner", description: "+4% XP from Jobs, per level.", icon: "📈" },
+  greedy: { label: "Greedy", description: "+5% cash from Jobs per level — but +5% Heat too.", icon: "💰" },
+  cautious: { label: "Cautious", description: "4% less Heat from Jobs per level — but -2% success chance.", icon: "👁" },
+  iron_will: { label: "Iron Will", description: "20% chance per level to avoid Injury on a failed Job.", icon: "🛡" },
 };
+
+export const MAX_TRAIT_LEVEL = 5;
+export const TRAITS_PER_OPERATIVE = 3;
 
 export interface DistrictDef {
   id: string;
@@ -393,6 +499,7 @@ export interface ItemDef {
   statBonus: Partial<Stats>;
   recipeId: string;
   tier: Rarity;
+  image: string;
 }
 
 export interface EquipmentRecipe {
@@ -401,17 +508,18 @@ export interface EquipmentRecipe {
   kind: ItemKind;
   stat: keyof Stats;
   description: string;
+  image: string;
 }
 
 export const EQUIPMENT_RECIPES: EquipmentRecipe[] = [
-  { id: "fedora", name: "Fedora", kind: "headwear", stat: "charm", description: "Eyes on the prize." },
-  { id: "ski_mask", name: "Ski Mask", kind: "headwear", stat: "stealth", description: "Nobody's getting a good look at you." },
-  { id: "pinstripe_vest", name: "Pinstripe Vest", kind: "torso", stat: "charm", description: "Tailored to intimidate." },
-  { id: "kevlar_vest", name: "Kevlar Vest", kind: "torso", stat: "power", description: "Insurance you can wear." },
-  { id: "brass_knux", name: "Brass Knuckles", kind: "hands", stat: "power", description: "Old-school persuasion." },
-  { id: "leather_gloves", name: "Leather Gloves", kind: "hands", stat: "cunning", description: "No prints, no problem." },
-  { id: "wingtips", name: "Wingtips", kind: "footwear", stat: "charm", description: "Walks into any room like he owns it." },
-  { id: "getaway_boots", name: "Getaway Boots", kind: "footwear", stat: "stealth", description: "Built for a quick exit." },
+  { id: "fedora", name: "Fedora", kind: "headwear", stat: "charm", description: "Eyes on the prize.", image: "/underworld/items/fedora.png" },
+  { id: "ski_mask", name: "Ski Mask", kind: "headwear", stat: "stealth", description: "Nobody's getting a good look at you.", image: "/underworld/items/ski_mask.png" },
+  { id: "pinstripe_vest", name: "Pinstripe Vest", kind: "torso", stat: "charm", description: "Tailored to intimidate.", image: "/underworld/items/pinstripe_vest.png" },
+  { id: "kevlar_vest", name: "Kevlar Vest", kind: "torso", stat: "power", description: "Insurance you can wear.", image: "/underworld/items/kevlar_vest.png" },
+  { id: "brass_knux", name: "Brass Knuckles", kind: "hands", stat: "power", description: "Old-school persuasion.", image: "/underworld/items/brass_knux.png" },
+  { id: "leather_gloves", name: "Leather Gloves", kind: "hands", stat: "cunning", description: "No prints, no problem.", image: "/underworld/items/leather_gloves.png" },
+  { id: "wingtips", name: "Wingtips", kind: "footwear", stat: "charm", description: "Walks into any room like he owns it.", image: "/underworld/items/wingtips.png" },
+  { id: "getaway_boots", name: "Getaway Boots", kind: "footwear", stat: "stealth", description: "Built for a quick exit.", image: "/underworld/items/getaway_boots.png" },
 ];
 
 export interface ForgeTierDef {
@@ -451,6 +559,7 @@ export const ITEMS: ItemDef[] = EQUIPMENT_RECIPES.flatMap((r) =>
       statBonus: { [r.stat]: ft.statBonus } as Partial<Stats>,
       recipeId: r.id,
       tier,
+      image: r.image,
     };
   })
 );
@@ -722,7 +831,13 @@ export function computeProductPrice(districtId: string, tierId: string, now: num
 }
 
 export function rollRarity(weights?: Partial<Record<Rarity, number>>): Rarity {
-  const entries = (Object.keys(RARITIES) as Rarity[]).map((id) => [id, weights?.[id] ?? RARITIES[id].weight] as const);
+  // When an override is given, a rarity it omits is excluded (weight 0), not
+  // defaulted back in — that's the whole point of a pack like Kingpin/Racket
+  // advertising "no common, no uncommon." Only fall back to the full default
+  // spread when no override object is passed at all (a plain recruit roll).
+  const entries = (Object.keys(RARITIES) as Rarity[]).map(
+    (id) => [id, weights ? weights[id] ?? 0 : RARITIES[id].weight] as const
+  );
   const total = entries.reduce((s, [, w]) => s + w, 0);
   let roll = Math.random() * total;
   for (const [id, w] of entries) {
@@ -737,10 +852,26 @@ export function rollRole(): Role {
   return roles[Math.floor(Math.random() * roles.length)];
 }
 
-export function rollTrait(): TraitId | undefined {
-  if (Math.random() > 0.35) return undefined;
-  const traits = Object.keys(TRAITS) as TraitId[];
-  return traits[Math.floor(Math.random() * traits.length)];
+// Rarity nudges the level roll up (not the trait selection — every operative
+// draws from the same pool regardless of rarity) so higher-rarity pulls feel
+// stronger without needing rarity-locked traits.
+const TRAIT_RARITY_LEVEL_BONUS: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 1, epic: 1, legendary: 2 };
+
+export function rollTraits(rarity: Rarity): OperativeTraitInstance[] {
+  const pool = (Object.keys(TRAITS) as TraitId[]).slice();
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const bonus = TRAIT_RARITY_LEVEL_BONUS[rarity];
+  return pool.slice(0, TRAITS_PER_OPERATIVE).map((id) => ({
+    id,
+    level: Math.min(MAX_TRAIT_LEVEL, 1 + Math.floor(Math.random() * 3) + bonus),
+  }));
+}
+
+export function traitLevel(op: OperativeCard, id: TraitId): number {
+  return op.traits.find((t) => t.id === id)?.level ?? 0;
 }
 
 export function rollStats(role: Role, rarity: Rarity): Stats {
@@ -756,8 +887,11 @@ export function rollStats(role: Role, rarity: Rarity): Stats {
   };
 }
 
-export function rollName(): string {
-  return NAME_POOL[Math.floor(Math.random() * NAME_POOL.length)];
+export function rollName(faction: Faction): string {
+  const names = NAME_POOLS[FACTION_TYPE[faction]];
+  const gender = Math.random() < 0.8 ? "m" : "f";
+  const pool = names[gender];
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
 // Promotion ladder — adapted from a reference game's "Capo Dossier" (which
@@ -798,15 +932,15 @@ export function meetsPromotionRequirement(op: OperativeCard): boolean {
   }
 }
 
-// Training Ledger — spend cash to permanently raise a base stat, capped and
-// rate-limited so it's a meaningful sink, not a free grind.
+// Training Ledger — free, not cash-based. Once per SKILL_POINTS_CYCLE_MS
+// (24h) the player claims a flat batch of skill points and spends them
+// however they like across any operative they own. Unspent points are NOT
+// banked into the next cycle — sweep() zeroes them out once the cycle
+// elapses, which is what makes this a login-progression hook rather than a
+// slow-accumulating currency.
 export const MAX_TRAINABLE_STAT = 20;
-export const DAILY_TRAIN_LIMIT = 18;
-export const TRAIN_RESET_MS = 24 * 60 * 60 * 1000;
-
-export function trainCost(currentValue: number): number {
-  return 40 + currentValue * 12;
-}
+export const SKILL_POINTS_PER_CLAIM = 10;
+export const SKILL_POINTS_CYCLE_MS = 24 * 60 * 60 * 1000;
 
 export function levelForXp(xp: number): number {
   return 1 + Math.floor(xp / 100);
