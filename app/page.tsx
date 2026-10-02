@@ -42,9 +42,14 @@ export default function HomePage() {
     setActiveSection("play");
   };
 
+  // Currency of War renders its own full HUD inside the iframe, so the
+  // site nav is redundant chrome eating space while that game is playing.
+  const hideSiteNav = activeSection === "play" && selectedGame === "currencyofwar";
+
   return (
     <div style={{ minHeight: '100vh' }}>
       {/* Navigation */}
+      {!hideSiteNav && (
       <nav style={{
         position: 'sticky',
         top: 0,
@@ -168,6 +173,7 @@ export default function HomePage() {
           </div>
         </div>
       </nav>
+      )}
 
       {showLoginModal && !isAuthenticated && (
         <LoginModal onClose={() => setShowLoginModal(false)} />
@@ -179,7 +185,7 @@ export default function HomePage() {
       ) : activeSection === "credits" ? (
         <Credits />
       ) : activeSection === "play" && selectedGame ? (
-        <div style={{ width: '100%', height: 'calc(100vh - 70px)' }}>
+        <div style={{ width: '100%', height: hideSiteNav ? '100vh' : 'calc(100vh - 70px)' }}>
           <div style={{
             padding: '10px 20px',
             background: 'rgba(0, 0, 0, 0.5)',
