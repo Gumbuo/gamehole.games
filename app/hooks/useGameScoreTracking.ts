@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 export function useGameScoreTracking() {
+  const { username, isAuthenticated } = useAuth();
+
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
       // Listen for game over events from Godot games
@@ -12,13 +15,33 @@ export function useGameScoreTracking() {
           return;
         }
 
-        // Log game stats (anonymous tracking)
-        console.log('Game Over:', { game, score, kills, crystals, healthDrops, roomsExplored, highestLevel });
-      }
+        if (!isAuthenticated || !username) {
+          console.log('Game Over (not logged in, score not saved):', { game, score });
+          return;
+        }
 
-      // Also listen for alien catacombs stats (for backward compatibility)
-      if (event.data && event.data.type === 'ALIEN_CATACOMBS_STATS') {
-        console.log('Alien Catacombs stats:', event.data.stats);
+        try {
+          const response = await fetch('/api/scores', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username,
+              game,
+              score,
+              kills,
+              crystals,
+              healthDrops,
+              roomsExplored,
+              highestLevel,
+            }),
+          });
+          const data = await response.json();
+          if (!data.success) {
+            console.warn('Score submission rejected:', data.error);
+          }
+        } catch (error) {
+          console.error('Failed to submit score:', error);
+        }
       }
     };
 
@@ -27,5 +50,5 @@ export function useGameScoreTracking() {
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, []);
+  }, [username, isAuthenticated]);
 }
