@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Leaderboard from "./components/Leaderboard";
 import Credits from "./components/Credits";
 import MusicPlayer from "./components/MusicPlayer";
@@ -15,7 +14,6 @@ const communityGames = {
 };
 
 export default function HomePage() {
-  const router = useRouter();
   const [activeSection, setActiveSection] = useState<"home" | "play" | "leaderboard" | "credits">("home");
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
@@ -578,82 +576,6 @@ export default function HomePage() {
                       fontWeight: 'bold',
                       letterSpacing: '1px',
                       boxShadow: '0 0 12px rgba(255,180,50,0.25)',
-                    }}
-                  >
-                    ▶ PLAY NOW
-                  </div>
-                </div>
-              </div>
-
-              {/* Underworld Inc. — native Next.js route, not an iframe embed */}
-              <div
-                onClick={() => router.push('/underworld')}
-                style={{
-                  background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
-                  border: '2px solid rgba(212, 175, 55, 0.4)',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#d4af37';
-                  e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-3px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.4)';
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                <div style={{ padding: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '10px' }}>
-                    <h3 style={{
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '18px',
-                      color: '#d4af37',
-                      margin: 0,
-                    }}>
-                      Underworld Inc.
-                    </h3>
-                    <span style={{
-                      padding: '3px 8px',
-                      background: 'rgba(212, 175, 55, 0.15)',
-                      border: '1px solid #d4af37',
-                      borderRadius: '4px',
-                      color: '#d4af37',
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '9px',
-                      fontWeight: 'bold',
-                      flexShrink: 0,
-                      marginLeft: '8px',
-                    }}>
-                      NEW
-                    </span>
-                  </div>
-                  <p style={{
-                    fontFamily: 'Share Tech Mono, monospace',
-                    fontSize: '11px',
-                    color: '#888',
-                    margin: '0 0 10px 0',
-                    lineHeight: '1.5',
-                  }}>
-                    Recruit a crew, run jobs, buy low and sell high. Build a Family and take the city — a 1990s crime management game.
-                  </p>
-                  <div
-                    style={{
-                      display: 'inline-block',
-                      padding: '8px 22px',
-                      background: 'linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05))',
-                      border: '1px solid #d4af37',
-                      borderRadius: '6px',
-                      color: '#d4af37',
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 'bold',
-                      letterSpacing: '1px',
-                      boxShadow: '0 0 12px rgba(212,175,55,0.25)',
                     }}
                   >
                     ▶ PLAY NOW

@@ -103,8 +103,19 @@ function buttonStyle(disabled?: boolean): React.CSSProperties {
   };
 }
 
+// Hidden from the public while a major rework is pending — the game, its
+// API routes, and its data all keep working, this just blocks the public
+// entry point. Bookmark ?dev=gumbuo2026 on this URL to still get in.
+const DEV_ACCESS_KEY = "gumbuo2026";
+
 export default function UnderworldPage() {
   const { wallet, wallets, select, connect, disconnect, connected, connecting, publicKey, signMessage } = useWallet();
+  const [accessChecked, setAccessChecked] = useState(false);
+  const [accessGranted, setAccessGranted] = useState(false);
+  useEffect(() => {
+    setAccessGranted(new URLSearchParams(window.location.search).get("dev") === DEV_ACCESS_KEY);
+    setAccessChecked(true);
+  }, []);
   const [sessionToken, setSessionToken] = useState<string | null>(null);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -415,6 +426,21 @@ export default function UnderworldPage() {
     setSave(null);
     disconnect().catch(() => {});
   };
+
+  if (!accessChecked) {
+    return <FullScreen>Loading...</FullScreen>;
+  }
+
+  if (!accessGranted) {
+    return (
+      <FullScreen>
+        <div style={{ textAlign: "center", color: THEME.textMuted, fontFamily: THEME.bodyFont }}>
+          <h2 style={{ color: THEME.secondary, fontFamily: THEME.font, marginBottom: 8 }}>Underworld Inc.</h2>
+          <p>Not available right now — check back soon.</p>
+        </div>
+      </FullScreen>
+    );
+  }
 
   if (authLoading) {
     return <FullScreen>Loading...</FullScreen>;
