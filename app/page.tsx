@@ -11,7 +11,7 @@ import { useAuth } from "./context/AuthContext";
 // Community Games
 const communityGames = {
   catacombs: { title: "ALIEN AF", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/alien-af-banner.png", description: "Shoot-em-up action — survive alien waves across multiple zones. World map, volcano world, catacombs. Grenades, guns, melee — Alien AF.", youtubeTrailer: "Fs-Hik2Lizo", youtubeStart: 6 },
-  currencyofwar: { title: "Currency of War", src: "https://voidfall.gumbuogw3.workers.dev", badge: "ALPHA", description: "Sci-fi card battler with a territory-conquest metagame — build decks, duel, garrison warzones across a galaxy-spanning globe." },
+  currencyofwar: { title: "Currency of War", src: "https://voidfall.gumbuogw3.workers.dev", badge: "ALPHA", image: "/currency-of-war-banner.png", description: "Sci-fi card battler with a territory-conquest metagame — build decks, duel, garrison warzones across a galaxy-spanning globe." },
 };
 
 export default function HomePage() {
@@ -46,6 +46,11 @@ export default function HomePage() {
     setActiveSection("home");
     setSelectedGame(null);
     window.history.replaceState(null, "", "/");
+    // This is a plain history.replaceState, not a real Next.js navigation,
+    // so usePathname()-driven listeners (the global MusicPlayer, which
+    // needs to know when Currency of War stops playing) never re-render on
+    // their own — a custom event is the only way to notify them.
+    window.dispatchEvent(new Event("gh:playstate-changed"));
   };
 
   const handleSubmitGame = () => {
@@ -65,6 +70,7 @@ export default function HomePage() {
     const url = new URL(window.location.href);
     url.searchParams.set("play", gameKey);
     window.history.replaceState(null, "", url.toString());
+    window.dispatchEvent(new Event("gh:playstate-changed"));
   };
 
   // Currency of War renders its own full HUD inside the iframe, so the

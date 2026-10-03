@@ -17,10 +17,22 @@ export default function MusicPlayer() {
   const [selectedTrack, setSelectedTrack] = useState(TRACKS[4]); // Galactic Groove
   const [isExpanded, setIsExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [playingCurrencyOfWar, setPlayingCurrencyOfWar] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // Currency of War renders its own in-game music, so this global player
+  // needs to stop while that game is up — but it lives at "/" behind a
+  // ?play= query param flipped via history.replaceState (not a real
+  // Next.js navigation), so usePathname() alone never notices the change.
+  useEffect(() => {
+    const check = () => setPlayingCurrencyOfWar(new URLSearchParams(window.location.search).get("play") === "currencyofwar");
+    check();
+    window.addEventListener("gh:playstate-changed", check);
+    return () => window.removeEventListener("gh:playstate-changed", check);
   }, []);
 
   const togglePlay = () => {
@@ -79,11 +91,13 @@ export default function MusicPlayer() {
     return () => audio.removeEventListener('ended', handleEnded);
   }, [selectedTrack]);
 
-  // Don't render if in iframe, not mounted, or on Underworld — that route has
-  // its own themed music player (mafia tracks, not this generic playlist).
+  // Don't render if in iframe, not mounted, on Underworld (its own themed
+  // music player), or playing Currency of War (its own in-game soundtrack
+  // — no reason to compete with it).
   if (!mounted) return null;
   if (typeof window !== "undefined" && window.self !== window.top) return null;
   if (pathname?.startsWith("/underworld")) return null;
+  if (playingCurrencyOfWar) return null;
 
   return (
     <>
