@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Leaderboard from "./components/Leaderboard";
 import Credits from "./components/Credits";
@@ -26,6 +26,28 @@ export default function HomePage() {
 
   useGameScoreTracking();
 
+  // Which game (if any) is being played lives only in React state by
+  // default, so a page refresh has nothing to restore from and always
+  // lands back on the home section. Mirroring it into the URL's query
+  // string (via plain history.replaceState, not next/navigation, so this
+  // never forces the route to de-opt to dynamic rendering) means a refresh
+  // re-reads `?play=` on mount and reopens the same game instead of
+  // bouncing home.
+  useEffect(() => {
+    const play = new URLSearchParams(window.location.search).get("play");
+    if (play && play in communityGames) {
+      setSelectedGame(play);
+      setActiveSection("play");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const goHome = () => {
+    setActiveSection("home");
+    setSelectedGame(null);
+    window.history.replaceState(null, "", "/");
+  };
+
   const handleSubmitGame = () => {
     // For now, just show success - in future this could save to a database
     console.log('Game submission:', submitForm);
@@ -40,6 +62,9 @@ export default function HomePage() {
   const playGame = (gameKey: string) => {
     setSelectedGame(gameKey);
     setActiveSection("play");
+    const url = new URL(window.location.href);
+    url.searchParams.set("play", gameKey);
+    window.history.replaceState(null, "", url.toString());
   };
 
   // Currency of War renders its own full HUD inside the iframe, so the
@@ -103,7 +128,7 @@ export default function HomePage() {
             ].map(({ key, img }) => (
               <button
                 key={key}
-                onClick={() => { setActiveSection(key as any); setSelectedGame(null); }}
+                onClick={() => { if (key === "home") { goHome(); } else { setActiveSection(key as any); setSelectedGame(null); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -185,38 +210,65 @@ export default function HomePage() {
       ) : activeSection === "credits" ? (
         <Credits />
       ) : activeSection === "play" && selectedGame ? (
-        <div style={{ width: '100%', height: hideSiteNav ? '100vh' : 'calc(100vh - 70px)' }}>
-          <div style={{
-            padding: '10px 20px',
-            background: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-            <span style={{ color: '#00d4ff', fontFamily: 'Orbitron, sans-serif' }}>
-              Now Playing: {communityGames[selectedGame as keyof typeof communityGames]?.title}
-            </span>
+        <div style={{ width: '100%', height: hideSiteNav ? '100vh' : 'calc(100vh - 70px)', position: 'relative' }}>
+          {/* Currency of War renders its own full HUD, so this whole play
+              view is given the entire viewport — no "Now Playing" bar
+              eating 50px off the top, just a small floating back button
+              that floats over the iframe instead of boxing it in. */}
+          {!hideSiteNav && (
+            <div style={{
+              padding: '10px 20px',
+              background: 'rgba(0, 0, 0, 0.5)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+              <span style={{ color: '#00d4ff', fontFamily: 'Orbitron, sans-serif' }}>
+                Now Playing: {communityGames[selectedGame as keyof typeof communityGames]?.title}
+              </span>
+              <button
+                onClick={goHome}
+                style={{
+                  padding: '8px 16px',
+                  background: 'rgba(255, 0, 102, 0.2)',
+                  border: '1px solid #ff0066',
+                  borderRadius: '6px',
+                  color: '#ff0066',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                }}
+              >
+                ← Back to Games
+              </button>
+            </div>
+          )}
+          {hideSiteNav && (
             <button
-              onClick={() => { setActiveSection("home"); setSelectedGame(null); }}
+              onClick={goHome}
               style={{
-                padding: '8px 16px',
-                background: 'rgba(255, 0, 102, 0.2)',
+                position: 'fixed',
+                top: '12px',
+                right: '12px',
+                zIndex: 50,
+                padding: '6px 12px',
+                background: 'rgba(0, 0, 0, 0.5)',
                 border: '1px solid #ff0066',
                 borderRadius: '6px',
                 color: '#ff0066',
                 fontFamily: 'Orbitron, sans-serif',
-                fontSize: '12px',
+                fontSize: '11px',
                 cursor: 'pointer',
               }}
             >
               ← Back to Games
             </button>
-          </div>
+          )}
           {(() => {
             const game = communityGames[selectedGame as keyof typeof communityGames];
             if (game && 'src' in game) {
               return (
-                <div style={{ width: '100%', height: 'calc(100% - 50px)' }}>
+                <div style={{ width: '100%', height: hideSiteNav ? '100%' : 'calc(100% - 50px)' }}>
                   <iframe
                     src={game.src}
                     style={{ width: '100%', height: '100%', border: 'none' }}

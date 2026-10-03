@@ -5,7 +5,6 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletReadyState } from "@solana/wallet-adapter-base";
 import bs58 from "bs58";
 import TerritoryMap from "./TerritoryMap";
-import UnderworldMusicPlayer from "./MusicPlayer";
 import type { PlayerSave, OperativeCard, Rarity, TerritoryTileState, Stats, EquippedItems, BountyState, MarketListing, Faction } from "./types";
 import {
   THEME,
@@ -783,7 +782,6 @@ export default function UnderworldPage() {
             />
           );
         })()}
-      <UnderworldMusicPlayer walletAddress={walletAddress} />
     </div>
   );
 }
