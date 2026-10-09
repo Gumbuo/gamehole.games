@@ -265,7 +265,7 @@ export default function HomePage() {
                 cursor: 'pointer',
               }}
             >
-              ← Back to Games
+              ← Back to gamehole.games
             </button>
           )}
           {(() => {
