@@ -25,10 +25,10 @@ export const metadata: Metadata = {
     siteName: "Game Hole",
     images: [
       {
-        url: "https://www.gamehole.games/logo.png",
+        url: "https://www.gamehole.games/foxhole-banner.png",
         width: 1024,
-        height: 1536,
-        alt: "Game Hole Logo",
+        height: 1024,
+        alt: "Game Hole - Free Browser Games",
       },
     ],
     type: "website",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Game Hole - Free Browser Games",
     description: "Play free browser games — Alien AF, Alien Arena, and more. Jump in and play instantly, no sign-up required.",
-    images: ["https://www.gamehole.games/logo.png"],
+    images: ["https://www.gamehole.games/foxhole-banner.png"],
   },
 };
 
