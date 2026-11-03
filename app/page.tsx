@@ -9,7 +9,7 @@ import { useAuth } from "./context/AuthContext";
 
 // Community Games
 const communityGames = {
-  catacombs: { title: "ALIEN AF", src: "/games/foxstead/index.html", badge: "ALPHA", image: "/alien-af-banner.png", description: "Shoot-em-up action — survive alien waves across multiple zones. World map, volcano world, catacombs. Grenades, guns, melee — Alien AF.", youtubeTrailer: "Fs-Hik2Lizo", youtubeStart: 6 },
+  foxstead: { title: "FoxStead", src: "/games/foxstead/index.html", badge: "MVP", image: "/foxstead-banner.png", description: "A chill farming and combat RPG — build your homestead, fight off alien invaders, and explore a living world.", youtubeTrailer: "qqFbayHgKZI" },
   currencyofwar: { title: "Currency of War", src: "https://voidfall.gumbuogw3.workers.dev", badge: "ALPHA", image: "/currency-of-war-banner.png", description: "Sci-fi card battler with a territory-conquest metagame — build decks, duel, garrison warzones across a galaxy-spanning globe." },
 };
 
@@ -375,8 +375,8 @@ export default function HomePage() {
                 const hasImage = 'image' in game && game.image;
                 const description = 'description' in game ? game.description : null;
                 const isComingSoon = 'comingSoon' in game && game.comingSoon;
-                const cardFrame = key === 'catacombs'
-                  ? { src: 'url(/card-frame-alien.png) 45 90 / 28px stretch', width: '28px' }
+                const cardFrame = key === 'foxstead'
+                  ? { src: 'url(/card-frame-farm.png) 55 90 / 28px stretch', width: '28px' }
                   : key === 'currencyofwar'
                   ? { src: 'url(/card-frame-mech.png) 40 40 / 24px stretch', width: '24px' }
                   : null;
@@ -487,101 +487,6 @@ export default function HomePage() {
                 </div>
                 );
               })}
-
-              {/* FoxStead — MVP live, links out to univershole.ink */}
-              <div
-                onClick={() => window.open('https://univershole.ink', '_blank', 'noopener,noreferrer')}
-                style={{
-                  background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(15, 15, 30, 0.8))',
-                  border: '28px solid rgba(255, 180, 50, 0.3)',
-                  borderImage: 'url(/card-frame-farm.png) 55 90 / 28px stretch',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#ffb432';
-                  e.currentTarget.style.boxShadow = '0 0 25px rgba(255, 180, 50, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-3px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255, 180, 50, 0.3)';
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                <img
-                  src="/foxstead-banner.png"
-                  alt="FoxStead"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                />
-                <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
-                  <iframe
-                    width="100%"
-                    height="100%"
-                    src="https://www.youtube.com/embed/qqFbayHgKZI"
-                    title="FoxStead Trailer"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{ border: 'none' }}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </div>
-                <div style={{ padding: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '10px' }}>
-                    <h3 style={{
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '18px',
-                      color: '#ffb432',
-                      margin: 0,
-                    }}>
-                      FoxStead
-                    </h3>
-                    <span style={{
-                      padding: '3px 8px',
-                      background: 'rgba(255, 180, 50, 0.15)',
-                      border: '1px solid #ffb432',
-                      borderRadius: '4px',
-                      color: '#ffb432',
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '9px',
-                      fontWeight: 'bold',
-                      flexShrink: 0,
-                      marginLeft: '8px',
-                    }}>
-                      MVP
-                    </span>
-                  </div>
-                  <p style={{
-                    fontFamily: 'Share Tech Mono, monospace',
-                    fontSize: '11px',
-                    color: '#888',
-                    margin: '0 0 10px 0',
-                    lineHeight: '1.5',
-                  }}>
-                    A chill farming and combat RPG — build your homestead, fight off alien invaders, and explore a living world.
-                  </p>
-                  <div
-                    style={{
-                      display: 'inline-block',
-                      padding: '8px 22px',
-                      background: 'linear-gradient(135deg, rgba(255,180,50,0.15), rgba(255,180,50,0.05))',
-                      border: '1px solid #ffb432',
-                      borderRadius: '6px',
-                      color: '#ffb432',
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 'bold',
-                      letterSpacing: '1px',
-                      boxShadow: '0 0 12px rgba(255,180,50,0.25)',
-                    }}
-                  >
-                    ▶ PLAY NOW
-                  </div>
-                </div>
-              </div>
 
             </div>
           </section>
