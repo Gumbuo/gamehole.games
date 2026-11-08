@@ -217,8 +217,8 @@ export default function HomePage() {
         <div style={{ width: '100%', height: hideSiteNav ? '100vh' : 'calc(100vh - 70px)', position: 'relative' }}>
           {/* Currency of War renders its own full HUD, so this whole play
               view is given the entire viewport — no "Now Playing" bar
-              eating 50px off the top, just a small floating back button
-              that floats over the iframe instead of boxing it in. */}
+              eating 50px off the top and no floating back button over it
+              (it covered the game's own top-right HUD). */}
           {!hideSiteNav && (
             <div style={{
               padding: '10px 20px',
@@ -246,27 +246,6 @@ export default function HomePage() {
                 ← Back to Games
               </button>
             </div>
-          )}
-          {hideSiteNav && (
-            <button
-              onClick={goHome}
-              style={{
-                position: 'fixed',
-                top: '12px',
-                right: '12px',
-                zIndex: 50,
-                padding: '6px 12px',
-                background: 'rgba(0, 0, 0, 0.5)',
-                border: '1px solid #ff0066',
-                borderRadius: '6px',
-                color: '#ff0066',
-                fontFamily: 'Orbitron, sans-serif',
-                fontSize: '11px',
-                cursor: 'pointer',
-              }}
-            >
-              ← Back to gamehole.games
-            </button>
           )}
           {(() => {
             const game = communityGames[selectedGame as keyof typeof communityGames];
