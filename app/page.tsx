@@ -122,6 +122,25 @@ export default function HomePage() {
                 );
               })}
             </div>
+            {/* Kitchen cabinet designer (static app in public/cabinets) */}
+            <a
+              href="/cabinets/easy/index.html"
+              title="Design your kitchen with standard cabinet sizes"
+              style={{
+                padding: '6px 12px',
+                background: 'rgba(224, 138, 60, 0.15)',
+                border: '1px solid #e08a3c',
+                borderRadius: '4px',
+                color: '#f0a35e',
+                fontFamily: 'Orbitron, sans-serif',
+                fontSize: '10px',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              🔨 Kitchen Designer
+            </a>
           </div>
 
           <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
