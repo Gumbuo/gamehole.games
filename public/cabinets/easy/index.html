@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Easy Kitchen Designer</title>
+  <meta name="description" content="Type in your wall length, then drag standard cabinet sizes onto the wall to design your kitchen.">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="easy.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Easy Kitchen Designer</h1>
+      <p class="sub">1. Enter your wall length. &nbsp;2. Drag cabinets onto the wall. &nbsp;3. Pick your colors.</p>
+    </div>
+    <nav class="row">
+      <a class="navlink" href="../index.html">Detailed planner</a>
+      <button type="button" class="btn ghostbtn" id="undoBtn" title="Undo (Ctrl+Z)">Undo</button>
+      <button type="button" class="btn" id="printBtn">Print</button>
+    </nav>
+  </header>
+
+  <main class="ez">
+    <section class="ez-work">
+      <div class="card">
+        <div class="tabs" id="tabs"></div>
+        <div class="wallset" id="wallset"></div>
+      </div>
+      <div class="card">
+        <div id="status" class="status"></div>
+        <div class="svgwrap ez-canvas" id="canvas"></div>
+        <div id="selbar" class="selbar"></div>
+        <ul id="warn" class="msgs"></ul>
+      </div>
+      <div class="card" id="finish"></div>
+      <div class="card" id="list"></div>
+    </section>
+
+    <aside class="ez-palette card" id="palette" aria-label="Cabinet sizes"></aside>
+  </main>
+
+  <div class="trash" id="trash">Drop here to remove</div>
+
+  <footer class="foot">
+    Rough draft only. Sizes are common US stock cabinets. Check every measurement and your appliance specs before ordering.
+  </footer>
+
+  <script src="../logic.js"></script>
+  <script src="../render.js"></script>
+  <script src="easy.js"></script>
+</body>
+</html>

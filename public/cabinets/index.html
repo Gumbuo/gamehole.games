@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cabinet Planner</title>
+  <meta name="description" content="Enter your kitchen wall measurements and get a rough draft of standard-size cabinets that fit.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Cabinet Planner</h1>
+      <p class="sub">Measure wall to wall, add your appliances, and get a rough draft of stock cabinet sizes that fit.</p>
+    </div>
+    <nav class="row">
+      <a href="easy/index.html" style="color:var(--accent);font-weight:600;text-decoration:none;margin-right:6px">Easy drag &amp; drop designer →</a>
+      <button type="button" class="btn" id="printBtn">Print draft</button>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <form id="form" class="panel" autocomplete="off" onsubmit="return false"></form>
+    <section id="results" class="results" aria-live="polite"></section>
+  </main>
+
+  <footer class="foot">
+    Rough draft only. Sizes are common US stock cabinets (3" steps, 9"–36").
+    Check every measurement, your appliance specs, and the plumbing and electrical locations before you order.
+  </footer>
+
+  <script src="logic.js"></script>
+  <script src="render.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
